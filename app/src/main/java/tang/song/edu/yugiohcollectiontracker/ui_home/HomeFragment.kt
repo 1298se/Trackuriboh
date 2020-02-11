@@ -1,15 +1,34 @@
-package tang.song.edu.yugiohcollectiontracker
+package tang.song.edu.yugiohcollectiontracker.ui_home
 
 import android.app.SearchManager
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
+import com.bumptech.glide.RequestManager
+import kotlinx.android.synthetic.main.fragment_home.*
+import tang.song.edu.yugiohcollectiontracker.BaseApplication
+import tang.song.edu.yugiohcollectiontracker.R
+import javax.inject.Inject
 
 class HomeFragment : Fragment() {
+    @Inject
+    lateinit var requestManager: RequestManager
+    @Inject
+    lateinit var cardViewModelFactory: CardViewModelFactory
+
     private var listener: OnFragmentInteractionListener? = null
+    private lateinit var mViewModel: CardViewModel
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (activity?.application as BaseApplication).appComponent.inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +42,17 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        requestManager.load(R.drawable.img_cardback).into(test_img)
+
+        mViewModel = ViewModelProvider(this, cardViewModelFactory).get(CardViewModel::class.java)
+        mViewModel.allCards.observe(this) {
+            Log.d("TAG", it.status.toString())
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -42,13 +72,8 @@ class HomeFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {
         listener?.onFragmentInteraction(uri)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
     }
 
     override fun onDetach() {
@@ -57,7 +82,6 @@ class HomeFragment : Fragment() {
     }
 
     interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)
     }
 }

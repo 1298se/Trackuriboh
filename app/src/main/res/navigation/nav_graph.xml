@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="tang.song.edu.yugiohcollectiontracker.HomeFragment"
+        android:name="tang.song.edu.yugiohcollectiontracker.ui_home.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/collectionFragment"
-        android:name="tang.song.edu.yugiohcollectiontracker.CollectionFragment"
+        android:name="tang.song.edu.yugiohcollectiontracker.ui_collections.CollectionFragment"
         android:label="Collection"
         tools:layout="@layout/fragment_collection" />
     <fragment
         android:id="@+id/wishlistFragment"
-        android:name="tang.song.edu.yugiohcollectiontracker.WishlistFragment"
+        android:name="tang.song.edu.yugiohcollectiontracker.ui_wishlist.WishlistFragment"
         android:label="Wishlist"
         tools:layout="@layout/fragment_wishlist" />
 </navigation>

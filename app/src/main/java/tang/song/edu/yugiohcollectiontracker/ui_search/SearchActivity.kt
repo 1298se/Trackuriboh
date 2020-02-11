@@ -1,10 +1,11 @@
-package tang.song.edu.yugiohcollectiontracker
+package tang.song.edu.yugiohcollectiontracker.ui_search
 
 import android.app.SearchManager
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import tang.song.edu.yugiohcollectiontracker.R
 
 class SearchActivity : AppCompatActivity() {
 

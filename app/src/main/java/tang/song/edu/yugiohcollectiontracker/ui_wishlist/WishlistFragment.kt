@@ -1,4 +1,4 @@
-package tang.song.edu.yugiohcollectiontracker
+package tang.song.edu.yugiohcollectiontracker.ui_wishlist
 
 import android.content.Context
 import android.net.Uri
@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import tang.song.edu.yugiohcollectiontracker.R
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
