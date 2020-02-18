@@ -2,7 +2,7 @@ package tang.song.edu.yugiohcollectiontracker.network.response
 
 import com.google.gson.annotations.SerializedName
 
-data class CardModel(
+data class CardResponse(
     val id: Long,
     val name: String,
     val type: String,
@@ -13,9 +13,21 @@ data class CardModel(
     val race: String,
     val attribute: String,
     @SerializedName("card_sets")
-    val cardSets: List<CardSetModel>,
+    val cardSets: List<CardSetResponse>,
     @SerializedName("card_images")
-    val cardImages: List<CardImageModel>,
+    val cardImages: List<CardImageResponse>,
     @SerializedName("card_prices")
-    val cardPrices: List<CardPriceModel>
-)
+    val cardPrices: List<CardPriceResponse>
+) {
+    override fun equals(other: Any?): Boolean {
+        if (other is CardResponse) {
+            return id == other.id
+        }
+
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+}

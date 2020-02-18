@@ -3,13 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/databaseFragment">
 
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="tang.song.edu.yugiohcollectiontracker.ui_home.HomeFragment"
-        android:label="Home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/databaseFragment"
+        android:name="tang.song.edu.yugiohcollectiontracker.ui_database.DatabaseFragment"
+        android:label="Database"
+        tools:layout="@layout/fragment_database">
+        <action
+            android:id="@+id/action_databaseFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
     <fragment
         android:id="@+id/collectionFragment"
         android:name="tang.song.edu.yugiohcollectiontracker.ui_collections.CollectionFragment"
@@ -20,4 +24,8 @@
         android:name="tang.song.edu.yugiohcollectiontracker.ui_wishlist.WishlistFragment"
         android:label="Wishlist"
         tools:layout="@layout/fragment_wishlist" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="tang.song.edu.yugiohcollectiontracker.ui_search.SearchFragment"
+        tools:layout="@layout/fragment_search" />
 </navigation>

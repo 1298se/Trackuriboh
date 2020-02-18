@@ -2,7 +2,7 @@ package tang.song.edu.yugiohcollectiontracker.network.response
 
 import com.google.gson.annotations.SerializedName
 
-data class CardPriceModel(
+data class CardPriceResponse(
     @SerializedName("cardmarket_price")
     val cardMarketPrice: String,
     @SerializedName("tcgplayer_price")

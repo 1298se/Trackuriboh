@@ -1,7 +1,8 @@
-package tang.song.edu.yugiohcollectiontracker.network
+package tang.song.edu.yugiohcollectiontracker.data.repository
 
 import android.util.Log
-import tang.song.edu.yugiohcollectiontracker.network.response.CardModel
+import tang.song.edu.yugiohcollectiontracker.network.CardDataSource
+import tang.song.edu.yugiohcollectiontracker.network.response.CardResponse
 import tang.song.edu.yugiohcollectiontracker.network.response.Resource
 import tang.song.edu.yugiohcollectiontracker.network.response.ResponseHandler
 import javax.inject.Inject
@@ -12,8 +13,15 @@ class CardRepository @Inject constructor(
     private val cardDataSource: CardDataSource,
     private val responseHandler: ResponseHandler
 ) {
-    suspend fun getAllCards(): Resource<List<CardModel>> {
-        Log.d("TAG", "repository@"+ this.hashCode() + " cardDataSource@" + cardDataSource.hashCode() + " responseHandler@" + responseHandler)
+    companion object {
+        private const val TAG = "CardRepository"
+    }
+
+    suspend fun getAllCards(): Resource<List<CardResponse>> {
+        Log.d(
+            TAG,
+            "repository@" + this.hashCode() + " cardDataSource@" + cardDataSource.hashCode() + " responseHandler@" + responseHandler
+        )
         return try {
             responseHandler.handleSuccess(cardDataSource.getAllCards())
         } catch (e: Exception) {

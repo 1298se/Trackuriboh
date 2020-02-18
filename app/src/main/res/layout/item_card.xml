@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/item_card_margin">
+
+    <ImageView
+        android:id="@+id/item_card_image"
+        android:layout_width="@dimen/item_card_image_width"
+        android:layout_height="@dimen/item_card_image_height"
+        android:contentDescription="@string/item_card_list_content_desc"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:src="@drawable/img_cardback" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/item_card_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/item_card_paddingLeft"
+        android:paddingEnd="12dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/item_card_image"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:text="Blue-Eyes White Dragon Blue-Eyes White Dragon Blue-Eyes White Dragon" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

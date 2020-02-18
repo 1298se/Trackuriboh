@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Database -->
+    <dimen name="item_card_margin">8dp</dimen>
+    <dimen name="item_card_paddingLeft">12dp</dimen>
+    <dimen name="item_card_image_width">96dp</dimen>
+    <dimen name="item_card_image_height">96dp</dimen>
+</resources>
