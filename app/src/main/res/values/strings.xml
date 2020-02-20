@@ -14,4 +14,8 @@
     <!-- Search -->
     <string name="search_title">Search</string>
     <string name="search_hint">Search for a card or set…</string>
+    <string-array name="category_array">
+        <item>Cards</item>
+        <item>Sets</item>
+    </string-array>
 </resources>

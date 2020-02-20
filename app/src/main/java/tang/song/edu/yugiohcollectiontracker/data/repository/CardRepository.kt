@@ -1,6 +1,7 @@
 package tang.song.edu.yugiohcollectiontracker.data.repository
 
 import android.util.Log
+import tang.song.edu.yugiohcollectiontracker.data.db.dao.CardDao
 import tang.song.edu.yugiohcollectiontracker.network.CardDataSource
 import tang.song.edu.yugiohcollectiontracker.network.response.CardResponse
 import tang.song.edu.yugiohcollectiontracker.network.response.Resource
@@ -10,8 +11,9 @@ import javax.inject.Singleton
 
 @Singleton
 class CardRepository @Inject constructor(
+    private val responseHandler: ResponseHandler,
     private val cardDataSource: CardDataSource,
-    private val responseHandler: ResponseHandler
+    private val cardDao: CardDao
 ) {
     companion object {
         private const val TAG = "CardRepository"

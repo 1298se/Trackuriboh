@@ -36,11 +36,11 @@ class SearchFragment : Fragment(), MenuItem.OnActionExpandListener {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+    override fun onMenuItemActionExpand(menuItem: MenuItem?): Boolean {
         return true
     }
 
-    override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+    override fun onMenuItemActionCollapse(menuItem: MenuItem?): Boolean {
         activity?.findNavController(R.id.nav_host_fragment)?.navigateUp()
 
         return true

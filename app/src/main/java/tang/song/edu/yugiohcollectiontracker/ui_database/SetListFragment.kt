@@ -31,7 +31,8 @@ class SetListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mViewModel = ViewModelProvider(this, mViewModelFactory).get(SetViewModel::class.java)
+        mViewModel =
+            ViewModelProvider(requireActivity(), mViewModelFactory).get(SetViewModel::class.java)
     }
 
     override fun onCreateView(

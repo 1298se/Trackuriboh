@@ -34,7 +34,8 @@ class CardListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mViewModel = ViewModelProvider(this, mViewModelFactory).get(CardViewModel::class.java)
+        mViewModel =
+            ViewModelProvider(requireActivity(), mViewModelFactory).get(CardViewModel::class.java)
     }
 
     override fun onCreateView(

@@ -7,5 +7,5 @@
         android:title="@string/search_title"
         android:icon="@drawable/ic_search_black_24dp"
         app:showAsAction="ifRoom|collapseActionView"
-        app:actionLayout="@layout/search_view" />
+        app:actionLayout="@layout/search_spinner_view" />
 </menu>
