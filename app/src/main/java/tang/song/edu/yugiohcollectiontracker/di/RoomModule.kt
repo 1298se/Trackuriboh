@@ -8,15 +8,12 @@ import tang.song.edu.yugiohcollectiontracker.data.db.dao.CardDao
 import javax.inject.Singleton
 
 @Module
-abstract class RoomModule {
+object RoomModule {
+    @Singleton
+    @Provides
+    fun provideCardDatabase(application: Application): CardDatabase =
+        CardDatabase(application)
 
-    companion object {
-        @Singleton
-        @Provides
-        fun provideCardDatabase(application: Application): CardDatabase =
-            CardDatabase(application)
-
-        @Provides
-        fun providesCardDao(cardDatabase: CardDatabase): CardDao = cardDatabase.cardDao()
-    }
+    @Provides
+    fun providesCardDao(cardDatabase: CardDatabase): CardDao = cardDatabase.cardDao()
 }

@@ -10,21 +10,20 @@ import tang.song.edu.yugiohcollectiontracker.R
 import javax.inject.Singleton
 
 @Module
-abstract class AppModule {
+object AppModule {
+    @Singleton
+    @Provides
+    fun provideRequestItems(): RequestOptions =
+        RequestOptions
+            .placeholderOf(R.drawable.img_cardback)
+            .error(R.drawable.img_cardback)
 
-    companion object {
-        @Singleton
-        @Provides
-        fun provideRequestItems(): RequestOptions =
-            RequestOptions
-                .placeholderOf(R.drawable.img_cardback)
-                .error(R.drawable.img_cardback)
-
-        @Singleton
-        @Provides
-        fun provideGlideInstance(application: Application, requestOptions: RequestOptions): RequestManager =
-            Glide.with(application)
-                .setDefaultRequestOptions(requestOptions)
-    }
-
+    @Singleton
+    @Provides
+    fun provideGlideInstance(
+        application: Application,
+        requestOptions: RequestOptions
+    ): RequestManager =
+        Glide.with(application)
+            .setDefaultRequestOptions(requestOptions)
 }

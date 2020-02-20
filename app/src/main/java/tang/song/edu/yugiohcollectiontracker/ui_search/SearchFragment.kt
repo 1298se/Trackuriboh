@@ -27,7 +27,7 @@ class SearchFragment : Fragment(), MenuItem.OnActionExpandListener {
         inflater.inflate(R.menu.search_actionbar_menu, menu)
 
         menu.findItem(R.id.open_search).apply {
-            mSearchView = this.actionView as SearchView
+            mSearchView = this.actionView.findViewById(R.id.search_view) as SearchView
             setOnActionExpandListener(this@SearchFragment)
 
             expandActionView()
