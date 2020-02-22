@@ -21,7 +21,7 @@
         android:id="@+id/item_card_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/item_card_paddingLeft"
+        android:paddingStart="@dimen/item_card_paddingStart"
         android:paddingEnd="12dp"
         android:maxLines="1"
         android:ellipsize="end"

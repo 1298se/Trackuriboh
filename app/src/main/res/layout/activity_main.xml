@@ -19,7 +19,10 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/main_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:collapseIcon="@drawable/ic_arrow_back_black_24dp">
+
+        </com.google.android.material.appbar.MaterialToolbar>
 
         <View style="@style/Divider" />
 

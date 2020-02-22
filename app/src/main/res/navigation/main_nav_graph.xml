@@ -27,5 +27,13 @@
     <fragment
         android:id="@+id/searchFragment"
         android:name="tang.song.edu.yugiohcollectiontracker.ui_search.SearchFragment"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_filterBottomSheetDialog"
+            app:destination="@id/filterBottomSheetDialog" />
+    </fragment>
+    <dialog
+        android:id="@+id/filterBottomSheetDialog"
+        android:name="tang.song.edu.yugiohcollectiontracker.ui_search.FilterBottomSheetDialogFragment"
+        android:label="FilterBottomSheetDialog" />
 </navigation>

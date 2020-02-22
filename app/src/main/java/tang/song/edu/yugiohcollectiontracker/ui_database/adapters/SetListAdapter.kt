@@ -34,7 +34,7 @@ class SetListAdapter : RecyclerView.Adapter<SetListAdapter.SetViewHolder>() {
 
     inner class SetViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         internal fun bind(item: SetResponse) {
-            itemView.findViewById<TextView>(R.id.item_set_title).text = (item.setName)
+            itemView.findViewById<TextView>(R.id.item_title_textview).text = (item.setName)
         }
     }
 }

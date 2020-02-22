@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Material -->
+    <dimen name="material_border_padding">16dp</dimen>
+    <dimen name="material_border_padding_large">24dp</dimen>
+
+    <!-- Search -->
+    <dimen name="chip_group_marginVertical">4dp</dimen>
+    <dimen name="chip_group_paddingHorizontal">12dp</dimen>
 
     <!-- Database -->
     <dimen name="item_card_margin">8dp</dimen>
-    <dimen name="item_card_paddingLeft">12dp</dimen>
+    <dimen name="item_card_paddingStart">12dp</dimen>
     <dimen name="item_card_image_width">96dp</dimen>
     <dimen name="item_card_image_height">96dp</dimen>
 </resources>

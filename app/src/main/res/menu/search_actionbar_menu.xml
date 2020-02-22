@@ -8,4 +8,10 @@
         android:icon="@drawable/ic_search_black_24dp"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionLayout="@layout/search_view" />
+
+    <item
+        android:id="@+id/action_filter"
+        android:title="@string/filter"
+        android:icon="@drawable/ic_filter_list_black_24dp"
+        app:showAsAction="always" />
 </menu>

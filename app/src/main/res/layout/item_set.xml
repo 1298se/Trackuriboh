@@ -8,10 +8,10 @@
     android:padding="@dimen/item_card_margin">
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/item_set_title"
+        android:id="@+id/item_title_textview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/item_card_paddingLeft"
+        android:paddingStart="@dimen/item_card_paddingStart"
         android:paddingEnd="12dp"
         android:maxLines="1"
         android:ellipsize="end"

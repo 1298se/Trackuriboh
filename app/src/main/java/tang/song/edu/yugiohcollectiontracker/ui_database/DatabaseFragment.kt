@@ -38,10 +38,12 @@ class DatabaseFragment : Fragment() {
         return when (item.itemId) {
             R.id.open_search -> {
                 activity?.findNavController(R.id.nav_host_fragment)
-                    ?.navigate(R.id.action_databaseFragment_to_searchFragment)
-                true
+                    ?.navigate(R.id.action_databaseFragment_to_searchFragment).let {
+                    true
+                }
+                false
             }
-            else -> super.onOptionsItemSelected(item)
+            else -> false
         }
     }
 

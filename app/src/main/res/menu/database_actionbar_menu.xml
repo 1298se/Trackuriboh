@@ -6,4 +6,9 @@
         android:title="@string/search_title"
         android:icon="@drawable/ic_search_black_24dp"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_refresh"
+        android:title="Refresh"
+        android:icon="@drawable/ic_refresh_black_24dp"
+        app:showAsAction="ifRoom" />
 </menu>

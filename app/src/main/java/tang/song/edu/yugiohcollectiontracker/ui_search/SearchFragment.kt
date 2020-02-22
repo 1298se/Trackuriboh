@@ -36,6 +36,20 @@ class SearchFragment : Fragment(), MenuItem.OnActionExpandListener {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_filter -> {
+                activity?.findNavController(R.id.nav_host_fragment)
+                    ?.navigate(R.id.action_searchFragment_to_filterBottomSheetDialog).let {
+                    mSearchView.clearFocus()
+                    true
+                }
+                false
+            }
+            else -> false
+        }
+    }
+
     override fun onMenuItemActionExpand(menuItem: MenuItem?): Boolean {
         return true
     }

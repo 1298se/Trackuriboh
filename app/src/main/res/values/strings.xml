@@ -17,5 +17,10 @@
     <string-array name="category_array">
         <item>Cards</item>
         <item>Sets</item>
+        <item>Archetypes</item>
     </string-array>
+
+    <!-- Filter -->
+    <string name="filter">Filter</string>
+    <string name="clear">Clear</string>
 </resources>
