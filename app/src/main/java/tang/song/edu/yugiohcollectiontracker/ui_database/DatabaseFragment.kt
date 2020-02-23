@@ -1,14 +1,15 @@
 package tang.song.edu.yugiohcollectiontracker.ui_database
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.DatabaseViewPagerAdapter
+import tang.song.edu.yugiohcollectiontracker.ui_search.SearchActivity
 
 class DatabaseFragment : Fragment() {
     private lateinit var mViewPager: ViewPager2
@@ -29,19 +30,16 @@ class DatabaseFragment : Fragment() {
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        // Inflate the options menu from XML
         inflater.inflate(R.menu.database_actionbar_menu, menu)
-
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.open_search -> {
-                activity?.findNavController(R.id.nav_host_fragment)
-                    ?.navigate(R.id.action_databaseFragment_to_searchFragment).let {
-                    true
-                }
-                false
+                startActivity(Intent(context, SearchActivity::class.java))
+                true
             }
             else -> false
         }

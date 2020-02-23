@@ -26,10 +26,12 @@ class SearchFragment : Fragment(), MenuItem.OnActionExpandListener {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.search_actionbar_menu, menu)
 
-        menu.findItem(R.id.open_search).apply {
-            mSearchView = this.actionView.findViewById(R.id.search_view) as SearchView
-            setOnActionExpandListener(this@SearchFragment)
+        menu.findItem(R.id.action_search).apply {
+            mSearchView = (this.actionView.findViewById(R.id.search_view) as SearchView).apply {
+                setIconifiedByDefault(false)
+            }
 
+            setOnActionExpandListener(this@SearchFragment)
             expandActionView()
         }
 
@@ -39,11 +41,11 @@ class SearchFragment : Fragment(), MenuItem.OnActionExpandListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_filter -> {
-                activity?.findNavController(R.id.nav_host_fragment)
-                    ?.navigate(R.id.action_searchFragment_to_filterBottomSheetDialog).let {
-                    mSearchView.clearFocus()
-                    true
-                }
+                activity?.findNavController(R.id.search_nav_host_fragment)
+                    ?.navigate(R.id.action_searchFragment_to_filterBottomSheetDialogFragment).let {
+                        mSearchView.clearFocus()
+                        true
+                    }
                 false
             }
             else -> false
@@ -55,9 +57,9 @@ class SearchFragment : Fragment(), MenuItem.OnActionExpandListener {
     }
 
     override fun onMenuItemActionCollapse(menuItem: MenuItem?): Boolean {
-        activity?.findNavController(R.id.nav_host_fragment)?.navigateUp()
+        activity?.finish()
 
-        return true
+        return false
     }
 
 }

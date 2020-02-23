@@ -64,7 +64,7 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
 
     // Material design
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.google.android.material:material:1.2.0-alpha05'
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"

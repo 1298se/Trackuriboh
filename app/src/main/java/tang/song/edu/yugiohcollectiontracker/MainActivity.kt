@@ -25,12 +25,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
+        val navController = findNavController(R.id.main_nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
     private fun setupActionBarAndNavigation() {
-        val navController = findNavController(R.id.nav_host_fragment)
+        val navController = findNavController(R.id.main_nav_host_fragment)
         appBarConfiguration = AppBarConfiguration(
             setOf(R.id.databaseFragment, R.id.collectionFragment, R.id.wishlistFragment),
             findViewById(R.id.drawer_layout)

@@ -7,58 +7,34 @@
     android:orientation="vertical"
     tools:context=".ui_search.SearchFragment">
 
-    <HorizontalScrollView
-        android:layout_width="match_parent"
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/chip_group_paddingHorizontal"
-        android:paddingEnd="@dimen/chip_group_paddingHorizontal">
+        android:layout_gravity="center_horizontal"
+        app:singleSelection="true"
+        app:selectionRequired="true"
+        app:checkedButton="@id/button_filter_cards">
 
-        <com.google.android.material.chip.ChipGroup
+        <Button
+            android:id="@+id/button_filter_cards"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/chip_group_marginVertical"
-            android:layout_marginBottom="@dimen/chip_group_marginVertical"
-            app:singleLine="true">
+            android:text="Cards"
+            style="@style/OutlinedButton" />
 
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Cards"
-                style="@style/Widget.MaterialComponents.Chip.Filter" />
+        <Button
+            android:id="@+id/button_filter_sets"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sets"
+            style="@style/OutlinedButton" />
 
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sets"
-                style="@style/Widget.MaterialComponents.Chip.Filter" />
-
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Archetype"
-                style="@style/Widget.MaterialComponents.Chip.Filter" />
-
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Fusion"
-                style="@style/Widget.MaterialComponents.Chip.Filter" />
-
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Synchro"
-                style="@style/Widget.MaterialComponents.Chip.Filter" />
-
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="XYZ"
-                style="@style/Widget.MaterialComponents.Chip.Filter" />
-
-        </com.google.android.material.chip.ChipGroup>
-    </HorizontalScrollView>
-
-    <View style="@style/Divider" />
+        <Button
+            android:id="@+id/button_filter_archetypes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Archetypes"
+            style="@style/OutlinedButton" />
+    </com.google.android.material.button.MaterialButtonToggleGroup>
 
 </LinearLayout>

@@ -15,6 +15,7 @@
     <style name="DrawerIconStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="color">@color/colorDark</item>
     </style>
+
     <style name="TabLayout" parent="Widget.MaterialComponents.TabLayout">
         <item name="tabIndicatorColor">?attr/colorPrimaryDark</item>
         <item name="tabTextColor">?attr/colorAccent</item>
@@ -22,7 +23,6 @@
     </style>
 
     <style name="SearchView" parent="Widget.AppCompat.SearchView.ActionBar">
-        <item name="iconifiedByDefault">false</item>
         <item name="searchIcon">@null</item>
         <item name="queryHint">@string/search_hint</item>
         <item name="queryBackground">@android:color/transparent</item>
@@ -32,6 +32,10 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:background">?android:attr/listDivider</item>
+    </style>
+
+    <style name="OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="backgroundTint">@color/button_outlined_states</item>
     </style>
 
 </resources>
