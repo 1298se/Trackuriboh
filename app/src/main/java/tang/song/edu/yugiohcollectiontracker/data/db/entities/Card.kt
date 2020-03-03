@@ -6,16 +6,16 @@ import androidx.room.PrimaryKey
 @Entity
 data class Card(
     @PrimaryKey(autoGenerate = true)
-    var id: Long,
-    var proDeckId: Long,
-    var deckId: Long,
-    var name: String,
-    var type: String,
-    var desc: String,
-    var atk: Int,
-    var def: Int,
-    var level: Int,
-    var race: String,
-    var attribute: String,
-    var rarity: Int
+    val cardId: Long,
+    val name: String,
+    val type: String,
+    val desc: String,
+    val atk: Int,
+    val def: Int,
+    val level: Int,
+    val race: String,
+    val attribute: String,
+    val archetype: String,
+    val scale: Int,
+    val cardImages: String
 )

@@ -1,10 +1,12 @@
 package tang.song.edu.yugiohcollectiontracker.di
 
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
 import dagger.Provides
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import tang.song.edu.yugiohcollectiontracker.network.CardRetrofitService
+import tang.song.edu.yugiohcollectiontracker.data.network.CardRetrofitService
 import javax.inject.Singleton
 
 @Module
@@ -14,9 +16,17 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetrofitInstance(): Retrofit =
+    fun provideOkHttpClient(): OkHttpClient =
+        OkHttpClient.Builder()
+            .addNetworkInterceptor(StethoInterceptor())
+            .build()
+
+    @Singleton
+    @Provides
+    fun provideRetrofitInstance(okHttpClient: OkHttpClient): Retrofit =
         Retrofit.Builder()
             .baseUrl(BASE_URL)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

@@ -11,22 +11,32 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import tang.song.edu.yugiohcollectiontracker.R
 
-class FilterBottomSheetDialogFragment : BottomSheetDialogFragment(),
+class CardFilterBottomSheetDialogFragment : BottomSheetDialogFragment(),
     Toolbar.OnMenuItemClickListener {
     private lateinit var mBottomSheetBehavior: BottomSheetBehavior<FrameLayout>
     private lateinit var mToolbar: MaterialToolbar
+    private lateinit var mCategoryChipGroup: ChipGroup
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val view = View.inflate(context, R.layout.bottom_sheet_filter, null)
+        val view = View.inflate(context, R.layout.card_bottom_sheet_filter, null)
         val bottomSheetDialog = initDialogView(savedInstanceState, view)
+
         mToolbar = view.findViewById(R.id.filter_toolbar)
+        mCategoryChipGroup = view.findViewById(R.id.card_category_chipgroup)
+
+        return bottomSheetDialog
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         initToolbar()
         initBottomSheetBehaviour()
-
-        return bottomSheetDialog
+        initChipGroups()
     }
 
     override fun onMenuItemClick(menuItem: MenuItem?): Boolean {
@@ -64,5 +74,16 @@ class FilterBottomSheetDialogFragment : BottomSheetDialogFragment(),
         mToolbar.setOnMenuItemClickListener(this)
         mToolbar.title = "Filter"
         mToolbar.setNavigationOnClickListener { dismiss() }
+    }
+
+    private fun initChipGroups() {
+        val categoryList = resources.getStringArray(R.array.card_category_list)
+
+        categoryList.forEach {
+            val chip =
+                layoutInflater.inflate(R.layout.filter_chip, mCategoryChipGroup, false) as Chip
+            chip.text = it
+            mCategoryChipGroup.addView(chip)
+        }
     }
 }

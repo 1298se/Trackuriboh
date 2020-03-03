@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import tang.song.edu.yugiohcollectiontracker.BaseApplication
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.SetListAdapter
+import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.SetViewModel
+import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.SetViewModelFactory
 import javax.inject.Inject
 
 class SetListFragment : Fragment() {
@@ -48,7 +50,7 @@ class SetListFragment : Fragment() {
 
         initRecyclerView(view)
 
-        mViewModel.allSets.observe(this) { response ->
+        mViewModel.setListResult.observe(this) { response ->
             if (response.isSuccess()) {
                 mAdapter.setItems(response.data)
             }

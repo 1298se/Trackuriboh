@@ -1,0 +1,27 @@
+package tang.song.edu.yugiohcollectiontracker.data.models
+
+enum class BaseMonsterTypes(val value: String) {
+    EFFECT_MONSTER("Effect Monster"),
+    FLIP_EFFECT_MONSTER("Flip Effect Monster"),
+    GEMINI_MONSTER("Gemini Monster"),
+    NORMAL_MONSTER("Normal Monster"),
+    NORMAL_TUNER_MONSTER("Normal Tuner Monster"),
+    PENDULUM_EFFECT_MONSTER("Pendulum Effect Monster"),
+    PENDULUM_FLIP_EFFECT_MONSTER("Pendulum Flip Effect Monster"),
+    PENDULUM_NORMAL_MONSTER("Pendulum Normal Monster"),
+    PENDULUM_TUNER_EFFECT_MONSTER("Pendulum Tuner Effect Monster"),
+    RITUAL_EFFECT_MONSTER("Ritual Effect Monster"),
+    RITUAL_MONSTER("Ritual Monster"),
+    SPIRIT_MONSTER("Spirit Monster"),
+    TOON_MONSTER("Toon Monster"),
+    TUNER_MONSTER("Tuner Monster"),
+    UNION_EFFECT_MONSTER("Union Effect Monster"),
+    FUSION_MONSTER("Fusion Monster"),
+    LINK_MONSTER("Link Monster"),
+    PENDULUM_EFFECT_FUSION_MONSTER("Pendulum Effect Fusion Monster"),
+    SYNCHRO_MONSTER("Synchro Monster"),
+    SYNCHRO_PENDULUM_EFFECT_MONSTER("Synchro Pendulum Effect Monster"),
+    SYNCHRO_TUNER_MONSTER("Synchro Tuner Monster"),
+    XYZ_MONSTER("XYZ_MONSTER"),
+    XYZ_PENDULUM_EFFECT_MONSTER("XYZ Pendulum Effect Monster"),
+}

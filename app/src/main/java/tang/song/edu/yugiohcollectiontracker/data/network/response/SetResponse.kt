@@ -1,4 +1,4 @@
-package tang.song.edu.yugiohcollectiontracker.network.response
+package tang.song.edu.yugiohcollectiontracker.data.network.response
 
 import com.google.gson.annotations.SerializedName
 

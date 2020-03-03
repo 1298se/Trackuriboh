@@ -5,15 +5,20 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import tang.song.edu.yugiohcollectiontracker.data.db.dao.CardDao
+import tang.song.edu.yugiohcollectiontracker.data.db.dao.CardSetDao
+import tang.song.edu.yugiohcollectiontracker.data.db.dao.SetDao
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
-import tang.song.edu.yugiohcollectiontracker.data.db.entities.Deck
+import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSetCrossRef
+import tang.song.edu.yugiohcollectiontracker.data.db.entities.Set
 
 @Database(
-    entities = [Card::class, Deck::class],
+    entities = [Card::class, Set::class, CardSetCrossRef::class],
     version = 1
 )
 abstract class CardDatabase : RoomDatabase() {
     abstract fun cardDao(): CardDao
+    abstract fun setDao(): SetDao
+    abstract fun cardSetDao(): CardSetDao
 
     companion object {
         @Volatile

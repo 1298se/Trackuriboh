@@ -14,6 +14,8 @@ import com.bumptech.glide.RequestManager
 import tang.song.edu.yugiohcollectiontracker.BaseApplication
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardListAdapter
+import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.CardViewModel
+import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.CardViewModelFactory
 import javax.inject.Inject
 
 class CardListFragment : Fragment() {
@@ -51,10 +53,7 @@ class CardListFragment : Fragment() {
 
         initRecyclerView(view)
 
-        mViewModel.allCards.observe(this) { response ->
-            if (response.isSuccess()) {
-                mAdapter.submitList(response.data)
-            }
+        mViewModel.cardListResult.observe(this) { response ->
         }
     }
 

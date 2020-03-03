@@ -1,4 +1,4 @@
-package tang.song.edu.yugiohcollectiontracker.network.response
+package tang.song.edu.yugiohcollectiontracker.data.network.response
 
 import com.google.gson.annotations.SerializedName
 
@@ -12,6 +12,8 @@ data class CardResponse(
     val level: Int,
     val race: String,
     val attribute: String,
+    val archetype: String,
+    val scale: Int,
     @SerializedName("card_sets")
     val cardSets: List<CardSetResponse>,
     @SerializedName("card_images")

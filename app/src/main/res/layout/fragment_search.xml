@@ -37,4 +37,9 @@
             style="@style/OutlinedButton" />
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/card_search_result_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

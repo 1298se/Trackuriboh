@@ -1,18 +1,45 @@
 package tang.song.edu.yugiohcollectiontracker.ui_search
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.RequestManager
+import tang.song.edu.yugiohcollectiontracker.BaseApplication
 import tang.song.edu.yugiohcollectiontracker.R
+import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardListAdapter
+import tang.song.edu.yugiohcollectiontracker.ui_search.viewmodels.SearchViewModel
+import tang.song.edu.yugiohcollectiontracker.ui_search.viewmodels.SearchViewModelFactory
+import javax.inject.Inject
 
 class SearchFragment : Fragment(), MenuItem.OnActionExpandListener {
+    @Inject
+    lateinit var mRequestManager: RequestManager
+    @Inject
+    lateinit var mViewModelFactory: SearchViewModelFactory
+
+    private lateinit var mAdapter: CardListAdapter
+    private lateinit var mViewModel: SearchViewModel
+
     private lateinit var mSearchView: SearchView
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        (activity?.application as BaseApplication).appComponent.inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        mViewModel =
+            ViewModelProvider(requireActivity(), mViewModelFactory).get(SearchViewModel::class.java)
         setHasOptionsMenu(true)
     }
 
@@ -21,6 +48,18 @@ class SearchFragment : Fragment(), MenuItem.OnActionExpandListener {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_search, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initRecyclerView(view)
+
+        mViewModel.cardSearchResult.observe(this) { response ->
+            if (response.isSuccess()) {
+                mAdapter.submitList(response.data)
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -61,5 +100,16 @@ class SearchFragment : Fragment(), MenuItem.OnActionExpandListener {
 
         return false
     }
+
+    private fun initRecyclerView(view: View) {
+        mAdapter = CardListAdapter(mRequestManager)
+        val layoutManager = LinearLayoutManager(requireContext())
+
+        view.findViewById<RecyclerView>(R.id.card_search_result_list).apply {
+            this.layoutManager = layoutManager
+            this.adapter = mAdapter
+        }
+    }
+
 
 }

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import tang.song.edu.yugiohcollectiontracker.R
-import tang.song.edu.yugiohcollectiontracker.network.response.SetResponse
+import tang.song.edu.yugiohcollectiontracker.data.network.response.SetResponse
 
 class SetListAdapter : RecyclerView.Adapter<SetListAdapter.SetViewHolder>() {
     private var mSetList: List<SetResponse> = ArrayList()

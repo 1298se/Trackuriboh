@@ -16,7 +16,7 @@
     </fragment>
     <dialog
         android:id="@+id/filterBottomSheetDialogFragment"
-        android:name="tang.song.edu.yugiohcollectiontracker.ui_search.FilterBottomSheetDialogFragment"
+        android:name="tang.song.edu.yugiohcollectiontracker.ui_search.CardFilterBottomSheetDialogFragment"
         android:label="FilterBottomSheetDialogFragment" />
 
 </navigation>

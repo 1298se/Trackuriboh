@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import tang.song.edu.yugiohcollectiontracker.R
-import tang.song.edu.yugiohcollectiontracker.network.response.CardResponse
+import tang.song.edu.yugiohcollectiontracker.data.network.response.CardResponse
 
 class CardListAdapter(val requestManager: RequestManager) :
     ListAdapter<CardResponse, CardListAdapter.CardViewHolder>(object :

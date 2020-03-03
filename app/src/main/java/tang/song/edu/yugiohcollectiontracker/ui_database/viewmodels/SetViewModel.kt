@@ -1,13 +1,12 @@
-package tang.song.edu.yugiohcollectiontracker.ui_database
+package tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import kotlinx.coroutines.Dispatchers
+import tang.song.edu.yugiohcollectiontracker.data.network.response.Resource
 import tang.song.edu.yugiohcollectiontracker.data.repository.SetRepository
-import tang.song.edu.yugiohcollectiontracker.network.response.Resource
 
 class SetViewModel(setRepository: SetRepository) : ViewModel() {
-    val allSets = liveData(Dispatchers.IO) {
+    val setListResult = liveData {
         emit(Resource.loading())
         emit(setRepository.getAllSets())
     }
