@@ -1,15 +1,12 @@
 package tang.song.edu.yugiohcollectiontracker.data.db.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSetXRef
 import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardSetInfo
 import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardWithSetInfo
 
 @Dao
-abstract class CardXCardSetDao : CardDao, CardSetDao {
+abstract class CardXCardSetDao : CardDao(), CardSetDao {
     @Query(
         "SELECT " +
                 "CardSet.setCode, " +
@@ -29,9 +26,9 @@ abstract class CardXCardSetDao : CardDao, CardSetDao {
         return CardWithSetInfo(card, setInfoList)
     }
 
-    @Insert
-    abstract suspend fun insertJoin(join: CardSetXRef)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun insertJoin(join: CardSetXRef): Long
 
-    @Insert
-    abstract suspend fun insertJoins(joins: List<CardSetXRef>)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun insertJoins(joins: List<CardSetXRef>): List<Long>
 }

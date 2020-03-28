@@ -6,5 +6,5 @@ import androidx.room.Entity
 data class CardSetXRef(
     val cardId: Long,
     val setCode: String,
-    val rarity: String
+    val rarity: String?
 )

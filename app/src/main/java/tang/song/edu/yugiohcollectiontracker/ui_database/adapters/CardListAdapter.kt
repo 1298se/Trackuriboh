@@ -34,7 +34,7 @@ class CardListAdapter(val requestManager: RequestManager) :
 
     inner class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         internal fun bind(item: CardResponse) {
-            requestManager.load(item.cardImages[0].imageUrlSmall)
+            requestManager.load(item.cardImages?.get(0)?.imageUrlSmall)
                 .into(itemView.findViewById(R.id.item_card_image))
             itemView.findViewById<TextView>(R.id.item_card_title).text = item.name
         }

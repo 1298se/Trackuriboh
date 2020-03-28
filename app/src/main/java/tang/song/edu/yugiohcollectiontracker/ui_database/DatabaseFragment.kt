@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -20,7 +19,7 @@ class DatabaseFragment : Fragment() {
 
     private lateinit var mViewPager: ViewPager2
     private lateinit var mTabLayout: TabLayout
-    private lateinit var mViewModel: ViewModel
+    private lateinit var mViewModel: DatabaseViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -52,8 +51,12 @@ class DatabaseFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.open_search -> {
+            R.id.action_open_search -> {
                 startActivity(Intent(context, SearchActivity::class.java))
+                true
+            }
+            R.id.action_database_sync -> {
+                mViewModel.syncDatabase()
                 true
             }
             else -> false

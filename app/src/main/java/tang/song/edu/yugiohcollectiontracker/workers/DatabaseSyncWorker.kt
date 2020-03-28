@@ -1,6 +1,7 @@
 package tang.song.edu.yugiohcollectiontracker.workers
 
 import android.content.Context
+import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import kotlinx.coroutines.Dispatchers
@@ -16,12 +17,22 @@ import tang.song.edu.yugiohcollectiontracker.data.network.response.CardSetRespon
 import tang.song.edu.yugiohcollectiontracker.data.network.response.SetResponse
 import tang.song.edu.yugiohcollectiontracker.data.repository.CardRepository
 import tang.song.edu.yugiohcollectiontracker.data.repository.SetRepository
+import java.util.*
+import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 class DatabaseSyncWorker(context: Context, params: WorkerParameters) :
     CoroutineWorker(context, params) {
+    @Inject
     lateinit var cardRepository: CardRepository
+    @Inject
     lateinit var setRepository: SetRepository
+    @Inject
     lateinit var cardDatabase: CardDatabase
+
+    companion object {
+        private val TAG = DatabaseSyncWorker::class.java.name
+    }
 
     init {
         (context.applicationContext as BaseApplication).appComponent.inject(this)
@@ -42,14 +53,24 @@ class DatabaseSyncWorker(context: Context, params: WorkerParameters) :
         cardList: List<CardResponse>?,
         setList: List<SetResponse>?
     ) {
+        Log.d(TAG, "cards from api: " + cardList?.size)
+        Log.d(TAG, "cardSets from api: " + setList?.size)
+
         if (cardList != null && setList != null) {
-            cardDatabase.cardDao().insertCards(convertCardResponseToCard(cardList))
-            cardDatabase.cardSetDao()
-            cardDatabase.cardXCardSetDao().insertJoins(createJoins(cardList))
+            val cardInsertNum =
+                cardDatabase.cardDao().insertCards(convertCardResponseListToCardList(cardList))
+            Log.d(TAG, "cards inserted to db: ${cardInsertNum.size}")
+
+            val setInsertNum =
+                cardDatabase.cardSetDao().insertSets(convertSetResponseListToSetList(setList))
+            Log.d(TAG, "card sets inserted to db: ${setInsertNum.size}")
+
+            val joinInsertNum = cardDatabase.cardXCardSetDao().insertJoins(createJoins(cardList))
+            Log.d(TAG, "joins inserted to db: ${joinInsertNum.size}")
         }
     }
 
-    private suspend fun convertCardResponseToCard(cardList: List<CardResponse>): List<Card> {
+    private suspend fun convertCardResponseListToCardList(cardList: List<CardResponse>): List<Card> {
         val result = ArrayList<Card>()
 
         withContext(Dispatchers.Default) {
@@ -67,7 +88,7 @@ class DatabaseSyncWorker(context: Context, params: WorkerParameters) :
                         card.attribute,
                         card.archetype,
                         card.scale,
-                        card.cardImages[0].imageUrlSmall
+                        card.cardImages?.get(0)?.imageUrlSmall
                     )
                 )
             }
@@ -76,7 +97,7 @@ class DatabaseSyncWorker(context: Context, params: WorkerParameters) :
         return result
     }
 
-    private suspend fun convertSetResponseToSet(setList: List<SetResponse>): List<CardSet> {
+    private suspend fun convertSetResponseListToSetList(setList: List<SetResponse>): List<CardSet> {
         val result = ArrayList<CardSet>()
 
         withContext(Dispatchers.Default) {
@@ -100,7 +121,7 @@ class DatabaseSyncWorker(context: Context, params: WorkerParameters) :
 
         withContext(Dispatchers.Default) {
             for (card in cardList) {
-                for (cardSet in card.cardSets) {
+                for (cardSet in card.cardSets ?: Collections.emptyList()) {
                     result.add(CardSetXRef(card.id, parseCardSet(cardSet), cardSet.setRarity))
                 }
             }

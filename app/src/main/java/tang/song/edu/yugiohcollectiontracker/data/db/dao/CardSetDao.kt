@@ -12,8 +12,8 @@ interface CardSetDao {
     suspend fun getSetByCode(setCode: String): CardSet
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSet(cardSet: CardSet)
+    suspend fun insertSet(cardSet: CardSet): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSets(set: List<CardSet>)
+    suspend fun insertSets(set: List<CardSet>): List<Long>
 }

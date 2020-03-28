@@ -7,13 +7,13 @@ import androidx.room.Query
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
 
 @Dao
-interface CardDao {
+abstract class CardDao {
     @Query("SELECT * FROM Card WHERE cardId = :cardId")
-    suspend fun getCard(cardId: Long): Card
+    abstract suspend fun getCard(cardId: Long): Card
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCard(card: Card)
+    abstract suspend fun insertCard(card: Card): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCards(card: List<Card>)
+    abstract suspend fun insertCards(card: List<Card>): List<Long>
 }
