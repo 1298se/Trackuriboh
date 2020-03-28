@@ -6,19 +6,19 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import tang.song.edu.yugiohcollectiontracker.data.db.dao.CardDao
 import tang.song.edu.yugiohcollectiontracker.data.db.dao.CardSetDao
-import tang.song.edu.yugiohcollectiontracker.data.db.dao.SetDao
+import tang.song.edu.yugiohcollectiontracker.data.db.dao.CardXCardSetDao
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
-import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSetCrossRef
-import tang.song.edu.yugiohcollectiontracker.data.db.entities.Set
+import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
+import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSetXRef
 
 @Database(
-    entities = [Card::class, Set::class, CardSetCrossRef::class],
+    entities = [Card::class, CardSet::class, CardSetXRef::class],
     version = 1
 )
 abstract class CardDatabase : RoomDatabase() {
     abstract fun cardDao(): CardDao
-    abstract fun setDao(): SetDao
     abstract fun cardSetDao(): CardSetDao
+    abstract fun cardXCardSetDao(): CardXCardSetDao
 
     companion object {
         @Volatile

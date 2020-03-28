@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class Set(
+data class CardSet(
     @PrimaryKey(autoGenerate = false)
     val setCode: String,
     val setName: String,

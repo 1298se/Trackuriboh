@@ -11,6 +11,7 @@ import javax.inject.Singleton
 
 @Module
 object AppModule {
+    @JvmStatic
     @Singleton
     @Provides
     fun provideRequestItems(): RequestOptions =
@@ -18,6 +19,7 @@ object AppModule {
             .placeholderOf(R.drawable.img_cardback)
             .error(R.drawable.img_cardback)
 
+    @JvmStatic
     @Singleton
     @Provides
     fun provideGlideInstance(

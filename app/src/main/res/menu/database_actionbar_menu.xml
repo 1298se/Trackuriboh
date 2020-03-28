@@ -9,7 +9,6 @@
 
     <item
         android:id="@+id/action_sync"
-        android:title="Download"
-        android:icon="@drawable/ic_update_black_24dp"
+        android:title="@string/database_sync_title"
         app:showAsAction="ifRoom" />
 </menu>

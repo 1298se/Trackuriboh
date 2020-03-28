@@ -1,22 +1,37 @@
 package tang.song.edu.yugiohcollectiontracker.ui_database
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import tang.song.edu.yugiohcollectiontracker.BaseApplication
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.DatabaseViewPagerAdapter
+import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.DatabaseViewModel
 import tang.song.edu.yugiohcollectiontracker.ui_search.SearchActivity
 
 class DatabaseFragment : Fragment() {
+
     private lateinit var mViewPager: ViewPager2
     private lateinit var mTabLayout: TabLayout
+    private lateinit var mViewModel: ViewModel
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        (activity?.application as BaseApplication).appComponent.inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        mViewModel = ViewModelProvider(this).get(DatabaseViewModel::class.java)
 
         setHasOptionsMenu(true)
     }

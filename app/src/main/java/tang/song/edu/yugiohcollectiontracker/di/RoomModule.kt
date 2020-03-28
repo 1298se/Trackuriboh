@@ -9,11 +9,14 @@ import javax.inject.Singleton
 
 @Module
 object RoomModule {
+
+    @JvmStatic
     @Singleton
     @Provides
     fun provideCardDatabase(application: Application): CardDatabase =
         CardDatabase(application)
 
+    @JvmStatic
     @Provides
     fun providesCardDao(cardDatabase: CardDatabase): CardDao = cardDatabase.cardDao()
 }

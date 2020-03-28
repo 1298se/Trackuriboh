@@ -14,6 +14,7 @@ object NetworkModule {
 
     private const val BASE_URL = "https://db.ygoprodeck.com/api/v6/"
 
+    @JvmStatic
     @Singleton
     @Provides
     fun provideOkHttpClient(): OkHttpClient =
@@ -21,6 +22,7 @@ object NetworkModule {
             .addNetworkInterceptor(StethoInterceptor())
             .build()
 
+    @JvmStatic
     @Singleton
     @Provides
     fun provideRetrofitInstance(okHttpClient: OkHttpClient): Retrofit =
@@ -30,6 +32,7 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
+    @JvmStatic
     @Singleton
     @Provides
     fun provideCardRetrofitService(retrofit: Retrofit): CardRetrofitService =

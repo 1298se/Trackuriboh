@@ -20,6 +20,7 @@
     <!-- Database -->
     <string name="tab_card_title">Cards</string>
     <string name="tab_set_title">Sets</string>
+    <string name="database_sync_title">Sync</string>
 
     <!-- Card Item List -->
     <string name="item_card_list_content_desc">Card Image</string>
