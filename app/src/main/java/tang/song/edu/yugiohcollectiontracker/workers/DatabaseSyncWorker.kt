@@ -6,17 +6,18 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import tang.song.edu.yugiohcollectiontracker.BaseApplication
 import tang.song.edu.yugiohcollectiontracker.data.db.CardDatabase
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSetXRef
+import tang.song.edu.yugiohcollectiontracker.data.network.CardRetrofitService
 import tang.song.edu.yugiohcollectiontracker.data.network.response.CardResponse
 import tang.song.edu.yugiohcollectiontracker.data.network.response.CardSetResponse
 import tang.song.edu.yugiohcollectiontracker.data.network.response.SetResponse
-import tang.song.edu.yugiohcollectiontracker.data.repository.CardRepository
-import tang.song.edu.yugiohcollectiontracker.data.repository.SetRepository
+import java.io.IOException
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -24,9 +25,7 @@ import kotlin.collections.ArrayList
 class DatabaseSyncWorker(context: Context, params: WorkerParameters) :
     CoroutineWorker(context, params) {
     @Inject
-    lateinit var cardRepository: CardRepository
-    @Inject
-    lateinit var setRepository: SetRepository
+    lateinit var cardRetrofitService: CardRetrofitService
     @Inject
     lateinit var cardDatabase: CardDatabase
 
@@ -39,14 +38,25 @@ class DatabaseSyncWorker(context: Context, params: WorkerParameters) :
     }
 
     override suspend fun doWork(): Result {
-        withContext(Dispatchers.IO) {
-            val cardList = async { cardRepository.getAllCards() }
-            val setList = async { setRepository.getAllSets() }
+        return try {
+            coroutineScope {
+                val cardList = async(Dispatchers.IO) { cardRetrofitService.getAllCards() }
+                val setList = async(Dispatchers.IO) { cardRetrofitService.getAllSets() }
 
-            populateDatabase(cardList.await().data, setList.await().data)
+                val cardResponse = cardList.await()
+                val setResponse = setList.await()
+
+                if (cardResponse.isSuccessful && setResponse.isSuccessful) {
+                    populateDatabase(cardResponse.body(), setResponse.body())
+                } else {
+                    throw IOException(cardResponse.message())
+                }
+            }
+
+            Result.success()
+        } catch (throwable: Throwable) {
+            Result.failure()
         }
-
-        return Result.success()
     }
 
     private suspend fun populateDatabase(
@@ -70,10 +80,10 @@ class DatabaseSyncWorker(context: Context, params: WorkerParameters) :
         }
     }
 
-    private suspend fun convertCardResponseListToCardList(cardList: List<CardResponse>): List<Card> {
-        val result = ArrayList<Card>()
-
+    private suspend fun convertCardResponseListToCardList(cardList: List<CardResponse>): List<Card> =
         withContext(Dispatchers.Default) {
+            val result = ArrayList<Card>()
+
             for (card in cardList) {
                 result.add(
                     Card(
@@ -92,15 +102,14 @@ class DatabaseSyncWorker(context: Context, params: WorkerParameters) :
                     )
                 )
             }
+            result
         }
 
-        return result
-    }
-
-    private suspend fun convertSetResponseListToSetList(setList: List<SetResponse>): List<CardSet> {
-        val result = ArrayList<CardSet>()
-
+    private suspend fun convertSetResponseListToSetList(setList: List<SetResponse>): List<CardSet> =
         withContext(Dispatchers.Default) {
+
+            val result = ArrayList<CardSet>()
+
             for (set in setList) {
                 result.add(
                     CardSet(
@@ -111,24 +120,22 @@ class DatabaseSyncWorker(context: Context, params: WorkerParameters) :
                     )
                 )
             }
+            result
         }
 
-        return result
-    }
-
-    private suspend fun createJoins(cardList: List<CardResponse>): List<CardSetXRef> {
-        val result = ArrayList<CardSetXRef>()
-
+    private suspend fun createJoins(cardList: List<CardResponse>): List<CardSetXRef> =
         withContext(Dispatchers.Default) {
+
+            val result = ArrayList<CardSetXRef>()
+
             for (card in cardList) {
                 for (cardSet in card.cardSets ?: Collections.emptyList()) {
                     result.add(CardSetXRef(card.id, parseCardSet(cardSet), cardSet.setRarity))
                 }
             }
-        }
 
-        return result
-    }
+            result
+        }
 
     private fun parseCardSet(cardSet: CardSetResponse): String {
         val hyphenIndex = cardSet.setCode.indexOf('-')

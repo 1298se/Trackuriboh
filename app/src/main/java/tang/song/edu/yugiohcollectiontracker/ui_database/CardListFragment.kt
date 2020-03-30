@@ -5,19 +5,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import tang.song.edu.yugiohcollectiontracker.BaseApplication
+import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardListAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.CardViewModel
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.CardViewModelFactory
 import javax.inject.Inject
 
-class CardListFragment : Fragment() {
+class CardListFragment : BaseFragment() {
     @Inject
     lateinit var mRequestManager: RequestManager
     @Inject

@@ -5,19 +5,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import tang.song.edu.yugiohcollectiontracker.BaseApplication
+import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.SetListAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.SetViewModel
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.SetViewModelFactory
 import javax.inject.Inject
 
-class SetListFragment : Fragment() {
+class SetListFragment : BaseFragment() {
     @Inject
     lateinit var mViewModelFactory: SetViewModelFactory
 
@@ -51,8 +51,8 @@ class SetListFragment : Fragment() {
         initRecyclerView(view)
 
         mViewModel.setListResult.observe(this) { response ->
-            if (response.isSuccess()) {
-                mAdapter.setItems(response.data)
+            if (response.isSuccessful) {
+                mAdapter.setItems(response.body())
             }
         }
     }

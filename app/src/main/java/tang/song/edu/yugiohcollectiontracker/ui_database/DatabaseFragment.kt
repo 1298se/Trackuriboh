@@ -4,18 +4,20 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.viewpager2.widget.ViewPager2
+import androidx.work.WorkInfo
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import tang.song.edu.yugiohcollectiontracker.BaseApplication
+import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.DatabaseViewPagerAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.DatabaseViewModel
 import tang.song.edu.yugiohcollectiontracker.ui_search.SearchActivity
 
-class DatabaseFragment : Fragment() {
+class DatabaseFragment : BaseFragment() {
 
     private lateinit var mViewPager: ViewPager2
     private lateinit var mTabLayout: TabLayout
@@ -42,6 +44,13 @@ class DatabaseFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_database, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initTabLayoutWithViewPager(view)
+        initObservers()
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         // Inflate the options menu from XML
@@ -63,10 +72,21 @@ class DatabaseFragment : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun initObservers() {
+        mViewModel.syncWorkInfo.observe(viewLifecycleOwner) { listOfWorkInfo ->
+            if (listOfWorkInfo.isNullOrEmpty()) {
+                return@observe
+            }
 
-        initTabLayoutWithViewPager(view)
+            val workInfo = listOfWorkInfo[0]
+
+            if (workInfo.state.isFinished && workInfo.state == WorkInfo.State.FAILED) {
+                showErrorDialog(
+                    R.string.database_sync_error_title,
+                    R.string.database_sync_error_message
+                )
+            }
+        }
     }
 
     private fun initTabLayoutWithViewPager(view: View) {

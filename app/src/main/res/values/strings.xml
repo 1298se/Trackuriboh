@@ -21,6 +21,8 @@
     <string name="tab_card_title">Cards</string>
     <string name="tab_set_title">Sets</string>
     <string name="database_sync_title">Sync</string>
+    <string name="database_sync_error_title">Sync Failed</string>
+    <string name="database_sync_error_message">An error has occurred while attempting to sync the database. Please try again later.</string>
 
     <!-- Card Item List -->
     <string name="item_card_list_content_desc">Card Image</string>
@@ -32,4 +34,8 @@
     <!-- Filter -->
     <string name="filter">Filter</string>
     <string name="clear">Clear</string>
+
+    <!-- Error -->
+    <string name="error_title_generic">Error</string>
+    <string name="error_message_generic">An error has occurred.</string>
 </resources>

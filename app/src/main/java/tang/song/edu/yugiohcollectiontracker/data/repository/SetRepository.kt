@@ -1,7 +1,7 @@
 package tang.song.edu.yugiohcollectiontracker.data.repository
 
-import tang.song.edu.yugiohcollectiontracker.data.network.SetDataSource
-import tang.song.edu.yugiohcollectiontracker.data.network.response.Resource
+import retrofit2.Response
+import tang.song.edu.yugiohcollectiontracker.data.SetDataSource
 import tang.song.edu.yugiohcollectiontracker.data.network.response.SetResponse
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,7 +14,7 @@ class SetRepository @Inject constructor(
         private const val TAG = "CardRepository"
     }
 
-    suspend fun getAllSets(): Resource<List<SetResponse>> {
-        return Resource.success(setDataSource.getAllSets())
+    suspend fun getAllSets(): Response<List<SetResponse>> {
+        return setDataSource.getAllSets()
     }
 }

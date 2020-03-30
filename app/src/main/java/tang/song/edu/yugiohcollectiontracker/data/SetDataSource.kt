@@ -1,5 +1,6 @@
-package tang.song.edu.yugiohcollectiontracker.data.network
+package tang.song.edu.yugiohcollectiontracker.data
 
+import tang.song.edu.yugiohcollectiontracker.data.network.CardRetrofitService
 import javax.inject.Inject
 
 class SetDataSource @Inject constructor(
