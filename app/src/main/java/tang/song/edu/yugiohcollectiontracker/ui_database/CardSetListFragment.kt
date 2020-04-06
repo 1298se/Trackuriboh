@@ -12,17 +12,17 @@ import androidx.recyclerview.widget.RecyclerView
 import tang.song.edu.yugiohcollectiontracker.BaseApplication
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.R
-import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.SetListAdapter
+import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardSetListAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.SetViewModel
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.SetViewModelFactory
 import javax.inject.Inject
 
-class SetListFragment : BaseFragment() {
+class CardSetListFragment : BaseFragment() {
     @Inject
     lateinit var mViewModelFactory: SetViewModelFactory
 
     private lateinit var mViewModel: SetViewModel
-    private lateinit var mAdapter: SetListAdapter
+    private lateinit var mAdapter: CardSetListAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -50,15 +50,13 @@ class SetListFragment : BaseFragment() {
 
         initRecyclerView(view)
 
-        mViewModel.setListResult.observe(this) { response ->
-            if (response.isSuccessful) {
-                mAdapter.setItems(response.body())
-            }
+        mViewModel.getCardSetList.observe(this) {
+            mAdapter.submitList(it)
         }
     }
 
     private fun initRecyclerView(view: View) {
-        mAdapter = SetListAdapter()
+        mAdapter = CardSetListAdapter()
         val layoutManager = LinearLayoutManager(requireContext())
 
         view.findViewById<RecyclerView>(R.id.set_list).apply {

@@ -7,8 +7,8 @@ data class CardSetResponse(
     val setName: String,
     @SerializedName("set_code")
     val setCode: String,
-    @SerializedName("set_rarity")
-    val setRarity: String,
-    @SerializedName("set_price")
-    val setPrice: String
+    @SerializedName("num_of_cards")
+    val size: Long,
+    @SerializedName("tcg_date")
+    val releaseDate: String
 )

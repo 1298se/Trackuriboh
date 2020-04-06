@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
@@ -35,8 +36,7 @@ class CardListFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mViewModel =
-            ViewModelProvider(requireActivity(), mViewModelFactory).get(CardViewModel::class.java)
+        mViewModel = ViewModelProvider(requireActivity(), mViewModelFactory).get(CardViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -51,6 +51,10 @@ class CardListFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView(view)
+
+        mViewModel.getCardList.observe(viewLifecycleOwner) {
+            mAdapter.submitList(it)
+        }
     }
 
     private fun initRecyclerView(view: View) {

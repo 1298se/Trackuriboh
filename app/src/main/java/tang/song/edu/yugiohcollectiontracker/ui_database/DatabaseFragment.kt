@@ -1,9 +1,11 @@
 package tang.song.edu.yugiohcollectiontracker.ui_database
 
+import android.app.SearchManager
+import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.viewpager2.widget.ViewPager2
@@ -13,11 +15,14 @@ import com.google.android.material.tabs.TabLayoutMediator
 import tang.song.edu.yugiohcollectiontracker.BaseApplication
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.R
+import tang.song.edu.yugiohcollectiontracker.databinding.FragmentDatabaseBinding
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.DatabaseViewPagerAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.DatabaseViewModel
 import tang.song.edu.yugiohcollectiontracker.ui_search.SearchActivity
 
 class DatabaseFragment : BaseFragment() {
+    private var _binding: FragmentDatabaseBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var mViewPager: ViewPager2
     private lateinit var mTabLayout: TabLayout
@@ -41,7 +46,8 @@ class DatabaseFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_database, container, false)
+        _binding = FragmentDatabaseBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,19 +57,44 @@ class DatabaseFragment : BaseFragment() {
         initObservers()
     }
 
+    override fun onDestroyView() {
+        _binding = null
+
+        super.onDestroyView()
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         // Inflate the options menu from XML
         inflater.inflate(R.menu.database_actionbar_menu, menu)
+        // Get the SearchView and set the searchable configuration
+        val searchManager = activity?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+
+        menu.findItem(R.id.action_open_search).apply {
+            (this.actionView.findViewById(R.id.search_view) as SearchView).apply {
+                setIconifiedByDefault(true)
+
+                val componentName = ComponentName(context, SearchActivity::class.java)
+                setSearchableInfo(searchManager.getSearchableInfo(componentName))
+            }
+
+            setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+                override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+                    menu.findItem(R.id.action_database_sync).isVisible = false
+                    return true
+                }
+
+                override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+                    activity?.invalidateOptionsMenu()
+                    return true
+                }
+            })
+        }
+
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_open_search -> {
-                startActivity(Intent(context, SearchActivity::class.java))
-                true
-            }
             R.id.action_database_sync -> {
                 mViewModel.syncDatabase()
                 true
@@ -90,10 +121,10 @@ class DatabaseFragment : BaseFragment() {
     }
 
     private fun initTabLayoutWithViewPager(view: View) {
-        mViewPager = view.findViewById(R.id.database_view_pager)
+        mViewPager = binding.databaseViewPager
         mViewPager.adapter = DatabaseViewPagerAdapter(requireActivity())
+        mTabLayout = binding.databaseTabLayout
 
-        mTabLayout = view.findViewById(R.id.database_tab_layout)
         TabLayoutMediator(mTabLayout, mViewPager) { tab, position ->
             tab.text = when (position) {
                 0 -> getString(R.string.tab_card_title)

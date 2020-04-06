@@ -1,5 +1,6 @@
 package tang.song.edu.yugiohcollectiontracker
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -12,9 +13,12 @@ import com.google.android.material.navigation.NavigationView
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
 
-    companion object {
-        private const val TAG = "MainActivity"
-        private const val SEARCH_TAG = "SEARCH"
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        if (intent != null && intent.getBooleanExtra(TAG_SEARCH_COMPLETE, false)) {
+            invalidateOptionsMenu()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

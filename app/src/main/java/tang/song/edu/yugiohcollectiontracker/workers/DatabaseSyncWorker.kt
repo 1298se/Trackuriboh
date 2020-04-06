@@ -9,14 +9,14 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import tang.song.edu.yugiohcollectiontracker.BaseApplication
-import tang.song.edu.yugiohcollectiontracker.data.db.CardDatabase
+import tang.song.edu.yugiohcollectiontracker.data.db.CardLocalCache
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
-import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSetXRef
+import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardXCardSetRef
 import tang.song.edu.yugiohcollectiontracker.data.network.CardRetrofitService
 import tang.song.edu.yugiohcollectiontracker.data.network.response.CardResponse
+import tang.song.edu.yugiohcollectiontracker.data.network.response.CardSetDetailResponse
 import tang.song.edu.yugiohcollectiontracker.data.network.response.CardSetResponse
-import tang.song.edu.yugiohcollectiontracker.data.network.response.SetResponse
 import java.io.IOException
 import java.util.*
 import javax.inject.Inject
@@ -27,7 +27,7 @@ class DatabaseSyncWorker(context: Context, params: WorkerParameters) :
     @Inject
     lateinit var cardRetrofitService: CardRetrofitService
     @Inject
-    lateinit var cardDatabase: CardDatabase
+    lateinit var cardLocalCache: CardLocalCache
 
     companion object {
         private val TAG = DatabaseSyncWorker::class.java.name
@@ -61,21 +61,19 @@ class DatabaseSyncWorker(context: Context, params: WorkerParameters) :
 
     private suspend fun populateDatabase(
         cardList: List<CardResponse>?,
-        setList: List<SetResponse>?
+        cardSetList: List<CardSetResponse>?
     ) {
         Log.d(TAG, "cards from api: " + cardList?.size)
-        Log.d(TAG, "cardSets from api: " + setList?.size)
+        Log.d(TAG, "cardSets from api: " + cardSetList?.size)
 
-        if (cardList != null && setList != null) {
-            val cardInsertNum =
-                cardDatabase.cardDao().insertCards(convertCardResponseListToCardList(cardList))
+        if (cardList != null && cardSetList != null) {
+            val cardInsertNum = cardLocalCache.insertCards(convertCardResponseListToCardList(cardList))
             Log.d(TAG, "cards inserted to db: ${cardInsertNum.size}")
 
-            val setInsertNum =
-                cardDatabase.cardSetDao().insertSets(convertSetResponseListToSetList(setList))
+            val setInsertNum = cardLocalCache.insertCardSets(convertSetResponseListToSetList(cardSetList))
             Log.d(TAG, "card sets inserted to db: ${setInsertNum.size}")
 
-            val joinInsertNum = cardDatabase.cardXCardSetDao().insertJoins(createJoins(cardList))
+            val joinInsertNum = cardLocalCache.insertCardXCardSets(createJoins(cardList))
             Log.d(TAG, "joins inserted to db: ${joinInsertNum.size}")
         }
     }
@@ -105,12 +103,12 @@ class DatabaseSyncWorker(context: Context, params: WorkerParameters) :
             result
         }
 
-    private suspend fun convertSetResponseListToSetList(setList: List<SetResponse>): List<CardSet> =
+    private suspend fun convertSetResponseListToSetList(cardSetList: List<CardSetResponse>): List<CardSet> =
         withContext(Dispatchers.Default) {
 
             val result = ArrayList<CardSet>()
 
-            for (set in setList) {
+            for (set in cardSetList) {
                 result.add(
                     CardSet(
                         set.setCode,
@@ -123,23 +121,23 @@ class DatabaseSyncWorker(context: Context, params: WorkerParameters) :
             result
         }
 
-    private suspend fun createJoins(cardList: List<CardResponse>): List<CardSetXRef> =
+    private suspend fun createJoins(cardList: List<CardResponse>): List<CardXCardSetRef> =
         withContext(Dispatchers.Default) {
 
-            val result = ArrayList<CardSetXRef>()
+            val result = ArrayList<CardXCardSetRef>()
 
             for (card in cardList) {
-                for (cardSet in card.cardSets ?: Collections.emptyList()) {
-                    result.add(CardSetXRef(card.id, parseCardSet(cardSet), cardSet.setRarity))
+                for (cardSet in card.cardSetDetails ?: Collections.emptyList()) {
+                    result.add(CardXCardSetRef(card.id, parseCardSet(cardSet), cardSet.setRarity))
                 }
             }
 
             result
         }
 
-    private fun parseCardSet(cardSet: CardSetResponse): String {
-        val hyphenIndex = cardSet.setCode.indexOf('-')
+    private fun parseCardSet(cardSetDetail: CardSetDetailResponse): String {
+        val hyphenIndex = cardSetDetail.setCode.indexOf('-')
 
-        return if (hyphenIndex != -1) cardSet.setCode.substring(0, hyphenIndex) else cardSet.setCode
+        return if (hyphenIndex != -1) cardSetDetail.setCode.substring(0, hyphenIndex) else cardSetDetail.setCode
     }
 }

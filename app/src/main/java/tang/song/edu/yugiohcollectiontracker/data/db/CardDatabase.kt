@@ -9,10 +9,10 @@ import tang.song.edu.yugiohcollectiontracker.data.db.dao.CardSetDao
 import tang.song.edu.yugiohcollectiontracker.data.db.dao.CardXCardSetDao
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
-import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSetXRef
+import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardXCardSetRef
 
 @Database(
-    entities = [Card::class, CardSet::class, CardSetXRef::class],
+    entities = [Card::class, CardSet::class, CardXCardSetRef::class],
     version = 1
 )
 abstract class CardDatabase : RoomDatabase() {

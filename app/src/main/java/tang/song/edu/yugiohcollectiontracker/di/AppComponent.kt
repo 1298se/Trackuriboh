@@ -4,8 +4,9 @@ import android.app.Application
 import dagger.BindsInstance
 import dagger.Component
 import tang.song.edu.yugiohcollectiontracker.ui_database.CardListFragment
+import tang.song.edu.yugiohcollectiontracker.ui_database.CardSetListFragment
 import tang.song.edu.yugiohcollectiontracker.ui_database.DatabaseFragment
-import tang.song.edu.yugiohcollectiontracker.ui_database.SetListFragment
+import tang.song.edu.yugiohcollectiontracker.ui_search.SearchActivity
 import tang.song.edu.yugiohcollectiontracker.ui_search.SearchFragment
 import tang.song.edu.yugiohcollectiontracker.workers.DatabaseSyncWorker
 import javax.inject.Singleton
@@ -20,9 +21,11 @@ interface AppComponent {
     }
 
     fun inject(fragment: CardListFragment)
-    fun inject(fragment: SetListFragment)
+    fun inject(fragment: CardSetListFragment)
     fun inject(fragment: DatabaseFragment)
     fun inject(fragment: SearchFragment)
+
+    fun inject(activity: SearchActivity)
 
     fun inject(worker: DatabaseSyncWorker)
 }

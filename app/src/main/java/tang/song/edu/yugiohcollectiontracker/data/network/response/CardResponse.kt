@@ -15,7 +15,7 @@ data class CardResponse(
     val archetype: String?,
     val scale: Int?,
     @SerializedName("card_sets")
-    val cardSets: List<CardSetResponse>?,
+    val cardSetDetails: List<CardSetDetailResponse>?,
     @SerializedName("card_images")
     val cardImages: List<CardImageResponse>?,
     @SerializedName("card_prices")
@@ -41,7 +41,7 @@ data class CardResponse(
         result = 31 * result + (attribute?.hashCode() ?: 0)
         result = 31 * result + (archetype?.hashCode() ?: 0)
         result = 31 * result + (scale ?: 0)
-        result = 31 * result + (cardSets?.hashCode() ?: 0)
+        result = 31 * result + (cardSetDetails?.hashCode() ?: 0)
         result = 31 * result + (cardImages?.hashCode() ?: 0)
         result = 31 * result + (cardPrices?.hashCode() ?: 0)
         return result

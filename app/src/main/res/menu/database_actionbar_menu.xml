@@ -5,7 +5,8 @@
         android:id="@+id/action_open_search"
         android:title="@string/search_title"
         android:icon="@drawable/ic_search_black_24dp"
-        app:showAsAction="always" />
+        app:showAsAction="always|collapseActionView"
+        app:actionLayout="@layout/search_view" />
 
     <item
         android:id="@+id/action_database_sync"
