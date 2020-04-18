@@ -9,6 +9,7 @@
         <item name="android:textColor">@color/colorAccent</item>
         <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
         <item name="android:actionMenuTextColor">@color/colorDark</item>
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialog</item>
     </style>
 
     <!-- Components -->
@@ -31,10 +32,27 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:background">?android:attr/listDivider</item>
+        <item name="android:color">?attr/colorPrimaryDark</item>
     </style>
 
     <style name="OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="backgroundTint">@color/button_outlined_states</item>
+    </style>
+
+    <style name="BottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+    </style>
+
+    <style name="BottomSheet" parent="Widget.MaterialComponents.BottomSheet">
+        <item name="shapeAppearanceOverlay">@style/BottomSheetDialogShapeAppearance</item>
+    </style>
+
+    <style name="BottomSheetDialogShapeAppearance" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">16dp</item>
+        <item name="cornerSizeTopLeft">16dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 
 </resources>

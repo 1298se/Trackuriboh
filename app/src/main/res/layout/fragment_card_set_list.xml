@@ -6,7 +6,7 @@
     tools:context=".ui_database.CardSetListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/set_list"
+        android:id="@+id/card_set_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

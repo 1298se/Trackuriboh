@@ -3,15 +3,25 @@ package tang.song.edu.yugiohcollectiontracker.ui_database.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
-import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
+import tang.song.edu.yugiohcollectiontracker.databinding.ItemCardBinding
 
-class CardListAdapter(val requestManager: RequestManager) : PagedListAdapter<Card, CardListAdapter.CardViewHolder>(CARD_COMPARATOR) {
+class CardListAdapter(
+    val onItemClickListener: OnItemClickListener,
+    val requestManager: RequestManager
+) : PagedListAdapter<Card, CardListAdapter.CardViewHolder>(CARD_COMPARATOR) {
+    interface OnItemClickListener {
+        fun onItemClick(cardId: Long)
+    }
+
+    init {
+        setHasStableIds(true)
+    }
+
     companion object {
         private val CARD_COMPARATOR = object : DiffUtil.ItemCallback<Card>() {
             override fun areItemsTheSame(oldItem: Card, newItem: Card): Boolean =
@@ -26,7 +36,7 @@ class CardListAdapter(val requestManager: RequestManager) : PagedListAdapter<Car
         parent: ViewGroup,
         viewType: Int
     ): CardViewHolder {
-        return CardViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_card, parent, false))
+        return CardViewHolder(ItemCardBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
@@ -36,11 +46,20 @@ class CardListAdapter(val requestManager: RequestManager) : PagedListAdapter<Car
         }
     }
 
-    inner class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        internal fun bind(item: Card) {
-            requestManager.load(item.cardImage).into(itemView.findViewById(R.id.item_card_image))
+    override fun getItemId(position: Int): Long {
+        return getItem(position)?.cardId ?: -1
+    }
 
-            itemView.findViewById<TextView>(R.id.item_card_title).text = item.name
+    inner class CardViewHolder(private val binding: ItemCardBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+        internal fun bind(item: Card) {
+            requestManager.load(item.cardImage).into(binding.itemCardImage)
+
+            binding.itemCardTitle.text = item.name
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(p0: View?) {
+            onItemClickListener.onItemClick(itemId)
         }
     }
 }

@@ -8,7 +8,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.navigation.NavigationView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -34,14 +34,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupActionBarAndNavigation() {
-        val navController = findNavController(R.id.main_nav_host_fragment)
-        appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.databaseFragment, R.id.collectionFragment, R.id.wishlistFragment),
-            findViewById(R.id.drawer_layout)
-        )
-
         setSupportActionBar(findViewById(R.id.main_toolbar))
+
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.databaseFragment, R.id.collectionFragment, R.id.wishlistFragment))
+
+        val navController = findNavController(R.id.main_nav_host_fragment)
         setupActionBarWithNavController(navController, appBarConfiguration)
-        findViewById<NavigationView>(R.id.nav_view).setupWithNavController(navController)
+        findViewById<BottomNavigationView>(R.id.bottom_nav_view).setupWithNavController(navController)
     }
 }

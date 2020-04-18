@@ -1,33 +1,47 @@
 package tang.song.edu.yugiohcollectiontracker.data.repository
 
-import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
+import kotlinx.coroutines.coroutineScope
 import tang.song.edu.yugiohcollectiontracker.data.db.CardLocalCache
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
+import tang.song.edu.yugiohcollectiontracker.data.network.CardRetrofitService
+import tang.song.edu.yugiohcollectiontracker.data.network.PagedListBoundaryCallbackResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class CardRepository @Inject constructor(
-    private val cardLocalCache: CardLocalCache
+    private val cardLocalCache: CardLocalCache,
+    private val cardRetrofitService: CardRetrofitService
 ) {
 
     companion object {
         private const val DATABASE_PAGE_SIZE = 30
     }
 
-    fun getCardList(): LiveData<PagedList<Card>> {
-        val dataSourceFactory = cardLocalCache.getCardList()
-
-        return LivePagedListBuilder(dataSourceFactory, DATABASE_PAGE_SIZE)
-            .build()
+    suspend fun getCardById(cardId: Long): Card {
+        return cardLocalCache.getCardById(cardId)
     }
 
-    fun search(queryString: String): LiveData<PagedList<Card>> {
-        val dataSourceFactory = cardLocalCache.searchCardByName(queryString)
+    suspend fun getCardList(): PagedListBoundaryCallbackResponse<Card> = coroutineScope {
+        val dataSourceFactory = cardLocalCache.getCardList()
+        val boundaryCallback = CardBoundaryCallback(cardRetrofitService, cardLocalCache, this)
 
-        return LivePagedListBuilder(dataSourceFactory, DATABASE_PAGE_SIZE)
+        val data = LivePagedListBuilder(dataSourceFactory, DATABASE_PAGE_SIZE)
+            .setBoundaryCallback(boundaryCallback)
             .build()
+
+        PagedListBoundaryCallbackResponse<Card>(data, boundaryCallback.networkErrors)
+    }
+
+    suspend fun search(queryString: String): PagedListBoundaryCallbackResponse<Card> = coroutineScope {
+        val dataSourceFactory = cardLocalCache.searchCardByName(queryString)
+        val boundaryCallback = CardBoundaryCallback(cardRetrofitService, cardLocalCache, this)
+
+        val data = LivePagedListBuilder(dataSourceFactory, DATABASE_PAGE_SIZE)
+            .setBoundaryCallback(boundaryCallback)
+            .build()
+
+        PagedListBoundaryCallbackResponse<Card>(data, boundaryCallback.networkErrors)
     }
 }

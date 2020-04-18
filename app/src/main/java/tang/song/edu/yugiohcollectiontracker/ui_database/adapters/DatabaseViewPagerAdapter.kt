@@ -19,4 +19,5 @@ class DatabaseViewPagerAdapter(fragment: FragmentActivity) : FragmentStateAdapte
         }
     }
 
+
 }

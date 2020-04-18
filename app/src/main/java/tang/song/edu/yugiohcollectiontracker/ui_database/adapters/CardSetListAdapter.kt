@@ -22,7 +22,7 @@ class CardSetListAdapter : PagedListAdapter<CardSet, CardSetListAdapter.SetViewH
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SetViewHolder {
-        return SetViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_set, parent, false))
+        return SetViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_card_set, parent, false))
     }
 
     override fun onBindViewHolder(holder: SetViewHolder, position: Int) {
@@ -34,7 +34,7 @@ class CardSetListAdapter : PagedListAdapter<CardSet, CardSetListAdapter.SetViewH
 
     inner class SetViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         internal fun bind(item: CardSet) {
-            itemView.findViewById<TextView>(R.id.item_title_textview).text = (item.setName)
+            itemView.findViewById<TextView>(R.id.card_set_title_textview).text = (item.setName)
         }
     }
 

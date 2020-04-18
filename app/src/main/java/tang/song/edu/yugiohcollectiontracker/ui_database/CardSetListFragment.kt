@@ -7,21 +7,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import tang.song.edu.yugiohcollectiontracker.BaseApplication
-import tang.song.edu.yugiohcollectiontracker.BaseFragment
-import tang.song.edu.yugiohcollectiontracker.R
+import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
+import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardSetListBinding
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardSetListAdapter
-import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.SetViewModel
-import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.SetViewModelFactory
+import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.CardSetViewModel
+import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.CardSetViewModelFactory
 import javax.inject.Inject
 
-class CardSetListFragment : BaseFragment() {
+class CardSetListFragment : BaseSearchListFragment<CardSet>() {
     @Inject
-    lateinit var mViewModelFactory: SetViewModelFactory
+    lateinit var mViewModelFactory: CardSetViewModelFactory
 
-    private lateinit var mViewModel: SetViewModel
+    private var _binding: FragmentCardSetListBinding? = null
+    private val binding
+        get() = _binding!!
+
+    private lateinit var mViewModel: CardSetViewModel
     private lateinit var mAdapter: CardSetListAdapter
 
     override fun onAttach(context: Context) {
@@ -33,33 +38,52 @@ class CardSetListFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mViewModel =
-            ViewModelProvider(requireActivity(), mViewModelFactory).get(SetViewModel::class.java)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_set_list, container, false)
+        _binding = FragmentCardSetListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initRecyclerView(view)
+        initRecyclerView()
 
-        mViewModel.getCardSetList.observe(this) {
+        mViewModel = ViewModelProvider(requireActivity(), mViewModelFactory).get(CardSetViewModel::class.java)
+
+        mViewModel.cardSetList.observe(viewLifecycleOwner) {
             mAdapter.submitList(it)
         }
     }
 
-    private fun initRecyclerView(view: View) {
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
+    }
+
+    override fun getListView(): RecyclerView {
+        return binding.cardSetList
+    }
+
+    override fun search(queryText: String?) {
+        mViewModel.search(queryText)
+    }
+
+    override fun submitList(list: PagedList<CardSet>?) {
+        mAdapter.submitList(list)
+    }
+
+    private fun initRecyclerView() {
         mAdapter = CardSetListAdapter()
         val layoutManager = LinearLayoutManager(requireContext())
 
-        view.findViewById<RecyclerView>(R.id.set_list).apply {
+        binding.cardSetList.apply {
             this.layoutManager = layoutManager
             this.adapter = mAdapter
         }

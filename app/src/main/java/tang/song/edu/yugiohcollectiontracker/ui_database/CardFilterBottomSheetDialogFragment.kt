@@ -1,4 +1,4 @@
-package tang.song.edu.yugiohcollectiontracker.ui_search
+package tang.song.edu.yugiohcollectiontracker.ui_database
 
 import android.app.Dialog
 import android.os.Bundle

@@ -10,8 +10,11 @@
     <dimen name="chip_group_paddingHorizontal">12dp</dimen>
 
     <!-- Database -->
-    <dimen name="item_card_margin">8dp</dimen>
-    <dimen name="item_card_paddingStart">12dp</dimen>
-    <dimen name="item_card_image_width">96dp</dimen>
-    <dimen name="item_card_image_height">96dp</dimen>
+    <dimen name="list_item_card_margin">8dp</dimen>
+    <dimen name="list_item_card_paddingStart">12dp</dimen>
+    <dimen name="list_item_card_image_width">96dp</dimen>
+    <dimen name="list_item_card_image_height">96dp</dimen>
+
+    <!-- Card Detail -->
+    <dimen name="card_detail_margin">24dp</dimen>
 </resources>

@@ -6,7 +6,7 @@ import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardSetInfo
 import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardWithSetInfo
 
 @Dao
-abstract class CardXCardSetDao : CardDao(), CardSetDao {
+abstract class CardXCardSetDao : CardDao, CardSetDao {
     @Query(
         "SELECT " +
                 "CardSet.setCode, " +

@@ -11,6 +11,7 @@ import tang.song.edu.yugiohcollectiontracker.TAG_DATABASE_SYNC_WORK
 import tang.song.edu.yugiohcollectiontracker.workers.DatabaseSyncWorker
 
 class DatabaseViewModel(application: Application) : AndroidViewModel(application) {
+    // Sync
     val syncWorkInfo: LiveData<List<WorkInfo>>
     private val workManager: WorkManager = WorkManager.getInstance(application)
 

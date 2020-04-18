@@ -8,19 +8,19 @@ import androidx.room.Query
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
 
 @Dao
-abstract class CardDao {
+interface CardDao {
     @Query("SELECT * FROM Card WHERE cardId = :cardId")
-    abstract suspend fun getCardById(cardId: Long): Card
+    suspend fun getCardById(cardId: Long): Card
 
     @Query("SELECT * FROM Card ORDER BY name ASC")
-    abstract fun getCardList(): DataSource.Factory<Int, Card>
+    fun getCardList(): DataSource.Factory<Int, Card>
 
-    @Query("SELECT * FROM Card WHERE name LIKE :queryString")
-    abstract fun searchCardByName(queryString: String): DataSource.Factory<Int, Card>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertCard(card: Card): Long
+    @Query("SELECT * FROM Card WHERE name LIKE :queryString ORDER BY name ASC")
+    fun searchCardByName(queryString: String): DataSource.Factory<Int, Card>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertCards(card: List<Card>): List<Long>
+    suspend fun insertCard(card: Card): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCards(card: List<Card>): List<Long>
 }

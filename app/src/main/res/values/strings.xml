@@ -27,6 +27,10 @@
     <!-- Card Item List -->
     <string name="item_card_list_content_desc">Card Image</string>
 
+    <!-- Card Detail -->
+    <string name="lbl_name">Name</string>
+    <string name="lbl_description">Description</string>
+
     <!-- Search -->
     <string name="search_title">Search</string>
     <string name="search_hint">Search for a card or set…</string>
