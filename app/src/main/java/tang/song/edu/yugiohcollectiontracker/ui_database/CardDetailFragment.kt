@@ -50,9 +50,6 @@ class CardDetailFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         prepareListData()
-        binding.cardSetExpandList.apply {
-            setAdapter(CardDetailExpandableListAdapter(listDataHeader, listDataChild))
-        }
 
         mViewModel = ViewModelProvider(this, mViewModelFactory).get(CardDetailViewModel::class.java)
 

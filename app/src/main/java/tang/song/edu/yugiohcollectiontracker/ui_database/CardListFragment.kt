@@ -52,12 +52,6 @@ class CardListFragment : BaseSearchListFragment<Card>(), CardListAdapter.OnItemC
         (activity?.application as BaseApplication).appComponent.inject(this)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -71,7 +65,11 @@ class CardListFragment : BaseSearchListFragment<Card>(), CardListAdapter.OnItemC
 
         initRecyclerView()
 
-        mViewModel = ViewModelProvider(requireActivity(), mViewModelFactory).get(CardViewModel::class.java)
+        mViewModel = ViewModelProvider(this, mViewModelFactory).get(CardViewModel::class.java)
+
+        mQueryString?.let {
+            mViewModel.search(mQueryString)
+        }
 
         mViewModel.cardList.observe(viewLifecycleOwner) {
             mAdapter.submitList(it)

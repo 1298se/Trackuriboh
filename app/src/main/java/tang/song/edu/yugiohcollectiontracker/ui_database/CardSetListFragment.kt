@@ -29,16 +29,22 @@ class CardSetListFragment : BaseSearchListFragment<CardSet>() {
     private lateinit var mViewModel: CardSetViewModel
     private lateinit var mAdapter: CardSetListAdapter
 
+    companion object {
+        fun newInstance(queryString: String?): CardSetListFragment {
+            val args = Bundle().apply {
+                putString(ARGS_QUERY_STRING, queryString)
+            }
+
+            return CardSetListFragment().apply {
+                arguments = args
+            }
+        }
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
         (activity?.application as BaseApplication).appComponent.inject(this)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -54,7 +60,11 @@ class CardSetListFragment : BaseSearchListFragment<CardSet>() {
 
         initRecyclerView()
 
-        mViewModel = ViewModelProvider(requireActivity(), mViewModelFactory).get(CardSetViewModel::class.java)
+        mViewModel = ViewModelProvider(this, mViewModelFactory).get(CardSetViewModel::class.java)
+
+        mQueryString?.let {
+            mViewModel.search(mQueryString)
+        }
 
         mViewModel.cardSetList.observe(viewLifecycleOwner) {
             mAdapter.submitList(it)
