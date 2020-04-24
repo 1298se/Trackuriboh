@@ -1,4 +1,4 @@
-package tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels
+package tang.song.edu.yugiohcollectiontracker.ui_card_detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData

@@ -18,5 +18,4 @@
         android:id="@+id/action_database_sync"
         android:title="@string/database_sync_title"
         app:showAsAction="ifRoom" />
-
 </menu>

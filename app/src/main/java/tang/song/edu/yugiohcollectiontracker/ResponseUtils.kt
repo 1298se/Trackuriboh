@@ -19,6 +19,12 @@ class ResponseUtils {
                 val result = ArrayList<Card>()
 
                 for (card in cardList) {
+                    val cardImageList = ArrayList<String>()
+
+                    for (cardImageResponse in card.cardImages ?: emptyList()) {
+                        cardImageList.add(cardImageResponse.imageUrl)
+                    }
+
                     result.add(
                         Card(
                             card.id,
@@ -32,7 +38,7 @@ class ResponseUtils {
                             card.attribute,
                             card.archetype,
                             card.scale,
-                            card.cardImages?.get(0)?.imageUrl
+                            cardImageList
                         )
                     )
                 }

@@ -29,7 +29,7 @@
         tools:layout="@layout/fragment_wishlist" />
     <fragment
         android:id="@+id/cardDetailFragment"
-        android:name="tang.song.edu.yugiohcollectiontracker.ui_database.CardDetailFragment">
+        android:name="tang.song.edu.yugiohcollectiontracker.ui_card_detail.CardDetailFragment">
         <argument
             android:name="cardId"
             app:argType="long" />

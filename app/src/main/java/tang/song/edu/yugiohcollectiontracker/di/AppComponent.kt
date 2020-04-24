@@ -3,7 +3,7 @@ package tang.song.edu.yugiohcollectiontracker.di
 import android.app.Application
 import dagger.BindsInstance
 import dagger.Component
-import tang.song.edu.yugiohcollectiontracker.ui_database.CardDetailFragment
+import tang.song.edu.yugiohcollectiontracker.ui_card_detail.CardDetailFragment
 import tang.song.edu.yugiohcollectiontracker.ui_database.CardListFragment
 import tang.song.edu.yugiohcollectiontracker.ui_database.CardSetListFragment
 import tang.song.edu.yugiohcollectiontracker.ui_database.DatabaseFragment

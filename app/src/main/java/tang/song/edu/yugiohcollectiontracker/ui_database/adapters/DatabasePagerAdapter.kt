@@ -6,7 +6,7 @@ import tang.song.edu.yugiohcollectiontracker.ui_database.CardListFragment
 import tang.song.edu.yugiohcollectiontracker.ui_database.CardSetListFragment
 import tang.song.edu.yugiohcollectiontracker.ui_database.DatabaseFragment
 
-class DatabaseViewPagerAdapter(private val fragment: DatabaseFragment) : FragmentStateAdapter(fragment) {
+class DatabasePagerAdapter(private val fragment: DatabaseFragment) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int {
         return 2
     }

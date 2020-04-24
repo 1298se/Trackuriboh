@@ -14,7 +14,7 @@ import tang.song.edu.yugiohcollectiontracker.BaseApplication
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentDatabaseBinding
-import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.DatabaseViewPagerAdapter
+import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.DatabasePagerAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.DatabaseViewModel
 
 class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener {
@@ -24,7 +24,7 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener {
     private var mSearchView: SearchView? = null
 
     private lateinit var mViewModel: DatabaseViewModel
-    private lateinit var mAdapter: DatabaseViewPagerAdapter
+    private lateinit var mAdapter: DatabasePagerAdapter
     private lateinit var mViewPager: ViewPager2
 
     override fun onAttach(context: Context) {
@@ -57,9 +57,9 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener {
     }
 
     override fun onDestroyView() {
-        _binding = null
-
         super.onDestroyView()
+
+        _binding = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -69,7 +69,6 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener {
         menu.findItem(R.id.action_open_search).apply {
             mSearchView = (this.actionView.findViewById(R.id.search_view) as SearchView).apply {
                 setIconifiedByDefault(true)
-
                 setOnQueryTextListener(this@DatabaseFragment)
             }
 
@@ -85,12 +84,6 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener {
                 }
             })
         }
-
-        mViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                performSearch(mSearchView?.query.toString())
-            }
-        })
 
         super.onCreateOptionsMenu(menu, inflater)
     }
@@ -137,7 +130,7 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener {
 
     private fun initTabLayoutWithViewPager() {
         mViewPager = binding.databaseViewPager.apply {
-            adapter = DatabaseViewPagerAdapter(this@DatabaseFragment).also {
+            adapter = DatabasePagerAdapter(this@DatabaseFragment).also {
                 mAdapter = it
             }
 
@@ -149,13 +142,20 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener {
                 }
 
             }.attach()
+
+            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    performSearch(mSearchView?.query?.toString())
+                }
+            })
         }
+
     }
 
     private fun performSearch(newText: String?) {
         val currentFragment = childFragmentManager.findFragmentByTag("f" + mAdapter.getItemId(mViewPager.currentItem))
 
-        if (currentFragment is BaseSearchListFragment<*>) {
+        if (currentFragment is BaseSearchListFragment<*> && currentFragment.isVisible) {
             currentFragment.onQueryTextChange(newText)
         }
     }
