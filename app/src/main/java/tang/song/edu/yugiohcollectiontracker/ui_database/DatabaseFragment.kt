@@ -2,11 +2,17 @@ package tang.song.edu.yugiohcollectiontracker.ui_database
 
 import android.content.Context
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager2.widget.ViewPager2
 import androidx.work.WorkInfo
 import com.google.android.material.tabs.TabLayoutMediator
@@ -17,11 +23,11 @@ import tang.song.edu.yugiohcollectiontracker.databinding.FragmentDatabaseBinding
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.DatabasePagerAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.DatabaseViewModel
 
-class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener {
+class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar.OnMenuItemClickListener, MenuItem.OnActionExpandListener {
     private var _binding: FragmentDatabaseBinding? = null
     private val binding get() = _binding!!
 
-    private var mSearchView: SearchView? = null
+    private lateinit var mSearchView: SearchView
 
     private lateinit var mViewModel: DatabaseViewModel
     private lateinit var mAdapter: DatabasePagerAdapter
@@ -52,6 +58,7 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener {
 
         mViewModel = ViewModelProvider(requireActivity()).get(DatabaseViewModel::class.java)
 
+        initToolbar()
         initTabLayoutWithViewPager()
         initObservers()
     }
@@ -60,32 +67,6 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener {
         super.onDestroyView()
 
         _binding = null
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        // Inflate the options menu from XML
-        inflater.inflate(R.menu.database_actionbar_menu, menu)
-
-        menu.findItem(R.id.action_open_search).apply {
-            mSearchView = (this.actionView.findViewById(R.id.search_view) as SearchView).apply {
-                setIconifiedByDefault(true)
-                setOnQueryTextListener(this@DatabaseFragment)
-            }
-
-            setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-                override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
-                    menu.findItem(R.id.action_database_sync).isVisible = false
-                    return true
-                }
-
-                override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
-                    activity?.invalidateOptionsMenu()
-                    return true
-                }
-            })
-        }
-
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -108,6 +89,30 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextChange(newText: String?): Boolean {
         performSearch(newText)
+        return true
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.action_open_filter -> {
+                findNavController().navigate(R.id.action_databaseFragment_to_filterBottomSheetDialogFragment)
+                true
+            }
+            R.id.action_database_sync -> {
+                mViewModel.syncDatabase()
+                true
+            }
+            else -> false
+        }
+    }
+
+    override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+        binding.databaseToolbar.menu.findItem(R.id.action_database_sync).isVisible = false
+        return true
+    }
+
+    override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+        binding.databaseToolbar.menu.findItem(R.id.action_database_sync).isVisible = true
         return true
     }
 
@@ -145,11 +150,33 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener {
 
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
-                    performSearch(mSearchView?.query?.toString())
+                    performSearch(mSearchView.query?.toString())
                 }
             })
         }
 
+    }
+
+    private fun initToolbar() {
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        binding.databaseToolbar.apply {
+            setupWithNavController(navController, appBarConfiguration)
+
+            inflateMenu(R.menu.database_actionbar_menu)
+
+            menu.findItem(R.id.action_open_search).apply {
+                mSearchView = (this.actionView.findViewById(R.id.search_view) as SearchView).apply {
+                    setIconifiedByDefault(true)
+                    setOnQueryTextListener(this@DatabaseFragment)
+                }
+
+                setOnActionExpandListener(this@DatabaseFragment)
+            }
+
+            setOnMenuItemClickListener(this@DatabaseFragment)
+        }
     }
 
     private fun performSearch(newText: String?) {
@@ -161,6 +188,6 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener {
     }
 
     fun getQueryString(): String? {
-        return mSearchView?.query?.toString()
+        return mSearchView.query?.toString()
     }
 }

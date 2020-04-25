@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.RequestManager
 import com.google.android.material.tabs.TabLayoutMediator
 import tang.song.edu.yugiohcollectiontracker.BaseApplication
@@ -22,8 +21,6 @@ class CardDetailFragment : BaseFragment() {
 
     @Inject
     lateinit var mViewModelFactory: CardDetailViewModelFactory
-
-    private val args: CardDetailFragmentArgs by navArgs()
 
     private var _binding: FragmentCardDetailBinding? = null
     private val binding
@@ -50,8 +47,7 @@ class CardDetailFragment : BaseFragment() {
 
         mViewModel = ViewModelProvider(this, mViewModelFactory).get(CardDetailViewModel::class.java)
 
-        mViewModel.getCardById(args.cardId).observe(viewLifecycleOwner, Observer {
-            mAdapter.setImageList(it.cardImage)
+        mViewModel.getCardById(12345).observe(viewLifecycleOwner, Observer {
         })
     }
 
