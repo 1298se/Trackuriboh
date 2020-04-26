@@ -10,6 +10,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/card_detail_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:collapseIcon="@drawable/ic_arrow_back_black_24dp" />
+
+        <View style="@style/Divider" />
+
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/card_image_view_pager"
             android:layout_width="205dp"

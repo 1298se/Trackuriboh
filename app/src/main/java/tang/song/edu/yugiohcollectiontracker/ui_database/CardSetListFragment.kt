@@ -7,18 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
-import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import tang.song.edu.yugiohcollectiontracker.BaseApplication
-import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardSetListBinding
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardSetListAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.CardSetViewModel
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.CardSetViewModelFactory
 import javax.inject.Inject
 
-class CardSetListFragment : BaseSearchListFragment<CardSet>() {
+class CardSetListFragment : BaseSearchListFragment() {
     @Inject
     lateinit var mViewModelFactory: CardSetViewModelFactory
 
@@ -30,6 +28,8 @@ class CardSetListFragment : BaseSearchListFragment<CardSet>() {
     private lateinit var mAdapter: CardSetListAdapter
 
     companion object {
+        private const val ARGS_QUERY_STRING = "ARGS_QUERY_STRING"
+
         fun newInstance(queryString: String?): CardSetListFragment {
             val args = Bundle().apply {
                 putString(ARGS_QUERY_STRING, queryString)
@@ -45,6 +45,14 @@ class CardSetListFragment : BaseSearchListFragment<CardSet>() {
         super.onAttach(context)
 
         (activity?.application as BaseApplication).appComponent.inject(this)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        arguments?.let {
+            mQueryString = it.getString(ARGS_QUERY_STRING)
+        }
     }
 
     override fun onCreateView(
@@ -85,8 +93,8 @@ class CardSetListFragment : BaseSearchListFragment<CardSet>() {
         mViewModel.search(queryText)
     }
 
-    override fun submitList(list: PagedList<CardSet>?) {
-        mAdapter.submitList(list)
+    override fun clearList() {
+        mAdapter.submitList(null)
     }
 
     private fun initRecyclerView() {

@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.RequestManager
 import com.google.android.material.tabs.TabLayoutMediator
 import tang.song.edu.yugiohcollectiontracker.BaseApplication
@@ -43,18 +46,30 @@ class CardDetailFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initToolbar()
         initTabLayoutWithViewPager()
 
         mViewModel = ViewModelProvider(this, mViewModelFactory).get(CardDetailViewModel::class.java)
 
-        mViewModel.getCardById(12345).observe(viewLifecycleOwner, Observer {
-        })
+        mViewModel.getCardById(9).observe(viewLifecycleOwner) {
+            binding.cardDetailToolbar.title = it.name
+            mAdapter.setImageList(it.cardImageList)
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
 
         _binding = null
+    }
+
+    private fun initToolbar() {
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        binding.cardDetailToolbar.apply {
+            setupWithNavController(navController, appBarConfiguration)
+        }
     }
 
     private fun initTabLayoutWithViewPager() {

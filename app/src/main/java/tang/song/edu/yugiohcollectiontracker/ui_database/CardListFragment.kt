@@ -8,19 +8,17 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
-import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import tang.song.edu.yugiohcollectiontracker.BaseApplication
-import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardListBinding
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardListAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.CardViewModel
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.CardViewModelFactory
 import javax.inject.Inject
 
-class CardListFragment : BaseSearchListFragment<Card>(), CardListAdapter.OnItemClickListener {
+class CardListFragment : BaseSearchListFragment(), CardListAdapter.OnItemClickListener {
     @Inject
     lateinit var mRequestManager: RequestManager
 
@@ -83,7 +81,7 @@ class CardListFragment : BaseSearchListFragment<Card>(), CardListAdapter.OnItemC
     }
 
     override fun onItemClick(cardId: Long) {
-        val action = DatabaseFragmentDirections.actionDatabaseFragmentToCardDetailFragment(cardId)
+        val action = DatabaseFragmentDirections.actionDatabaseFragmentToCardDetailActivity()
         findNavController().navigate(action)
     }
 
@@ -95,8 +93,8 @@ class CardListFragment : BaseSearchListFragment<Card>(), CardListAdapter.OnItemC
         mViewModel.search(queryText)
     }
 
-    override fun submitList(list: PagedList<Card>?) {
-        mAdapter.submitList(list)
+    override fun clearList() {
+        mAdapter.submitList(null)
     }
 
     private fun initRecyclerView() {

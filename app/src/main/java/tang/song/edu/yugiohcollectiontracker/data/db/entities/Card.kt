@@ -17,5 +17,5 @@ data class Card(
     val attribute: String?,
     val archetype: String?,
     val scale: Int?,
-    val cardImage: List<String>?
+    val cardImageList: List<String>?
 )

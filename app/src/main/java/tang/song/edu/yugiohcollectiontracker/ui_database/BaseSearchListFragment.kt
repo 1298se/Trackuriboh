@@ -1,11 +1,10 @@
 package tang.song.edu.yugiohcollectiontracker.ui_database
 
 import android.os.Bundle
-import androidx.paging.PagedList
 import androidx.recyclerview.widget.RecyclerView
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
 
-abstract class BaseSearchListFragment<T> : BaseFragment() {
+abstract class BaseSearchListFragment : BaseFragment() {
     protected var mQueryString: String? = null
 
     companion object {
@@ -24,11 +23,11 @@ abstract class BaseSearchListFragment<T> : BaseFragment() {
         newText?.trim().let {
             getListView().scrollToPosition(0)
             search(it)
-            submitList(null)
+            clearList()
         }
     }
 
     protected abstract fun search(queryText: String?)
     protected abstract fun getListView(): RecyclerView
-    protected abstract fun submitList(list: PagedList<T>?)
+    protected abstract fun clearList()
 }

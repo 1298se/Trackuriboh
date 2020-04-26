@@ -11,11 +11,11 @@
         android:label="Database"
         tools:layout="@layout/fragment_database">
         <action
-            android:id="@+id/action_databaseFragment_to_cardDetailFragment"
-            app:destination="@id/cardDetailFragment" />
-        <action
             android:id="@+id/action_databaseFragment_to_filterBottomSheetDialogFragment"
             app:destination="@id/filterBottomSheetDialogFragment" />
+        <action
+            android:id="@+id/action_databaseFragment_to_cardDetailActivity"
+            app:destination="@id/cardDetailActivity" />
     </fragment>
     <fragment
         android:id="@+id/collectionFragment"
@@ -27,15 +27,13 @@
         android:name="tang.song.edu.yugiohcollectiontracker.ui_wishlist.WishlistFragment"
         android:label="Wishlist"
         tools:layout="@layout/fragment_wishlist" />
-    <fragment
-        android:id="@+id/cardDetailFragment"
-        android:name="tang.song.edu.yugiohcollectiontracker.ui_card_detail.CardDetailFragment">
-        <argument
-            android:name="cardId"
-            app:argType="long" />
-    </fragment>
     <dialog
         android:id="@+id/filterBottomSheetDialogFragment"
         android:name="tang.song.edu.yugiohcollectiontracker.ui_database.CardFilterBottomSheetDialogFragment"
         android:label="FilterBottomSheetDialogFragment" />
+    <activity
+        android:id="@+id/cardDetailActivity"
+        android:name="tang.song.edu.yugiohcollectiontracker.ui_card_detail.CardDetailActivity"
+        android:label="activity_card_detail"
+        tools:layout="@layout/activity_card_detail" />
 </navigation>

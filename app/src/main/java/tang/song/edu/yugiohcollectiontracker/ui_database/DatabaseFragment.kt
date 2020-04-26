@@ -39,12 +39,6 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
         (activity?.application as BaseApplication).appComponent.inject(this)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,26 +63,13 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
         _binding = null
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_open_filter -> {
-                findNavController().navigate(R.id.action_databaseFragment_to_filterBottomSheetDialogFragment)
-                true
-            }
-            R.id.action_database_sync -> {
-                mViewModel.syncDatabase()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
     override fun onQueryTextSubmit(query: String?): Boolean {
+        mSearchView.clearFocus()
+        performSearch(query)
         return false
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        performSearch(newText)
         return true
     }
 
@@ -115,6 +96,8 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
         binding.databaseToolbar.menu.findItem(R.id.action_database_sync).isVisible = true
         return true
     }
+
+    fun getQueryString(): String? = mSearchView.query?.toString()
 
     private fun initObservers() {
         mViewModel.syncWorkInfo.observe(viewLifecycleOwner) { listOfWorkInfo ->
@@ -154,7 +137,6 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
                 }
             })
         }
-
     }
 
     private fun initToolbar() {
@@ -179,15 +161,11 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
         }
     }
 
-    private fun performSearch(newText: String?) {
+    private fun performSearch(query: String?) {
         val currentFragment = childFragmentManager.findFragmentByTag("f" + mAdapter.getItemId(mViewPager.currentItem))
 
-        if (currentFragment is BaseSearchListFragment<*> && currentFragment.isVisible) {
-            currentFragment.onQueryTextChange(newText)
+        if (currentFragment is BaseSearchListFragment) {
+            currentFragment.onQueryTextChange(query)
         }
-    }
-
-    fun getQueryString(): String? {
-        return mSearchView.query?.toString()
     }
 }
