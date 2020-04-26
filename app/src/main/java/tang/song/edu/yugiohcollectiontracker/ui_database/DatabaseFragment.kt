@@ -64,7 +64,6 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        mSearchView.clearFocus()
         performSearch(query)
         return false
     }
