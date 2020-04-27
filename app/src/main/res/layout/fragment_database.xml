@@ -8,12 +8,11 @@
     android:orientation="vertical"
     tools:context=".ui_database.DatabaseFragment">
 
-
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/database_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:collapseIcon="@drawable/ic_arrow_back_black_24dp" />
+        app:collapseIcon="?attr/homeAsUpIndicator" />
 
     <View style="@style/Divider" />
 

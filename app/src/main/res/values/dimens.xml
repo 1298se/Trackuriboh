@@ -16,5 +16,9 @@
     <dimen name="list_item_card_image_height">96dp</dimen>
 
     <!-- Card Detail -->
-    <dimen name="card_detail_margin">24dp</dimen>
+    <dimen name="card_image_swipe_padding">16dp</dimen>
+    <dimen name="card_image_height">250dp</dimen>
+    <dimen name="image_slider_height">6dp</dimen>
+    <dimen name="image_slider_margin_bottom">5dp</dimen>
+    <dimen name="image_slider_width">10dp</dimen>
 </resources>

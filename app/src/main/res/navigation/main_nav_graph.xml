@@ -35,5 +35,10 @@
         android:id="@+id/cardDetailActivity"
         android:name="tang.song.edu.yugiohcollectiontracker.ui_card_detail.CardDetailActivity"
         android:label="activity_card_detail"
-        tools:layout="@layout/activity_card_detail" />
+        tools:layout="@layout/activity_card_detail">
+
+        <argument
+            android:name="card_id"
+            app:argType="long" />
+    </activity>
 </navigation>

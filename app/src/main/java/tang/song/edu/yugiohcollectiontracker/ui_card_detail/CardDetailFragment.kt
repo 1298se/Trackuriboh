@@ -7,23 +7,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.RequestManager
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import tang.song.edu.yugiohcollectiontracker.BaseApplication
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardDetailBinding
+import tang.song.edu.yugiohcollectiontracker.ui_base.CollapseToolbarStateChangeListener
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardImagePagerAdapter
 import javax.inject.Inject
 
-class CardDetailFragment : BaseFragment() {
+class CardDetailFragment : BaseFragment(), View.OnClickListener {
     @Inject
     lateinit var mRequestManager: RequestManager
 
     @Inject
     lateinit var mViewModelFactory: CardDetailViewModelFactory
+
+    private val args by navArgs<CardDetailActivityArgs>()
 
     private var _binding: FragmentCardDetailBinding? = null
     private val binding
@@ -51,8 +53,7 @@ class CardDetailFragment : BaseFragment() {
 
         mViewModel = ViewModelProvider(this, mViewModelFactory).get(CardDetailViewModel::class.java)
 
-        mViewModel.getCardById(9).observe(viewLifecycleOwner) {
-            binding.cardDetailToolbar.title = it.name
+        mViewModel.getCardById(args.cardId).observe(viewLifecycleOwner) {
             mAdapter.setImageList(it.cardImageList)
         }
     }
@@ -64,22 +65,33 @@ class CardDetailFragment : BaseFragment() {
     }
 
     private fun initToolbar() {
-        val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        binding.cardDetailAppBarLayout.addOnOffsetChangedListener(object : CollapseToolbarStateChangeListener() {
+            override fun onStateChanged(appBarLayout: AppBarLayout?, state: State) {
+                if (state == State.COLLAPSED) {
+                    binding.cardDetailToolbar.title = "Card Details"
+                } else {
+                    binding.cardDetailToolbar.title = null
+                }
+            }
+        })
 
         binding.cardDetailToolbar.apply {
-            setupWithNavController(navController, appBarConfiguration)
+            setNavigationOnClickListener(this@CardDetailFragment)
         }
     }
 
     private fun initTabLayoutWithViewPager() {
-        binding.cardImageViewPager.apply {
-            adapter = CardImagePagerAdapter(mRequestManager).also {
-                mAdapter = it
-            }
-
-            TabLayoutMediator(binding.cardImageTabLayout, this) { _, _ ->
-            }.attach()
+        binding.cardImageViewPager.adapter = CardImagePagerAdapter(mRequestManager).also {
+            mAdapter = it
         }
+
+        TabLayoutMediator(binding.cardImageTabLayout, binding.cardImageViewPager) { _, _ ->
+        }.attach()
+    }
+
+    // Back button
+    override fun onClick(view: View?) {
+        activity?.onBackPressed()
     }
 }

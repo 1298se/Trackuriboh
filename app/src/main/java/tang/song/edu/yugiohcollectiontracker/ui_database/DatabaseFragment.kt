@@ -86,12 +86,13 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
         }
     }
 
-    override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+    override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
         binding.databaseToolbar.menu.findItem(R.id.action_database_sync).isVisible = false
         return true
     }
 
-    override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+    override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+        performSearch(null)
         binding.databaseToolbar.menu.findItem(R.id.action_database_sync).isVisible = true
         return true
     }

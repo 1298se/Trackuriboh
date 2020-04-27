@@ -10,6 +10,5 @@ class CardViewModel(private val cardRepository: CardRepository) : BaseSearchView
 
     val cardList: LiveData<PagedList<Card>> = itemList
 
-    override suspend fun totalListSource(): PagedListBoundaryCallbackResponse<Card> = cardRepository.getCardList()
     override suspend fun searchSource(queryString: String): PagedListBoundaryCallbackResponse<Card> = cardRepository.search(queryString)
 }

@@ -9,7 +9,5 @@ import tang.song.edu.yugiohcollectiontracker.data.repository.CardSetRepository
 class CardSetViewModel(private val cardSetRepository: CardSetRepository) : BaseSearchViewModel<CardSet>() {
     val cardSetList: LiveData<PagedList<CardSet>> = itemList
 
-    override suspend fun totalListSource(): PagedListBoundaryCallbackResponse<CardSet> = cardSetRepository.getCardSetList()
-
     override suspend fun searchSource(queryString: String): PagedListBoundaryCallbackResponse<CardSet> = cardSetRepository.search(queryString)
 }

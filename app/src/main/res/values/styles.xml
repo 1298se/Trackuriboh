@@ -10,6 +10,7 @@
         <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
         <item name="android:actionMenuTextColor">@color/colorDark</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialog</item>
+        <item name="homeAsUpIndicator">@drawable/ic_arrow_back_black_24dp</item>
     </style>
 
     <!-- Components -->

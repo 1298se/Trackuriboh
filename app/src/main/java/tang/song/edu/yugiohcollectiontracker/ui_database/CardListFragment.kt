@@ -81,7 +81,7 @@ class CardListFragment : BaseSearchListFragment(), CardListAdapter.OnItemClickLi
     }
 
     override fun onItemClick(cardId: Long) {
-        val action = DatabaseFragmentDirections.actionDatabaseFragmentToCardDetailActivity()
+        val action = DatabaseFragmentDirections.actionDatabaseFragmentToCardDetailActivity(cardId)
         findNavController().navigate(action)
     }
 
