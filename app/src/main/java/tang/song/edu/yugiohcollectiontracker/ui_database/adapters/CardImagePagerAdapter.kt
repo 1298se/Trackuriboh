@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
-import tang.song.edu.yugiohcollectiontracker.databinding.CardImageSwipeContainerBinding
+import tang.song.edu.yugiohcollectiontracker.databinding.CardImageContainerBinding
 
 class CardImagePagerAdapter(
     private val requestManager: RequestManager
@@ -12,7 +12,7 @@ class CardImagePagerAdapter(
     private var cardImageList: List<String>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardImageViewHolder {
-        return CardImageViewHolder(CardImageSwipeContainerBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return CardImageViewHolder(CardImageContainerBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: CardImageViewHolder, position: Int) {
@@ -28,7 +28,7 @@ class CardImagePagerAdapter(
         notifyDataSetChanged()
     }
 
-    inner class CardImageViewHolder(private val binding: CardImageSwipeContainerBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class CardImageViewHolder(private val binding: CardImageContainerBinding) : RecyclerView.ViewHolder(binding.root) {
         internal fun bind(imageUrl: String?) {
             requestManager.load(imageUrl).into(binding.cardImageContainer)
         }

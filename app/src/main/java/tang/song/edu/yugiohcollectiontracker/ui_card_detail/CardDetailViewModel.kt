@@ -5,7 +5,7 @@ import androidx.lifecycle.liveData
 import tang.song.edu.yugiohcollectiontracker.data.repository.CardRepository
 
 class CardDetailViewModel(private val cardRepository: CardRepository) : ViewModel() {
-    fun getCardById(cardId: Long) = liveData {
-        emit(cardRepository.getCardById(cardId))
+    fun getCardDetailsById(cardId: Long) = liveData {
+        emit(cardRepository.getCardDetails(cardId))
     }
 }

@@ -6,6 +6,7 @@ import tang.song.edu.yugiohcollectiontracker.ResponseUtils
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardXCardSetRef
+import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardWithSetInfo
 import tang.song.edu.yugiohcollectiontracker.data.network.response.CardResponse
 import tang.song.edu.yugiohcollectiontracker.data.network.response.CardSetResponse
 import javax.inject.Inject
@@ -45,8 +46,8 @@ class CardLocalCache @Inject constructor(
         return cardDatabase.cardXCardSetDao().insertJoins(joinList)
     }
 
-    suspend fun getCardById(cardId: Long): Card {
-        return cardDatabase.cardDao().getCardById(cardId)
+    suspend fun getCardDetails(cardId: Long): CardWithSetInfo {
+        return cardDatabase.cardXCardSetDao().getCardWithSetInfo(cardId)
     }
 
     fun getCardList(): DataSource.Factory<Int, Card> {

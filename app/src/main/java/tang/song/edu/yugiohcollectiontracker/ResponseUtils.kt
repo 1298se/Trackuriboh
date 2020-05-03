@@ -5,6 +5,7 @@ import kotlinx.coroutines.withContext
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardXCardSetRef
+import tang.song.edu.yugiohcollectiontracker.data.models.CardType
 import tang.song.edu.yugiohcollectiontracker.data.network.response.CardResponse
 import tang.song.edu.yugiohcollectiontracker.data.network.response.CardSetDetailResponse
 import tang.song.edu.yugiohcollectiontracker.data.network.response.CardSetResponse
@@ -29,7 +30,7 @@ class ResponseUtils {
                         Card(
                             card.id,
                             card.name,
-                            card.type,
+                            CardType.fromString(card.type),
                             card.desc,
                             card.atk,
                             card.def,
@@ -55,7 +56,7 @@ class ResponseUtils {
                         CardSet(
                             set.setCode,
                             set.setName,
-                            set.size,
+                            set.numOfCards,
                             set.releaseDate
                         )
                     )

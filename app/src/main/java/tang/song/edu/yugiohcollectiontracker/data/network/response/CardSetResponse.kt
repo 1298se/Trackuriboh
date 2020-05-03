@@ -8,7 +8,7 @@ data class CardSetResponse(
     @SerializedName("set_code")
     val setCode: String,
     @SerializedName("num_of_cards")
-    val size: Long,
+    val numOfCards: Long,
     @SerializedName("tcg_date")
     val releaseDate: String
 )

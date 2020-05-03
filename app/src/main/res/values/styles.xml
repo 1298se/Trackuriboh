@@ -6,9 +6,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textColor">?attr/colorAccent</item>
         <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
-        <item name="android:actionMenuTextColor">@color/colorDark</item>
+        <item name="android:actionMenuTextColor">?attr/colorPrimaryDark</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialog</item>
         <item name="homeAsUpIndicator">@drawable/ic_arrow_back_black_24dp</item>
     </style>
@@ -54,6 +54,29 @@
         <item name="cornerSizeTopLeft">16dp</item>
         <item name="cornerSizeBottomRight">0dp</item>
         <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+
+    <style name="TextAppearance.TypographyStyles.Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ImageSliderViewPager" parent="">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:paddingTop">@dimen/card_image_swipe_padding</item>
+        <item name="android:paddingBottom">@dimen/card_image_swipe_padding</item>
+    </style>
+
+    <style name="ImageSliderTabLayout" parent="Widget.MaterialComponents.TabLayout">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_marginBottom">@dimen/image_slider_margin_bottom</item>
+        <item name="tabBackground">@drawable/image_slider_tab_selector</item>
+        <item name="tabGravity">center</item>
+        <item name="tabIndicatorHeight">0dp</item>
+        <item name="tabMaxWidth">@dimen/image_slider_width</item>
+    </style>
+
+    <style name="TextAppearance.TypographyStyles.Body1" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">16sp</item>
     </style>
 
 </resources>

@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class CardSet(
     @PrimaryKey(autoGenerate = false)
     val setCode: String,
-    val setName: String?,
-    val size: Long?,
+    val setName: String,
+    val numOfCards: Long?,
     val releaseDate: String?
 )

@@ -4,8 +4,8 @@ import com.google.gson.annotations.SerializedName
 
 data class CardResponse(
     val id: Long,
-    val name: String?,
-    val type: String?,
+    val name: String,
+    val type: String,
     val desc: String?,
     val atk: Int?,
     val def: Int?,
@@ -31,8 +31,8 @@ data class CardResponse(
 
     override fun hashCode(): Int {
         var result = id.hashCode()
-        result = 31 * result + (name?.hashCode() ?: 0)
-        result = 31 * result + (type?.hashCode() ?: 0)
+        result = 31 * result + name.hashCode()
+        result = 31 * result + type.hashCode()
         result = 31 * result + (desc?.hashCode() ?: 0)
         result = 31 * result + (atk ?: 0)
         result = 31 * result + (def ?: 0)

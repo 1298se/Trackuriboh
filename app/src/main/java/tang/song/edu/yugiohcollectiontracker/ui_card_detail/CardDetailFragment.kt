@@ -15,6 +15,7 @@ import tang.song.edu.yugiohcollectiontracker.BaseApplication
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardDetailBinding
 import tang.song.edu.yugiohcollectiontracker.ui_base.CollapseToolbarStateChangeListener
+import tang.song.edu.yugiohcollectiontracker.ui_card_detail.adapters.CardDetailPagerAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardImagePagerAdapter
 import javax.inject.Inject
 
@@ -32,7 +33,8 @@ class CardDetailFragment : BaseFragment(), View.OnClickListener {
         get() = _binding!!
 
     private lateinit var mViewModel: CardDetailViewModel
-    private lateinit var mAdapter: CardImagePagerAdapter
+    private lateinit var mImagePagerAdapter: CardImagePagerAdapter
+    private lateinit var mCardDetailPagerAdapter: CardDetailPagerAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -49,12 +51,14 @@ class CardDetailFragment : BaseFragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         initToolbar()
-        initTabLayoutWithViewPager()
+        initImageViewPager()
+        initCardDetailViewPager()
 
         mViewModel = ViewModelProvider(this, mViewModelFactory).get(CardDetailViewModel::class.java)
 
-        mViewModel.getCardById(args.cardId).observe(viewLifecycleOwner) {
-            mAdapter.setImageList(it.cardImageList)
+        mViewModel.getCardDetailsById(args.cardId).observe(viewLifecycleOwner) {
+            mImagePagerAdapter.setImageList(it.card.cardImageList)
+            mCardDetailPagerAdapter.setCard(it.card)
         }
     }
 
@@ -62,6 +66,11 @@ class CardDetailFragment : BaseFragment(), View.OnClickListener {
         super.onDestroyView()
 
         _binding = null
+    }
+
+    // Back button
+    override fun onClick(view: View?) {
+        activity?.onBackPressed()
     }
 
     private fun initToolbar() {
@@ -81,17 +90,25 @@ class CardDetailFragment : BaseFragment(), View.OnClickListener {
         }
     }
 
-    private fun initTabLayoutWithViewPager() {
+    private fun initImageViewPager() {
         binding.cardImageViewPager.adapter = CardImagePagerAdapter(mRequestManager).also {
-            mAdapter = it
+            mImagePagerAdapter = it
         }
 
-        TabLayoutMediator(binding.cardImageTabLayout, binding.cardImageViewPager) { _, _ ->
-        }.attach()
+        TabLayoutMediator(binding.cardImageTabLayout, binding.cardImageViewPager) { _, _ -> }.attach()
     }
 
-    // Back button
-    override fun onClick(view: View?) {
-        activity?.onBackPressed()
+    private fun initCardDetailViewPager() {
+        binding.cardDetailViewPager.adapter = CardDetailPagerAdapter(this).also {
+            mCardDetailPagerAdapter = it
+        }
+
+        TabLayoutMediator(binding.cardDetailTabLayout, binding.cardDetailViewPager) { tab, position ->
+            tab.text = when (position) {
+                0 -> "Overview"
+                1 -> "Set Details"
+                else -> null
+            }
+        }.attach()
     }
 }

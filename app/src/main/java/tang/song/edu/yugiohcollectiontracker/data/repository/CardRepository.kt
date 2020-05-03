@@ -4,6 +4,7 @@ import androidx.paging.LivePagedListBuilder
 import kotlinx.coroutines.coroutineScope
 import tang.song.edu.yugiohcollectiontracker.data.db.CardLocalCache
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
+import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardWithSetInfo
 import tang.song.edu.yugiohcollectiontracker.data.network.CardRetrofitService
 import tang.song.edu.yugiohcollectiontracker.data.network.PagedListBoundaryCallbackResponse
 import javax.inject.Inject
@@ -19,8 +20,8 @@ class CardRepository @Inject constructor(
         private const val DATABASE_PAGE_SIZE = 30
     }
 
-    suspend fun getCardById(cardId: Long): Card {
-        return cardLocalCache.getCardById(cardId)
+    suspend fun getCardDetails(cardId: Long): CardWithSetInfo {
+        return cardLocalCache.getCardDetails(cardId)
     }
 
     suspend fun getCardList(): PagedListBoundaryCallbackResponse<Card> = coroutineScope {
