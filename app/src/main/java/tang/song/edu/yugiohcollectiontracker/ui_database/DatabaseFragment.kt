@@ -2,10 +2,8 @@ package tang.song.edu.yugiohcollectiontracker.ui_database
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
@@ -22,10 +20,10 @@ import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentDatabaseBinding
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.DatabasePagerAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.DatabaseViewModel
+import tang.song.edu.yugiohcollectiontracker.viewBinding
 
-class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar.OnMenuItemClickListener, MenuItem.OnActionExpandListener {
-    private var _binding: FragmentDatabaseBinding? = null
-    private val binding get() = _binding!!
+class DatabaseFragment : BaseFragment(R.layout.fragment_database), SearchView.OnQueryTextListener, Toolbar.OnMenuItemClickListener, MenuItem.OnActionExpandListener {
+    private val binding by viewBinding(FragmentDatabaseBinding::bind)
 
     private lateinit var mSearchView: SearchView
 
@@ -39,14 +37,6 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
         (activity?.application as BaseApplication).appComponent.inject(this)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentDatabaseBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -55,12 +45,6 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
         initToolbar()
         initTabLayoutWithViewPager()
         initObservers()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        _binding = null
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -92,12 +76,10 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
     }
 
     override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-        performSearch(null)
+        resetLists()
         binding.databaseToolbar.menu.findItem(R.id.action_database_sync).isVisible = true
         return true
     }
-
-    fun getQueryString(): String? = mSearchView.query?.toString()
 
     private fun initObservers() {
         mViewModel.syncWorkInfo.observe(viewLifecycleOwner) { listOfWorkInfo ->
@@ -130,12 +112,6 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
                 }
 
             }.attach()
-
-            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    performSearch(mSearchView.query?.toString())
-                }
-            })
         }
     }
 
@@ -166,6 +142,16 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
 
         if (currentFragment is BaseSearchListFragment) {
             currentFragment.onQueryTextChange(query)
+        }
+    }
+
+    private fun resetLists() {
+        repeat(mAdapter.itemCount) {
+            val currentFragment = childFragmentManager.findFragmentByTag("f" + mAdapter.getItemId(it))
+
+            if (currentFragment is BaseSearchListFragment) {
+                currentFragment.onQueryTextChange(null)
+            }
         }
     }
 }

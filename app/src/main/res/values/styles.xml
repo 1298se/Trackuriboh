@@ -68,7 +68,6 @@
 
     <style name="ImageSliderTabLayout" parent="Widget.MaterialComponents.TabLayout">
         <item name="android:background">@android:color/transparent</item>
-        <item name="android:layout_marginBottom">@dimen/image_slider_margin_bottom</item>
         <item name="tabBackground">@drawable/image_slider_tab_selector</item>
         <item name="tabGravity">center</item>
         <item name="tabIndicatorHeight">0dp</item>

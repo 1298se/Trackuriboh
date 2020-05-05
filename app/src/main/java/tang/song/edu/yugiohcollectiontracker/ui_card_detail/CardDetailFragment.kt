@@ -2,35 +2,37 @@ package tang.song.edu.yugiohcollectiontracker.ui_card_detail
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.RequestManager
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import tang.song.edu.yugiohcollectiontracker.BaseApplication
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
+import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardDetailBinding
 import tang.song.edu.yugiohcollectiontracker.ui_base.CollapseToolbarStateChangeListener
 import tang.song.edu.yugiohcollectiontracker.ui_card_detail.adapters.CardDetailPagerAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardImagePagerAdapter
+import tang.song.edu.yugiohcollectiontracker.viewBinding
 import javax.inject.Inject
 
-class CardDetailFragment : BaseFragment(), View.OnClickListener {
+class CardDetailFragment : BaseFragment(R.layout.fragment_card_detail) {
     @Inject
     lateinit var mRequestManager: RequestManager
 
     @Inject
     lateinit var mViewModelFactory: CardDetailViewModelFactory
 
-    private val args by navArgs<CardDetailActivityArgs>()
+    private val args: CardDetailFragmentArgs by navArgs()
 
     private var _binding: FragmentCardDetailBinding? = null
-    private val binding
-        get() = _binding!!
+    private val binding by viewBinding(FragmentCardDetailBinding::bind)
 
     private lateinit var mViewModel: CardDetailViewModel
     private lateinit var mImagePagerAdapter: CardImagePagerAdapter
@@ -40,11 +42,6 @@ class CardDetailFragment : BaseFragment(), View.OnClickListener {
         super.onAttach(context)
 
         (activity?.application as BaseApplication).appComponent.inject(this)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentCardDetailBinding.inflate(inflater, container, false)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,13 +65,7 @@ class CardDetailFragment : BaseFragment(), View.OnClickListener {
         _binding = null
     }
 
-    // Back button
-    override fun onClick(view: View?) {
-        activity?.onBackPressed()
-    }
-
     private fun initToolbar() {
-
         binding.cardDetailAppBarLayout.addOnOffsetChangedListener(object : CollapseToolbarStateChangeListener() {
             override fun onStateChanged(appBarLayout: AppBarLayout?, state: State) {
                 if (state == State.COLLAPSED) {
@@ -85,9 +76,10 @@ class CardDetailFragment : BaseFragment(), View.OnClickListener {
             }
         })
 
-        binding.cardDetailToolbar.apply {
-            setNavigationOnClickListener(this@CardDetailFragment)
-        }
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        binding.cardDetailCollapsingToolbarLayout.setupWithNavController(binding.cardDetailToolbar, navController, appBarConfiguration)
     }
 
     private fun initImageViewPager() {

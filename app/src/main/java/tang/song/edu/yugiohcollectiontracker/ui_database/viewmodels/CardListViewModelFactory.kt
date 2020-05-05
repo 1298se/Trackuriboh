@@ -5,12 +5,11 @@ import androidx.lifecycle.ViewModelProvider
 import tang.song.edu.yugiohcollectiontracker.data.repository.CardRepository
 import javax.inject.Inject
 
-class CardViewModelFactory @Inject constructor(private val cardRepository: CardRepository) :
-    ViewModelProvider.Factory {
+class CardListViewModelFactory @Inject constructor(private val cardRepository: CardRepository) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(CardViewModel::class.java)) {
-            return CardViewModel(
+        if (modelClass.isAssignableFrom(CardListViewModel::class.java)) {
+            return CardListViewModel(
                 cardRepository
             ) as T
         }
