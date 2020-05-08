@@ -7,10 +7,7 @@ import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardXCardSetRef
 import tang.song.edu.yugiohcollectiontracker.data.models.CardType
 import tang.song.edu.yugiohcollectiontracker.data.network.response.CardResponse
-import tang.song.edu.yugiohcollectiontracker.data.network.response.CardSetDetailResponse
 import tang.song.edu.yugiohcollectiontracker.data.network.response.CardSetResponse
-import java.util.*
-import kotlin.collections.ArrayList
 
 class ResponseUtils {
 
@@ -22,8 +19,9 @@ class ResponseUtils {
                 for (card in cardList) {
                     val cardImageList = ArrayList<String>()
 
-                    for (cardImageResponse in card.cardImages ?: emptyList()) {
+                    card.cardImages?.forEach { cardImageResponse ->
                         cardImageList.add(cardImageResponse.imageUrl)
+
                     }
 
                     result.add(
@@ -70,18 +68,18 @@ class ResponseUtils {
                 val result = ArrayList<CardXCardSetRef>()
 
                 for (card in cardList) {
-                    for (cardSet in card.cardSetDetails ?: Collections.emptyList()) {
-                        result.add(CardXCardSetRef(card.id, parseCardSet(cardSet), cardSet.setRarity))
+                    card.cardSetDetails?.forEach { cardSet ->
+                        result.add(CardXCardSetRef(card.id, parseCardSet(cardSet.setCode), cardSet.setCode, cardSet.setRarity, cardSet.setPrice))
                     }
                 }
 
                 result
             }
 
-        private fun parseCardSet(cardSetDetail: CardSetDetailResponse): String {
-            val hyphenIndex = cardSetDetail.setCode.indexOf('-')
+        private fun parseCardSet(cardNumber: String): String {
+            val hyphenIndex = cardNumber.indexOf('-')
 
-            return if (hyphenIndex != -1) cardSetDetail.setCode.substring(0, hyphenIndex) else cardSetDetail.setCode
+            return if (hyphenIndex != -1) cardNumber.substring(0, hyphenIndex) else cardNumber
         }
     }
 }

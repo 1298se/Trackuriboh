@@ -56,10 +56,6 @@
         <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 
-    <style name="TextAppearance.TypographyStyles.Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
-        <item name="android:textSize">14sp</item>
-    </style>
-
     <style name="ImageSliderViewPager" parent="">
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:paddingTop">@dimen/card_image_swipe_padding</item>
@@ -74,8 +70,16 @@
         <item name="tabMaxWidth">@dimen/image_slider_width</item>
     </style>
 
-    <style name="TextAppearance.TypographyStyles.Body1" parent="TextAppearance.MaterialComponents.Body1">
+    <style name="TextAppearance.Types.Body1" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.Types.Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.Types.Headline5" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textSize">24sp</item>
     </style>
 
 </resources>

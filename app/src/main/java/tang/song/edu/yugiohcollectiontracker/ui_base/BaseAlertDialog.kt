@@ -6,14 +6,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import tang.song.edu.yugiohcollectiontracker.R
 
+private const val TAG_DIALOG_TITLE = "TAG_DIALOG_TITLE"
+private const val TAG_DIALOG_MESSAGE = "TAG_DIALOG_MESSAGE"
+
 open class ErrorDialogFragment : DialogFragment() {
     private lateinit var mDialogTitle: String
     private lateinit var mDialogMessage: String
 
     companion object {
-        private const val TAG_DIALOG_TITLE = "TAG_DIALOG_TITLE"
-        private const val TAG_DIALOG_MESSAGE = "TAG_DIALOG_MESSAGE"
-
         fun newInstance(title: String?, message: String?): ErrorDialogFragment {
             val fragment = ErrorDialogFragment()
 

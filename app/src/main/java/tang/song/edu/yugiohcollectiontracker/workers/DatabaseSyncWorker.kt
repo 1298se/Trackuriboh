@@ -45,6 +45,7 @@ class DatabaseSyncWorker(context: Context, params: WorkerParameters) :
 
             Result.success()
         } catch (throwable: Throwable) {
+            throwable.printStackTrace()
             Result.failure()
         }
     }

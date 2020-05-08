@@ -9,14 +9,12 @@ import tang.song.edu.yugiohcollectiontracker.data.network.PagedListBoundaryCallb
 import javax.inject.Inject
 import javax.inject.Singleton
 
+private const val DATABASE_PAGE_SIZE = 30
+
 @Singleton
 class CardSetRepository @Inject constructor(
     private val cardLocalCache: CardLocalCache
 ) {
-
-    companion object {
-        private const val DATABASE_PAGE_SIZE = 30
-    }
 
     suspend fun getCardSetList(): PagedListBoundaryCallbackResponse<CardSet> = coroutineScope {
         val dataSourceFactory = cardLocalCache.getCardSetList()
@@ -35,4 +33,6 @@ class CardSetRepository @Inject constructor(
 
         PagedListBoundaryCallbackResponse(data, MutableLiveData())
     }
+
+    suspend fun getCardSetByCode(setCode: String) = cardLocalCache.getCardSetByCode(setCode)
 }

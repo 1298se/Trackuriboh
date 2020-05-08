@@ -50,12 +50,20 @@ class CardLocalCache @Inject constructor(
         return cardDatabase.cardXCardSetDao().getCardWithSetInfo(cardId)
     }
 
+    suspend fun getCardSetByCode(setCode: String): CardSet {
+        return cardDatabase.cardSetDao().getCardSetByCode(setCode)
+    }
+
     fun getCardList(): DataSource.Factory<Int, Card> {
         return cardDatabase.cardDao().getCardList()
     }
 
     fun getCardSetList(): DataSource.Factory<Int, CardSet> {
         return cardDatabase.cardSetDao().getCardSetList()
+    }
+
+    fun getCardListBySet(setCode: String): DataSource.Factory<Int, Card> {
+        return cardDatabase.cardXCardSetDao().getCardListBySet(setCode)
     }
 
     fun searchCardByName(name: String): DataSource.Factory<Int, Card> {

@@ -51,11 +51,14 @@ class CardListAdapter(
     }
 
     inner class CardViewHolder(private val binding: ItemCardBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+        init {
+            itemView.setOnClickListener(this)
+        }
+
         internal fun bind(item: Card) {
             requestManager.load(item.cardImageList?.get(0)).into(binding.itemCardImage)
 
             binding.itemCardTitle.text = item.name
-            itemView.setOnClickListener(this)
         }
 
         override fun onClick(p0: View?) {

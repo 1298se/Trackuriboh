@@ -5,79 +5,79 @@
     android:orientation="vertical">
 
     <com.google.android.material.textview.MaterialTextView
-        style="@style/TextAppearance.TypographyStyles.Subtitle2"
+        style="@style/TextAppearance.Types.Subtitle2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Name" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/card_name_text_view"
-        style="@style/TextAppearance.TypographyStyles.Body1"
+        style="@style/TextAppearance.Types.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Blue-Eyes White Dragon" />
 
     <com.google.android.material.textview.MaterialTextView
-        style="@style/TextAppearance.TypographyStyles.Subtitle2"
+        style="@style/TextAppearance.Types.Subtitle2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Type" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/card_type_text_view"
-        style="@style/TextAppearance.TypographyStyles.Body1"
+        style="@style/TextAppearance.Types.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Normal Monster" />
 
     <com.google.android.material.textview.MaterialTextView
-        style="@style/TextAppearance.TypographyStyles.Subtitle2"
+        style="@style/TextAppearance.Types.Subtitle2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Race" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/card_race_text_view"
-        style="@style/TextAppearance.TypographyStyles.Body1"
+        style="@style/TextAppearance.Types.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Dragon" />
 
     <com.google.android.material.textview.MaterialTextView
-        style="@style/TextAppearance.TypographyStyles.Subtitle2"
+        style="@style/TextAppearance.Types.Subtitle2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Attribute" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/card_attribute_text_view"
-        style="@style/TextAppearance.TypographyStyles.Body1"
+        style="@style/TextAppearance.Types.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="LIGHT" />
 
     <com.google.android.material.textview.MaterialTextView
-        style="@style/TextAppearance.TypographyStyles.Subtitle2"
+        style="@style/TextAppearance.Types.Subtitle2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="A / D" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/card_atk_def_text_view"
-        style="@style/TextAppearance.TypographyStyles.Body1"
+        style="@style/TextAppearance.Types.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="3000 / 2500" />
 
     <com.google.android.material.textview.MaterialTextView
-        style="@style/TextAppearance.TypographyStyles.Subtitle2"
+        style="@style/TextAppearance.Types.Subtitle2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Description" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/card_description_text_view"
-        style="@style/TextAppearance.TypographyStyles.Body1"
+        style="@style/TextAppearance.Types.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="This legendary dragon is a powerful engine of destruction. Virtually invincible, very few have faced this awesome creature and lived to tell the tale." />

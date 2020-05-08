@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import tang.song.edu.yugiohcollectiontracker.BaseApplication
@@ -17,7 +18,7 @@ import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.CardSetListV
 import tang.song.edu.yugiohcollectiontracker.viewBinding
 import javax.inject.Inject
 
-class CardSetListFragment : BaseSearchListFragment(R.layout.fragment_card_set_list) {
+class CardSetListFragment : BaseSearchListFragment(R.layout.fragment_card_set_list), CardSetListAdapter.OnItemClickListener {
     @Inject
     lateinit var mViewModelFactory: CardSetListViewModelFactory
 
@@ -60,8 +61,13 @@ class CardSetListFragment : BaseSearchListFragment(R.layout.fragment_card_set_li
         mAdapter.submitList(null)
     }
 
+    override fun onItemClick(setCode: String) {
+        val action = DatabaseFragmentDirections.actionDatabaseFragmentToCardSetDetailFragment(setCode)
+        findNavController().navigate(action)
+    }
+
     private fun initRecyclerView() {
-        mAdapter = CardSetListAdapter()
+        mAdapter = CardSetListAdapter(this)
         val layoutManager = LinearLayoutManager(requireContext())
 
         binding.cardSetList.apply {

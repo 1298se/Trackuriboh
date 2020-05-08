@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_databaseFragment_to_cardDetailFragment"
             app:destination="@id/cardDetailFragment" />
+        <action
+            android:id="@+id/action_databaseFragment_to_cardSetDetailFragment"
+            app:destination="@id/cardSetDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/collectionFragment"
@@ -36,5 +39,19 @@
         <argument
             android:name="cardId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_cardDetailFragment_to_cardSetDetailFragment"
+            app:destination="@id/cardSetDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cardSetDetailFragment"
+        android:name="tang.song.edu.yugiohcollectiontracker.ui_card_set_detail.CardSetDetailFragment"
+        tools:layout="@layout/fragment_card_set_detail">
+        <argument
+            android:name="setCode"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_cardSetDetailFragment_to_cardDetailFragment"
+            app:destination="@id/cardDetailFragment" />
     </fragment>
 </navigation>

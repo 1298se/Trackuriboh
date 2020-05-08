@@ -3,14 +3,19 @@ package tang.song.edu.yugiohcollectiontracker.ui_database.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
+import tang.song.edu.yugiohcollectiontracker.databinding.ItemCardSetBinding
 
-class CardSetListAdapter : PagedListAdapter<CardSet, CardSetListAdapter.SetViewHolder>(SET_COMPARATOR) {
+class CardSetListAdapter(
+    private val onItemClickListener: OnItemClickListener
+) : PagedListAdapter<CardSet, CardSetListAdapter.CardSetViewHolder>(SET_COMPARATOR) {
+    interface OnItemClickListener {
+        fun onItemClick(setCode: String)
+    }
+
     companion object {
         private val SET_COMPARATOR = object : DiffUtil.ItemCallback<CardSet>() {
             override fun areItemsTheSame(oldItem: CardSet, newItem: CardSet): Boolean =
@@ -21,21 +26,32 @@ class CardSetListAdapter : PagedListAdapter<CardSet, CardSetListAdapter.SetViewH
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SetViewHolder {
-        return SetViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_card_set, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardSetViewHolder {
+        return CardSetViewHolder(ItemCardSetBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    override fun onBindViewHolder(holder: SetViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CardSetViewHolder, position: Int) {
         val cardSetItem = getItem(position)
         if (cardSetItem != null) {
             holder.bind(cardSetItem)
         }
     }
 
-    inner class SetViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class CardSetViewHolder(private val binding: ItemCardSetBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+        init {
+            itemView.setOnClickListener(this)
+        }
+
         internal fun bind(item: CardSet) {
-            itemView.findViewById<TextView>(R.id.card_set_title_textview).text = (item.setName)
+            binding.cardSetTitleTextview.text = (item.setName)
+        }
+
+        override fun onClick(p0: View?) {
+            val cardSet = getItem(adapterPosition)
+
+            if (cardSet != null) {
+                onItemClickListener.onItemClick(cardSet.setCode)
+            }
         }
     }
-
 }

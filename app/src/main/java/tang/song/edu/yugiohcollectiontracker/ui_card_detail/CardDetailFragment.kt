@@ -55,7 +55,7 @@ class CardDetailFragment : BaseFragment(R.layout.fragment_card_detail) {
 
         mViewModel.getCardDetailsById(args.cardId).observe(viewLifecycleOwner) {
             mImagePagerAdapter.setImageList(it.card.cardImageList)
-            mCardDetailPagerAdapter.setCard(it.card)
+            mCardDetailPagerAdapter.setCard(it)
         }
     }
 

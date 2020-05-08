@@ -7,6 +7,7 @@ import javax.inject.Inject
 
 class CardSetListViewModelFactory @Inject constructor(private val cardSetRepository: CardSetRepository) : ViewModelProvider.Factory {
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CardSetListViewModel::class.java)) {
             return CardSetListViewModel(

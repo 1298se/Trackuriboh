@@ -1,6 +1,8 @@
 package tang.song.edu.yugiohcollectiontracker.data.repository
 
+import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import kotlinx.coroutines.coroutineScope
 import tang.song.edu.yugiohcollectiontracker.data.db.CardLocalCache
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
@@ -10,15 +12,13 @@ import tang.song.edu.yugiohcollectiontracker.data.network.PagedListBoundaryCallb
 import javax.inject.Inject
 import javax.inject.Singleton
 
+private const val DATABASE_PAGE_SIZE = 30
+
 @Singleton
 class CardRepository @Inject constructor(
     private val cardLocalCache: CardLocalCache,
     private val cardRetrofitService: CardRetrofitService
 ) {
-
-    companion object {
-        private const val DATABASE_PAGE_SIZE = 30
-    }
 
     suspend fun getCardDetails(cardId: Long): CardWithSetInfo {
         return cardLocalCache.getCardDetails(cardId)
@@ -32,7 +32,7 @@ class CardRepository @Inject constructor(
             .setBoundaryCallback(boundaryCallback)
             .build()
 
-        PagedListBoundaryCallbackResponse<Card>(data, boundaryCallback.networkErrors)
+        PagedListBoundaryCallbackResponse(data, boundaryCallback.networkErrors)
     }
 
     suspend fun search(queryString: String): PagedListBoundaryCallbackResponse<Card> = coroutineScope {
@@ -43,6 +43,13 @@ class CardRepository @Inject constructor(
             .setBoundaryCallback(boundaryCallback)
             .build()
 
-        PagedListBoundaryCallbackResponse<Card>(data, boundaryCallback.networkErrors)
+        PagedListBoundaryCallbackResponse(data, boundaryCallback.networkErrors)
+    }
+
+    fun getCardListBySet(setCode: String): LiveData<PagedList<Card>> {
+        val dataSourceFactory = cardLocalCache.getCardListBySet(setCode)
+
+        return LivePagedListBuilder(dataSourceFactory, DATABASE_PAGE_SIZE)
+            .build()
     }
 }
