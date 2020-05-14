@@ -77,7 +77,9 @@ class DatabaseFragment : BaseFragment(R.layout.fragment_database), SearchView.On
 
     override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
         resetLists()
-        binding.databaseToolbar.menu.findItem(R.id.action_database_sync).isVisible = true
+
+        binding.databaseToolbar.menu.clear()
+        onCreateOptionsMenu()
         return true
     }
 
@@ -119,9 +121,13 @@ class DatabaseFragment : BaseFragment(R.layout.fragment_database), SearchView.On
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
 
-        binding.databaseToolbar.apply {
-            setupWithNavController(navController, appBarConfiguration)
+        binding.databaseToolbar.setupWithNavController(navController, appBarConfiguration)
 
+        onCreateOptionsMenu()
+    }
+
+    private fun onCreateOptionsMenu() {
+        binding.databaseToolbar.apply {
             inflateMenu(R.menu.database_actionbar_menu)
 
             menu.findItem(R.id.action_open_search).apply {
@@ -149,7 +155,7 @@ class DatabaseFragment : BaseFragment(R.layout.fragment_database), SearchView.On
         repeat(mAdapter.itemCount) {
             val currentFragment = childFragmentManager.findFragmentByTag("f" + mAdapter.getItemId(it))
 
-            if (currentFragment is BaseSearchListFragment) {
+            if (currentFragment is BaseSearchListFragment && !currentFragment.lastQueryValue().isNullOrBlank()) {
                 currentFragment.onQueryTextChange(null)
             }
         }

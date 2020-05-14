@@ -34,6 +34,6 @@ enum class CardType(val value: String) {
 
     companion object {
         private val map = values().associateBy(CardType::value)
-        fun fromString(cardType: String) = map[cardType] ?: CardType.UNKNOWN
+        fun fromString(cardType: String?) = map[cardType] ?: UNKNOWN
     }
 }

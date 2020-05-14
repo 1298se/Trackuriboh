@@ -14,6 +14,8 @@ data class CardResponse(
     val attribute: String?,
     val archetype: String?,
     val scale: Int?,
+    val linkval: Int?,
+    val linkmarkers: List<String>?,
     @SerializedName("card_sets")
     val cardSetDetails: List<CardSetDetailResponse>?,
     @SerializedName("card_images")

@@ -4,31 +4,70 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/list_item_card_margin">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/item_card_image"
         android:layout_width="@dimen/list_item_card_image_width"
         android:layout_height="@dimen/list_item_card_image_height"
+        android:layout_marginStart="@dimen/list_item_margin_start"
+        android:layout_marginTop="@dimen/list_item_image_large_margin_top"
+        android:layout_marginBottom="@dimen/list_item_image_large_margin_bottom"
         android:contentDescription="@string/item_card_list_content_desc"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/img_cardback" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/item_card_title"
+        android:id="@+id/item_card_title_textview"
+        style="@style/TextAppearance.Types.Subtitle1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/list_item_card_paddingStart"
-        android:paddingEnd="12dp"
-        android:maxLines="1"
+        android:layout_marginStart="@dimen/list_item_margin_start"
+        android:layout_marginTop="@dimen/list_item_text_margin_top"
+        android:layout_marginEnd="@dimen/list_item_margin_end"
         android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintBottom_toTopOf="@id/item_card_type_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/item_card_image"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/item_card_image"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="Blue-Eyes White Dragon Blue-Eyes White Dragon Blue-Eyes White Dragon" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/item_card_type_textview"
+        style="@style/TextAppearance.Types.Caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/list_item_margin_start"
+        android:layout_marginTop="@dimen/list_item_secondary_text_margin_top"
+        android:layout_marginEnd="@dimen/list_item_margin_end"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintBottom_toTopOf="@id/item_card_race_attribute_ad_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/item_card_image"
+        app:layout_constraintTop_toBottomOf="@id/item_card_title_textview"
+        tools:text="Normal Monster" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/item_card_race_attribute_ad_textview"
+        style="@style/TextAppearance.Types.Caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/list_item_margin_start"
+        android:layout_marginTop="@dimen/list_item_secondary_text_margin_top"
+        android:layout_marginEnd="@dimen/list_item_margin_end"
+        android:layout_marginBottom="@dimen/list_item_text_margin_bottom"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@id/item_card_image"
+        app:layout_constraintTop_toBottomOf="@id/item_card_type_textview"
+        tools:text="8 \u2605 LIGHT \u2022 Dragon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

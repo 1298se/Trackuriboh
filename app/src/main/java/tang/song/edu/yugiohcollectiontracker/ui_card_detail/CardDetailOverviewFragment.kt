@@ -59,9 +59,10 @@ class CardDetailOverviewFragment : BaseFragment(R.layout.fragment_card_detail_ov
                     val monsterBinding = CardDetailTypeMonsterBinding.inflate(LayoutInflater.from(context), binding.cardDetailOverviewContainer, false).apply {
                         cardNameTextView.text = card.name
                         cardTypeTextView.text = card.type.value
+                        cardLevelTextView.text = card.level?.toString()
                         cardRaceTextView.text = card.race
                         cardAttributeTextView.text = card.attribute
-                        cardAtkDefTextView.text = card.atk.toString()
+                        cardAtkDefTextView.text = getString(R.string.card_detail_atk_def, card.atk, card.def)
                         cardDescriptionTextView.text = card.desc
                     }
 
@@ -71,11 +72,5 @@ class CardDetailOverviewFragment : BaseFragment(R.layout.fragment_card_detail_ov
 
             binding.cardDetailOverviewContainer.addView(descriptionView)
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        _binding = null
     }
 }

@@ -7,14 +7,14 @@ import tang.song.edu.yugiohcollectiontracker.data.models.CardType
 
 class Converters {
     @TypeConverter
-    fun jsonToList(stringList: String): List<String> = Gson().fromJson(stringList, object : TypeToken<List<String>>() {}.type)
+    fun jsonToList(stringList: String?): List<String>? = Gson().fromJson(stringList, object : TypeToken<List<String>>() {}.type)
 
     @TypeConverter
-    fun listToJson(list: List<String>): String = Gson().toJson(list)
+    fun listToJson(list: List<String>?): String? = Gson().toJson(list)
 
     @TypeConverter
-    fun cardTypeToString(cardType: CardType) = cardType.value
+    fun cardTypeToString(cardType: CardType?) = cardType?.value
 
     @TypeConverter
-    fun stringToCardType(cardType: String) = CardType.fromString(cardType)
+    fun stringToCardType(cardType: String?) = CardType.fromString(cardType)
 }

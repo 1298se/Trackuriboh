@@ -7,7 +7,9 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
+import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
+import tang.song.edu.yugiohcollectiontracker.data.models.CardType
 import tang.song.edu.yugiohcollectiontracker.databinding.ItemCardBinding
 
 class CardListAdapter(
@@ -58,7 +60,15 @@ class CardListAdapter(
         internal fun bind(item: Card) {
             requestManager.load(item.cardImageList?.get(0)).into(binding.itemCardImage)
 
-            binding.itemCardTitle.text = item.name
+            binding.itemCardTitleTextview.text = item.name
+            binding.itemCardTypeTextview.text = item.type.value
+
+            binding.itemCardRaceAttributeAdTextview.text = when (item.type) {
+                CardType.SPELL_CARD, CardType.TRAP_CARD -> item.race
+                CardType.LINK_MONSTER -> itemView.context.getString(R.string.item_card_list_link_attribute_race_text, item.linkval, item.attribute, item.race)
+                CardType.UNKNOWN -> null
+                else -> itemView.context.getString(R.string.item_card_list_level_attribute_race_text, item.level, item.attribute, item.race)
+            }
         }
 
         override fun onClick(p0: View?) {

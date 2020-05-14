@@ -14,6 +14,8 @@ abstract class BaseSearchListFragment(contentLayoutId: Int) : BaseFragment(conte
         }
     }
 
+    fun lastQueryValue() = getViewModel().lastQueryValue()
+
     private fun search(queryText: String?) {
         getViewModel().search(queryText)
     }

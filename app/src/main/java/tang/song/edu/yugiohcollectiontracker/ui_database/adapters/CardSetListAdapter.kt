@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
 import tang.song.edu.yugiohcollectiontracker.databinding.ItemCardSetBinding
 
@@ -43,7 +44,9 @@ class CardSetListAdapter(
         }
 
         internal fun bind(item: CardSet) {
-            binding.cardSetTitleTextview.text = (item.setName)
+            binding.cardSetTitleTextview.text = item.setName
+            binding.cardSetSizeTextview.text = itemView.context.getString(R.string.item_card_set_list_size, item.numOfCards)
+            binding.cardSetReleaseDateTextview.text = item.releaseDate
         }
 
         override fun onClick(p0: View?) {

@@ -5,6 +5,14 @@
     <dimen name="material_border_padding">16dp</dimen>
     <dimen name="material_border_padding_large">24dp</dimen>
 
+    <dimen name="list_item_margin_start">16dp</dimen>
+    <dimen name="list_item_margin_end">16dp</dimen>
+    <dimen name="list_item_text_margin_top">16dp</dimen>
+    <dimen name="list_item_text_margin_bottom">16dp</dimen>
+    <dimen name="list_item_secondary_text_margin_top">8dp</dimen>
+    <dimen name="list_item_image_large_margin_top">16dp</dimen>
+    <dimen name="list_item_image_large_margin_bottom">16dp</dimen>
+
     <!-- Search -->
     <dimen name="chip_group_marginVertical">4dp</dimen>
     <dimen name="chip_group_paddingHorizontal">12dp</dimen>

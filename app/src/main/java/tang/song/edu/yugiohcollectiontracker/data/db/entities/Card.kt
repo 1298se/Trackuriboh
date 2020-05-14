@@ -21,5 +21,7 @@ data class Card(
     val attribute: String?,
     val archetype: String?,
     val scale: Int?,
+    val linkval: Int?,
+    val linkmarkers: List<String>?,
     val cardImageList: List<String>?
 ) : Parcelable

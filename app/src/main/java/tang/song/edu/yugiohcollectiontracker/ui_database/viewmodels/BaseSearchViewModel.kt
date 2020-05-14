@@ -44,6 +44,8 @@ abstract class BaseSearchViewModel<T> : ViewModel() {
         _queryLiveData.postValue(queryString?.trim())
     }
 
+    fun lastQueryValue(): String? = _queryLiveData.value
+
     abstract suspend fun totalListSource(): PagedListBoundaryCallbackResponse<T>
     abstract suspend fun searchSource(queryString: String): PagedListBoundaryCallbackResponse<T>
 }

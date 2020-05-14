@@ -26,18 +26,20 @@ class ResponseUtils {
 
                     result.add(
                         Card(
-                            card.id,
-                            card.name,
-                            CardType.fromString(card.type),
-                            card.desc,
-                            card.atk,
-                            card.def,
-                            card.level,
-                            card.race,
-                            card.attribute,
-                            card.archetype,
-                            card.scale,
-                            cardImageList
+                            cardId = card.id,
+                            name = card.name,
+                            type = CardType.fromString(card.type),
+                            desc = card.desc,
+                            atk = card.atk,
+                            def = card.def,
+                            level = card.level,
+                            race = card.race,
+                            attribute = card.attribute,
+                            archetype = card.archetype,
+                            scale = card.scale,
+                            linkval = card.linkval,
+                            linkmarkers = card.linkmarkers,
+                            cardImageList = cardImageList
                         )
                     )
                 }
@@ -52,10 +54,10 @@ class ResponseUtils {
                 for (set in cardSetList) {
                     result.add(
                         CardSet(
-                            set.setCode,
-                            set.setName,
-                            set.numOfCards,
-                            set.releaseDate
+                            setCode = set.setCode,
+                            setName = set.setName,
+                            numOfCards = set.numOfCards,
+                            releaseDate = set.releaseDate
                         )
                     )
                 }
