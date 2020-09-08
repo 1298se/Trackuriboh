@@ -60,7 +60,7 @@ class CardDetailSetInfoFragment : BaseFragment(R.layout.fragment_card_detail_set
                 movementMethod = LinkMovementMethod.getInstance()
             }
 
-            val setCodeTextView = createTableTextView(cardSetInfo.setCode)
+            val setCodeTextView = createTableTextView(cardSetInfo.cardNumber)
 
             val rarityTextView = createTableTextView(cardSetInfo.rarity)
 

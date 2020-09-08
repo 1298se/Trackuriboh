@@ -128,7 +128,7 @@ class DatabaseFragment : BaseFragment(R.layout.fragment_database), SearchView.On
 
     private fun onCreateOptionsMenu() {
         binding.databaseToolbar.apply {
-            inflateMenu(R.menu.database_actionbar_menu)
+            inflateMenu(R.menu.database_toolbar_menu)
 
             menu.findItem(R.id.action_open_search).apply {
                 mSearchView = (this.actionView.findViewById(R.id.search_view) as SearchView).apply {

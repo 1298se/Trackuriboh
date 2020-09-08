@@ -22,5 +22,5 @@ interface CardDao {
     suspend fun insertCard(card: Card): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCards(card: List<Card>): List<Long>
+    suspend fun insertCards(cards: List<Card>): List<Long>
 }

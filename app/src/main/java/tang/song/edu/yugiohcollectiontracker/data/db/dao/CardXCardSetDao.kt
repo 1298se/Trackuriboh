@@ -21,7 +21,10 @@ abstract class CardXCardSetDao : CardDao, CardSetDao {
                 "Card.race, " +
                 "Card.attribute, " +
                 "Card.archetype, " +
-                "Card.scale, Card.cardImageList FROM CardXCardSetRef " +
+                "Card.scale, " +
+                "Card.linkval, " +
+                "Card.linkmarkers, " +
+                "Card.cardImageList FROM CardXCardSetRef " +
                 "INNER JOIN Card ON Card.cardId = CardXCardSetRef.cardId " +
                 "WHERE CardXCardSetRef.setCode = :setCode ORDER BY name ASC"
     )

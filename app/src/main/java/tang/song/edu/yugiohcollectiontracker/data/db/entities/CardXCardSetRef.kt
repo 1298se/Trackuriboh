@@ -1,12 +1,17 @@
 package tang.song.edu.yugiohcollectiontracker.data.db.entities
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
 
-@Entity(primaryKeys = ["cardId", "setCode"])
+@Entity
 data class CardXCardSetRef(
-    val cardId: Long,
-    val setCode: String,
+    @PrimaryKey(autoGenerate = false)
     val cardNumber: String,
+    @ForeignKey(entity = Card::class, parentColumns = ["cardId"], childColumns = ["cardId"], onDelete = ForeignKey.CASCADE)
+    val cardId: Long,
+    @ForeignKey(entity = CardSet::class, parentColumns = ["setCode"], childColumns = ["setCode"], onDelete = ForeignKey.CASCADE)
+    val setCode: String,
     val rarity: String?,
     val price: String?
 )

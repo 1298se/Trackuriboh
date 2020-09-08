@@ -19,10 +19,12 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav_view"
-        android:background="@color/colorDark"
+        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        app:itemTextColor="@color/bottom_nav_states"
+        app:itemIconTint="@color/bottom_nav_states"
         app:menu="@menu/nav_drawer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="1" />

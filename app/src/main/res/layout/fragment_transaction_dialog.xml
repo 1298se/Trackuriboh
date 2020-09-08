@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/new_transaction_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:navigationIcon="@drawable/ic_close_black_24dp"
+        app:title="@string/lbl_new_transaction" />
+
+    <View
+        android:id="@+id/divider1"
+        app:layout_constraintTop_toBottomOf="@id/new_transaction_toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/Divider" />
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextAppearance.Types.Subtitle1"
+        android:id="@+id/new_transaction_card_name_title_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:layout_marginTop="@dimen/material_border_padding"
+        android:layout_marginStart="@dimen/material_border_padding"
+        app:layout_constraintTop_toBottomOf="@id/divider1"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:id="@+id/new_transaction_card_name_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_border_padding_small"
+        android:layout_marginStart="@dimen/material_border_padding"
+        tools:text="Blue-Eyes White Dragon"
+        app:layout_constraintTop_toBottomOf="@id/new_transaction_card_name_title_textview"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextAppearance.Types.Subtitle1"
+        android:id="@+id/new_date_title_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date"
+        android:layout_marginTop="@dimen/material_border_padding_small"
+        android:layout_marginStart="@dimen/material_border_padding"
+        app:layout_constraintTop_toBottomOf="@id/new_transaction_card_name_textview"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/new_transaction_date_edittext"
+        style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:hint="Select Date"
+        android:layout_marginTop="@dimen/material_border_padding_small"
+        android:layout_marginStart="@dimen/material_border_padding"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintTop_toBottomOf="@id/new_date_title_textview"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextAppearance.Types.Subtitle1"
+        android:id="@+id/new_transaction_type_title_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Transaction Type"
+        android:layout_marginTop="@dimen/material_border_padding_small"
+        android:layout_marginStart="@dimen/material_border_padding"
+        app:layout_constraintTop_toBottomOf="@id/new_transaction_date_edittext"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Spinner
+        android:id="@+id/new_transaction_type_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_border_padding_small"
+        android:layout_marginStart="@dimen/material_border_padding"
+        app:layout_constraintTop_toBottomOf="@id/new_transaction_type_title_textview"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextAppearance.Types.Subtitle1"
+        android:id="@+id/new_transaction_purchase_price_title_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Purchased at:"
+        android:layout_marginTop="@dimen/material_border_padding_small"
+        android:layout_marginStart="@dimen/material_border_padding"
+        app:layout_constraintTop_toBottomOf="@id/new_transaction_type_spinner"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/new_transaction_purchase_price_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_border_padding_small"
+        android:layout_marginStart="@dimen/material_border_padding"
+        android:inputType="numberDecimal"
+        android:hint="Enter purchase price"
+        app:layout_constraintTop_toBottomOf="@id/new_transaction_purchase_price_title_textview"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextAppearance.Types.Subtitle1"
+        android:id="@+id/new_transaction_sale_price_title_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sold at:"
+        android:layout_marginTop="@dimen/material_border_padding_small"
+        android:layout_marginStart="@dimen/material_border_padding"
+        app:layout_constraintTop_toBottomOf="@id/new_transaction_purchase_price_edittext"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/new_transaction_sale_price_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_border_padding_small"
+        android:layout_marginStart="@dimen/material_border_padding"
+        android:layout_marginBottom="@dimen/material_border_padding"
+        android:inputType="numberDecimal"
+        android:hint="Enter sale price"
+        app:layout_constraintTop_toBottomOf="@id/new_transaction_sale_price_title_textview"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

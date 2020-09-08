@@ -6,15 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import tang.song.edu.yugiohcollectiontracker.data.db.converters.Converters
-import tang.song.edu.yugiohcollectiontracker.data.db.dao.CardDao
-import tang.song.edu.yugiohcollectiontracker.data.db.dao.CardSetDao
-import tang.song.edu.yugiohcollectiontracker.data.db.dao.CardXCardSetDao
-import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
-import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
-import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardXCardSetRef
+import tang.song.edu.yugiohcollectiontracker.data.db.dao.*
+import tang.song.edu.yugiohcollectiontracker.data.db.entities.*
 
 @Database(
-    entities = [Card::class, CardSet::class, CardXCardSetRef::class],
+    entities = [Card::class, CardSet::class, CardXCardSetRef::class, CardInventory::class, Transaction::class],
     version = 1
 )
 @TypeConverters(Converters::class)
@@ -22,6 +18,10 @@ abstract class CardDatabase : RoomDatabase() {
     abstract fun cardDao(): CardDao
     abstract fun cardSetDao(): CardSetDao
     abstract fun cardXCardSetDao(): CardXCardSetDao
+
+    abstract fun cardInventoryDao(): CardInventoryDao
+    abstract fun transactionDao(): TransactionDao
+    abstract fun cardInventoryXTransactionDao(): CardInventoryXTransactionDao
 
     companion object {
         @Volatile

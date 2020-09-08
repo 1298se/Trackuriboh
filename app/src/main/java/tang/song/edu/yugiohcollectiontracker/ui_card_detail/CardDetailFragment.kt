@@ -2,7 +2,9 @@ package tang.song.edu.yugiohcollectiontracker.ui_card_detail
 
 import android.content.Context
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
@@ -15,6 +17,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import tang.song.edu.yugiohcollectiontracker.BaseApplication
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.R
+import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardWithSetInfo
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardDetailBinding
 import tang.song.edu.yugiohcollectiontracker.ui_base.CollapseToolbarStateChangeListener
 import tang.song.edu.yugiohcollectiontracker.ui_card_detail.adapters.CardDetailPagerAdapter
@@ -22,7 +25,7 @@ import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardImagePager
 import tang.song.edu.yugiohcollectiontracker.viewBinding
 import javax.inject.Inject
 
-class CardDetailFragment : BaseFragment(R.layout.fragment_card_detail) {
+class CardDetailFragment : BaseFragment(R.layout.fragment_card_detail), Toolbar.OnMenuItemClickListener {
     @Inject
     lateinit var mRequestManager: RequestManager
 
@@ -31,12 +34,13 @@ class CardDetailFragment : BaseFragment(R.layout.fragment_card_detail) {
 
     private val args: CardDetailFragmentArgs by navArgs()
 
-    private var _binding: FragmentCardDetailBinding? = null
     private val binding by viewBinding(FragmentCardDetailBinding::bind)
 
     private lateinit var mViewModel: CardDetailViewModel
     private lateinit var mImagePagerAdapter: CardImagePagerAdapter
     private lateinit var mCardDetailPagerAdapter: CardDetailPagerAdapter
+
+    private lateinit var mCard: CardWithSetInfo
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -54,18 +58,29 @@ class CardDetailFragment : BaseFragment(R.layout.fragment_card_detail) {
         mViewModel = ViewModelProvider(this, mViewModelFactory).get(CardDetailViewModel::class.java)
 
         mViewModel.getCardDetailsById(args.cardId).observe(viewLifecycleOwner) {
-            mImagePagerAdapter.setImageList(it.card.cardImageList)
-            mCardDetailPagerAdapter.setCard(it)
+            mCard = it.also {
+                mImagePagerAdapter.setImageList(it.card.cardImageList)
+                mCardDetailPagerAdapter.setCard(it)
+            }
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        _binding = null
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.action_add_to_inventory -> {
+                findNavController().navigate(R.id.action_cardDetailFragment_to_transactionDialogFragment)
+                true
+            }
+            else -> false
+        }
     }
 
     private fun initToolbar() {
+        binding.cardDetailToolbar.apply {
+            inflateMenu(R.menu.card_detail_toolbar_menu)
+
+            setOnMenuItemClickListener(this@CardDetailFragment)
+        }
         binding.cardDetailAppBarLayout.addOnOffsetChangedListener(object : CollapseToolbarStateChangeListener() {
             override fun onStateChanged(appBarLayout: AppBarLayout?, state: State) {
                 if (state == State.COLLAPSED) {

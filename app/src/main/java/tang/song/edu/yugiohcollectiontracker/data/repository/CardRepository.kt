@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import kotlinx.coroutines.coroutineScope
+import tang.song.edu.yugiohcollectiontracker.DATABASE_PAGE_SIZE
 import tang.song.edu.yugiohcollectiontracker.data.db.CardLocalCache
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
 import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardWithSetInfo
@@ -11,8 +12,6 @@ import tang.song.edu.yugiohcollectiontracker.data.network.CardRetrofitService
 import tang.song.edu.yugiohcollectiontracker.data.network.PagedListBoundaryCallbackResponse
 import javax.inject.Inject
 import javax.inject.Singleton
-
-private const val DATABASE_PAGE_SIZE = 30
 
 @Singleton
 class CardRepository @Inject constructor(

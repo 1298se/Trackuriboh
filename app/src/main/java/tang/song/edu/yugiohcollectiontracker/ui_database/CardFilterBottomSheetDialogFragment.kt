@@ -2,7 +2,6 @@ package tang.song.edu.yugiohcollectiontracker.ui_database
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
@@ -53,13 +52,6 @@ class CardFilterBottomSheetDialogFragment : BottomSheetDialogFragment(),
             this.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
                 ?.let {
                     mBottomSheetBehavior = BottomSheetBehavior.from(it)
-
-                    it.layoutParams.apply {
-                        val displayMetrics = DisplayMetrics()
-                        activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
-
-                        height = displayMetrics.heightPixels
-                    }
                 }
         }
     }

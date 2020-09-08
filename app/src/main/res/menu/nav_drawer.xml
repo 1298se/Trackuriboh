@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/summaryFragment"
+            android:icon="@drawable/ic_account_circle_black_24dp"
+            android:title="Summary" />
+        <item
+            android:id="@+id/inventoryFragment"
+            android:icon="@drawable/ic_inventory_black_24dp"
+            android:title="Inventory" />
+
         <item
             android:id="@+id/databaseFragment"
             android:icon="@drawable/ic_database_black_24dp"
             android:title="Database" />
-        <item
-            android:id="@+id/collectionFragment"
-            android:icon="@drawable/ic_collections_black_24dp"
-            android:title="Collections" />
-        <item
-            android:id="@+id/wishlistFragment"
-            android:icon="@drawable/ic_star_black_24dp"
-            android:title="Wishlist" />
     </group>
 </menu>
