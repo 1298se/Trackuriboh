@@ -2,14 +2,15 @@ package tang.song.edu.yugiohcollectiontracker.ui_database
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import tang.song.edu.yugiohcollectiontracker.BaseApplication
-import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardSetListBinding
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardSetListAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.BaseSearchViewModel
@@ -18,11 +19,11 @@ import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.CardSetListV
 import tang.song.edu.yugiohcollectiontracker.viewBinding
 import javax.inject.Inject
 
-class CardSetListFragment : BaseSearchListFragment(R.layout.fragment_card_set_list), CardSetListAdapter.OnItemClickListener {
+class CardSetListFragment : BaseSearchListFragment(), CardSetListAdapter.OnItemClickListener {
     @Inject
     lateinit var mViewModelFactory: CardSetListViewModelFactory
 
-    private val binding by viewBinding(FragmentCardSetListBinding::bind)
+    private val binding by viewBinding(FragmentCardSetListBinding::inflate)
 
     private lateinit var mViewModel: CardSetListViewModel
     private lateinit var mAdapter: CardSetListAdapter
@@ -37,6 +38,10 @@ class CardSetListFragment : BaseSearchListFragment(R.layout.fragment_card_set_li
         super.onCreate(savedInstanceState)
 
         mViewModel = ViewModelProvider(this, mViewModelFactory).get(CardSetListViewModel::class.java)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

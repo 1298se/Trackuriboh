@@ -2,8 +2,10 @@ package tang.song.edu.yugiohcollectiontracker.ui_database
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
@@ -22,8 +24,8 @@ import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.DatabasePagerA
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.DatabaseViewModel
 import tang.song.edu.yugiohcollectiontracker.viewBinding
 
-class DatabaseFragment : BaseFragment(R.layout.fragment_database), SearchView.OnQueryTextListener, Toolbar.OnMenuItemClickListener, MenuItem.OnActionExpandListener {
-    private val binding by viewBinding(FragmentDatabaseBinding::bind)
+class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar.OnMenuItemClickListener, MenuItem.OnActionExpandListener {
+    private val binding by viewBinding(FragmentDatabaseBinding::inflate)
 
     private lateinit var mSearchView: SearchView
 
@@ -35,6 +37,10 @@ class DatabaseFragment : BaseFragment(R.layout.fragment_database), SearchView.On
         super.onAttach(context)
 
         (activity?.application as BaseApplication).appComponent.inject(this)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

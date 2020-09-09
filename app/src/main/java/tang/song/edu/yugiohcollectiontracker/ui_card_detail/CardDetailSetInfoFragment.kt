@@ -5,24 +5,24 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TableLayout
 import android.widget.TableRow
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textview.MaterialTextView
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
-
-import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardSetInfo
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardDetailSetInfoBinding
 import tang.song.edu.yugiohcollectiontracker.viewBinding
 
 private const val ARG_CARD_SET_INFO = "ARG_CARD_SET_INFO"
 
-class CardDetailSetInfoFragment : BaseFragment(R.layout.fragment_card_detail_set_info) {
+class CardDetailSetInfoFragment : BaseFragment() {
     private var mCardSetInfoList: List<CardSetInfo>? = null
 
-    private val binding by viewBinding(FragmentCardDetailSetInfoBinding::bind)
+    private val binding by viewBinding(FragmentCardDetailSetInfoBinding::inflate)
 
     companion object {
         fun newInstance(cardSetInfoList: List<CardSetInfo>?) =
@@ -39,6 +39,10 @@ class CardDetailSetInfoFragment : BaseFragment(R.layout.fragment_card_detail_set
         arguments?.let {
             mCardSetInfoList = it.getParcelableArrayList(ARG_CARD_SET_INFO)
         }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

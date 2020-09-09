@@ -3,6 +3,7 @@ package tang.song.edu.yugiohcollectiontracker.ui_card_detail
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
@@ -14,9 +15,8 @@ import tang.song.edu.yugiohcollectiontracker.viewBinding
 
 private const val ARG_CARD = "ARG_CARD"
 
-class CardDetailOverviewFragment : BaseFragment(R.layout.fragment_card_detail_overview) {
-    private var _binding: FragmentCardDetailOverviewBinding? = null
-    private val binding by viewBinding(FragmentCardDetailOverviewBinding::bind)
+class CardDetailOverviewFragment : BaseFragment() {
+    private val binding by viewBinding(FragmentCardDetailOverviewBinding::inflate)
 
     private var mCard: Card? = null
 
@@ -34,6 +34,10 @@ class CardDetailOverviewFragment : BaseFragment(R.layout.fragment_card_detail_ov
         arguments?.let {
             mCard = it.getParcelable(ARG_CARD)
         }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

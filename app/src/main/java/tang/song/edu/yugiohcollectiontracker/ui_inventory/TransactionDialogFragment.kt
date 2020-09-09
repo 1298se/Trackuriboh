@@ -10,18 +10,17 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentTransactionDialogBinding
+import tang.song.edu.yugiohcollectiontracker.viewBinding
 
 class TransactionDialogFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
     private lateinit var viewModel: TransactionDialogViewModel
 
-    private var _binding: FragmentTransactionDialogBinding? = null
-    private val binding get() = _binding!!
+    private val binding by viewBinding(FragmentTransactionDialogBinding::inflate)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentTransactionDialogBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -35,11 +34,6 @@ class TransactionDialogFragment : DialogFragment(), Toolbar.OnMenuItemClickListe
         super.onViewCreated(view, savedInstanceState)
 
         initToolbar()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {

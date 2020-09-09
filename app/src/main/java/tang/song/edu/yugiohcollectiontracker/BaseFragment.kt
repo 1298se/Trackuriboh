@@ -5,7 +5,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import tang.song.edu.yugiohcollectiontracker.ui_base.ErrorDialogFragment
 
-abstract class BaseFragment(contentLayoutId: Int) : Fragment(contentLayoutId) {
+abstract class BaseFragment : Fragment() {
     private var mErrorDialog: ErrorDialogFragment? = null
 
     open fun showError(title: Int, message: Int) {

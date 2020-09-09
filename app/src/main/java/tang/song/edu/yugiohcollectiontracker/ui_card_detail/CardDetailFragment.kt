@@ -2,8 +2,10 @@ package tang.song.edu.yugiohcollectiontracker.ui_card_detail
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
@@ -25,7 +27,7 @@ import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardImagePager
 import tang.song.edu.yugiohcollectiontracker.viewBinding
 import javax.inject.Inject
 
-class CardDetailFragment : BaseFragment(R.layout.fragment_card_detail), Toolbar.OnMenuItemClickListener {
+class CardDetailFragment : BaseFragment(), Toolbar.OnMenuItemClickListener {
     @Inject
     lateinit var mRequestManager: RequestManager
 
@@ -34,7 +36,7 @@ class CardDetailFragment : BaseFragment(R.layout.fragment_card_detail), Toolbar.
 
     private val args: CardDetailFragmentArgs by navArgs()
 
-    private val binding by viewBinding(FragmentCardDetailBinding::bind)
+    private val binding by viewBinding(FragmentCardDetailBinding::inflate)
 
     private lateinit var mViewModel: CardDetailViewModel
     private lateinit var mImagePagerAdapter: CardImagePagerAdapter
@@ -46,6 +48,10 @@ class CardDetailFragment : BaseFragment(R.layout.fragment_card_detail), Toolbar.
         super.onAttach(context)
 
         (activity?.application as BaseApplication).appComponent.inject(this)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
