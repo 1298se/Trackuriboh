@@ -53,7 +53,10 @@ class DatabaseFragment : BaseFragment(R.layout.fragment_database), SearchView.On
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        return true
+        if (newText.isNullOrBlank()) {
+            resetLists()
+        }
+        return false
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {

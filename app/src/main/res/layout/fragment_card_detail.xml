@@ -60,6 +60,7 @@
         android:id="@+id/card_detail_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="@dimen/material_border_padding"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
