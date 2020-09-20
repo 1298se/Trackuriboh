@@ -71,7 +71,15 @@ class ResponseUtils {
 
                 for (card in cardList) {
                     card.cardSetDetails?.forEach { cardSet ->
-                        result.add(CardXCardSetRef(cardSet.setCode, card.id, parseCardSet(cardSet.setCode), cardSet.setRarity, cardSet.setPrice))
+                        result.add(
+                            CardXCardSetRef(
+                                cardNumber = cardSet.setCode,
+                                cardId = card.id,
+                                setCode = parseCardSet(cardSet.setCode),
+                                rarity = cardSet.setRarity,
+                                price = cardSet.setPrice
+                            )
+                        )
                     }
                 }
 

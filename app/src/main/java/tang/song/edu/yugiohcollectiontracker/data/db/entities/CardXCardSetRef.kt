@@ -6,7 +6,8 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class CardXCardSetRef(
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
     val cardNumber: String,
     @ForeignKey(entity = Card::class, parentColumns = ["cardId"], childColumns = ["cardId"], onDelete = ForeignKey.CASCADE)
     val cardId: Long,
