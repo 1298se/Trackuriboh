@@ -1,135 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/new_transaction_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:navigationIcon="@drawable/ic_close_black_24dp"
         app:title="@string/lbl_new_transaction" />
 
     <View
         android:id="@+id/divider1"
-        app:layout_constraintTop_toBottomOf="@id/new_transaction_toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         style="@style/Divider" />
 
-    <com.google.android.material.textview.MaterialTextView
-        style="@style/TextAppearance.Types.Subtitle1"
-        android:id="@+id/new_transaction_card_name_title_textview"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/new_transaction_name_textfield"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Name"
-        android:layout_marginTop="@dimen/material_border_padding"
         android:layout_marginStart="@dimen/material_border_padding"
-        app:layout_constraintTop_toBottomOf="@id/divider1"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginEnd="@dimen/material_border_padding"
+        android:layout_marginTop="16dp"
+        android:hint="Name">
 
-    <com.google.android.material.textview.MaterialTextView
-        style="@style/TextAppearance.MaterialComponents.Body1"
-        android:id="@+id/new_transaction_card_name_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/material_border_padding_small"
-        android:layout_marginStart="@dimen/material_border_padding"
-        android:text="Blue-Eyes White Dragon"
-        app:layout_constraintTop_toBottomOf="@id/new_transaction_card_name_title_textview"
-        app:layout_constraintStart_toStartOf="parent" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="end"
+            tools:text="Blue-Eyes White Dragon" />
 
-    <com.google.android.material.textview.MaterialTextView
-        style="@style/TextAppearance.Types.Subtitle1"
-        android:id="@+id/new_date_title_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Date"
-        android:layout_marginTop="@dimen/material_border_padding_small"
-        android:layout_marginStart="@dimen/material_border_padding"
-        app:layout_constraintTop_toBottomOf="@id/new_transaction_card_name_textview"
-        app:layout_constraintStart_toStartOf="parent" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/new_transaction_date_edittext"
-        style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/new_transaction_region_setcode_rarity"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="Select Date"
-        android:layout_marginTop="@dimen/material_border_padding_small"
-        android:layout_marginStart="@dimen/material_border_padding"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintTop_toBottomOf="@id/new_date_title_textview"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:orientation="horizontal">
 
-    <com.google.android.material.textview.MaterialTextView
-        style="@style/TextAppearance.Types.Subtitle1"
-        android:id="@+id/new_transaction_type_title_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Transaction Type"
-        android:layout_marginTop="@dimen/material_border_padding_small"
-        android:layout_marginStart="@dimen/material_border_padding"
-        app:layout_constraintTop_toBottomOf="@id/new_transaction_date_edittext"
-        app:layout_constraintStart_toStartOf="parent" />
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.ExposedDropdown"
+            android:id="@+id/new_transaction_setcode_textfield"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/material_border_padding"
+            android:layout_marginEnd="@dimen/material_border_padding"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:hint="Set Code">
 
-    <Spinner
-        android:id="@+id/new_transaction_type_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/material_border_padding_small"
-        android:layout_marginStart="@dimen/material_border_padding"
-        app:layout_constraintTop_toBottomOf="@id/new_transaction_type_title_textview"
-        app:layout_constraintStart_toStartOf="parent" />
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:singleLine="true"
+                android:ellipsize="end"
+                tools:text="LOB-001" />
 
-    <com.google.android.material.textview.MaterialTextView
-        style="@style/TextAppearance.Types.Subtitle1"
-        android:id="@+id/new_transaction_purchase_price_title_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Purchased at:"
-        android:layout_marginTop="@dimen/material_border_padding_small"
-        android:layout_marginStart="@dimen/material_border_padding"
-        app:layout_constraintTop_toBottomOf="@id/new_transaction_type_spinner"
-        app:layout_constraintStart_toStartOf="parent" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/new_transaction_purchase_price_edittext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/material_border_padding_small"
-        android:layout_marginStart="@dimen/material_border_padding"
-        android:inputType="numberDecimal"
-        android:hint="Enter purchase price"
-        app:layout_constraintTop_toBottomOf="@id/new_transaction_purchase_price_title_textview"
-        app:layout_constraintStart_toStartOf="parent" />
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.ExposedDropdown"
+            android:id="@+id/new_transaction_rarity_textfield"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/material_border_padding"
+            android:layout_marginEnd="@dimen/material_border_padding"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:hint="Rarity">
 
-    <com.google.android.material.textview.MaterialTextView
-        style="@style/TextAppearance.Types.Subtitle1"
-        android:id="@+id/new_transaction_sale_price_title_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sold at:"
-        android:layout_marginTop="@dimen/material_border_padding_small"
-        android:layout_marginStart="@dimen/material_border_padding"
-        app:layout_constraintTop_toBottomOf="@id/new_transaction_purchase_price_edittext"
-        app:layout_constraintStart_toStartOf="parent" />
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:singleLine="true"
+                android:ellipsize="end"
+                tools:text="Ultra Rare" />
 
-    <EditText
-        android:id="@+id/new_transaction_sale_price_edittext"
-        android:layout_width="wrap_content"
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/new_transaction_region_type_platform"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/material_border_padding_small"
-        android:layout_marginStart="@dimen/material_border_padding"
-        android:layout_marginBottom="@dimen/material_border_padding"
-        android:inputType="numberDecimal"
-        android:hint="Enter sale price"
-        app:layout_constraintTop_toBottomOf="@id/new_transaction_sale_price_title_textview"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:orientation="horizontal">
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.ExposedDropdown"
+            android:id="@+id/new_transaction_type_textfield"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/material_border_padding"
+            android:layout_marginEnd="@dimen/material_border_padding"
+            android:layout_marginTop="16dp"
+            android:layout_weight="4"
+            android:hint="Transaction Type">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:singleLine="true"
+                android:ellipsize="end"
+                tools:text="Purchase" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.ExposedDropdown"
+            android:id="@+id/new_transaction_platform_textfield"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/material_border_padding"
+            android:layout_marginEnd="@dimen/material_border_padding"
+            android:layout_marginTop="16dp"
+            android:layout_weight="3"
+            android:hint="Platform">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:inputType="none"
+                tools:text="Ebay" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/new_transaction_region_buyer_seller_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/new_transaction_buyer_seller_textfield"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/material_border_padding"
+            android:layout_marginEnd="@dimen/material_border_padding"
+            android:layout_marginTop="16dp"
+            android:layout_weight="2"
+            android:hint="Seller">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                tools:text="Troll&amp;Toad" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/new_transaction_amount_textfield"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/material_border_padding"
+            android:layout_marginEnd="@dimen/material_border_padding"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:hint="Amount">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:inputType="numberDecimal"
+                tools:text="99.99" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/new_transaction_tracking_textfield"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="Tracking Number">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:text="123456" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

@@ -1,7 +1,10 @@
 package tang.song.edu.yugiohcollectiontracker.ui_inventory
 
 import androidx.lifecycle.ViewModel
+import tang.song.edu.yugiohcollectiontracker.data.repository.CardInventoryRepository
 
-class TransactionDialogViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+class TransactionDialogViewModel(private val inventoryRepository: CardInventoryRepository) : ViewModel() {
+    fun insertTransaction() {
+
+    }
 }

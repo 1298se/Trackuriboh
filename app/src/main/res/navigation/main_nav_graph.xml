@@ -59,6 +59,6 @@
     </fragment>
     <dialog
         android:id="@+id/transactionDialogFragment"
-        android:name="tang.song.edu.yugiohcollectiontracker.ui_inventory.TransactionDialogFragment"
-        android:label="TransactionDialogFragment" />
+        android:name="tang.song.edu.yugiohcollectiontracker.ui_inventory.TransactionBottomSheetDialogFragment"
+        android:label="TransactionBottomSheetDialogFragment" />
 </navigation>

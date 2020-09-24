@@ -12,7 +12,7 @@ data class Transaction(
     @PrimaryKey(autoGenerate = true)
     val transactionId: Long = 0,
     @ForeignKey(entity = CardInventory::class, parentColumns = ["inventoryId"], childColumns = ["inventoryId"], onDelete = ForeignKey.CASCADE)
-    val inventoryId: Long,
+    var inventoryId: Long,
     val transactionType: TransactionType?,
     val quantity: Int?,
     val date: Date,

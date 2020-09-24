@@ -2,13 +2,11 @@ package tang.song.edu.yugiohcollectiontracker.ui_card_detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import tang.song.edu.yugiohcollectiontracker.data.repository.CardInventoryRepository
 import tang.song.edu.yugiohcollectiontracker.data.repository.CardRepository
 import javax.inject.Inject
 
 class CardDetailViewModelFactory @Inject constructor(
-    private val cardRepository: CardRepository,
-    private val cardInventoryRepository: CardInventoryRepository
+    private val cardRepository: CardRepository
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
@@ -16,7 +14,6 @@ class CardDetailViewModelFactory @Inject constructor(
         if (modelClass.isAssignableFrom(CardDetailViewModel::class.java)) {
             return CardDetailViewModel(
                 cardRepository,
-                cardInventoryRepository
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

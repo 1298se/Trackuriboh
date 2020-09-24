@@ -24,6 +24,7 @@ import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardDetailBindi
 import tang.song.edu.yugiohcollectiontracker.ui_base.CollapseToolbarStateChangeListener
 import tang.song.edu.yugiohcollectiontracker.ui_card_detail.adapters.CardDetailPagerAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardImagePagerAdapter
+import tang.song.edu.yugiohcollectiontracker.ui_inventory.TransactionBottomSheetDialogFragment
 import tang.song.edu.yugiohcollectiontracker.viewBinding
 import javax.inject.Inject
 
@@ -74,7 +75,7 @@ class CardDetailFragment : BaseFragment(), Toolbar.OnMenuItemClickListener {
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.action_add_to_inventory -> {
-                findNavController().navigate(R.id.action_cardDetailFragment_to_transactionDialogFragment)
+                TransactionBottomSheetDialogFragment().show(parentFragmentManager, null)
                 true
             }
             else -> false
