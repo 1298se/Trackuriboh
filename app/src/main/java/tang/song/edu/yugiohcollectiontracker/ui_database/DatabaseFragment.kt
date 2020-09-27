@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
