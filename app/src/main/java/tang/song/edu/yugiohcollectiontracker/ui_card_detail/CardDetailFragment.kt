@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
@@ -24,7 +23,6 @@ import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardDetailBindi
 import tang.song.edu.yugiohcollectiontracker.ui_base.CollapseToolbarStateChangeListener
 import tang.song.edu.yugiohcollectiontracker.ui_card_detail.adapters.CardDetailPagerAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardImagePagerAdapter
-import tang.song.edu.yugiohcollectiontracker.ui_inventory.TransactionBottomSheetDialogFragment
 import tang.song.edu.yugiohcollectiontracker.viewBinding
 import javax.inject.Inject
 
@@ -75,7 +73,8 @@ class CardDetailFragment : BaseFragment(), Toolbar.OnMenuItemClickListener {
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.action_add_to_inventory -> {
-                TransactionBottomSheetDialogFragment().show(parentFragmentManager, null)
+                val action = CardDetailFragmentDirections.actionCardDetailFragmentToTransactionDialogFragment(mCard.card.cardId)
+                findNavController().navigate(action)
                 true
             }
             else -> false

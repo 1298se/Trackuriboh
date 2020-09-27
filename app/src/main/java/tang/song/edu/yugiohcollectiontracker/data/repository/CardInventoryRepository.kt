@@ -22,8 +22,4 @@ class CardInventoryRepository @Inject constructor(
     suspend fun insertTransaction(transaction: Transaction): Long {
         return cardInventoryLocalCache.insertTransaction(transaction)
     }
-
-    suspend fun insertTransactions(transactions: List<Transaction>): List<Long> {
-        return cardInventoryLocalCache.insertTransactions(transactions)
-    }
 }

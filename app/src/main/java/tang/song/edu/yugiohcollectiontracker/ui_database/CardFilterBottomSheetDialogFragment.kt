@@ -9,11 +9,11 @@ import androidx.appcompat.widget.Toolbar
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import tang.song.edu.yugiohcollectiontracker.R
-import tang.song.edu.yugiohcollectiontracker.databinding.CardBottomSheetFilterBinding
+import tang.song.edu.yugiohcollectiontracker.databinding.BottomSheetCardFilterBinding
 import tang.song.edu.yugiohcollectiontracker.viewBinding
 
 class CardFilterBottomSheetDialogFragment : BottomSheetDialogFragment(), Toolbar.OnMenuItemClickListener {
-    private val binding by viewBinding(CardBottomSheetFilterBinding::inflate)
+    private val binding by viewBinding(BottomSheetCardFilterBinding::inflate)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return binding.root

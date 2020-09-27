@@ -60,5 +60,9 @@
     <dialog
         android:id="@+id/transactionDialogFragment"
         android:name="tang.song.edu.yugiohcollectiontracker.ui_inventory.TransactionBottomSheetDialogFragment"
-        android:label="TransactionBottomSheetDialogFragment" />
+        android:label="TransactionBottomSheetDialogFragment" >
+        <argument
+            android:name="cardId"
+            app:argType="long" />
+    </dialog>
 </navigation>

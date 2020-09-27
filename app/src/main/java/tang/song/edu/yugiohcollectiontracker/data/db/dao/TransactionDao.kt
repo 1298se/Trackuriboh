@@ -9,7 +9,4 @@ import tang.song.edu.yugiohcollectiontracker.data.db.entities.Transaction
 interface TransactionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transaction: Transaction): Long
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTransactions(transactions: List<Transaction>): List<Long>
 }

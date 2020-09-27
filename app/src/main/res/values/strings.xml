@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">YugiohCollectionTracker</string>
+    <string name="app_name">Trackuriboh</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -51,4 +51,17 @@
 
     <!-- Inventory -->
     <string name="lbl_new_transaction">New Transaction</string>
+
+    <!-- Transaction -->
+    <string-array name="transaction_types">
+        <item>Purchase</item>
+        <item>Sale</item>
+    </string-array>
+
+    <string-array name="platform_types">
+        <item>Ebay</item>
+        <item>Facebook</item>
+        <item>Website</item>
+        <item>Other</item>
+    </string-array>
 </resources>

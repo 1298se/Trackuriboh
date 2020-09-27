@@ -8,6 +8,7 @@ import tang.song.edu.yugiohcollectiontracker.ui_card_set_detail.CardSetDetailFra
 import tang.song.edu.yugiohcollectiontracker.ui_database.CardListFragment
 import tang.song.edu.yugiohcollectiontracker.ui_database.CardSetListFragment
 import tang.song.edu.yugiohcollectiontracker.ui_database.DatabaseFragment
+import tang.song.edu.yugiohcollectiontracker.ui_inventory.TransactionBottomSheetDialogFragment
 import tang.song.edu.yugiohcollectiontracker.workers.DatabaseSyncWorker
 import javax.inject.Singleton
 
@@ -25,6 +26,7 @@ interface AppComponent {
     fun inject(fragment: DatabaseFragment)
     fun inject(fragment: CardDetailFragment)
     fun inject(fragment: CardSetDetailFragment)
+    fun inject(fragment: TransactionBottomSheetDialogFragment)
 
     fun inject(worker: DatabaseSyncWorker)
 }

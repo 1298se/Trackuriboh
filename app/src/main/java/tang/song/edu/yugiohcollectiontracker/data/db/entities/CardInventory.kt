@@ -12,6 +12,7 @@ data class CardInventory(
     val inventoryId: Long = 0,
     val cardId: Long,
     val cardName: String?,
+    val cardNumber: String,
     val rarity: String?,
     val quantity: Int?,
     val avgPurchasePrice: Double?,

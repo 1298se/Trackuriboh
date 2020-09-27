@@ -19,8 +19,4 @@ class CardInventoryLocalCache @Inject constructor(
     suspend fun insertTransaction(transaction: Transaction): Long {
         return cardDatabase.transactionDao().insertTransaction(transaction)
     }
-
-    suspend fun insertTransactions(transactions: List<Transaction>): List<Long> {
-        return cardDatabase.transactionDao().insertTransactions(transactions)
-    }
 }
