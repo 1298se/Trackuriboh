@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
@@ -16,10 +15,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.bottom_sheet_transaction.*
 import tang.song.edu.yugiohcollectiontracker.BaseApplication
 import tang.song.edu.yugiohcollectiontracker.R
-import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardSetInfo
+import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardInventory
 import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardWithSetInfo
+import tang.song.edu.yugiohcollectiontracker.data.models.PlatformType
+import tang.song.edu.yugiohcollectiontracker.data.models.TransactionType
 import tang.song.edu.yugiohcollectiontracker.databinding.BottomSheetTransactionBinding
 import tang.song.edu.yugiohcollectiontracker.viewBinding
+import java.util.*
 import javax.inject.Inject
 
 class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), Toolbar.OnMenuItemClickListener {
@@ -59,7 +61,7 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), Toolba
 
         mViewModel.getCardDetailsById(args.cardId).observe(viewLifecycleOwner) {
             mCard = it.also {
-                binding.newTransactionNameEditext.setText(it.card.name)
+                binding.newTransactionNameEdittext.setText(it.card.name)
             }
 
             initDropdowns()
@@ -71,12 +73,12 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), Toolba
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         return when(item?.itemId) {
             R.id.action_save_transaction -> {
-                /*mViewModel.insertTransaction(
-                    card = mCard.card,
-                    cardNumber = binding.newTransactionCardNumberTextview.text.toString(),
-                    rarity = new_transaction_rarity_textview.text.toString()
-                )*/
-                return true
+                mViewModel.insertTransaction(CardInventory(
+                    cardId = mCard.card.cardId,
+                    cardName = mCard.card.name,
+                    cardNumber =
+                ))
+                return tru
             }
             else -> false
         }
@@ -103,6 +105,7 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), Toolba
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, cardNumberList.toList())
         binding.newTransactionCardNumberTextview.apply {
             setAdapter(adapter)
+
             setOnItemClickListener { _, _, _, _ ->
                 setRarityDropdown(this.text.toString())
             }
@@ -117,7 +120,7 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), Toolba
     }
 
     private fun initPlatformDropdown() {
-        val platformTypeList = resources.getStringArray(R.array.platform_types)
+        val platformTypeList = resources.getStringArray(R.array.platform_types).toList()
 
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, platformTypeList)
         binding.newTransactionPlatformTextview.setAdapter(adapter)
@@ -131,6 +134,12 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), Toolba
         } }
 
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, rarityList)
-        binding.newTransactionRarityTextview.setAdapter(adapter)
+        binding.newTransactionRarityTextview.apply {
+            setAdapter(adapter)
+
+            if (rarityList.size == 1) {
+                setText(rarityList[0], false)
+            }
+        }
     }
 }

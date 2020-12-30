@@ -8,6 +8,11 @@ import javax.inject.Inject
 class CardInventoryLocalCache @Inject constructor(
     private val cardDatabase: CardDatabase
 ) {
+
+    suspend fun getInventory(cardNumber: String, rarity: String): CardInventory? {
+        return cardDatabase.cardInventoryDao().getInventory(cardNumber, rarity)
+    }
+
     suspend fun getInventoryWithTransactions(inventoryId: Long): CardInventoryWithTransactions {
         return cardDatabase.cardInventoryXTransactionDao().getCardInventoryWithTransaction(inventoryId)
     }

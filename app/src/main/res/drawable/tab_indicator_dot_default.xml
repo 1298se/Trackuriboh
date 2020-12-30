@@ -4,7 +4,7 @@
         android:left="2dp"
         android:right="2dp">
         <shape android:shape="oval">
-            <solid android:color="@color/colorPrimaryDark" />
+            <solid android:color="?attr/colorPrimaryDark" />
         </shape>
     </item>
 </layer-list>

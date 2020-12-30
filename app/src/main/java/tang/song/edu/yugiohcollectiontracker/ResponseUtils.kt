@@ -39,7 +39,7 @@ class ResponseUtils {
                             scale = card.scale,
                             linkval = card.linkval,
                             linkmarkers = card.linkmarkers,
-                            cardImageList = cardImageList
+                            cardImageURLList = cardImageList
                         )
                     )
                 }

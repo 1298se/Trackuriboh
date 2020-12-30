@@ -75,7 +75,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/material_border_padding"
-        android:backgroundTint="?attr/colorPrimaryDark"
         android:text="Apply"
         app:layout_constraintTop_toBottomOf="@id/divider3"
         app:layout_constraintBottom_toBottomOf="parent"

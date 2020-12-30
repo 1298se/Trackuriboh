@@ -58,7 +58,7 @@ class CardListAdapter(
         }
 
         internal fun bind(item: Card) {
-            requestManager.load(item.cardImageList?.get(0)).into(binding.itemCardImage)
+            requestManager.load(item.cardImageURLList?.get(0)).into(binding.itemCardImage)
 
             binding.itemCardTitleTextview.text = item.name
             binding.itemCardTypeTextview.text = item.type.value

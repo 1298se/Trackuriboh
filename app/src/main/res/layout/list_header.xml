@@ -3,8 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp"
-    android:background="@color/colorPrimary">
+    android:padding="8dp">
 
 
     <TextView
@@ -12,7 +11,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
-        android:textSize="16sp"
-        android:textColor="#f9f93d" />
+        android:textSize="16sp" />
 
 </LinearLayout>

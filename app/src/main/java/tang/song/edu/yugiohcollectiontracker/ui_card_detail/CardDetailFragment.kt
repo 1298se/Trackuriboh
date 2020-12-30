@@ -64,7 +64,7 @@ class CardDetailFragment : BaseFragment(), Toolbar.OnMenuItemClickListener {
 
         mViewModel.getCardDetailsById(args.cardId).observe(viewLifecycleOwner) {
             mCard = it.also {
-                mImagePagerAdapter.setImageList(it.card.cardImageList)
+                mImagePagerAdapter.setImageList(it.card.cardImageURLList)
                 mCardDetailPagerAdapter.setCard(it)
             }
         }

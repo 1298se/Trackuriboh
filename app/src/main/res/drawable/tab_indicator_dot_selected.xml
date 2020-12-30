@@ -4,7 +4,7 @@
         android:left="2dp"
         android:right="2dp">
         <shape android:shape="oval">
-            <solid android:color="@color/colorAccent" />
+            <solid android:color="?attr/colorAccent" />
         </shape>
     </item>
 </layer-list>

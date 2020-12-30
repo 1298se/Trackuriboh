@@ -11,20 +11,7 @@ import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardWithSetInfo
 abstract class CardXCardSetDao : CardDao, CardSetDao {
     @Transaction
     @Query(
-        "SELECT Card.cardId, " +
-                "Card.name, " +
-                "Card.type, " +
-                "Card.desc, " +
-                "Card.atk, " +
-                "Card.def, " +
-                "Card.level, " +
-                "Card.race, " +
-                "Card.attribute, " +
-                "Card.archetype, " +
-                "Card.scale, " +
-                "Card.linkval, " +
-                "Card.linkmarkers, " +
-                "Card.cardImageList FROM CardXCardSetRef " +
+        "SELECT * FROM CardXCardSetRef " +
                 "INNER JOIN Card ON Card.cardId = CardXCardSetRef.cardId " +
                 "WHERE CardXCardSetRef.setCode = :setCode ORDER BY name ASC"
     )
@@ -32,12 +19,7 @@ abstract class CardXCardSetDao : CardDao, CardSetDao {
 
     @Transaction
     @Query(
-        "SELECT CardSet.setCode, " +
-                "CardSet.setName, " +
-                "CardXCardSetRef.cardNumber, " +
-                "CardXCardSetRef.rarity, " +
-                "CardXCardSetRef.price, " +
-                "CardSet.releaseDate FROM CardXCardSetRef " +
+        "SELECT * FROM CardXCardSetRef " +
                 "INNER JOIN CardSet ON CardSet.setCode = CardXCardSetRef.setCode " +
                 "WHERE CardXCardSetRef.cardId = :cardId"
     )
