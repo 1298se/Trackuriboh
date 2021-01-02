@@ -3,6 +3,8 @@ package tang.song.edu.yugiohcollectiontracker.di
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -10,11 +12,11 @@ import tang.song.edu.yugiohcollectiontracker.data.network.CardRetrofitService
 import javax.inject.Singleton
 
 @Module
+@InstallIn(ApplicationComponent::class)
 object NetworkModule {
 
     private const val BASE_URL = "https://db.ygoprodeck.com/api/v6/"
 
-    @JvmStatic
     @Singleton
     @Provides
     fun provideOkHttpClient(): OkHttpClient =
@@ -22,7 +24,6 @@ object NetworkModule {
             .addNetworkInterceptor(StethoInterceptor())
             .build()
 
-    @JvmStatic
     @Singleton
     @Provides
     fun provideRetrofitInstance(okHttpClient: OkHttpClient): Retrofit =
@@ -32,7 +33,6 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-    @JvmStatic
     @Singleton
     @Provides
     fun provideCardRetrofitService(retrofit: Retrofit): CardRetrofitService =

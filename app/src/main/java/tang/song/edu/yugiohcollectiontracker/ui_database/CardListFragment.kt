@@ -1,48 +1,32 @@
 package tang.song.edu.yugiohcollectiontracker.ui_database
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
-import tang.song.edu.yugiohcollectiontracker.BaseApplication
+import dagger.hilt.android.AndroidEntryPoint
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardListBinding
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardListAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.BaseSearchViewModel
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.CardListViewModel
-import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.CardListViewModelFactory
 import tang.song.edu.yugiohcollectiontracker.viewBinding
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class CardListFragment : BaseSearchListFragment(), CardListAdapter.OnItemClickListener {
     @Inject
     lateinit var mRequestManager: RequestManager
 
-    @Inject
-    lateinit var mViewModelFactory: CardListViewModelFactory
-
     private val binding by viewBinding(FragmentCardListBinding::inflate)
 
-    private lateinit var mViewModel: CardListViewModel
+    private val mViewModel: CardListViewModel by viewModels()
     private lateinit var mAdapter: CardListAdapter
 
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        (activity?.application as BaseApplication).appComponent.inject(this)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        mViewModel = ViewModelProvider(this, mViewModelFactory).get(CardListViewModel::class.java)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return binding.root

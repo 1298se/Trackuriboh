@@ -6,12 +6,14 @@ import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 import tang.song.edu.yugiohcollectiontracker.R
 import javax.inject.Singleton
 
 @Module
+@InstallIn(ApplicationComponent::class)
 object AppModule {
-    @JvmStatic
     @Singleton
     @Provides
     fun provideRequestItems(): RequestOptions =
@@ -19,7 +21,6 @@ object AppModule {
             .placeholderOf(R.drawable.img_cardback)
             .error(R.drawable.img_cardback)
 
-    @JvmStatic
     @Singleton
     @Provides
     fun provideGlideInstance(

@@ -1,18 +1,22 @@
 package tang.song.edu.yugiohcollectiontracker.workers
 
 import android.content.Context
+import androidx.hilt.Assisted
+import androidx.hilt.work.WorkerInject
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import tang.song.edu.yugiohcollectiontracker.BaseApplication
 import tang.song.edu.yugiohcollectiontracker.data.db.CardLocalCache
 import tang.song.edu.yugiohcollectiontracker.data.network.CardRetrofitService
 import java.io.IOException
 import javax.inject.Inject
 
-class DatabaseSyncWorker(context: Context, params: WorkerParameters) :
+class DatabaseSyncWorker @WorkerInject constructor(
+    @Assisted context: Context,
+    @Assisted params: WorkerParameters
+) :
     CoroutineWorker(context, params) {
     @Inject
     lateinit var cardRetrofitService: CardRetrofitService
@@ -21,10 +25,6 @@ class DatabaseSyncWorker(context: Context, params: WorkerParameters) :
 
     companion object {
         private val TAG = DatabaseSyncWorker::class.java.name
-    }
-
-    init {
-        (context.applicationContext as BaseApplication).appComponent.inject(this)
     }
 
     override suspend fun doWork(): Result {

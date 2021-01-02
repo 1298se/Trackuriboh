@@ -1,6 +1,5 @@
 package tang.song.edu.yugiohcollectiontracker.ui_database
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -8,14 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager2.widget.ViewPager2
 import androidx.work.WorkInfo
 import com.google.android.material.tabs.TabLayoutMediator
-import tang.song.edu.yugiohcollectiontracker.BaseApplication
+import dagger.hilt.android.AndroidEntryPoint
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentDatabaseBinding
@@ -23,20 +22,15 @@ import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.DatabasePagerA
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.DatabaseViewModel
 import tang.song.edu.yugiohcollectiontracker.viewBinding
 
+@AndroidEntryPoint
 class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar.OnMenuItemClickListener, MenuItem.OnActionExpandListener {
     private val binding by viewBinding(FragmentDatabaseBinding::inflate)
 
     private lateinit var mSearchView: SearchView
 
-    private lateinit var mViewModel: DatabaseViewModel
+    private val mViewModel: DatabaseViewModel by viewModels()
     private lateinit var mAdapter: DatabasePagerAdapter
     private lateinit var mViewPager: ViewPager2
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        (activity?.application as BaseApplication).appComponent.inject(this)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return binding.root
@@ -44,8 +38,6 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        mViewModel = ViewModelProvider(requireActivity()).get(DatabaseViewModel::class.java)
 
         initToolbar()
         initTabLayoutWithViewPager()

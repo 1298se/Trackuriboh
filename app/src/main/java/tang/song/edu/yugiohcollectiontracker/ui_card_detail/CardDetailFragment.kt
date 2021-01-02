@@ -1,13 +1,12 @@
 package tang.song.edu.yugiohcollectiontracker.ui_card_detail
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
@@ -15,7 +14,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.RequestManager
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import tang.song.edu.yugiohcollectiontracker.BaseApplication
+import dagger.hilt.android.AndroidEntryPoint
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardWithSetInfo
@@ -26,28 +25,20 @@ import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardImagePager
 import tang.song.edu.yugiohcollectiontracker.viewBinding
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class CardDetailFragment : BaseFragment(), Toolbar.OnMenuItemClickListener {
     @Inject
     lateinit var mRequestManager: RequestManager
-
-    @Inject
-    lateinit var mViewModelFactory: CardDetailViewModelFactory
 
     private val args: CardDetailFragmentArgs by navArgs()
 
     private val binding by viewBinding(FragmentCardDetailBinding::inflate)
 
-    private lateinit var mViewModel: CardDetailViewModel
+    private val mViewModel: CardDetailViewModel by viewModels()
     private lateinit var mImagePagerAdapter: CardImagePagerAdapter
     private lateinit var mCardDetailPagerAdapter: CardDetailPagerAdapter
 
     private lateinit var mCard: CardWithSetInfo
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        (activity?.application as BaseApplication).appComponent.inject(this)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return binding.root
@@ -59,8 +50,6 @@ class CardDetailFragment : BaseFragment(), Toolbar.OnMenuItemClickListener {
         initToolbar()
         initImageViewPager()
         initCardDetailViewPager()
-
-        mViewModel = ViewModelProvider(this, mViewModelFactory).get(CardDetailViewModel::class.java)
 
         mViewModel.getCardDetailsById(args.cardId).observe(viewLifecycleOwner) {
             mCard = it.also {

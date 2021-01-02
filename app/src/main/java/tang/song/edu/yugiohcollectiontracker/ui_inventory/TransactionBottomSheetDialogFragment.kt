@@ -1,6 +1,5 @@
 package tang.song.edu.yugiohcollectiontracker.ui_inventory
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -8,38 +7,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.bottom_sheet_transaction.*
-import tang.song.edu.yugiohcollectiontracker.BaseApplication
 import tang.song.edu.yugiohcollectiontracker.R
-import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardInventory
 import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardWithSetInfo
-import tang.song.edu.yugiohcollectiontracker.data.models.PlatformType
-import tang.song.edu.yugiohcollectiontracker.data.models.TransactionType
 import tang.song.edu.yugiohcollectiontracker.databinding.BottomSheetTransactionBinding
 import tang.song.edu.yugiohcollectiontracker.viewBinding
 import java.util.*
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), Toolbar.OnMenuItemClickListener {
-    @Inject
-    lateinit var mViewModelFactory: TransactionBottomSheetDialogViewModelFactory
-    private lateinit var mViewModel: TransactionBottomSheetDialogViewModel
+    private val mViewModel: TransactionBottomSheetDialogViewModel by viewModels()
 
     private val args: TransactionBottomSheetDialogFragmentArgs by navArgs()
 
     private val binding by viewBinding(BottomSheetTransactionBinding::inflate)
 
     private lateinit var mCard: CardWithSetInfo
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        (activity?.application as BaseApplication).appComponent.inject(this)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog?.setOnShowListener {
@@ -57,8 +45,6 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), Toolba
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mViewModel = ViewModelProvider(requireActivity(), mViewModelFactory).get(TransactionBottomSheetDialogViewModel::class.java)
-
         mViewModel.getCardDetailsById(args.cardId).observe(viewLifecycleOwner) {
             mCard = it.also {
                 binding.newTransactionNameEdittext.setText(it.card.name)
@@ -73,12 +59,7 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), Toolba
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         return when(item?.itemId) {
             R.id.action_save_transaction -> {
-                mViewModel.insertTransaction(CardInventory(
-                    cardId = mCard.card.cardId,
-                    cardName = mCard.card.name,
-                    cardNumber =
-                ))
-                return tru
+                return true
             }
             else -> false
         }

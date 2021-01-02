@@ -1,15 +1,14 @@
 package tang.song.edu.yugiohcollectiontracker.ui_database
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import tang.song.edu.yugiohcollectiontracker.BaseApplication
+import dagger.hilt.android.AndroidEntryPoint
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardSetListBinding
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardSetListAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.BaseSearchViewModel
@@ -18,26 +17,15 @@ import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.CardSetListV
 import tang.song.edu.yugiohcollectiontracker.viewBinding
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class CardSetListFragment : BaseSearchListFragment(), CardSetListAdapter.OnItemClickListener {
     @Inject
     lateinit var mViewModelFactory: CardSetListViewModelFactory
 
     private val binding by viewBinding(FragmentCardSetListBinding::inflate)
 
-    private lateinit var mViewModel: CardSetListViewModel
+    private val mViewModel: CardSetListViewModel by viewModels()
     private lateinit var mAdapter: CardSetListAdapter
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        (activity?.application as BaseApplication).appComponent.inject(this)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        mViewModel = ViewModelProvider(this, mViewModelFactory).get(CardSetListViewModel::class.java)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return binding.root
