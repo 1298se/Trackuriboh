@@ -13,15 +13,10 @@ import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardSetListBind
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardSetListAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.BaseSearchViewModel
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.CardSetListViewModel
-import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.CardSetListViewModelFactory
 import tang.song.edu.yugiohcollectiontracker.viewBinding
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class CardSetListFragment : BaseSearchListFragment(), CardSetListAdapter.OnItemClickListener {
-    @Inject
-    lateinit var mViewModelFactory: CardSetListViewModelFactory
-
     private val binding by viewBinding(FragmentCardSetListBinding::inflate)
 
     private val mViewModel: CardSetListViewModel by viewModels()
