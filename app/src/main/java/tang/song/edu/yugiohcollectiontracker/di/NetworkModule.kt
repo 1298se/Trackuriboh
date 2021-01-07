@@ -15,7 +15,7 @@ import javax.inject.Singleton
 @InstallIn(ApplicationComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = "https://db.ygoprodeck.com/api/v6/"
+    private const val BASE_URL = "https://db.ygoprodeck.com/api/v7/"
 
     @Singleton
     @Provides

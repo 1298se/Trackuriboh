@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="tang.song.edu.yugiohcollectiontracker">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,9 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui_card_detail.CardDetailActivity"
-            android:parentActivityName=".MainActivity" />
-        <activity
             android:name=".MainActivity"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan">
@@ -27,6 +25,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:authorities="${applicationId}.workmanager-init"
+            tools:node="remove" />
     </application>
 
 </manifest>

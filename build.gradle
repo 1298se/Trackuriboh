@@ -8,7 +8,7 @@ buildscript {
     ext.room_version = '2.2.3'
     ext.dagger_version = '2.26'
     ext.glide_version = '4.11.0'
-    ext.paging_version = "2.1.2"
+    ext.paging_version = "3.0.0-alpha11"
     repositories {
         google()
         jcenter()

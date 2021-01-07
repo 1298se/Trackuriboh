@@ -2,25 +2,21 @@ package tang.song.edu.yugiohcollectiontracker.ui_inventory
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.bottom_sheet_transaction.*
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardWithSetInfo
 import tang.song.edu.yugiohcollectiontracker.databinding.BottomSheetTransactionBinding
 import tang.song.edu.yugiohcollectiontracker.viewBinding
-import java.util.*
 
 @AndroidEntryPoint
-class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), Toolbar.OnMenuItemClickListener {
+class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), View.OnClickListener {
     private val mViewModel: TransactionBottomSheetDialogViewModel by viewModels()
 
     private val args: TransactionBottomSheetDialogFragmentArgs by navArgs()
@@ -45,6 +41,8 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), Toolba
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.newTransactionSaveButton.setOnClickListener(this)
+
         mViewModel.getCardDetailsById(args.cardId).observe(viewLifecycleOwner) {
             mCard = it.also {
                 binding.newTransactionNameEdittext.setText(it.card.name)
@@ -56,20 +54,12 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), Toolba
         initToolbar()
     }
 
-    override fun onMenuItemClick(item: MenuItem?): Boolean {
-        return when(item?.itemId) {
-            R.id.action_save_transaction -> {
-                return true
-            }
-            else -> false
-        }
+    override fun onClick(view: View?) {
     }
 
     private fun initToolbar() {
         binding.newTransactionToolbar.apply {
-            inflateMenu(R.menu.transaction_dialog_toolbar_menu)
             setNavigationOnClickListener { dismiss() }
-            setOnMenuItemClickListener(this@TransactionBottomSheetDialogFragment)
         }
     }
 
