@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import dagger.hilt.android.AndroidEntryPoint
+import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardListBinding
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardListAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.BaseSearchViewModel
@@ -18,7 +20,7 @@ import tang.song.edu.yugiohcollectiontracker.viewBinding
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CardListFragment : BaseSearchListFragment(), CardListAdapter.OnItemClickListener {
+class CardListFragment : BaseSearchListFragment<Card>(), CardListAdapter.OnItemClickListener {
     @Inject
     lateinit var mRequestManager: RequestManager
 
@@ -26,7 +28,6 @@ class CardListFragment : BaseSearchListFragment(), CardListAdapter.OnItemClickLi
 
     private val mViewModel: CardListViewModel by viewModels()
     private lateinit var mAdapter: CardListAdapter
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return binding.root
@@ -36,10 +37,7 @@ class CardListFragment : BaseSearchListFragment(), CardListAdapter.OnItemClickLi
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView()
-
-        mViewModel.cardList.observe(viewLifecycleOwner) {
-            mAdapter.submitList(it)
-        }
+        search(null)
     }
 
     override fun onItemClick(cardId: Long) {
@@ -49,7 +47,7 @@ class CardListFragment : BaseSearchListFragment(), CardListAdapter.OnItemClickLi
         findNavController().navigate(action)
     }
 
-    override fun getViewModel(): BaseSearchViewModel<*> {
+    override fun getViewModel(): BaseSearchViewModel<Card> {
         return mViewModel
     }
 
@@ -57,8 +55,8 @@ class CardListFragment : BaseSearchListFragment(), CardListAdapter.OnItemClickLi
         return binding.cardList
     }
 
-    override fun clearList() {
-        mAdapter.submitList(null)
+    override suspend fun submitData(pagingData: PagingData<Card>) {
+        mAdapter.submitData(pagingData)
     }
 
     private fun initRecyclerView() {

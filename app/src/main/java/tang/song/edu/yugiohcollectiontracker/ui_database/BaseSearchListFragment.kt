@@ -1,26 +1,36 @@
 package tang.song.edu.yugiohcollectiontracker.ui_database
 
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.BaseSearchViewModel
 
-abstract class BaseSearchListFragment : BaseFragment() {
+abstract class BaseSearchListFragment<T : Any> : BaseFragment() {
+    private var searchJob: Job? = null
 
     fun onQueryTextChange(newText: String?) {
-        newText?.trim().let {
+        (newText ?: "").trim().let {
             getListView().scrollToPosition(0)
             search(it)
-            clearList()
         }
     }
 
-    fun lastQueryValue() = getViewModel().lastQueryValue()
+    fun lastQueryValue() = getViewModel().currentQueryValue()
 
-    private fun search(queryText: String?) {
-        getViewModel().search(queryText)
+    protected fun search(queryString: String?) {
+        searchJob?.cancel()
+        searchJob = lifecycleScope.launch {
+            getViewModel().search(queryString).collectLatest {
+                submitData(it)
+            }
+        }
     }
 
-    protected abstract fun getViewModel(): BaseSearchViewModel<*>
+    protected abstract fun getViewModel(): BaseSearchViewModel<T>
     protected abstract fun getListView(): RecyclerView
-    protected abstract fun clearList()
+    protected abstract suspend fun submitData(pagingData: PagingData<T>)
 }

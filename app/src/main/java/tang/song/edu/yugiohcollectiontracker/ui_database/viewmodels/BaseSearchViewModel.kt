@@ -1,51 +1,32 @@
 package tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels
 
-import android.text.TextUtils
-import androidx.lifecycle.*
-import androidx.paging.PagedList
-import tang.song.edu.yugiohcollectiontracker.data.network.PagedListBoundaryCallbackResponse
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import kotlinx.coroutines.flow.Flow
 
-abstract class BaseSearchViewModel<T> : ViewModel() {
-    private val _queryLiveData = MutableLiveData<String>()
+abstract class BaseSearchViewModel<T : Any> : ViewModel() {
+    private var currentQueryValue: String? = null
 
-    private val itemSearchResult: LiveData<PagedListBoundaryCallbackResponse<T>> = Transformations.switchMap(_queryLiveData) {
-        liveData(viewModelScope.coroutineContext) {
-            if (TextUtils.isEmpty(it)) {
-                emit(totalListSource())
-            } else {
-                emit(searchSource(it))
-            }
-        }
-    }
-
-    private val itemTotalResult: LiveData<PagedListBoundaryCallbackResponse<T>> = liveData {
-        emit(totalListSource())
-    }
-
-    private val _itemListResult: MediatorLiveData<PagedListBoundaryCallbackResponse<T>> = MediatorLiveData()
-
-    protected val itemList: LiveData<PagedList<T>> = Transformations.switchMap(_itemListResult) { it.data }
-    val networkErrors: LiveData<String> = Transformations.switchMap(_itemListResult) { it.networkErrors }
-
-    init {
-        _itemListResult.addSource(itemTotalResult) {
-            _itemListResult.value = it
-        }
-
-        _itemListResult.addSource(itemSearchResult) {
-            _itemListResult.value = it
-        }
-    }
+    private var currentSearchResult: Flow<PagingData<T>>? = null
 
     /**
      * Search a repository based on a query string.
      */
-    fun search(queryString: String?) {
-        _queryLiveData.postValue(queryString?.trim())
+    fun search(queryString: String?): Flow<PagingData<T>> {
+        val lastResult = currentSearchResult
+        if (queryString == currentQueryValue && lastResult != null) {
+            return lastResult
+        }
+
+        currentQueryValue = queryString
+        val newSearchResult = searchSource(queryString).cachedIn(viewModelScope)
+        currentSearchResult = newSearchResult
+        return newSearchResult
     }
 
-    fun lastQueryValue(): String? = _queryLiveData.value
+    fun currentQueryValue(): String? = currentQueryValue
 
-    abstract suspend fun totalListSource(): PagedListBoundaryCallbackResponse<T>
-    abstract suspend fun searchSource(queryString: String): PagedListBoundaryCallbackResponse<T>
+    protected abstract fun searchSource(queryString: String?): Flow<PagingData<T>>
 }

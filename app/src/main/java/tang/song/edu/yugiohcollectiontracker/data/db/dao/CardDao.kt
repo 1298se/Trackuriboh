@@ -1,6 +1,6 @@
 package tang.song.edu.yugiohcollectiontracker.data.db.dao
 
-import androidx.paging.DataSource
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -13,10 +13,10 @@ interface CardDao {
     suspend fun getCardById(cardId: Long): Card
 
     @Query("SELECT * FROM Card ORDER BY name ASC")
-    fun getCardList(): DataSource.Factory<Int, Card>
+    fun getCardList(): PagingSource<Int, Card>
 
     @Query("SELECT * FROM Card WHERE name LIKE :queryString ORDER BY name ASC")
-    fun searchCardByName(queryString: String): DataSource.Factory<Int, Card>
+    fun searchCardByName(queryString: String): PagingSource<Int, Card>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCard(card: Card): Long

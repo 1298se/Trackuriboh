@@ -4,7 +4,7 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
-import tang.song.edu.yugiohcollectiontracker.data.models.CardType
+import tang.song.edu.yugiohcollectiontracker.data.types.CardType
 
 @Parcelize
 @Entity

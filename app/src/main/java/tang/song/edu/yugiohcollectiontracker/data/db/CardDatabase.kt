@@ -15,6 +15,7 @@ import tang.song.edu.yugiohcollectiontracker.data.db.entities.*
 )
 @TypeConverters(Converters::class)
 abstract class CardDatabase : RoomDatabase() {
+
     abstract fun cardDao(): CardDao
     abstract fun cardSetDao(): CardSetDao
     abstract fun cardXCardSetDao(): CardXCardSetDao

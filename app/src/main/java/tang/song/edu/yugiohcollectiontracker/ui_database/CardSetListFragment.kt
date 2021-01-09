@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
+import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardSetListBinding
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.CardSetListAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.BaseSearchViewModel
@@ -16,7 +18,7 @@ import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.CardSetListV
 import tang.song.edu.yugiohcollectiontracker.viewBinding
 
 @AndroidEntryPoint
-class CardSetListFragment : BaseSearchListFragment(), CardSetListAdapter.OnItemClickListener {
+class CardSetListFragment : BaseSearchListFragment<CardSet>(), CardSetListAdapter.OnItemClickListener {
     private val binding by viewBinding(FragmentCardSetListBinding::inflate)
 
     private val mViewModel: CardSetListViewModel by viewModels()
@@ -30,13 +32,10 @@ class CardSetListFragment : BaseSearchListFragment(), CardSetListAdapter.OnItemC
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView()
-
-        mViewModel.cardSetList.observe(viewLifecycleOwner) {
-            mAdapter.submitList(it)
-        }
+        search(null)
     }
 
-    override fun getViewModel(): BaseSearchViewModel<*> {
+    override fun getViewModel(): BaseSearchViewModel<CardSet> {
         return mViewModel
     }
 
@@ -44,8 +43,8 @@ class CardSetListFragment : BaseSearchListFragment(), CardSetListAdapter.OnItemC
         return binding.cardSetList
     }
 
-    override fun clearList() {
-        mAdapter.submitList(null)
+    override suspend fun submitData(pagingData: PagingData<CardSet>) {
+        mAdapter.submitData(pagingData)
     }
 
     override fun onItemClick(setCode: String) {

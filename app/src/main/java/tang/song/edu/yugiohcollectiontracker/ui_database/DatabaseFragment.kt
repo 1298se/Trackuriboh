@@ -46,14 +46,11 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         performSearch(query)
-        return false
+        return true
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        if (newText.isNullOrBlank()) {
-            resetLists()
-        }
-        return false
+        return true
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
@@ -75,11 +72,14 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
         return true
     }
 
+    /** When the searchview closes, **/
     override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-        resetLists()
+        if (item?.itemId == R.id.action_search) {
+            resetLists()
 
-        binding.databaseToolbar.menu.clear()
-        onCreateOptionsMenu()
+            binding.databaseToolbar.menu.clear()
+            onCreateOptionsMenu()
+        }
         return true
     }
 
@@ -130,7 +130,7 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
         binding.databaseToolbar.apply {
             inflateMenu(R.menu.database_toolbar_menu)
 
-            menu.findItem(R.id.action_open_search).apply {
+            menu.findItem(R.id.action_search).apply {
                 mSearchView = (this.actionView.findViewById(R.id.search_view) as SearchView).apply {
                     setIconifiedByDefault(true)
                     setOnQueryTextListener(this@DatabaseFragment)
@@ -143,10 +143,11 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
         }
     }
 
+    /** Queries on the current displayed fragment **/
     private fun performSearch(query: String?) {
         val currentFragment = childFragmentManager.findFragmentByTag("f" + mAdapter.getItemId(mViewPager.currentItem))
 
-        if (currentFragment is BaseSearchListFragment) {
+        if (currentFragment is BaseSearchListFragment<*>) {
             currentFragment.onQueryTextChange(query)
         }
     }
@@ -155,7 +156,7 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
         repeat(mAdapter.itemCount) {
             val currentFragment = childFragmentManager.findFragmentByTag("f" + mAdapter.getItemId(it))
 
-            if (currentFragment is BaseSearchListFragment && !currentFragment.lastQueryValue().isNullOrBlank()) {
+            if (currentFragment is BaseSearchListFragment<*> && !currentFragment.lastQueryValue().isNullOrBlank()) {
                 currentFragment.onQueryTextChange(null)
             }
         }

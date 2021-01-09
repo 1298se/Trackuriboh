@@ -1,6 +1,6 @@
 package tang.song.edu.yugiohcollectiontracker.data.db.dao
 
-import androidx.paging.DataSource
+import androidx.paging.PagingSource
 import androidx.room.*
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardXCardSetRef
@@ -15,7 +15,7 @@ abstract class CardXCardSetDao : CardDao, CardSetDao {
                 "INNER JOIN Card ON Card.cardId = CardXCardSetRef.cardId " +
                 "WHERE CardXCardSetRef.setCode = :setCode ORDER BY name ASC"
     )
-    abstract fun getCardListBySet(setCode: String): DataSource.Factory<Int, Card>
+    abstract fun getCardListBySet(setCode: String): PagingSource<Int, Card>
 
     @Transaction
     @Query(

@@ -1,4 +1,4 @@
-package tang.song.edu.yugiohcollectiontracker.data.models
+package tang.song.edu.yugiohcollectiontracker.data.types
 
 enum class TransactionType(val value: Int) {
     PURCHASE(1),

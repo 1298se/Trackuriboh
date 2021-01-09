@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
@@ -12,6 +13,8 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardSetDetailBinding
 import tang.song.edu.yugiohcollectiontracker.ui_card_set_detail.viewmodels.CardSetDetailViewModel
@@ -41,8 +44,10 @@ class CardSetDetailFragment : BaseFragment(), CardListAdapter.OnItemClickListene
         initToolbar()
         initRecyclerView()
 
-        mViewModel.getCardListBySet(args.setCode).observe(viewLifecycleOwner) {
-            mAdapter.submitList(it)
+        lifecycleScope.launch {
+            mViewModel.getCardListBySet(args.setCode).collect {
+                mAdapter.submitData(it)
+            }
         }
 
         mViewModel.getCardSetByCode(args.setCode).observe(viewLifecycleOwner) {

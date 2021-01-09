@@ -1,18 +1,14 @@
 package tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.paging.PagedList
+import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
-import tang.song.edu.yugiohcollectiontracker.data.network.PagedListBoundaryCallbackResponse
 import tang.song.edu.yugiohcollectiontracker.data.repository.CardSetRepository
 
 class CardSetListViewModel @ViewModelInject constructor(
     private val cardSetRepository: CardSetRepository,
 ) : BaseSearchViewModel<CardSet>() {
-    val cardSetList: LiveData<PagedList<CardSet>> = itemList
 
-    override suspend fun searchSource(queryString: String): PagedListBoundaryCallbackResponse<CardSet> = cardSetRepository.search(queryString)
-
-    override suspend fun totalListSource(): PagedListBoundaryCallbackResponse<CardSet> = cardSetRepository.getCardSetList()
+    override fun searchSource(queryString: String?): Flow<PagingData<CardSet>> = cardSetRepository.search(queryString)
 }

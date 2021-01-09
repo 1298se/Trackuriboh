@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
-import tang.song.edu.yugiohcollectiontracker.data.models.CardType
+import tang.song.edu.yugiohcollectiontracker.data.types.CardType
 import tang.song.edu.yugiohcollectiontracker.databinding.CardDetailTypeMonsterBinding
 import tang.song.edu.yugiohcollectiontracker.databinding.CardDetailTypeSpellTrapBinding
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardDetailOverviewBinding

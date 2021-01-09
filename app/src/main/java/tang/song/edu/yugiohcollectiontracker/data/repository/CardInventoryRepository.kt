@@ -4,7 +4,7 @@ import tang.song.edu.yugiohcollectiontracker.data.db.CardInventoryLocalCache
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardInventory
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Transaction
 import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardInventoryWithTransactions
-import tang.song.edu.yugiohcollectiontracker.data.models.TransactionType
+import tang.song.edu.yugiohcollectiontracker.data.types.TransactionType
 import java.text.DecimalFormat
 import javax.inject.Inject
 import javax.inject.Singleton

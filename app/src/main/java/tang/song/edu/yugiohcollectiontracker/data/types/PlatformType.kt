@@ -1,4 +1,4 @@
-package tang.song.edu.yugiohcollectiontracker.data.models
+package tang.song.edu.yugiohcollectiontracker.data.types
 
 enum class PlatformType(val value: Int) {
     EBAY(1),

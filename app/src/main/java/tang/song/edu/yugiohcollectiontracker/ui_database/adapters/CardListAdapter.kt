@@ -3,25 +3,21 @@ package tang.song.edu.yugiohcollectiontracker.ui_database.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
-import tang.song.edu.yugiohcollectiontracker.data.models.CardType
+import tang.song.edu.yugiohcollectiontracker.data.types.CardType
 import tang.song.edu.yugiohcollectiontracker.databinding.ItemCardBinding
 
 class CardListAdapter(
     val onItemClickListener: OnItemClickListener,
     val requestManager: RequestManager
-) : PagedListAdapter<Card, CardListAdapter.CardViewHolder>(CARD_COMPARATOR) {
+) : PagingDataAdapter<Card, CardListAdapter.CardViewHolder>(CARD_COMPARATOR) {
     interface OnItemClickListener {
         fun onItemClick(cardId: Long)
-    }
-
-    init {
-        setHasStableIds(true)
     }
 
     companion object {
@@ -48,16 +44,14 @@ class CardListAdapter(
         }
     }
 
-    override fun getItemId(position: Int): Long {
-        return getItem(position)?.cardId ?: -1
-    }
-
     inner class CardViewHolder(private val binding: ItemCardBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+        private var card: Card? = null
         init {
             itemView.setOnClickListener(this)
         }
 
         internal fun bind(item: Card) {
+            this.card = item
             requestManager.load(item.cardImageURLList?.get(0)).into(binding.itemCardImage)
 
             binding.itemCardTitleTextview.text = item.name
@@ -72,7 +66,7 @@ class CardListAdapter(
         }
 
         override fun onClick(p0: View?) {
-            onItemClickListener.onItemClick(itemId)
+            onItemClickListener.onItemClick(card?.cardId ?: throw IllegalArgumentException("card has no id"))
         }
     }
 }

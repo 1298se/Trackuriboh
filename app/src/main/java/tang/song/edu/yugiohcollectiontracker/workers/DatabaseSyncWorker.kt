@@ -10,18 +10,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import tang.song.edu.yugiohcollectiontracker.data.db.CardLocalCache
 import tang.song.edu.yugiohcollectiontracker.data.network.CardRetrofitService
-import java.io.IOException
-import javax.inject.Inject
 
 class DatabaseSyncWorker @WorkerInject constructor(
     @Assisted context: Context,
-    @Assisted params: WorkerParameters
-) :
-    CoroutineWorker(context, params) {
-    @Inject
-    lateinit var cardRetrofitService: CardRetrofitService
-    @Inject
-    lateinit var cardLocalCache: CardLocalCache
+    @Assisted params: WorkerParameters,
+    private val cardRetrofitService: CardRetrofitService,
+    private val cardLocalCache: CardLocalCache,
+) : CoroutineWorker(context, params) {
 
     companion object {
         private val TAG = DatabaseSyncWorker::class.java.name
@@ -36,11 +31,7 @@ class DatabaseSyncWorker @WorkerInject constructor(
                 val cardResponse = cardList.await()
                 val setResponse = setList.await()
 
-                if (cardResponse.isSuccessful && setResponse.isSuccessful) {
-                    cardLocalCache.populateDatabase(TAG, cardResponse.body(), setResponse.body())
-                } else {
-                    throw IOException(cardResponse.message())
-                }
+                cardLocalCache.populateDatabase(TAG, cardResponse.data, setResponse)
             }
 
             Result.success()

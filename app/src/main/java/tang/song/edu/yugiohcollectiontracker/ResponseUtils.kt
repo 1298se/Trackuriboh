@@ -5,9 +5,9 @@ import kotlinx.coroutines.withContext
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardXCardSetRef
-import tang.song.edu.yugiohcollectiontracker.data.models.CardType
 import tang.song.edu.yugiohcollectiontracker.data.network.response.CardResponse
 import tang.song.edu.yugiohcollectiontracker.data.network.response.CardSetResponse
+import tang.song.edu.yugiohcollectiontracker.data.types.CardType
 
 class ResponseUtils {
 

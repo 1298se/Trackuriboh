@@ -3,7 +3,7 @@ package tang.song.edu.yugiohcollectiontracker.ui_database.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import tang.song.edu.yugiohcollectiontracker.R
@@ -12,7 +12,7 @@ import tang.song.edu.yugiohcollectiontracker.databinding.ItemCardSetBinding
 
 class CardSetListAdapter(
     private val onItemClickListener: OnItemClickListener
-) : PagedListAdapter<CardSet, CardSetListAdapter.CardSetViewHolder>(SET_COMPARATOR) {
+) : PagingDataAdapter<CardSet, CardSetListAdapter.CardSetViewHolder>(SET_COMPARATOR) {
     interface OnItemClickListener {
         fun onItemClick(setCode: String)
     }

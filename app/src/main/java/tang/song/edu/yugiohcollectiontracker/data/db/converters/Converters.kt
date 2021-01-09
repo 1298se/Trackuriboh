@@ -3,9 +3,9 @@ package tang.song.edu.yugiohcollectiontracker.data.db.converters
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import tang.song.edu.yugiohcollectiontracker.data.models.CardType
-import tang.song.edu.yugiohcollectiontracker.data.models.PlatformType
-import tang.song.edu.yugiohcollectiontracker.data.models.TransactionType
+import tang.song.edu.yugiohcollectiontracker.data.types.CardType
+import tang.song.edu.yugiohcollectiontracker.data.types.PlatformType
+import tang.song.edu.yugiohcollectiontracker.data.types.TransactionType
 import java.util.*
 
 class Converters {

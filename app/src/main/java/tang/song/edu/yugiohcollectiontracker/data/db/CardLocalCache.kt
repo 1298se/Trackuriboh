@@ -1,7 +1,7 @@
 package tang.song.edu.yugiohcollectiontracker.data.db
 
 import android.util.Log
-import androidx.paging.DataSource
+import androidx.paging.PagingSource
 import tang.song.edu.yugiohcollectiontracker.ResponseUtils
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
@@ -54,25 +54,21 @@ class CardLocalCache @Inject constructor(
         return cardDatabase.cardSetDao().getCardSetByCode(setCode)
     }
 
-    fun getCardList(): DataSource.Factory<Int, Card> {
-        return cardDatabase.cardDao().getCardList()
-    }
-
-    fun getCardSetList(): DataSource.Factory<Int, CardSet> {
+    fun getCardSetList(): PagingSource<Int, CardSet> {
         return cardDatabase.cardSetDao().getCardSetList()
     }
 
-    fun getCardListBySet(setCode: String): DataSource.Factory<Int, Card> {
+    fun getCardListBySet(setCode: String): PagingSource<Int, Card> {
         return cardDatabase.cardXCardSetDao().getCardListBySet(setCode)
     }
 
-    fun searchCardByName(name: String): DataSource.Factory<Int, Card> {
-        val query = "%${name.replace(' ', '%')}%"
+    fun searchCardByName(name: String?): PagingSource<Int, Card> {
+        val query = "%${(name ?: "").replace(' ', '%')}%"
         return cardDatabase.cardDao().searchCardByName(query)
     }
 
-    fun searchCardSetByName(name: String): DataSource.Factory<Int, CardSet> {
-        val query = "%${name.replace(' ', '%')}%"
+    fun searchCardSetByName(name: String?): PagingSource<Int, CardSet> {
+        val query = "%${(name ?: "").replace(' ', '%')}%"
         return cardDatabase.cardSetDao().searchCardSetByName(query)
     }
 }

@@ -10,5 +10,7 @@ data class CardPriceResponse(
     @SerializedName("ebay_price")
     val ebayPrice: String,
     @SerializedName("amazon_price")
-    val amazonPrice: String
+    val amazonPrice: String,
+    @SerializedName("coolstuffinc_price")
+    val coolstuffincPrice: String,
 )

@@ -1,4 +1,4 @@
-package tang.song.edu.yugiohcollectiontracker.data.models
+package tang.song.edu.yugiohcollectiontracker.data.types
 
 enum class CardType(val value: String) {
     EFFECT_MONSTER("Effect Monster"),
