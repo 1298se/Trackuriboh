@@ -56,7 +56,7 @@ class CardDetailSetInfoFragment : BaseFragment() {
             val setNameTextView = createTableTextView(SpannableString(cardSetInfo.setName).apply {
                 setSpan(object : ClickableSpan() {
                     override fun onClick(p0: View) {
-                        val action = CardDetailFragmentDirections.actionCardDetailFragmentToCardSetDetailFragment(cardSetInfo.setCode)
+                        val action = CardDetailFragmentDirections.actionCardDetailFragmentToCardSetDetailFragment(cardSetInfo.setName)
                         findNavController().navigate(action)
                     }
                 }, 0, cardSetInfo.setName.length, Spanned.SPAN_INCLUSIVE_INCLUSIVE)

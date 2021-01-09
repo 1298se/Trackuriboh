@@ -1,6 +1,7 @@
 package tang.song.edu.yugiohcollectiontracker.workers
 
 import android.content.Context
+import android.util.Log
 import androidx.hilt.Assisted
 import androidx.hilt.work.WorkerInject
 import androidx.work.CoroutineWorker
@@ -25,13 +26,17 @@ class DatabaseSyncWorker @WorkerInject constructor(
     override suspend fun doWork(): Result {
         return try {
             coroutineScope {
-                val cardList = async(Dispatchers.IO) { cardRetrofitService.getAllCards() }
-                val setList = async(Dispatchers.IO) { cardRetrofitService.getAllSets() }
+                val cardListRequest = async(Dispatchers.IO) { cardRetrofitService.getAllCards() }
+                val cardSetListRequest = async(Dispatchers.IO) { cardRetrofitService.getAllSets() }
 
-                val cardResponse = cardList.await()
-                val setResponse = setList.await()
+                val cardListResponse = cardListRequest.await()
+                val cardSetListResponse = cardSetListRequest.await()
 
-                cardLocalCache.populateDatabase(TAG, cardResponse.data, setResponse)
+                Log.d(TAG, "cards from api: " + cardListResponse.data.size)
+                Log.d(TAG, "cardSets from api: " + cardSetListResponse.size)
+
+                cardLocalCache.clearDatabase()
+                cardLocalCache.populateDatabase(TAG, cardListResponse.data, cardSetListResponse)
             }
 
             Result.success()

@@ -28,8 +28,8 @@ class CardRepository @Inject constructor(
         return cardLocalCache.getCardDetails(cardId)
     }
 
-    fun getCardListBySet(setCode: String): Flow<PagingData<Card>> {
-        val pagingSourceFactory = { cardLocalCache.getCardListBySet(setCode) }
+    fun getCardListBySet(setName: String): Flow<PagingData<Card>> {
+        val pagingSourceFactory = { cardLocalCache.getCardListBySet(setName) }
 
         return Pager(
             config = PagingConfig(pageSize = DATABASE_PAGE_SIZE),

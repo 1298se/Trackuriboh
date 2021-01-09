@@ -47,8 +47,8 @@ class CardSetListFragment : BaseSearchListFragment<CardSet>(), CardSetListAdapte
         mAdapter.submitData(pagingData)
     }
 
-    override fun onItemClick(setCode: String) {
-        val action = DatabaseFragmentDirections.actionDatabaseFragmentToCardSetDetailFragment(setCode)
+    override fun onItemClick(setName: String) {
+        val action = DatabaseFragmentDirections.actionDatabaseFragmentToCardSetDetailFragment(setName)
         findNavController().navigate(action)
     }
 

@@ -71,10 +71,15 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), View.O
 
     private fun initCardNumberDropdown() {
         val cardNumberList = mutableSetOf<String>()
+        // Add to set because there can be multiple rarities for each card number
         mCard.sets.forEach { cardNumberList.add(it.cardNumber) }
 
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, cardNumberList.toList())
         binding.newTransactionCardNumberTextview.apply {
+            if (cardNumberList.size == 1) {
+                setText(cardNumberList.elementAt(0), false)
+                setRarityDropdown(this.text.toString())
+            }
             setAdapter(adapter)
 
             setOnItemClickListener { _, _, _, _ ->

@@ -51,7 +51,7 @@
         android:name="tang.song.edu.yugiohcollectiontracker.ui_card_set_detail.CardSetDetailFragment"
         tools:layout="@layout/fragment_card_set_detail">
         <argument
-            android:name="setCode"
+            android:name="setName"
             app:argType="string" />
         <action
             android:id="@+id/action_cardSetDetailFragment_to_cardDetailFragment"

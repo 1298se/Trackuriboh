@@ -12,9 +12,9 @@ class CardSetDetailViewModel @ViewModelInject constructor(
     private val cardRepository: CardRepository,
     private val cardSetRepository: CardSetRepository,
 ) : ViewModel() {
-    fun getCardListBySet(setCode: String) = cardRepository.getCardListBySet(setCode)
+    fun getCardListBySet(setName: String) = cardRepository.getCardListBySet(setName)
 
-    fun getCardSetByCode(setCode: String) = liveData(Dispatchers.IO + viewModelScope.coroutineContext) {
-        emit(cardSetRepository.getCardSetByCode(setCode))
+    fun getCardSet(setName: String) = liveData(Dispatchers.IO + viewModelScope.coroutineContext) {
+        emit(cardSetRepository.getCardSet(setName))
     }
 }

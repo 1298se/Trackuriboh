@@ -24,5 +24,5 @@ class CardSetRepository @Inject constructor(
         ).flow
     }
 
-    suspend fun getCardSetByCode(setCode: String) = cardLocalCache.getCardSetByCode(setCode)
+    suspend fun getCardSet(setName: String) = cardLocalCache.getCardSet(setName)
 }

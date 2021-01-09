@@ -9,8 +9,8 @@ import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
 
 @Dao
 interface CardSetDao {
-    @Query("SELECT * FROM CardSet WHERE setCode = :setCode")
-    suspend fun getCardSetByCode(setCode: String): CardSet
+    @Query("SELECT * FROM CardSet WHERE setName = :setName")
+    suspend fun getCardSet(setName: String): CardSet
 
     @Query("SELECT * FROM CardSet ORDER BY setName ASC")
     fun getCardSetList(): PagingSource<Int, CardSet>
@@ -22,5 +22,9 @@ interface CardSetDao {
     suspend fun insertCardSet(cardSet: CardSet): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+
     suspend fun insertCardSets(cardSets: List<CardSet>): List<Long>
+
+    @Query("SELECT * FROM CardSet WHERE (setName LIKE :queryString)")
+    suspend fun _searchCardSet(queryString: String): List<CardSet>
 }

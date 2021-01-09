@@ -1,14 +1,17 @@
 package tang.song.edu.yugiohcollectiontracker.data.db
 
+import android.database.sqlite.SQLiteConstraintException
 import android.util.Log
 import androidx.paging.PagingSource
-import tang.song.edu.yugiohcollectiontracker.ResponseUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardXCardSetRef
 import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardWithSetInfo
 import tang.song.edu.yugiohcollectiontracker.data.network.response.CardResponse
 import tang.song.edu.yugiohcollectiontracker.data.network.response.CardSetResponse
+import tang.song.edu.yugiohcollectiontracker.data.types.CardType
 import javax.inject.Inject
 
 class CardLocalCache @Inject constructor(
@@ -19,47 +22,104 @@ class CardLocalCache @Inject constructor(
         cardList: List<CardResponse>?,
         cardSetList: List<CardSetResponse>?
     ) {
-        Log.d(tag, "cards from api: " + cardList?.size)
-        Log.d(tag, "cardSets from api: " + cardSetList?.size)
+        withContext(Dispatchers.Default) {
+            cardList?.map { convertCardResponseToCard(it) }?.also {
+                cardDatabase.cardDao().insertCards(it)
+            }
+            cardSetList?.map { convertCardSetResponseToCardSet(it) }?.also {
+                cardDatabase.cardSetDao().insertCardSets(it)
+            }
 
-        if (cardList != null && cardSetList != null) {
-            val cardInsertNum = insertCards(ResponseUtils.convertCardResponseListToCardList(cardList))
-            Log.d(tag, "cards inserted to db: ${cardInsertNum.size}")
-
-            val setInsertNum = insertCardSets(ResponseUtils.convertSetResponseListToSetList(cardSetList))
-            Log.d(tag, "card sets inserted to db: ${setInsertNum.size}")
-
-            val joinInsertNum = insertCardXCardSets(ResponseUtils.createJoins(cardList))
-            Log.d(tag, "joins inserted to db: ${joinInsertNum.size}")
+            createJoins(cardList ?: emptyList()).also {
+                for (join in it) {
+                    try {
+                        cardDatabase.cardXCardSetDao().insertJoin(join)
+                    } catch (exception: SQLiteConstraintException) {
+                        // Sometimes card set has small typos, try to create the join with fuzzy search
+                        try {
+                            cardDatabase.cardXCardSetDao().fuzzyInsertJoin(join)
+                        } catch (exception: SQLiteConstraintException) {
+                            Log.d(tag, "join with cardnumber ${join.cardNumber} and setname ${join.setName} not inserted")
+                        }
+                    }
+                }
+            }
         }
     }
 
-    private suspend fun insertCards(cardList: List<Card>): List<Long> {
-        return cardDatabase.cardDao().insertCards(cardList)
+    private fun convertCardResponseToCard(card: CardResponse): Card {
+        val cardImageList = ArrayList<String>()
+
+        card.cardImages?.forEach { cardImageResponse ->
+            cardImageList.add(cardImageResponse.imageUrl)
+
+        }
+
+        return Card(
+                cardId = card.id,
+                name = card.name,
+                type = CardType.fromString(card.type),
+                desc = card.desc,
+                atk = card.atk,
+                def = card.def,
+                level = card.level,
+                race = card.race,
+                attribute = card.attribute,
+                archetype = card.archetype,
+                scale = card.scale,
+                linkval = card.linkval,
+                linkmarkers = card.linkmarkers,
+                cardImageURLList = cardImageList
+        )
     }
 
-    private suspend fun insertCardSets(cardSetList: List<CardSet>): List<Long> {
-        return cardDatabase.cardSetDao().insertCardSets(cardSetList)
+    private fun convertCardSetResponseToCardSet(cardSet: CardSetResponse): CardSet {
+        return CardSet(
+            setCode = cardSet.setCode,
+            setName = cardSet.setName,
+            numOfCards = cardSet.numOfCards,
+            releaseDate = cardSet.releaseDate
+        )
     }
 
-    private suspend fun insertCardXCardSets(joinList: List<CardXCardSetRef>): List<Long> {
-        return cardDatabase.cardXCardSetDao().insertJoins(joinList)
+    private fun createJoins(cardList: List<CardResponse>): List<CardXCardSetRef> {
+            val result = ArrayList<CardXCardSetRef>()
+
+            for (card in cardList) {
+                card.cardSetDetails?.forEach { cardSet ->
+                    result.add(
+                        CardXCardSetRef(
+                            cardNumber = cardSet.setCode,
+                            cardId = card.id,
+                            setName = cardSet.setName,
+                            rarity = cardSet.setRarity,
+                            price = cardSet.setPrice
+                        )
+                    )
+                }
+            }
+
+            return result
+    }
+
+    fun clearDatabase() {
+        return cardDatabase.clearAllTables()
     }
 
     suspend fun getCardDetails(cardId: Long): CardWithSetInfo {
         return cardDatabase.cardXCardSetDao().getCardWithSetInfo(cardId)
     }
 
-    suspend fun getCardSetByCode(setCode: String): CardSet {
-        return cardDatabase.cardSetDao().getCardSetByCode(setCode)
+    suspend fun getCardSet(setName: String): CardSet {
+        return cardDatabase.cardSetDao().getCardSet(setName)
     }
 
     fun getCardSetList(): PagingSource<Int, CardSet> {
         return cardDatabase.cardSetDao().getCardSetList()
     }
 
-    fun getCardListBySet(setCode: String): PagingSource<Int, Card> {
-        return cardDatabase.cardXCardSetDao().getCardListBySet(setCode)
+    fun getCardListBySet(setName: String): PagingSource<Int, Card> {
+        return cardDatabase.cardXCardSetDao().getCardListBySet(setName)
     }
 
     fun searchCardByName(name: String?): PagingSource<Int, Card> {

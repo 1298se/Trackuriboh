@@ -14,13 +14,13 @@ class CardSetListAdapter(
     private val onItemClickListener: OnItemClickListener
 ) : PagingDataAdapter<CardSet, CardSetListAdapter.CardSetViewHolder>(SET_COMPARATOR) {
     interface OnItemClickListener {
-        fun onItemClick(setCode: String)
+        fun onItemClick(setName: String)
     }
 
     companion object {
         private val SET_COMPARATOR = object : DiffUtil.ItemCallback<CardSet>() {
             override fun areItemsTheSame(oldItem: CardSet, newItem: CardSet): Boolean =
-                oldItem.setCode == newItem.setCode
+                oldItem.setName == newItem.setName
 
             override fun areContentsTheSame(oldItem: CardSet, newItem: CardSet): Boolean =
                 oldItem == newItem
@@ -50,10 +50,10 @@ class CardSetListAdapter(
         }
 
         override fun onClick(p0: View?) {
-            val cardSet = getItem(adapterPosition)
+            val cardSet = getItem(bindingAdapterPosition)
 
             if (cardSet != null) {
-                onItemClickListener.onItemClick(cardSet.setCode)
+                onItemClickListener.onItemClick(cardSet.setName)
             }
         }
     }
