@@ -29,7 +29,7 @@ class CardListFragment : BaseSearchListFragment<Card>(), CardListAdapter.OnItemC
     private val mViewModel: CardListViewModel by viewModels()
     private lateinit var mAdapter: CardListAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
     }
 
@@ -37,7 +37,8 @@ class CardListFragment : BaseSearchListFragment<Card>(), CardListAdapter.OnItemC
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView()
-        search(null)
+
+        search(mViewModel.currentQueryValue())
     }
 
     override fun onItemClick(cardId: Long) {

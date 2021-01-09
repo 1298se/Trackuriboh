@@ -12,7 +12,7 @@ import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.BaseSearchVi
 abstract class BaseSearchListFragment<T : Any> : BaseFragment() {
     private var searchJob: Job? = null
 
-    fun onQueryTextChange(newText: String?) {
+    fun updateSearchList(newText: String?) {
         (newText ?: "").trim().let {
             getListView().scrollToPosition(0)
             search(it)

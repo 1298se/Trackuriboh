@@ -76,10 +76,6 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), View.O
 
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, cardNumberList.toList())
         binding.newTransactionCardNumberTextview.apply {
-            if (cardNumberList.size == 1) {
-                setText(cardNumberList.elementAt(0), false)
-                setRarityDropdown(this.text.toString())
-            }
             setAdapter(adapter)
 
             setOnItemClickListener { _, _, _, _ ->

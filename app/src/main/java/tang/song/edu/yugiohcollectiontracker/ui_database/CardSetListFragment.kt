@@ -32,7 +32,7 @@ class CardSetListFragment : BaseSearchListFragment<CardSet>(), CardSetListAdapte
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView()
-        search(null)
+        search(mViewModel.currentQueryValue())
     }
 
     override fun getViewModel(): BaseSearchViewModel<CardSet> {
