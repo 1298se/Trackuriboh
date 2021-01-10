@@ -13,7 +13,9 @@ abstract class CardXCardSetDao : CardDao, CardSetDao {
     @Query(
         "SELECT * FROM CardXCardSetRef " +
                 "INNER JOIN Card ON Card.cardId = CardXCardSetRef.cardId " +
-                "WHERE CardXCardSetRef.setName = :setName ORDER BY name ASC"
+                "WHERE CardXCardSetRef.setName = :setName " +
+                "GROUP BY CardXCardSetRef.cardId " +
+                "ORDER BY Card.name ASC"
     )
     abstract fun getCardListBySet(setName: String): PagingSource<Int, Card>
 
