@@ -23,6 +23,4 @@ class CardSetRepository @Inject constructor(
             pagingSourceFactory = pagingSourceFactory
         ).flow
     }
-
-    suspend fun getCardSet(setName: String) = cardLocalCache.getCardSet(setName)
 }

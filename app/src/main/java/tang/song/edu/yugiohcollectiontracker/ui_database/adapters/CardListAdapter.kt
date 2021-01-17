@@ -7,17 +7,25 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
+import dagger.hilt.android.scopes.ActivityScoped
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
 import tang.song.edu.yugiohcollectiontracker.data.types.CardType
 import tang.song.edu.yugiohcollectiontracker.databinding.ItemCardBinding
+import javax.inject.Inject
 
-class CardListAdapter(
-    val onItemClickListener: OnItemClickListener,
+@ActivityScoped
+class CardListAdapter @Inject constructor(
     val requestManager: RequestManager
 ) : PagingDataAdapter<Card, CardListAdapter.CardViewHolder>(CARD_COMPARATOR) {
+    private var mOnItemClickListener: OnItemClickListener? = null
+
     interface OnItemClickListener {
         fun onItemClick(cardId: Long)
+    }
+
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
+        mOnItemClickListener = onItemClickListener
     }
 
     companion object {
@@ -52,7 +60,7 @@ class CardListAdapter(
 
         internal fun bind(item: Card) {
             this.card = item
-            requestManager.load(item.cardImageURLList?.get(0)).into(binding.itemCardImage)
+            requestManager.load(item.getDefaultImageURL()).into(binding.itemCardImage)
 
             binding.itemCardTitleTextview.text = item.name
             binding.itemCardTypeTextview.text = item.type.value
@@ -66,7 +74,7 @@ class CardListAdapter(
         }
 
         override fun onClick(p0: View?) {
-            onItemClickListener.onItemClick(card?.cardId ?: throw IllegalArgumentException("card has no id"))
+            mOnItemClickListener?.onItemClick(card?.cardId ?: throw IllegalArgumentException("card has no id"))
         }
     }
 }

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
@@ -15,6 +16,7 @@ import com.bumptech.glide.RequestManager
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardWithSetInfo
@@ -51,8 +53,8 @@ class CardDetailFragment : BaseFragment(), Toolbar.OnMenuItemClickListener {
         initImageViewPager()
         initCardDetailViewPager()
 
-        mViewModel.getCardDetailsById(args.cardId).observe(viewLifecycleOwner) {
-            mCard = it.also {
+        lifecycleScope.launch {
+            mCard = mViewModel.getCardDetailsById(args.cardId).also {
                 mImagePagerAdapter.setImageList(it.card.cardImageURLList)
                 mCardDetailPagerAdapter.setCard(it)
             }

@@ -4,6 +4,7 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import tang.song.edu.yugiohcollectiontracker.data.types.CardType
+import tang.song.edu.yugiohcollectiontracker.data.types.EditionType
 import tang.song.edu.yugiohcollectiontracker.data.types.PlatformType
 import tang.song.edu.yugiohcollectiontracker.data.types.TransactionType
 import java.util.*
@@ -41,4 +42,10 @@ class Converters {
 
     @TypeConverter
     fun intToPlatformType(platformType: Int?) = PlatformType.fromInt(platformType)
+
+    @TypeConverter
+    fun editionTypeToInt(editionType: EditionType?) = editionType?.value
+
+    @TypeConverter
+    fun intToEditionType(editionType: Int?) = EditionType.fromInt(editionType)
 }

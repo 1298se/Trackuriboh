@@ -9,7 +9,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.RequestManager
 import dagger.hilt.android.AndroidEntryPoint
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardListBinding
@@ -22,12 +21,11 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class CardListFragment : BaseSearchListFragment<Card>(), CardListAdapter.OnItemClickListener {
     @Inject
-    lateinit var mRequestManager: RequestManager
+    lateinit var mAdapter: CardListAdapter
 
     private val binding by viewBinding(FragmentCardListBinding::inflate)
 
     private val mViewModel: CardListViewModel by viewModels()
-    private lateinit var mAdapter: CardListAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
@@ -61,11 +59,9 @@ class CardListFragment : BaseSearchListFragment<Card>(), CardListAdapter.OnItemC
     }
 
     private fun initRecyclerView() {
-        mAdapter = CardListAdapter(this, mRequestManager)
-        val layoutManager = LinearLayoutManager(requireContext())
-
+        mAdapter.setOnItemClickListener(this)
         binding.cardList.apply {
-            this.layoutManager = layoutManager
+            this.layoutManager = LinearLayoutManager(context)
             this.adapter = mAdapter
         }
     }

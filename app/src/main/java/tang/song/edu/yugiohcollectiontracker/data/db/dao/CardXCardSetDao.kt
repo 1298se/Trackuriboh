@@ -28,7 +28,7 @@ abstract class CardXCardSetDao : CardDao, CardSetDao {
     abstract suspend fun getCardSetInfo(cardId: Long): List<CardSetInfo>
 
     @Transaction
-    open suspend fun getCardWithSetInfo(cardId: Long): CardWithSetInfo {
+    open suspend fun getCardDetails(cardId: Long): CardWithSetInfo {
         val card = getCardById(cardId)
         val setInfoList = getCardSetInfo(cardId)
 

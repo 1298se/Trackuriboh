@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/new_transaction_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:navigationIcon="@drawable/ic_close_black_24dp"
-        app:title="@string/lbl_new_transaction" />
-
-    <View
-        android:id="@+id/divider1"
-        style="@style/Divider" />
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:id="@+id/new_transaction_name_quantity_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/new_transaction_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:navigationIcon="@drawable/ic_close_black_24dp"
+            app:title="@string/lbl_new_transaction" />
+
+        <View
+            android:id="@+id/divider1"
+            style="@style/Divider" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/new_transaction_region_name_quantity"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/material_border_padding"
+            android:layout_marginStart="@dimen/material_border_padding_small"
             android:layout_marginEnd="@dimen/material_border_padding"
             android:layout_marginTop="@dimen/material_border_padding"
             android:layout_weight="4"
@@ -43,202 +42,223 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/new_transaction_quantity_layout"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/new_transaction_region_cardNumber_rarity"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/material_border_padding"
-            android:layout_marginEnd="@dimen/material_border_padding"
-            android:layout_marginTop="@dimen/material_border_padding"
-            android:layout_weight="1"
-            android:hint="Qty">
+            android:orientation="horizontal">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/new_transaction_quantity_edittext"
-                android:inputType="number"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.App.TextInputLayout.ExposedDropdown"
+                android:id="@+id/new_transaction_cardNumber_layout"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:ellipsize="end"
-                tools:text="100" />
+                android:layout_marginStart="@dimen/material_border_padding"
+                android:layout_marginEnd="@dimen/material_border_padding_small"
+                android:layout_marginTop="@dimen/material_border_padding"
+                android:layout_weight="1"
+                android:hint="Card Number">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/new_transaction_cardNumber_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    tools:text="LOB-001" />
 
-    </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <LinearLayout
-        android:id="@+id/new_transaction_region_cardNumber_rarity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.App.TextInputLayout.ExposedDropdown"
+                android:id="@+id/new_transaction_rarity_layout"
+                android:clickable="false"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/material_border_padding_small"
+                android:layout_marginEnd="@dimen/material_border_padding"
+                android:layout_marginTop="@dimen/material_border_padding"
+                android:layout_weight="1"
+                android:hint="Rarity">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.App.TextInputLayout.ExposedDropdown"
-            android:id="@+id/new_transaction_cardNumber_layout"
-            android:layout_width="0dp"
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/new_transaction_rarity_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    tools:text="Ultra Rare" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/new_transaction_region_edition_price"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/material_border_padding"
-            android:layout_marginEnd="@dimen/material_border_padding"
-            android:layout_marginTop="@dimen/material_border_padding"
-            android:layout_weight="1"
-            android:hint="Card Number">
+            android:orientation="horizontal">
 
-            <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/new_transaction_cardNumber_textview"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.App.TextInputLayout.ExposedDropdown"
+                android:id="@+id/new_transaction_edition_layout"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:ellipsize="end"
-                tools:text="LOB-001" />
+                android:layout_marginStart="@dimen/material_border_padding"
+                android:layout_marginEnd="@dimen/material_border_padding_small"
+                android:layout_marginTop="@dimen/material_border_padding"
+                android:layout_weight="2"
+                android:hint="Edition">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/new_transaction_edition_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    tools:text="1st Edition" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.App.TextInputLayout.ExposedDropdown"
-            android:id="@+id/new_transaction_rarity_layout"
-            android:clickable="false"
-            android:layout_width="0dp"
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/new_transaction_price_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/material_border_padding_small"
+                android:layout_marginEnd="@dimen/material_border_padding_small"
+                android:layout_marginTop="@dimen/material_border_padding"
+                android:layout_weight="1"
+                android:hint="Price">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/new_transaction_price_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:inputType="numberDecimal"
+                    tools:text="99.99" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/new_transaction_quantity_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/material_border_padding_small"
+                android:layout_marginEnd="@dimen/material_border_padding"
+                android:layout_marginTop="@dimen/material_border_padding"
+                android:layout_weight="1"
+                android:hint="Qty">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/new_transaction_quantity_edittext"
+                    android:inputType="number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    tools:text="100" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/new_transaction_region_type_platform"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/material_border_padding"
-            android:layout_marginEnd="@dimen/material_border_padding"
-            android:layout_marginTop="@dimen/material_border_padding"
-            android:layout_weight="1"
-            android:hint="Rarity">
+            android:orientation="horizontal">
 
-            <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/new_transaction_rarity_textview"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.App.TextInputLayout.ExposedDropdown"
+                android:id="@+id/new_transaction_type_layout"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:ellipsize="end"
-                tools:text="Ultra Rare" />
+                android:layout_marginStart="@dimen/material_border_padding"
+                android:layout_marginEnd="@dimen/material_border_padding_small"
+                android:layout_marginTop="@dimen/material_border_padding"
+                android:layout_weight="4"
+                android:hint="Transaction Type">
 
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/new_transaction_type_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    tools:text="Purchase" />
 
-    <LinearLayout
-        android:id="@+id/new_transaction_region_type_platform"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.App.TextInputLayout.ExposedDropdown"
-            android:id="@+id/new_transaction_type_layout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/material_border_padding"
-            android:layout_marginEnd="@dimen/material_border_padding"
-            android:layout_marginTop="@dimen/material_border_padding"
-            android:layout_weight="4"
-            android:hint="Transaction Type">
-
-            <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/new_transaction_type_textview"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.App.TextInputLayout.ExposedDropdown"
+                android:id="@+id/new_transaction_platform_layout"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:inputType="none"
-                android:singleLine="true"
-                android:ellipsize="end"
-                tools:text="Purchase" />
+                android:layout_marginStart="@dimen/material_border_padding_small"
+                android:layout_marginEnd="@dimen/material_border_padding"
+                android:layout_marginTop="@dimen/material_border_padding"
+                android:layout_weight="3"
+                android:hint="Platform">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/new_transaction_platform_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:inputType="none"
+                    tools:text="Ebay" />
 
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.App.TextInputLayout.ExposedDropdown"
-            android:id="@+id/new_transaction_platform_layout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/material_border_padding"
-            android:layout_marginEnd="@dimen/material_border_padding"
-            android:layout_marginTop="@dimen/material_border_padding"
-            android:layout_weight="3"
-            android:hint="Platform">
-
-            <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/new_transaction_platform_textview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:ellipsize="end"
-                android:inputType="none"
-                tools:text="Ebay" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/new_transaction_region_buyer_seller_amount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/new_transaction_buyer_seller_layout"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/material_border_padding"
             android:layout_marginEnd="@dimen/material_border_padding"
             android:layout_marginTop="@dimen/material_border_padding"
-            android:layout_weight="2"
             android:hint="Seller">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/new_transaction_buyer_seller_edittext"
+                android:id="@+id/new_Transaction_buyer_seller_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
                 android:singleLine="true"
+                android:ellipsize="end"
                 tools:text="Troll&amp;Toad" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/new_transaction_amount_layout"
-            android:layout_width="0dp"
+            android:id="@+id/new_transaction_Tracking_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/material_border_padding"
             android:layout_marginEnd="@dimen/material_border_padding"
             android:layout_marginTop="@dimen/material_border_padding"
-            android:layout_weight="1"
-            android:hint="Amount">
+            android:hint="Tracking Number">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/new_transaction_amount_edittext"
+                android:id="@+id/new_transaction_tracking_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:inputType="numberDecimal"
-                tools:text="99.99" />
+                tools:text="123456" />
 
         </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/new_transaction_tracking_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/material_border_padding"
-        android:layout_marginEnd="@dimen/material_border_padding"
-        android:layout_marginTop="@dimen/material_border_padding"        android:hint="Tracking Number">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/new_transaction_tracking_edittext"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/new_transaction_save_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:text="123456" />
+            android:layout_margin="@dimen/material_border_padding"
+            android:text="Save" />
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/new_transaction_save_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/material_border_padding"
-        android:text="Save" />
-
-</LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

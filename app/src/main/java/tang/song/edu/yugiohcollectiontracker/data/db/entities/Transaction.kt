@@ -16,6 +16,6 @@ data class Transaction(
     val date: Date,
     val buyerSellerName: String?,
     val trackingNumber: String?,
-    val amount: Double?,
+    val price: Double?,
     val salePlatform: PlatformType?
 )

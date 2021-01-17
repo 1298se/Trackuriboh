@@ -22,9 +22,9 @@
     </fragment>
     <fragment
         android:id="@+id/inventoryFragment"
-        android:name="tang.song.edu.yugiohcollectiontracker.ui_inventory.InventoryFragment"
+        android:name="tang.song.edu.yugiohcollectiontracker.ui_inventory.InventoryListFragment"
         android:label="Inventory"
-        tools:layout="@layout/fragment_inventory" />
+        tools:layout="@layout/fragment_inventory_list" />
     <fragment
         android:id="@+id/summaryFragment"
         android:name="tang.song.edu.yugiohcollectiontracker.ui_summary.SummaryFragment"

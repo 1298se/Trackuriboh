@@ -10,11 +10,15 @@ import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
 import tang.song.edu.yugiohcollectiontracker.databinding.ItemCardSetBinding
 
-class CardSetListAdapter(
-    private val onItemClickListener: OnItemClickListener
-) : PagingDataAdapter<CardSet, CardSetListAdapter.CardSetViewHolder>(SET_COMPARATOR) {
+class CardSetListAdapter() : PagingDataAdapter<CardSet, CardSetListAdapter.CardSetViewHolder>(SET_COMPARATOR) {
+    private var mOnItemClickListener: OnItemClickListener? = null
+
     interface OnItemClickListener {
         fun onItemClick(setName: String)
+    }
+
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
+        mOnItemClickListener = onItemClickListener
     }
 
     companion object {
@@ -53,7 +57,7 @@ class CardSetListAdapter(
             val cardSet = getItem(bindingAdapterPosition)
 
             if (cardSet != null) {
-                onItemClickListener.onItemClick(cardSet.setName)
+                mOnItemClickListener?.onItemClick(cardSet.setName)
             }
         }
     }

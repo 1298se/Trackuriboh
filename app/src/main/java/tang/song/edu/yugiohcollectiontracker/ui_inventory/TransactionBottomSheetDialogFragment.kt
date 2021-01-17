@@ -1,19 +1,28 @@
 package tang.song.edu.yugiohcollectiontracker.ui_inventory
 
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import tang.song.edu.yugiohcollectiontracker.R
+import kotlinx.coroutines.launch
 import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardWithSetInfo
+import tang.song.edu.yugiohcollectiontracker.data.types.EditionType
+import tang.song.edu.yugiohcollectiontracker.data.types.PlatformType
+import tang.song.edu.yugiohcollectiontracker.data.types.TransactionType
 import tang.song.edu.yugiohcollectiontracker.databinding.BottomSheetTransactionBinding
+import tang.song.edu.yugiohcollectiontracker.ui_inventory.adapters.EnumArrayAdapter
+import tang.song.edu.yugiohcollectiontracker.ui_inventory.viewmodels.TransactionBottomSheetDialogViewModel
+import tang.song.edu.yugiohcollectiontracker.ui_inventory.viewmodels.TransactionData
 import tang.song.edu.yugiohcollectiontracker.viewBinding
+import java.util.*
 
 @AndroidEntryPoint
 class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), View.OnClickListener {
@@ -24,6 +33,22 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), View.O
     private val binding by viewBinding(BottomSheetTransactionBinding::inflate)
 
     private lateinit var mCard: CardWithSetInfo
+
+    private val KEY_EDITION_TYPE = "Edition_Type"
+    private val KEY_TRANSACTION_TYPE = "Transaction_Type"
+    private val KEY_PLATFORM_TYPE = "Platform_type"
+
+    private var mEditionType: EditionType? = null
+    private var mTransactionType: TransactionType? = null
+    private var mPlatformType: PlatformType? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        mEditionType = EditionType.fromInt(savedInstanceState?.getInt(KEY_EDITION_TYPE, -1))
+        mTransactionType = TransactionType.fromInt(savedInstanceState?.getInt(KEY_TRANSACTION_TYPE, -1))
+        mPlatformType = PlatformType.fromInt(savedInstanceState?.getInt(KEY_PLATFORM_TYPE, -1))
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog?.setOnShowListener {
@@ -43,18 +68,44 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), View.O
 
         binding.newTransactionSaveButton.setOnClickListener(this)
 
-        mViewModel.getCardDetailsById(args.cardId).observe(viewLifecycleOwner) {
-            mCard = it.also {
-                binding.newTransactionNameEdittext.setText(it.card.name)
-            }
-
-            initDropdowns()
-        }
-
         initToolbar()
+
+        lifecycleScope.launch {
+            mCard = mViewModel.getCardDetailsById(args.cardId)
+            binding.newTransactionNameEdittext.apply {
+                setText(mCard.card.name)
+                inputType = InputType.TYPE_NULL
+            }
+                initDropdowns()
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putInt(KEY_EDITION_TYPE, mEditionType?.value ?: -1)
+        outState.putInt(KEY_TRANSACTION_TYPE, mTransactionType?.value ?: -1)
+        outState.putInt(KEY_PLATFORM_TYPE, mPlatformType?.value ?: -1)
     }
 
     override fun onClick(view: View?) {
+        val transactionData = TransactionData(
+            cardId = mCard.card.cardId,
+            cardName = mCard.card.name,
+            cardNumber = binding.newTransactionCardNumberTextview.text.toString(),
+            cardImageURL = mCard.card.getDefaultImageURL(),
+            rarity = binding.newTransactionRarityTextview.text.toString(),
+            edition = mEditionType,
+            quantity = binding.newTransactionQuantityEdittext.text.toString().toInt(),
+            date = Date(),
+            buyerSellerName = binding.newTransactionBuyerSellerEdittext.text.toString(),
+            transactionType = mTransactionType!!,
+            trackingNumber = binding.newTransactionTrackingEdittext.text.toString(),
+            salePlatform = mPlatformType!!,
+            price = binding.newTransactionPriceEdittext.text.toString().toDouble()
+        )
+
+        mViewModel.insertTransaction(transactionData)
     }
 
     private fun initToolbar() {
@@ -64,44 +115,35 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), View.O
     }
 
     private fun initDropdowns() {
-        initCardNumberDropdown()
+        initCardNumberDropdown(null)
+        initRarityDropdown(null)
+        initEditionDropdown()
         initTransactionTypeDropdown()
         initPlatformDropdown()
     }
 
-    private fun initCardNumberDropdown() {
+    private fun initCardNumberDropdown(rarity: String?) {
         val cardNumberList = mutableSetOf<String>()
         // Add to set because there can be multiple rarities for each card number
-        mCard.sets.forEach { cardNumberList.add(it.cardNumber) }
+        mCard.sets.forEach { if (rarity ?: it.rarity == it.rarity) {
+            cardNumberList.add(it.cardNumber)
+        } }
 
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, cardNumberList.toList())
         binding.newTransactionCardNumberTextview.apply {
             setAdapter(adapter)
 
             setOnItemClickListener { _, _, _, _ ->
-                setRarityDropdown(this.text.toString())
+                initRarityDropdown(this.text.toString())
             }
         }
     }
 
-    private fun initTransactionTypeDropdown() {
-        val transactionTypeList = resources.getStringArray(R.array.transaction_types)
-
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, transactionTypeList)
-        binding.newTransactionTypeTextview.setAdapter(adapter)
-    }
-
-    private fun initPlatformDropdown() {
-        val platformTypeList = resources.getStringArray(R.array.platform_types).toList()
-
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, platformTypeList)
-        binding.newTransactionPlatformTextview.setAdapter(adapter)
-    }
-
-    private fun setRarityDropdown(cardNumber: String) {
+    private fun initRarityDropdown(cardNumber: String?) {
         val rarityList = mutableListOf<String>()
 
-        mCard.sets.forEach { if (it.cardNumber == cardNumber && it.rarity != null) {
+        // If null is passed in as cardNumber, no cardNumber is selected so show all rarities
+        mCard.sets.forEach { if (cardNumber ?: it.cardNumber == it.cardNumber && it.rarity != null) {
             rarityList.add(it.rarity)
         } }
 
@@ -109,8 +151,42 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), View.O
         binding.newTransactionRarityTextview.apply {
             setAdapter(adapter)
 
-            if (rarityList.size == 1) {
-                setText(rarityList[0], false)
+            setOnItemClickListener { _, _, _, _ ->
+                initCardNumberDropdown(this.text.toString())
+            }
+        }
+    }
+
+    private fun initEditionDropdown() {
+        val adapter = EnumArrayAdapter(requireContext(), EditionType.values().toList())
+        binding.newTransactionEditionTextview.apply {
+            setAdapter(adapter)
+
+            setOnItemClickListener { adapterView, view, position, id ->
+                mEditionType = adapterView.getItemAtPosition(position) as EditionType
+            }
+        }
+    }
+
+    private fun initTransactionTypeDropdown() {
+        val adapter = EnumArrayAdapter(requireContext(), TransactionType.values().toList())
+        binding.newTransactionTypeTextview.apply {
+            setAdapter(adapter)
+
+            setOnItemClickListener { adapterView, view, position, id ->
+                mTransactionType = adapterView.getItemAtPosition(position) as TransactionType
+            }
+        }
+
+    }
+
+    private fun initPlatformDropdown() {
+        val adapter = EnumArrayAdapter(requireContext(), PlatformType.values().toList())
+        binding.newTransactionPlatformTextview.apply {
+            setAdapter(adapter)
+
+            setOnItemClickListener { adapterView, view, position, id ->
+                mPlatformType = adapterView.getItemAtPosition(position) as PlatformType
             }
         }
     }

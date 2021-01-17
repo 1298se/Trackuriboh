@@ -11,9 +11,8 @@ import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.RequestManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardSetDetailBinding
@@ -25,14 +24,13 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class CardSetDetailFragment : BaseFragment(), CardListAdapter.OnItemClickListener {
     @Inject
-    lateinit var mRequestManager: RequestManager
+    lateinit var mAdapter: CardListAdapter
 
     private val args: CardSetDetailFragmentArgs by navArgs()
 
     private val binding by viewBinding(FragmentCardSetDetailBinding::inflate)
     private val mViewModel: CardSetDetailViewModel by viewModels()
 
-    private lateinit var mAdapter: CardListAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return binding.root
@@ -47,7 +45,7 @@ class CardSetDetailFragment : BaseFragment(), CardListAdapter.OnItemClickListene
         binding.cardSetDetailCollapseToolbar.title = args.setName
 
         lifecycleScope.launch {
-            mViewModel.getCardListBySet(args.setName).collect {
+            mViewModel.getCardListBySet(args.setName).collectLatest {
                 mAdapter.submitData(it)
             }
         }
@@ -67,11 +65,10 @@ class CardSetDetailFragment : BaseFragment(), CardListAdapter.OnItemClickListene
     }
 
     private fun initRecyclerView() {
-        mAdapter = CardListAdapter(this, mRequestManager)
-        val layoutManager = LinearLayoutManager(requireContext())
+        mAdapter.setOnItemClickListener(this)
 
         binding.cardList.apply {
-            this.layoutManager = layoutManager
+            this.layoutManager = LinearLayoutManager(context)
             this.adapter = mAdapter
         }
     }

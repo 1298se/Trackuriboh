@@ -24,4 +24,6 @@ data class Card(
     val linkval: Int?,
     val linkmarkers: List<String>?,
     val cardImageURLList: List<String>?
-) : Parcelable
+) : Parcelable {
+    fun getDefaultImageURL(): String? = this.cardImageURLList?.get(0)
+}

@@ -4,19 +4,23 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
+import tang.song.edu.yugiohcollectiontracker.data.types.EditionType
+import java.util.*
 
 @Parcelize
 @Entity
 data class CardInventory(
     @PrimaryKey(autoGenerate = true)
     val inventoryId: Long = 0,
+    var lastTransaction: Date,
     val cardId: Long,
     val cardName: String,
     val cardNumber: String,
     var cardImageURL: String?,
-    val rarity: String,
+    val rarity: String?,
+    val edition: EditionType?,
     var quantity: Int = 0,
     var soldQuantity: Int = 0,
-    var currentAvgPurchasePrice: Double = 0.toDouble(),
-    var avgSalePrice: Double = 0.toDouble()
+    var curAvgPurchasePrice: Double = 0.toDouble(),
+    var profitAndLoss: Double = 0.toDouble()
 ) : Parcelable

@@ -53,11 +53,11 @@ class CardSetListFragment : BaseSearchListFragment<CardSet>(), CardSetListAdapte
     }
 
     private fun initRecyclerView() {
-        mAdapter = CardSetListAdapter(this)
-        val layoutManager = LinearLayoutManager(requireContext())
-
+        mAdapter = CardSetListAdapter().apply {
+            setOnItemClickListener(this@CardSetListFragment)
+        }
         binding.cardSetList.apply {
-            this.layoutManager = layoutManager
+            this.layoutManager = LinearLayoutManager(context)
             this.adapter = mAdapter
         }
     }

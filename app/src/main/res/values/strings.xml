@@ -51,17 +51,19 @@
 
     <!-- Inventory -->
     <string name="lbl_new_transaction">New Transaction</string>
+    <string name="item_inventory_setcode_rarity_edition_text" comment="LOB-001 \u2022 Ultra Rare \u2022 1st Edition">%1$s \u2022 %2$s \u2022 %3$s</string>
+    <string name="item_inventory_quantity_text" comment="Qty: 6">Qty: %1$d</string>
+    <string name="item_inventory_avg_purchase_price" comment="Avg. Purchase Price: $50">Avg. Purchase Price: %1$.2f</string>
 
     <!-- Transaction -->
-    <string-array name="transaction_types">
-        <item>Purchase</item>
-        <item>Sale</item>
-    </string-array>
+    <string name="lbl_first_edition">1st Edition</string>
+    <string name="lbl_limited_edition">Limited Edition</string>
+    <string name="lbl_unlimited_edition">Unlimited</string>
 
-    <string-array name="platform_types">
-        <item>Ebay</item>
-        <item>Facebook</item>
-        <item>Website</item>
-        <item>Other</item>
-    </string-array>
+    <string name="lbl_purchase">Purchase</string>
+    <string name="lbl_sale">Sale</string>
+
+    <string name="lbl_ebay">Ebay</string>
+    <string name="lbl_facebook">Facebook</string>
+    <string name="lbl_other">Other</string>
 </resources>
