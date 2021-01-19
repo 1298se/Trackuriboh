@@ -1,10 +1,16 @@
 package tang.song.edu.yugiohcollectiontracker.ui_database
 
+import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.BaseSearchViewModel
@@ -12,9 +18,19 @@ import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.BaseSearchVi
 abstract class BaseSearchListFragment<T : Any> : BaseFragment() {
     private var searchJob: Job? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        lifecycleScope.launchWhenStarted {
+            getAdapter().loadStateFlow
+                .distinctUntilChangedBy { it.refresh }
+                .filter { it.refresh is LoadState.NotLoading }
+                .collect { getListView().scrollToPosition(0) }
+        }
+    }
+
     fun updateSearchList(newText: String?) {
         (newText ?: "").trim().let {
-            getListView().scrollToPosition(0)
             search(it)
         }
     }
@@ -32,5 +48,6 @@ abstract class BaseSearchListFragment<T : Any> : BaseFragment() {
 
     protected abstract fun getViewModel(): BaseSearchViewModel<T>
     protected abstract fun getListView(): RecyclerView
+    protected abstract fun getAdapter(): PagingDataAdapter<T, out RecyclerView.ViewHolder>
     protected abstract suspend fun submitData(pagingData: PagingData<T>)
 }
