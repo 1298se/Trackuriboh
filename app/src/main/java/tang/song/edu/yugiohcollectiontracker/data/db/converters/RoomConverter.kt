@@ -3,13 +3,10 @@ package tang.song.edu.yugiohcollectiontracker.data.db.converters
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import tang.song.edu.yugiohcollectiontracker.data.types.CardType
-import tang.song.edu.yugiohcollectiontracker.data.types.EditionType
-import tang.song.edu.yugiohcollectiontracker.data.types.PlatformType
-import tang.song.edu.yugiohcollectiontracker.data.types.TransactionType
+import tang.song.edu.yugiohcollectiontracker.data.types.*
 import java.util.*
 
-class Converters {
+class RoomConverter {
     @TypeConverter
     fun timestampToDate(value: Long?): Date? {
         return value?.let { Date(it) }
@@ -48,4 +45,10 @@ class Converters {
 
     @TypeConverter
     fun intToEditionType(editionType: Int?) = EditionType.fromInt(editionType)
+
+    @TypeConverter
+    fun conditionTypeToInt(conditionType: ConditionType?) = conditionType?.value
+
+    @TypeConverter
+    fun intToConditionType(conditionType: Int?) = ConditionType.fromInt(conditionType)
 }

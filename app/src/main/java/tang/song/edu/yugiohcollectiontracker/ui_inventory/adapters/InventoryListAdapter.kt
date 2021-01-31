@@ -7,13 +7,11 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
-import dagger.hilt.android.scopes.ActivityScoped
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardInventory
 import tang.song.edu.yugiohcollectiontracker.databinding.ItemInventoryBinding
 import javax.inject.Inject
 
-@ActivityScoped
 class InventoryListAdapter @Inject constructor(
     val requestManager: RequestManager,
 ) : PagingDataAdapter<CardInventory, InventoryListAdapter.InventoryViewHolder>(INVENTORY_COMPARATOR) {

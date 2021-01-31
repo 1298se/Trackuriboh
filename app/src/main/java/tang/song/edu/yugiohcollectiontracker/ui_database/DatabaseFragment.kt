@@ -5,19 +5,22 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager2.widget.ViewPager2
-import androidx.work.WorkInfo
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentDatabaseBinding
+import tang.song.edu.yugiohcollectiontracker.services.DatabaseSyncService
 import tang.song.edu.yugiohcollectiontracker.ui_database.adapters.DatabasePagerAdapter
 import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.DatabaseViewModel
 import tang.song.edu.yugiohcollectiontracker.viewBinding
@@ -32,12 +35,28 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
     private lateinit var mAdapter: DatabasePagerAdapter
     private lateinit var mViewPager: ViewPager2
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activity?.onBackPressedDispatcher?.addCallback {
+            if (mViewPager.currentItem == 0) {
+                if (!findNavController().popBackStack()) {
+                    activity?.finish()
+                }
+            } else {
+                mViewPager.currentItem = mViewPager.currentItem - 1
+            }
+        }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.databaseSyncProgressIndicator.setVisibilityAfterHide(View.GONE)
 
         initToolbar()
         initTabLayoutWithViewPager()
@@ -84,18 +103,20 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
     }
 
     private fun initObservers() {
-        mViewModel.syncWorkInfo.observe(viewLifecycleOwner) { listOfWorkInfo ->
-            if (listOfWorkInfo.isNullOrEmpty()) {
-                return@observe
-            }
+        lifecycleScope.launchWhenStarted {
+            mViewModel.databaseSyncState.collect {
+                if (it is DatabaseSyncService.DatabaseSyncState.LOADING) {
+                    binding.databaseViewPager.visibility = View.INVISIBLE
+                    binding.databaseSyncProgressIndicator.show()
+                } else {
+                    binding.databaseViewPager.visibility = View.VISIBLE
+                    binding.databaseSyncProgressIndicator.hide()
 
-            val workInfo = listOfWorkInfo[0]
+                    if (it is DatabaseSyncService.DatabaseSyncState.FAILURE) {
+                        showError(R.string.database_sync_error_title, R.string.database_sync_error_message)
+                    }
+                }
 
-            if (workInfo.state.isFinished && workInfo.state == WorkInfo.State.FAILED) {
-                showError(
-                    R.string.database_sync_error_title,
-                    R.string.database_sync_error_message
-                )
             }
         }
     }

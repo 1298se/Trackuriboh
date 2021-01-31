@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import tang.song.edu.yugiohcollectiontracker.data.db.converters.Converters
+import tang.song.edu.yugiohcollectiontracker.data.db.converters.RoomConverter
 import tang.song.edu.yugiohcollectiontracker.data.db.dao.*
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.*
 
@@ -13,7 +13,7 @@ import tang.song.edu.yugiohcollectiontracker.data.db.entities.*
     entities = [Card::class, CardSet::class, CardXCardSetRef::class, CardInventory::class, Transaction::class],
     version = 1
 )
-@TypeConverters(Converters::class)
+@TypeConverters(RoomConverter::class)
 abstract class CardDatabase : RoomDatabase() {
 
     abstract fun cardDao(): CardDao

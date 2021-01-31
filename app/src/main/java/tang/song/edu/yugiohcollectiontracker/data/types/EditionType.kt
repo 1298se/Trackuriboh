@@ -1,8 +1,10 @@
 package tang.song.edu.yugiohcollectiontracker.data.types
 
+import kotlinx.parcelize.Parcelize
 import tang.song.edu.yugiohcollectiontracker.R
 
-enum class EditionType(val value: Int) : StringResourceEnum {
+@Parcelize
+enum class EditionType(override val value: Int) : StringResourceEnum {
     FIRST_EDITION(1),
     LIMITED_EDITION(2),
     UNLIMITED(3);

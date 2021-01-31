@@ -59,7 +59,7 @@
     </fragment>
     <dialog
         android:id="@+id/transactionDialogFragment"
-        android:name="tang.song.edu.yugiohcollectiontracker.ui_inventory.TransactionBottomSheetDialogFragment"
+        android:name="tang.song.edu.yugiohcollectiontracker.ui_transaction_form.views.TransactionBottomSheetDialogFragment"
         android:label="TransactionBottomSheetDialogFragment" >
         <argument
             android:name="cardId"

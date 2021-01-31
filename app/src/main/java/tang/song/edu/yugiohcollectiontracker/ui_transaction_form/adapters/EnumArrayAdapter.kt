@@ -1,4 +1,4 @@
-package tang.song.edu.yugiohcollectiontracker.ui_inventory.adapters
+package tang.song.edu.yugiohcollectiontracker.ui_transaction_form.adapters
 
 import android.content.Context
 import android.view.View
@@ -35,34 +35,19 @@ class EnumArrayAdapter<T: StringResourceEnum>(
         return filteredList[position]
     }
 
+    fun getPosition(item: T): Int {
+        return filteredList.indexOf(item)
+    }
+
     inner class EnumFilter : Filter() {
         private val suggestions =  ArrayList<T>()
 
         override fun performFiltering(constraints: CharSequence?): FilterResults {
-            suggestions.clear()
-
-            if (constraints.isNullOrEmpty()) {
-                suggestions.addAll(itemList)
-            } else {
-                for (item in itemList) {
-                    if (context.getString(item.getResourceId()).startsWith(constraints)) {
-                        suggestions.add(item)
-                    }
-                }
-            }
-
-            return FilterResults().apply {
-                values = suggestions
-                count = suggestions.size
-            }
+            return FilterResults()
         }
 
         override fun publishResults(constraints: CharSequence?, results: FilterResults?) {
-            filteredList.apply {
-                clear()
-                addAll(results?.values as Collection<T>)
-            }
-            notifyDataSetChanged()
+            return
         }
 
         override fun convertResultToString(resultValue: Any?): CharSequence {

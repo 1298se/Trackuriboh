@@ -7,14 +7,12 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
-import dagger.hilt.android.scopes.ActivityScoped
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
 import tang.song.edu.yugiohcollectiontracker.data.types.CardType
 import tang.song.edu.yugiohcollectiontracker.databinding.ItemCardBinding
 import javax.inject.Inject
 
-@ActivityScoped
 class CardListAdapter @Inject constructor(
     val requestManager: RequestManager
 ) : PagingDataAdapter<Card, CardListAdapter.CardViewHolder>(CARD_COMPARATOR) {

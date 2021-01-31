@@ -1,8 +1,10 @@
 package tang.song.edu.yugiohcollectiontracker.data.types
 
+import kotlinx.parcelize.Parcelize
 import tang.song.edu.yugiohcollectiontracker.R
 
-enum class PlatformType(val value: Int) : StringResourceEnum {
+@Parcelize
+enum class PlatformType(override val value: Int) : StringResourceEnum {
     EBAY(1),
     FACEBOOK(2),
     OTHER(3);

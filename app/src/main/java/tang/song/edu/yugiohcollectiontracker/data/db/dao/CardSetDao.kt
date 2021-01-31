@@ -22,7 +22,6 @@ interface CardSetDao {
     suspend fun insertCardSet(cardSet: CardSet): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-
     suspend fun insertCardSets(cardSets: List<CardSet>): List<Long>
 
     @Query("SELECT * FROM CardSet WHERE (setName LIKE :queryString)")

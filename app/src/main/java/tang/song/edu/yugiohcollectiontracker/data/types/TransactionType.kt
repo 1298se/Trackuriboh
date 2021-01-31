@@ -1,8 +1,10 @@
 package tang.song.edu.yugiohcollectiontracker.data.types
 
+import kotlinx.parcelize.Parcelize
 import tang.song.edu.yugiohcollectiontracker.R
 
-enum class TransactionType(val value: Int) : StringResourceEnum {
+@Parcelize
+enum class TransactionType(override val value: Int) : StringResourceEnum {
     PURCHASE(1),
     SALE(2);
 
