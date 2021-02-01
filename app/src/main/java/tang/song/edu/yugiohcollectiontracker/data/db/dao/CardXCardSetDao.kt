@@ -54,6 +54,9 @@ abstract class CardXCardSetDao : CardDao, CardSetDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertJoins(joins: List<CardXCardSetRef>): List<Long>
 
+    @Query("DELETE FROM CardXCardSetRef")
+    abstract override suspend fun deleteTable()
+
     private fun parseCardSetCode(cardNumber: String): String? {
         val hyphenIndex = cardNumber.indexOf('-')
         return if (hyphenIndex != -1) cardNumber.substring(0, hyphenIndex) else null

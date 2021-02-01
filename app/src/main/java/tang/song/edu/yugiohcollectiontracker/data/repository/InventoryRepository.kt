@@ -3,7 +3,9 @@ package tang.song.edu.yugiohcollectiontracker.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import tang.song.edu.yugiohcollectiontracker.DATABASE_PAGE_SIZE
 import tang.song.edu.yugiohcollectiontracker.data.db.CardInventoryLocalCache
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardInventory
@@ -25,7 +27,7 @@ class InventoryRepository @Inject constructor(
         return Pager(
             config = PagingConfig(pageSize = DATABASE_PAGE_SIZE),
             pagingSourceFactory = pagingSourceFactory
-        ).flow
+        ).flow.flowOn(Dispatchers.IO)
     }
 
     suspend fun getInventoryWithTransactions(inventoryId: Long): CardInventoryWithTransactions {

@@ -102,8 +102,10 @@ class CardLocalCache @Inject constructor(
             return result
     }
 
-    fun clearDatabase() {
-        return cardDatabase.clearAllTables()
+    suspend fun clearDatabase() {
+        cardDatabase.cardDao().deleteTable()
+        cardDatabase.cardSetDao().deleteTable()
+        cardDatabase.cardXCardSetDao().deleteTable()
     }
 
     suspend fun getCardDetails(cardId: Long): CardWithSetInfo {

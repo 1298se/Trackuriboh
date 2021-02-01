@@ -23,4 +23,7 @@ interface CardDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCards(cards: List<Card>): List<Long>
+
+    @Query("DELETE FROM Card")
+    suspend fun deleteTable()
 }

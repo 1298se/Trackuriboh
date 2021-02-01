@@ -2,12 +2,10 @@ package tang.song.edu.yugiohcollectiontracker.services
 
 import android.util.Log
 import dagger.hilt.android.scopes.ActivityScoped
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.withContext
 import tang.song.edu.yugiohcollectiontracker.data.db.CardLocalCache
 import tang.song.edu.yugiohcollectiontracker.data.network.CardRetrofitService
 import javax.inject.Inject
@@ -27,28 +25,27 @@ class DatabaseSyncService @Inject constructor(
     }
 
     suspend fun syncDatabase() {
-        withContext(Dispatchers.IO) {
-            try {
+        try {
 
-                coroutineScope {
-                    _databaseSyncStateFlow.value = DatabaseSyncState.LOADING
-                    val cardListRequest = async { cardRetrofitService.getAllCards() }
-                    val cardSetListRequest = async { cardRetrofitService.getAllSets() }
+            coroutineScope {
+                _databaseSyncStateFlow.value = DatabaseSyncState.LOADING
+                val cardListRequest = async { cardRetrofitService.getAllCards() }
+                val cardSetListRequest = async { cardRetrofitService.getAllSets() }
 
-                    val cardListResponse = cardListRequest.await()
-                    val cardSetListResponse = cardSetListRequest.await()
+                val cardListResponse = cardListRequest.await()
+                val cardSetListResponse = cardSetListRequest.await()
 
-                    Log.d(TAG, "cards from api: " + cardListResponse.data.size)
-                    Log.d(TAG, "cardSets from api: " + cardSetListResponse.size)
+                Log.d(TAG, "cards from api: " + cardListResponse.data.size)
+                Log.d(TAG, "cardSets from api: " + cardSetListResponse.size)
 
-                    cardLocalCache.populateDatabase(TAG, cardListResponse.data, cardSetListResponse)
-                }
-
-                _databaseSyncStateFlow.value = DatabaseSyncState.SUCCESS
-            } catch (throwable: Throwable) {
-                throwable.printStackTrace()
-                _databaseSyncStateFlow.value = DatabaseSyncState.FAILURE(throwable.message)
+                cardLocalCache.clearDatabase()
+                cardLocalCache.populateDatabase(TAG, cardListResponse.data, cardSetListResponse)
             }
+
+            _databaseSyncStateFlow.value = DatabaseSyncState.SUCCESS
+        } catch (throwable: Throwable) {
+            throwable.printStackTrace()
+            _databaseSyncStateFlow.value = DatabaseSyncState.FAILURE(throwable.message)
         }
     }
 

@@ -3,6 +3,7 @@ package tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -18,7 +19,7 @@ class DatabaseViewModel @ViewModelInject constructor(
 
     fun syncDatabase() {
         syncJob?.cancel()
-        syncJob = viewModelScope.launch {
+        syncJob = viewModelScope.launch(Dispatchers.IO) {
             databaseSyncService.syncDatabase()
         }
     }
