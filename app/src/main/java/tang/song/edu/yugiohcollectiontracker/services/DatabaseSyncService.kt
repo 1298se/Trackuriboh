@@ -41,7 +41,6 @@ class DatabaseSyncService @Inject constructor(
                     Log.d(TAG, "cards from api: " + cardListResponse.data.size)
                     Log.d(TAG, "cardSets from api: " + cardSetListResponse.size)
 
-                    cardLocalCache.clearDatabase()
                     cardLocalCache.populateDatabase(TAG, cardListResponse.data, cardSetListResponse)
                 }
 

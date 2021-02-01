@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -31,7 +31,7 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
 
     private lateinit var mSearchView: SearchView
 
-    private val mViewModel: DatabaseViewModel by viewModels()
+    private val mViewModel: DatabaseViewModel by activityViewModels()
     private lateinit var mAdapter: DatabasePagerAdapter
     private lateinit var mViewPager: ViewPager2
 

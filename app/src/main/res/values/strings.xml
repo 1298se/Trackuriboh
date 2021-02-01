@@ -55,7 +55,7 @@
     <string name="item_inventory_quantity_text" comment="Qty: 6">Qty: %1$d</string>
     <string name="item_inventory_avg_purchase_price" comment="Avg. Purchase Price: $50">Avg. Purchase Price: %1$.2f</string>
 
-    <!-- Transaction -->
+    <!-- Transaction Form -->
     <string name="lbl_card_name">Card Name</string>
     <string name="lbl_card_number">Card Number</string>
     <string name="lbl_rarity">Rarity</string>
@@ -69,20 +69,27 @@
     <string name="lbl_tracking_number">Tracking Number</string>
     <string name="lbl_save">Save</string>
 
+    <string name="lbl_buyer">Buyer</string>
+    <string name="lbl_seller">Seller</string>
+
+    <string name="lbl_required">Required</string>
+    <string name="lbl_invalid">Invalid</string>
+
+    <!-- Editions -->
     <string name="lbl_first_edition">1st Edition</string>
     <string name="lbl_limited_edition">Limited Edition</string>
     <string name="lbl_unlimited_edition">Unlimited</string>
 
+    <!-- Transaction Types -->
     <string name="lbl_purchase">Purchase</string>
     <string name="lbl_sale">Sale</string>
 
-    <string name="lbl_buyer">Buyer</string>
-    <string name="lbl_seller">Seller</string>
-
+    <!-- Platforms -->
     <string name="lbl_ebay">Ebay</string>
     <string name="lbl_facebook">Facebook</string>
     <string name="lbl_other">Other</string>
 
+    <!-- Conditions -->
     <string name="lbl_near_mint">Near Mint</string>
     <string name="lbl_very_lightly_played">Very Lightly Played</string>
     <string name="lbl_lightly_played">Lightly Played</string>
