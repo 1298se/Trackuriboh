@@ -6,7 +6,10 @@ import tang.song.edu.yugiohcollectiontracker.BR
 import tang.song.edu.yugiohcollectiontracker.data.types.StringResourceEnum
 import tang.song.edu.yugiohcollectiontracker.data.types.TransactionType
 
-class TransactionFormModel : BaseObservable() {
+class TransactionDataModel : BaseObservable() {
+    var cardId: Long? = null
+    var cardImageURL: String? = null
+
     @get: Bindable
     var cardName: String? = null
         set(value) {
@@ -30,6 +33,12 @@ class TransactionFormModel : BaseObservable() {
         set(value) {
             field = value
             notifyPropertyChanged(BR.edition)
+        }
+    @get: Bindable
+    var date: Long? = null
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.date)
         }
     @get: Bindable
     var price: String? = null

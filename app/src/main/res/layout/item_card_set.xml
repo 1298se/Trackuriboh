@@ -16,14 +16,14 @@
         android:layout_marginEnd="@dimen/list_item_margin_end"
         android:ellipsize="end"
         android:maxLines="1"
-        app:layout_constraintBottom_toTopOf="@id/card_set_size_textview"
-        app:layout_constraintEnd_toStartOf="@id/card_set_release_date_textview"
+        app:layout_constraintBottom_toTopOf="@id/card_set_release_date_textview"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Legend of Blue-Eyes White Dragon Legend of Blue-Eyes White Dragon" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/card_set_size_textview"
+        android:id="@+id/card_set_release_date_textview"
         style="@style/TextAppearance.Types.Caption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -31,18 +31,8 @@
         android:layout_marginTop="@dimen/list_item_secondary_text_margin_top"
         android:layout_marginBottom="@dimen/list_item_text_margin_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/card_set_release_date_textview"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/card_set_title_textview"
-        tools:text="Size: 355" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/card_set_release_date_textview"
-        style="@style/TextAppearance.Types.Caption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/list_item_text_margin_top"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="2002-03-08" />
+        tools:text="Release Date: 2002-03-08" />
 </androidx.constraintlayout.widget.ConstraintLayout>

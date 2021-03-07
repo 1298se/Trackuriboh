@@ -29,4 +29,8 @@
     <dimen name="image_slider_height">6dp</dimen>
     <dimen name="image_slider_margin_bottom">5dp</dimen>
     <dimen name="image_slider_width">10dp</dimen>
+
+    <!-- New Transaction Form -->
+    <dimen name="new_transaction_row_spacing">12dp</dimen>
+    <dimen name="new_transaction_column_spacing">12dp</dimen>
 </resources>

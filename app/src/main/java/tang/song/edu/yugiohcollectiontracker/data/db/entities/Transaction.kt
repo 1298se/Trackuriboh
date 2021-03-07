@@ -4,7 +4,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import tang.song.edu.yugiohcollectiontracker.data.types.PlatformType
 import tang.song.edu.yugiohcollectiontracker.data.types.TransactionType
-import java.util.*
 
 @Entity
 data class Transaction(
@@ -13,9 +12,9 @@ data class Transaction(
     var inventoryId: Long,
     val transactionType: TransactionType?,
     val quantity: Int?,
-    val date: Date,
-    val buyerSellerName: String?,
+    val date: Long?,
+    val partyName: String?,
     val trackingNumber: String?,
     val price: Double?,
-    val salePlatform: PlatformType?
+    val platformType: PlatformType?
 )

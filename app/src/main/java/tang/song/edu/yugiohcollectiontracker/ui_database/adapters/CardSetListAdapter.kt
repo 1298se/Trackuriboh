@@ -6,11 +6,18 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
 import tang.song.edu.yugiohcollectiontracker.databinding.ItemCardSetBinding
 
-class CardSetListAdapter() : PagingDataAdapter<CardSet, CardSetListAdapter.CardSetViewHolder>(SET_COMPARATOR) {
+private val SET_COMPARATOR = object : DiffUtil.ItemCallback<CardSet>() {
+    override fun areItemsTheSame(oldItem: CardSet, newItem: CardSet): Boolean =
+        oldItem.setName == newItem.setName
+
+    override fun areContentsTheSame(oldItem: CardSet, newItem: CardSet): Boolean =
+        oldItem == newItem
+}
+
+class CardSetListAdapter : PagingDataAdapter<CardSet, CardSetListAdapter.CardSetViewHolder>(SET_COMPARATOR) {
     private var mOnItemClickListener: OnItemClickListener? = null
 
     interface OnItemClickListener {
@@ -19,16 +26,6 @@ class CardSetListAdapter() : PagingDataAdapter<CardSet, CardSetListAdapter.CardS
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
         mOnItemClickListener = onItemClickListener
-    }
-
-    companion object {
-        private val SET_COMPARATOR = object : DiffUtil.ItemCallback<CardSet>() {
-            override fun areItemsTheSame(oldItem: CardSet, newItem: CardSet): Boolean =
-                oldItem.setName == newItem.setName
-
-            override fun areContentsTheSame(oldItem: CardSet, newItem: CardSet): Boolean =
-                oldItem == newItem
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardSetViewHolder {
@@ -49,7 +46,6 @@ class CardSetListAdapter() : PagingDataAdapter<CardSet, CardSetListAdapter.CardS
 
         internal fun bind(item: CardSet) {
             binding.cardSetTitleTextview.text = item.setName
-            binding.cardSetSizeTextview.text = itemView.context.getString(R.string.item_card_set_list_size, item.numOfCards)
             binding.cardSetReleaseDateTextview.text = item.releaseDate
         }
 

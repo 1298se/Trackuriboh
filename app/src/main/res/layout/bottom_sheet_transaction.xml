@@ -10,7 +10,7 @@
         <import type="tang.song.edu.yugiohcollectiontracker.data.types.PlatformType" />
         <import type="tang.song.edu.yugiohcollectiontracker.data.types.ConditionType" />
         <import type="tang.song.edu.yugiohcollectiontracker.Converters" />
-        <variable name="viewModel" type="tang.song.edu.yugiohcollectiontracker.ui_transaction_form.viewmodels.TransactionBottomSheetDialogViewModel" />
+        <variable name="transactionData" type="tang.song.edu.yugiohcollectiontracker.ui_transaction_form.models.TransactionDataModel" />
         <variable name="editionTypes" type="List&lt;EditionType>" />
         <variable name="transactionTypes" type="List&lt;TransactionType>" />
         <variable name="platformTypes" type="List&lt;PlatformType>" />
@@ -18,7 +18,7 @@
         <variable name="validator" type="tang.song.edu.yugiohcollectiontracker.ui_transaction_form.TransactionFormValidator" />
     </data>
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -38,14 +38,18 @@
                 android:id="@+id/divider1"
                 style="@style/Divider" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/material_border_padding">
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/new_transaction_card_name_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/material_border_padding"
-                android:layout_marginEnd="@dimen/material_border_padding"
-                android:layout_marginTop="@dimen/material_border_padding"
-                android:hint="@string/lbl_card_name">
+                android:hint="@string/lbl_card_name"
+                android:enabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/new_transaction_card_name_edittext"
@@ -53,7 +57,7 @@
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:ellipsize="end"
-                    android:text="@={viewModel.formData.cardName}"
+                    android:text="@={transactionData.cardName}"
                     tools:text="Blue-Eyes White Dragon" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -66,13 +70,12 @@
                 android:baselineAligned="false">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.App.TextInputLayout.ExposedDropdown"
+                    style="@style/Widget.AppTheme.TextInputLayout.ExposedDropdown"
                     android:id="@+id/new_transaction_cardNumber_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/material_border_padding"
-                    android:layout_marginEnd="@dimen/material_border_padding_small"
-                    android:layout_marginTop="@dimen/material_border_padding"
+                    android:layout_marginEnd="@dimen/new_transaction_column_spacing"
+                    android:layout_marginTop="@dimen/new_transaction_row_spacing"
                     android:layout_weight="1"
                     android:hint="@string/lbl_card_number">
 
@@ -82,23 +85,22 @@
                         android:layout_height="wrap_content"
                         android:singleLine="true"
                         android:ellipsize="end"
-                        android:text="@={viewModel.formData.cardNumber}"
+                        android:text="@={transactionData.cardNumber}"
                         validator="@{validator}"
                         tools:text="LOB-001" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.App.TextInputLayout.ExposedDropdown"
+                    style="@style/Widget.AppTheme.TextInputLayout.ExposedDropdown"
                     android:id="@+id/new_transaction_rarity_layout"
                     android:clickable="false"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/material_border_padding_small"
-                    android:layout_marginEnd="@dimen/material_border_padding"
-                    android:layout_marginTop="@dimen/material_border_padding"
+                    android:layout_marginTop="@dimen/new_transaction_row_spacing"
                     android:layout_weight="1"
-                    android:hint="@string/lbl_rarity">
+                    android:hint="@string/lbl_rarity"
+                    android:enabled="false">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/new_transaction_rarity_textview"
@@ -106,7 +108,7 @@
                         android:layout_height="wrap_content"
                         android:singleLine="true"
                         android:ellipsize="end"
-                        android:text="@={viewModel.formData.rarity}"
+                        android:text="@={transactionData.rarity}"
                         validator="@{validator}"
                         tools:text="Ultra Rare" />
 
@@ -115,21 +117,19 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/new_transaction_region_edition_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:baselineAligned="false">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.App.TextInputLayout.ExposedDropdown"
+                    style="@style/Widget.AppTheme.TextInputLayout.ExposedDropdown"
                     android:id="@+id/new_transaction_edition_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/material_border_padding"
-                    android:layout_marginEnd="@dimen/material_border_padding_small"
-                    android:layout_marginTop="@dimen/material_border_padding"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="@dimen/new_transaction_column_spacing"
+                    android:layout_marginTop="@dimen/new_transaction_row_spacing"
                     android:hint="@string/lbl_edition">
 
                     <tang.song.edu.yugiohcollectiontracker.ui_transaction_form.views.EnumAutoCompleteTextView
@@ -140,19 +140,68 @@
                         android:singleLine="true"
                         android:inputType="none"
                         entries="@{editionTypes}"
-                        selectedItem="@={viewModel.formData.edition}"
+                        selectedItem="@={transactionData.edition}"
                         validator="@{validator}"
                         tools:text="1st Edition" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/new_transaction_date_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/new_transaction_row_spacing"
+                    android:hint="@string/lbl_date"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/ic_baseline_calendar_today_24">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/new_transaction_date_textview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:inputType="none"
+                        android:text="@{Converters.dateToString(transactionData.date)}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.AppTheme.TextInputLayout.ExposedDropdown"
+                android:id="@+id/new_transaction_condition_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/new_transaction_row_spacing"
+                android:hint="@string/lbl_condition">
+
+                <tang.song.edu.yugiohcollectiontracker.ui_transaction_form.views.EnumAutoCompleteTextView
+                    android:id="@+id/new_transaction_condition_textview"
+                    entries="@{conditionTypes}"
+                    selectedItem="@={transactionData.condition}"
+                    validator="@{validator}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:inputType="none"
+                    android:singleLine="true"
+                    tools:text="Moderately Played" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/new_transaction_price_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/material_border_padding_small"
-                    android:layout_marginEnd="@dimen/material_border_padding_small"
-                    android:layout_marginTop="@dimen/material_border_padding"
+                    android:layout_marginEnd="@dimen/new_transaction_column_spacing"
+                    android:layout_marginTop="@dimen/new_transaction_row_spacing"
                     android:layout_weight="1"
                     android:hint="@string/lbl_price">
 
@@ -163,7 +212,7 @@
                         android:singleLine="true"
                         android:ellipsize="end"
                         android:inputType="numberDecimal"
-                        android:text="@={viewModel.formData.price}"
+                        android:text="@={transactionData.price}"
                         validator="@{validator}"
                         tools:text="99.99" />
 
@@ -173,26 +222,24 @@
                     android:id="@+id/new_transaction_quantity_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/material_border_padding_small"
-                    android:layout_marginEnd="@dimen/material_border_padding"
-                    android:layout_marginTop="@dimen/material_border_padding"
+                    android:layout_marginTop="@dimen/new_transaction_row_spacing"
                     android:layout_weight="1"
                     android:hint="@string/lbl_quantity">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/new_transaction_quantity_edittext"
-                        android:inputType="number"
+                        validator="@{validator}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
                         android:ellipsize="end"
-                        android:text="@={viewModel.formData.quantity}"
-                        validator="@{validator}"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:text="@={transactionData.quantity}"
                         tools:text="100" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
 
+            </LinearLayout>
             <LinearLayout
                 android:id="@+id/new_transaction_region_type_platform"
                 android:layout_width="match_parent"
@@ -201,13 +248,12 @@
                 android:baselineAligned="false">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    style="@style/Widget.AppTheme.TextInputLayout.ExposedDropdown"
                     android:id="@+id/new_transaction_type_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/material_border_padding"
-                    android:layout_marginEnd="@dimen/material_border_padding_small"
-                    android:layout_marginTop="@dimen/material_border_padding"
+                    android:layout_marginEnd="@dimen/new_transaction_column_spacing"
+                    android:layout_marginTop="@dimen/new_transaction_row_spacing"
                     android:layout_weight="1"
                     android:hint="@string/lbl_transaction">
 
@@ -219,20 +265,18 @@
                         android:singleLine="true"
                         android:inputType="none"
                         entries="@{transactionTypes}"
-                        selectedItem="@={viewModel.formData.transactionType}"
+                        selectedItem="@={transactionData.transactionType}"
                         validator="@{validator}"
                         tools:text="Purchase" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.App.TextInputLayout.ExposedDropdown"
+                    style="@style/Widget.AppTheme.TextInputLayout.ExposedDropdown"
                     android:id="@+id/new_transaction_platform_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/material_border_padding_small"
-                    android:layout_marginEnd="@dimen/material_border_padding"
-                    android:layout_marginTop="@dimen/material_border_padding"
+                    android:layout_marginTop="@dimen/new_transaction_row_spacing"
                     android:layout_weight="1"
                     android:hint="@string/lbl_platform">
 
@@ -244,74 +288,36 @@
                         android:ellipsize="end"
                         android:inputType="none"
                         entries="@{platformTypes}"
-                        selectedItem="@={viewModel.formData.platformType}"
+                        selectedItem="@={transactionData.platformType}"
                         validator="@{validator}"
                         tools:text="Ebay" />
 
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/new_transaction_region_condition_party_name"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/new_transaction_party_name_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:baselineAligned="false">
+                android:layout_marginTop="@dimen/new_transaction_row_spacing"
+                partyHint="@{transactionData.transactionType}">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.App.TextInputLayout.ExposedDropdown"
-                    android:id="@+id/new_transaction_condition_layout"
-                    android:layout_width="0dp"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/new_transaction_party_name_edittext"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/material_border_padding"
-                    android:layout_marginEnd="@dimen/material_border_padding_small"
-                    android:layout_marginTop="@dimen/material_border_padding"
-                    android:layout_weight="1"
-                    android:hint="@string/lbl_condition">
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:text="@={transactionData.partyName}"
+                    tools:text="Troll&amp;Toad" />
 
-                    <tang.song.edu.yugiohcollectiontracker.ui_transaction_form.views.EnumAutoCompleteTextView
-                        android:id="@+id/new_transaction_condition_textview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:inputType="none"
-                        entries="@{conditionTypes}"
-                        selectedItem="@={viewModel.formData.condition}"
-                        validator="@{validator}"
-                        tools:text="Moderately Played" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/new_transaction_party_name_layout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="@dimen/material_border_padding"
-                    android:layout_marginEnd="@dimen/material_border_padding"
-                    android:layout_marginTop="@dimen/material_border_padding"
-                    partyHint="@{viewModel.formData.transactionType}">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/new_transaction_party_name_edittext"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        android:text="@={viewModel.formData.partyName}"
-                        tools:text="Troll&amp;Toad" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/new_transaction_tracking_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/material_border_padding"
-                android:layout_marginEnd="@dimen/material_border_padding"
-                android:layout_marginTop="@dimen/material_border_padding"
+                android:layout_marginTop="@dimen/new_transaction_row_spacing"
                 android:hint="@string/lbl_tracking_number">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -320,7 +326,7 @@
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:ellipsize="end"
-                    android:text="@={viewModel.formData.tracking}"
+                    android:text="@={transactionData.tracking}"
                     tools:text="123456" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -329,9 +335,9 @@
                 android:id="@+id/new_transaction_save_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/material_border_padding"
+                android:layout_marginTop="@dimen/new_transaction_row_spacing"
                 android:text="@string/lbl_save" />
-
+            </LinearLayout>
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 </layout>

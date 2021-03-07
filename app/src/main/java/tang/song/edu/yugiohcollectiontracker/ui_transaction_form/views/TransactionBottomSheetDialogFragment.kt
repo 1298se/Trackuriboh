@@ -7,13 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
+import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardWithSetInfo
 import tang.song.edu.yugiohcollectiontracker.data.types.ConditionType
 import tang.song.edu.yugiohcollectiontracker.data.types.EditionType
@@ -22,9 +25,10 @@ import tang.song.edu.yugiohcollectiontracker.data.types.TransactionType
 import tang.song.edu.yugiohcollectiontracker.databinding.BottomSheetTransactionBinding
 import tang.song.edu.yugiohcollectiontracker.ui_transaction_form.TransactionFormValidatorImpl
 import tang.song.edu.yugiohcollectiontracker.ui_transaction_form.viewmodels.TransactionBottomSheetDialogViewModel
+import tang.song.edu.yugiohcollectiontracker.ui_transaction_form.viewmodels.TransactionResult
 
 @AndroidEntryPoint
-class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), View.OnClickListener {
+class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment() {
     private val mViewModel: TransactionBottomSheetDialogViewModel by viewModels()
 
     private val args: TransactionBottomSheetDialogFragmentArgs by navArgs()
@@ -44,8 +48,7 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), View.O
         }
 
         binding = BottomSheetTransactionBinding.inflate(layoutInflater, container, false).apply {
-            viewModel = mViewModel
-            lifecycleOwner = viewLifecycleOwner
+            transactionData = mViewModel.transactionData
             editionTypes = EditionType.values().toList()
             platformTypes = PlatformType.values().toList()
             transactionTypes = TransactionType.values().toList()
@@ -58,29 +61,26 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), View.O
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.newTransactionSaveButton.setOnClickListener(this)
+        binding.newTransactionSaveButton.setOnClickListener { validateAndSave()  }
+        binding.newTransactionDateLayout.setEndIconOnClickListener { openDatePicker() }
 
         initToolbar()
 
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             mCard = mViewModel.getCardDetailsById(args.cardId)
-            binding.newTransactionCardNameEdittext.isEnabled = false
             initDropdowns()
         }
-    }
 
-    override fun onClick(view: View?) {
-        val formValidator = TransactionFormValidatorImpl(binding, mCard)
-        setFormIsEnabled(false)
-
-        binding.apply {
-            validator = formValidator
-            executePendingBindings()
-        }
-
-        setFormIsEnabled(true)
-        if (formValidator.isValid) {
-            mViewModel.insertTransaction()
+        lifecycleScope.launchWhenStarted {
+            mViewModel.transactionState.collect { state ->
+                when (state) {
+                    TransactionResult.SUCCESS -> dismiss()
+                    TransactionResult.ERROR -> {
+                        Toast.makeText(context, "Failed to save transaction", Toast.LENGTH_LONG).show()
+                    }
+                    null -> return@collect
+                }
+            }
         }
     }
 
@@ -112,8 +112,12 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), View.O
 
                 override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     binding.newTransactionRarityLayout.isEnabled = false
+                    initRarityDropdown(text?.toString())
+
                     if (cardNumberList.contains(text?.toString())) {
-                        initRarityDropdown(text?.toString())
+                        binding.newTransactionRarityLayout.isEnabled = true
+                    } else {
+                        binding.newTransactionRarityTextview.text = null
                     }
                 }
 
@@ -126,7 +130,6 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), View.O
     }
 
     private fun initRarityDropdown(cardNumber: String?) {
-        binding.newTransactionRarityLayout.isEnabled = true
 
         val rarityList = mutableListOf<String>()
 
@@ -152,6 +155,32 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment(), View.O
             newTransactionConditionLayout.isEnabled = enabled
             newTransactionPartyNameLayout.isEnabled = enabled
             newTransactionTrackingLayout.isEnabled = enabled
+        }
+    }
+
+    private fun validateAndSave() {
+        val formValidator = TransactionFormValidatorImpl(binding, mCard)
+        setFormIsEnabled(false)
+
+        binding.apply {
+            validator = formValidator
+            executePendingBindings()
+        }
+
+        setFormIsEnabled(true)
+        if (formValidator.isValid) {
+            mViewModel.insertTransaction()
+        }
+    }
+
+    private fun openDatePicker() {
+        val builder = MaterialDatePicker.Builder.datePicker().apply {
+            setTheme(R.style.ThemeOverlay_AppTheme_MaterialCalendar)
+        }
+        val picker = builder.build()
+        picker.show(requireActivity().supportFragmentManager, picker.toString())
+        picker.addOnPositiveButtonClickListener {
+            mViewModel.transactionData.date = it
         }
     }
 }

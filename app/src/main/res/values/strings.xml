@@ -29,9 +29,6 @@
     <string name="item_card_list_level_attribute_race_text" comment="8 \u2605 LIGHT \u2022 Dragon">%1$d \u2605 %2$s \u2022 %3$s</string>
     <string name="item_card_list_link_attribute_race_text" comment="LINK 8 LIGHT \u2022 Dragon">LINK %1$d \u2022 %2$s \u2022 %3$s</string>
 
-    <!-- Set Item List -->
-    <string name="item_card_set_list_size">Size: %1$d</string>
-
     <!-- Card Detail -->
     <string name="lbl_name">Name</string>
     <string name="lbl_description">Description</string>
@@ -60,6 +57,7 @@
     <string name="lbl_card_number">Card Number</string>
     <string name="lbl_rarity">Rarity</string>
     <string name="lbl_edition">Edition</string>
+    <string name="lbl_date">Date</string>
     <string name="lbl_price">Price</string>
     <string name="lbl_quantity">Quantity</string>
     <string name="lbl_transaction">Transaction</string>

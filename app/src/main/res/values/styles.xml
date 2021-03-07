@@ -1,44 +1,32 @@
 <resources>
-
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
-        <item name="android:actionMenuTextColor">?attr/colorPrimaryDark</item>
-        <item name="bottomSheetDialogTheme">@style/BottomSheetDialog</item>
-        <item name="homeAsUpIndicator">@drawable/ic_arrow_back_black_24dp</item>
-        <item name="textInputStyle">@style/Widget.App.TextInputLayout</item>
+    <style name="Widget.AppTheme.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
+        <item name="hintTextColor">?attr/colorOnPrimary</item>
+        <item name="boxStrokeColor">?attr/colorOnPrimary</item>
     </style>
 
-    <style name="Widget.App.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="shapeAppearance">@style/ShapeAppearance.App.SmallComponent</item>
-        <item name="hintTextColor">?attr/colorPrimaryDark</item>
-        <item name="boxStrokeColor">?attr/colorPrimaryDark</item>
-    </style>
-
-    <style name="Widget.App.TextInputLayout.ExposedDropdown" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-        <item name="hintTextColor">?attr/colorPrimaryDark</item>
-        <item name="boxStrokeColor">?attr/colorPrimaryDark</item>
-    </style>
-
-    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
-        <item name="cornerFamily">cut</item>
-        <item name="cornerSize">4dp</item>
+    <style name="Widget.AppTheme.TextInputLayout.ExposedDropdown" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu">
+        <item name="hintTextColor">?attr/colorOnPrimary</item>
+        <item name="boxStrokeColor">?attr/colorOnPrimary</item>
     </style>
 
     <!-- Components -->
-    <style name="DrawerIconStyle" parent="Widget.AppCompat.DrawerArrowToggle">
-    </style>
-
-    <style name="TabLayout" parent="Widget.MaterialComponents.TabLayout">
+    <style name="Widget.AppTheme.TabLayout" parent="Widget.MaterialComponents.TabLayout">
         <item name="tabIndicatorColor">?attr/colorPrimaryDark</item>
         <item name="tabTextColor">?attr/colorAccent</item>
         <item name="tabSelectedTextColor">?attr/colorPrimaryDark</item>
     </style>
 
-    <style name="SearchView" parent="Widget.AppCompat.SearchView.ActionBar">
+    <style name="Widget.AppTheme.SearchView" parent="Widget.AppCompat.SearchView.ActionBar">
         <item name="searchIcon">@null</item>
         <item name="queryBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="Widget.AppTheme.LinearProgressIndicator" parent="Widget.MaterialComponents.LinearProgressIndicator">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.AppTheme.LinearProgressIndicator</item>
+    </style>
+
+    <style name="ThemeOverlay.AppTheme.LinearProgressIndicator" parent="">
+        <item name="colorPrimary">?attr/colorPrimaryDark</item>
     </style>
 
     <style name="Divider">
@@ -48,28 +36,21 @@
         <item name="android:color">?attr/colorPrimaryDark</item>
     </style>
 
-    <style name="OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+    <style name="Widget.AppTheme.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="backgroundTint">@color/button_outlined_states</item>
     </style>
 
-    <style name="BottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/BottomSheet</item>
+    <style name="Widget.AppTheme.Button.TextButton.Dialog" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
 
-    <style name="BottomSheet" parent="Widget.MaterialComponents.BottomSheet">
-        <item name="shapeAppearanceOverlay">@style/BottomSheetDialogShapeAppearance</item>
-    </style>
-
-    <style name="BottomSheetDialogShapeAppearance" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopRight">16dp</item>
-        <item name="cornerSizeTopLeft">16dp</item>
-        <item name="cornerSizeBottomRight">0dp</item>
-        <item name="cornerSizeBottomLeft">0dp</item>
+    <style name="Widget.AppTheme.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="itemIconTint">@color/bottom_nav_states</item>
+        <item name="itemTextColor">@color/bottom_nav_states</item>
     </style>
 
     <style name="ImageSliderViewPager" parent="">
-        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:background">?attr/colorPrimaryDark</item>
         <item name="android:paddingTop">@dimen/card_image_swipe_padding</item>
         <item name="android:paddingBottom">@dimen/card_image_swipe_padding</item>
     </style>
@@ -80,26 +61,6 @@
         <item name="tabGravity">center</item>
         <item name="tabIndicatorHeight">0dp</item>
         <item name="tabMaxWidth">@dimen/image_slider_width</item>
-    </style>
-
-    <style name="TextAppearance.Types.Body1" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textSize">16sp</item>
-    </style>
-
-    <style name="TextAppearance.Types.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
-        <item name="android:textSize">16sp</item>
-    </style>
-
-    <style name="TextAppearance.Types.Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="TextAppearance.Types.Headline5" parent="TextAppearance.MaterialComponents.Headline5">
-        <item name="android:textSize">24sp</item>
-    </style>
-
-    <style name="TextAppearance.Types.Caption" parent="TextAppearance.MaterialComponents.Caption">
-        <item name="android:textSize">12sp</item>
     </style>
 
 </resources>

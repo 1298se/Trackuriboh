@@ -5,14 +5,13 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import tang.song.edu.yugiohcollectiontracker.data.types.EditionType
-import java.util.*
 
 @Parcelize
 @Entity
 data class CardInventory(
     @PrimaryKey(autoGenerate = true)
     val inventoryId: Long = 0,
-    var lastTransaction: Date,
+    var lastTransaction: Long,
     val cardId: Long,
     val cardName: String,
     val cardNumber: String,

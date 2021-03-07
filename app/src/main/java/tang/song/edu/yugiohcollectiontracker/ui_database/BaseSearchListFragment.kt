@@ -1,6 +1,5 @@
 package tang.song.edu.yugiohcollectiontracker.ui_database
 
-import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
@@ -18,9 +17,7 @@ import tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels.BaseSearchVi
 abstract class BaseSearchListFragment<T : Any> : BaseFragment() {
     private var searchJob: Job? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    init {
         lifecycleScope.launchWhenStarted {
             getAdapter().loadStateFlow
                 .distinctUntilChangedBy { it.refresh }

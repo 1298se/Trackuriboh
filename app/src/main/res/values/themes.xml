@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/white_light</item>
+        <item name="colorPrimaryDark">@color/white_dark</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorAccent">@color/black</item>
+
+        <item name="colorSecondary">@color/black_dark</item>
+        <item name="colorSecondaryVariant">@color/black_light</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Sets the color of the back button for toolbar -->
+        <item name="colorControlNormal">@color/black</item>
+
+        <item name="bottomNavigationStyle">@style/Widget.AppTheme.BottomNavigationView</item>
+        <item name="textInputStyle">@style/Widget.AppTheme.TextInputLayout</item>
+        <item name="linearProgressIndicatorStyle">@style/Widget.AppTheme.LinearProgressIndicator</item>
+        <item name="tabStyle">@style/Widget.AppTheme.TabLayout</item>
+    </style>
+
+    <style name="ThemeOverlay.AppTheme.MaterialCalendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.AppTheme.Button.TextButton.Dialog</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.AppTheme.Button.TextButton.Dialog</item>
+    </style>
+</resources>

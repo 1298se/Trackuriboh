@@ -11,8 +11,10 @@ import tang.song.edu.yugiohcollectiontracker.data.db.CardInventoryLocalCache
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardInventory
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Transaction
 import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardInventoryWithTransactions
+import tang.song.edu.yugiohcollectiontracker.data.types.EditionType
+import tang.song.edu.yugiohcollectiontracker.data.types.PlatformType
 import tang.song.edu.yugiohcollectiontracker.data.types.TransactionType
-import tang.song.edu.yugiohcollectiontracker.ui_inventory.viewmodels.TransactionData
+import tang.song.edu.yugiohcollectiontracker.ui_transaction_form.models.TransactionDataModel
 import java.text.DecimalFormat
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -35,45 +37,45 @@ class InventoryRepository @Inject constructor(
 
     }
 
-    suspend fun insertTransaction(transactionData: TransactionData): Long {
-        var inventory = cardInventoryLocalCache.getInventory(transactionData.cardNumber, transactionData.rarity, transactionData.edition)?.apply {
-            lastTransaction = transactionData.date
+    suspend fun insertTransaction(transactionData: TransactionDataModel): Long {
+        var inventory = cardInventoryLocalCache.getInventory(transactionData.cardNumber!!, transactionData.rarity, transactionData.edition as EditionType)?.apply {
+            lastTransaction = transactionData.date!!
         }
 
         if (inventory == null) {
             inventory = CardInventory(
-                cardId = transactionData.cardId,
-                cardName = transactionData.cardName,
-                cardNumber = transactionData.cardNumber,
-                lastTransaction = transactionData.date,
+                cardId = transactionData.cardId!!,
+                cardName = transactionData.cardName!!,
+                cardNumber = transactionData.cardNumber!!,
+                lastTransaction = transactionData.date!!,
                 cardImageURL = transactionData.cardImageURL,
                 rarity = transactionData.rarity,
-                edition = transactionData.edition,
+                edition = transactionData.edition as EditionType,
             )
         }
 
         when (transactionData.transactionType) {
             TransactionType.PURCHASE -> {
-                inventory.curAvgPurchasePrice = calculateAveragePrice(inventory.curAvgPurchasePrice, inventory.quantity, transactionData.price, transactionData.quantity)
-                inventory.quantity += transactionData.quantity
+                inventory.curAvgPurchasePrice = calculateAveragePrice(inventory.curAvgPurchasePrice, inventory.quantity, transactionData.price?.toDouble(), transactionData.quantity?.toInt())
+                inventory.quantity += transactionData.quantity?.toInt() ?: 0
             }
             TransactionType.SALE -> {
-                inventory.profitAndLoss = calculateProfitAndLoss(inventory.curAvgPurchasePrice, transactionData.price, transactionData.quantity)
-                inventory.soldQuantity += transactionData.quantity
-                inventory.quantity -= transactionData.quantity
+                inventory.profitAndLoss = calculateProfitAndLoss(inventory.curAvgPurchasePrice, transactionData.price?.toDouble(), transactionData.quantity?.toInt())
+                inventory.soldQuantity += transactionData.quantity?.toInt() ?: 0
+                inventory.quantity -= transactionData.quantity?.toInt() ?: 0
             }
         }
 
         val inventoryId = cardInventoryLocalCache.insertInventory(inventory)
         return cardInventoryLocalCache.insertTransaction(Transaction(
             inventoryId = inventoryId,
-            transactionType = transactionData.transactionType,
-            quantity = transactionData.quantity,
+            transactionType = transactionData.transactionType as TransactionType,
+            quantity = transactionData.quantity?.toInt(),
             date = transactionData.date,
-            buyerSellerName = transactionData.buyerSellerName,
-            trackingNumber = transactionData.trackingNumber,
-            price = transactionData.price,
-            salePlatform = transactionData.salePlatform
+            partyName = transactionData.partyName,
+            trackingNumber = transactionData.tracking,
+            price = transactionData.price?.toDouble(),
+            platformType = transactionData.platformType as PlatformType
         ))
     }
 

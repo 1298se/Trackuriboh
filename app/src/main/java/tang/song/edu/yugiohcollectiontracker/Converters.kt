@@ -1,26 +1,11 @@
 package tang.song.edu.yugiohcollectiontracker
-    import androidx.databinding.InverseMethod
+import java.text.SimpleDateFormat
+import java.util.*
 
 object Converters {
-    @InverseMethod("stringToDouble")
-    @JvmStatic
-    fun doubleToString(
-        value: Double
-    ): String = value.toString()
-
-    @JvmStatic
-   fun stringToDouble(
-        value: String
-    ): Double = value.toDouble()
-
-    @InverseMethod("stringToInt")
-    @JvmStatic
-    fun intToString(
-        value: Int
-    ): String = value.toString()
-
-    @JvmStatic
-    fun stringToInt(
-        value: String
-    ): Int = value.toInt()
+    @JvmStatic fun dateToString(
+        value: Long?
+    ): String? {
+        return value?.let { SimpleDateFormat("dd/MM/yyyy").apply { timeZone = TimeZone.getTimeZone("UTC") }.format(Date(value)) }
+    }
 }

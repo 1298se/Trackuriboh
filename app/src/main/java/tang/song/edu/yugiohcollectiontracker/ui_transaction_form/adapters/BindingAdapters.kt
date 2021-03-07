@@ -37,11 +37,6 @@ fun setSelectedItem(view: EnumAutoCompleteTextView, value: StringResourceEnum?) 
 @InverseBindingAdapter(attribute = "selectedItem")
 fun getSelectedItem(view: EnumAutoCompleteTextView): StringResourceEnum? = view.selectedItem
 
-@BindingAdapter("app:errorText")
-fun setErrorMessage(view: TextInputLayout, errorMessage: String?) {
-    view.error = errorMessage
-}
-
 @BindingAdapter("partyHint")
 fun setPartyHint(view: TextInputLayout, hint: StringResourceEnum?) {
     view.hint = if (hint == null) {
