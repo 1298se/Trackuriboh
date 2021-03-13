@@ -53,6 +53,8 @@ class CardSetListFragment : BaseSearchListFragment<CardSet>(), CardSetListAdapte
     }
 
     override fun onItemClick(setName: String) {
+        hideSoftKeyboard()
+
         val action = DatabaseFragmentDirections.actionDatabaseFragmentToCardSetDetailFragment(setName)
         findNavController().navigate(action)
     }
