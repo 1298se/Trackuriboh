@@ -21,7 +21,7 @@ class CardDetailPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment
         }
     }
 
-    fun setCard(card: CardWithSetInfo) {
+    fun setCard(card: CardWithSetInfo?) {
         mCardWithSetInfo = card
         notifyDataSetChanged()
     }

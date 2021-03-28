@@ -108,7 +108,7 @@ class CardLocalCache @Inject constructor(
         cardDatabase.cardXCardSetDao().deleteTable()
     }
 
-    suspend fun getCardDetails(cardId: Long): CardWithSetInfo {
+    suspend fun getCardDetails(cardId: Long): CardWithSetInfo? {
         return cardDatabase.cardXCardSetDao().getCardDetails(cardId)
     }
 

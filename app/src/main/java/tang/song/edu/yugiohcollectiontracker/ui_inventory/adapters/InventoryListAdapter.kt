@@ -1,7 +1,6 @@
 package tang.song.edu.yugiohcollectiontracker.ui_inventory.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -46,14 +45,12 @@ class InventoryListAdapter @Inject constructor(
         }
     }
 
-    inner class InventoryViewHolder(private val binding: ItemInventoryBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
-        private var inventory: CardInventory? = null
+    inner class InventoryViewHolder(private val binding: ItemInventoryBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
-            itemView.setOnClickListener(this)
+            itemView.setOnClickListener{ mOnItemClickListener?.onItemClick(getItem(bindingAdapterPosition)?.inventoryId ?: throw IllegalArgumentException("inventory has no id")) }
         }
 
         internal fun bind(item: CardInventory) {
-            this.inventory = item
             requestManager.load(item.cardImageURL).into(binding.itemInventoryImage)
 
             binding.itemInventoryTitleTextview.text = item.cardName
@@ -61,10 +58,5 @@ class InventoryListAdapter @Inject constructor(
             binding.itemInventorySetcodeRarityEditionTextview.text = itemView.context.getString(R.string.item_inventory_setcode_rarity_edition_text, item.cardNumber, item.rarity, "1st Edition")
             binding.itemInventoryAvgPurchasePriceTextview.text = itemView.context.getString(R.string.item_inventory_avg_purchase_price, item.curAvgPurchasePrice)
         }
-
-        override fun onClick(p0: View?) {
-            mOnItemClickListener?.onItemClick(inventory?.inventoryId ?: throw IllegalArgumentException("inventory has no id"))
-        }
-
     }
 }

@@ -26,7 +26,7 @@ class CardRepository @Inject constructor(
             pagingSourceFactory = pagingSourceFactory
         ).flow.flowOn(Dispatchers.IO)
     }
-    suspend fun getCardDetails(cardId: Long): CardWithSetInfo {
+    suspend fun getCardDetails(cardId: Long): CardWithSetInfo? {
         return cardLocalCache.getCardDetails(cardId)
     }
 

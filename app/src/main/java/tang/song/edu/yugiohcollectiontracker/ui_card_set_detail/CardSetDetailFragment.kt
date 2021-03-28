@@ -42,7 +42,7 @@ class CardSetDetailFragment : BaseFragment(), CardListAdapter.OnItemClickListene
         initToolbar()
         initRecyclerView()
 
-        binding.cardSetDetailCollapseToolbar.title = args.setName
+       binding.cardSetDetailCollapseToolbar.title = args.setName
 
         lifecycleScope.launch {
             mViewModel.getCardListBySet(args.setName).collectLatest {

@@ -28,11 +28,15 @@ abstract class CardXCardSetDao : CardDao, CardSetDao {
     abstract suspend fun getCardSetInfo(cardId: Long): List<CardSetInfo>
 
     @Transaction
-    open suspend fun getCardDetails(cardId: Long): CardWithSetInfo {
+    open suspend fun getCardDetails(cardId: Long): CardWithSetInfo? {
         val card = getCardById(cardId)
         val setInfoList = getCardSetInfo(cardId)
 
-        return CardWithSetInfo(card, setInfoList)
+        return if (card != null) {
+            CardWithSetInfo(card, setInfoList)
+        } else {
+            null
+        }
     }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

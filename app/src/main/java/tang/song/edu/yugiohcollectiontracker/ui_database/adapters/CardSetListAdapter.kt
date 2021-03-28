@@ -1,7 +1,6 @@
 package tang.song.edu.yugiohcollectiontracker.ui_database.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -39,22 +38,16 @@ class CardSetListAdapter : PagingDataAdapter<CardSet, CardSetListAdapter.CardSet
         }
     }
 
-    inner class CardSetViewHolder(private val binding: ItemCardSetBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+    inner class CardSetViewHolder(private val binding: ItemCardSetBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
-            itemView.setOnClickListener(this)
+            itemView.setOnClickListener{
+                mOnItemClickListener?.onItemClick(getItem(bindingAdapterPosition)?.setName ?: throw IllegalArgumentException("card set is null"))
+            }
         }
 
         internal fun bind(item: CardSet) {
             binding.cardSetTitleTextview.text = item.setName
             binding.cardSetReleaseDateTextview.text = item.releaseDate
-        }
-
-        override fun onClick(p0: View?) {
-            val cardSet = getItem(bindingAdapterPosition)
-
-            if (cardSet != null) {
-                mOnItemClickListener?.onItemClick(cardSet.setName)
-            }
         }
     }
 }

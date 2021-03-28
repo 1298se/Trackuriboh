@@ -8,9 +8,8 @@ import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.R
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
 import tang.song.edu.yugiohcollectiontracker.data.types.CardType
-import tang.song.edu.yugiohcollectiontracker.databinding.CardDetailTypeMonsterBinding
-import tang.song.edu.yugiohcollectiontracker.databinding.CardDetailTypeSpellTrapBinding
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardDetailOverviewBinding
+import tang.song.edu.yugiohcollectiontracker.databinding.ItemCardDetailOverviewBinding
 import tang.song.edu.yugiohcollectiontracker.viewBinding
 
 private const val ARG_CARD = "ARG_CARD"
@@ -47,34 +46,31 @@ class CardDetailOverviewFragment : BaseFragment() {
 
     private fun generateDescriptionView(card: Card?) {
         card?.let {
-            val descriptionView: View = when (card.type) {
-                CardType.SPELL_CARD, CardType.TRAP_CARD -> {
-                    val spellBinding = CardDetailTypeSpellTrapBinding.inflate(LayoutInflater.from(context), binding.cardDetailOverviewContainer, false).apply {
-                        cardNameTextView.text = card.name
-                        cardTypeTextView.text = card.type.value
-                        cardRaceTextView.text = card.race
-                        cardDescriptionTextView.text = card.desc
-                    }
-
-                    spellBinding.root
-                }
-                CardType.UNKNOWN -> View(context)
-                else -> {
-                    val monsterBinding = CardDetailTypeMonsterBinding.inflate(LayoutInflater.from(context), binding.cardDetailOverviewContainer, false).apply {
-                        cardNameTextView.text = card.name
-                        cardTypeTextView.text = card.type.value
-                        cardLevelTextView.text = card.level?.toString()
-                        cardRaceTextView.text = card.race
-                        cardAttributeTextView.text = card.attribute
-                        cardAtkDefTextView.text = getString(R.string.card_detail_atk_def, card.atk, card.def)
-                        cardDescriptionTextView.text = card.desc
-                    }
-
-                    monsterBinding.root
-                }
+            val viewMap: Map<Int, String?> = when (card.type) {
+                CardType.UNKNOWN -> emptyMap()
+                CardType.SPELL_CARD, CardType.TRAP_CARD -> mapOf(
+                    R.string.lbl_name to card.name,
+                    R.string.lbl_type to card.type.value,
+                    R.string.lbl_race to card.race,
+                    R.string.lbl_description to card.desc
+                )
+                else -> mapOf(
+                    R.string.lbl_name to card.name,
+                    R.string.lbl_type to card.type.value,
+                    R.string.lbl_levelrank to card.level?.toString(),
+                    R.string.lbl_race to card.race,
+                    R.string.lbl_attribute to card.attribute,
+                    R.string.lbl_atkdef to getString(R.string.card_detail_atk_def, card.atk, card.def),
+                    R.string.lbl_description to card.desc
+                )
             }
 
-            binding.cardDetailOverviewContainer.addView(descriptionView)
+            for ((titleResId, content) in viewMap) {
+                ItemCardDetailOverviewBinding.inflate(layoutInflater, binding.cardDetailOverviewContainer, true).apply {
+                    itemCardDetailOverviewTitleTextview.text = getString(titleResId)
+                    itemCardDetailOverviewContentTextview.text = content
+                }
+            }
         }
     }
 }

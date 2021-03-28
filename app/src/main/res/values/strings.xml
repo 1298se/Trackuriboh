@@ -31,7 +31,15 @@
 
     <!-- Card Detail -->
     <string name="lbl_name">Name</string>
+    <string name="lbl_type">Type</string>
+    <string name="lbl_levelrank">Level/Rank</string>
+    <string name="lbl_race">Race</string>
+    <string name="lbl_attribute">Attribute</string>
+    <string name="lbl_atkdef">A/D</string>
     <string name="lbl_description">Description</string>
+    <string name="lbl_card_details">Card Details</string>
+    <string name="lbl_overview">Overview</string>
+    <string name="lbl_set_details">Set Details</string>
     <string name="card_detail_atk_def">%1$d \/ %2$d</string>
 
     <!-- Search -->

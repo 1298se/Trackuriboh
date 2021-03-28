@@ -35,7 +35,7 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: BottomSheetTransactionBinding
 
-    private lateinit var mCard: CardWithSetInfo
+    private var mCard: CardWithSetInfo? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         dialog?.setOnShowListener {
@@ -95,9 +95,9 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun initCardNumberDropdown() {
-        val cardNumberList = mCard.sets.map { it.cardNumber }.toSet()
+        val cardNumberList = mCard?.sets?.map { it.cardNumber }?.toSet()
 
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, cardNumberList.toList())
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, cardNumberList?.toList() ?: emptyList())
         binding.newTransactionCardNumberTextview.apply {
             setAdapter(adapter)
 
@@ -114,7 +114,7 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment() {
                     binding.newTransactionRarityLayout.isEnabled = false
                     initRarityDropdown(text?.toString())
 
-                    if (cardNumberList.contains(text?.toString())) {
+                    if (cardNumberList?.contains(text?.toString()) == true) {
                         binding.newTransactionRarityLayout.isEnabled = true
                     } else {
                         binding.newTransactionRarityTextview.text = null
@@ -134,7 +134,7 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment() {
         val rarityList = mutableListOf<String>()
 
         // If null is passed in as cardNumber, no cardNumber is selected so show all rarities
-        mCard.sets.forEach { if (cardNumber ?: it.cardNumber == it.cardNumber && it.rarity != null) {
+        mCard?.sets?.forEach { if (cardNumber ?: it.cardNumber == it.cardNumber && it.rarity != null) {
             rarityList.add(it.rarity)
         } }
 

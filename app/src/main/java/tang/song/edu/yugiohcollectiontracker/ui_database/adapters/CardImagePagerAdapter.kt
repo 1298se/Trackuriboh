@@ -5,8 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import tang.song.edu.yugiohcollectiontracker.databinding.CardImageContainerBinding
+import javax.inject.Inject
 
-class CardImagePagerAdapter(
+class CardImagePagerAdapter @Inject constructor(
     private val requestManager: RequestManager
 ) : RecyclerView.Adapter<CardImagePagerAdapter.CardImageViewHolder>() {
     private var cardImageList: List<String>? = null

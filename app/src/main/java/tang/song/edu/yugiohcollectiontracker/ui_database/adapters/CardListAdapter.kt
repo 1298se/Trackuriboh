@@ -1,7 +1,6 @@
 package tang.song.edu.yugiohcollectiontracker.ui_database.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -50,14 +49,12 @@ class CardListAdapter @Inject constructor(
         }
     }
 
-    inner class CardViewHolder(private val binding: ItemCardBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
-        private var card: Card? = null
+    inner class CardViewHolder(private val binding: ItemCardBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
-            itemView.setOnClickListener(this)
+            itemView.setOnClickListener { mOnItemClickListener?.onItemClick(getItem(bindingAdapterPosition)?.cardId ?: throw IllegalArgumentException("card is null")) }
         }
 
         internal fun bind(item: Card) {
-            this.card = item
             requestManager.load(item.getDefaultImageURL()).into(binding.itemCardImage)
 
             binding.itemCardTitleTextview.text = item.name
@@ -69,10 +66,6 @@ class CardListAdapter @Inject constructor(
                 CardType.UNKNOWN -> null
                 else -> itemView.context.getString(R.string.item_card_list_level_attribute_race_text, item.level, item.attribute, item.race)
             }
-        }
-
-        override fun onClick(p0: View?) {
-            mOnItemClickListener?.onItemClick(card?.cardId ?: throw IllegalArgumentException("card has no id"))
         }
     }
 }

@@ -2,23 +2,20 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/card_detail_app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         app:elevation="0dp">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/card_detail_collapsing_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="@android:color/white"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:titleEnabled="false">
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/card_image_view_pager"
@@ -46,7 +43,7 @@
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        <View style="@style/Divider" />
+        <include layout="@layout/divider_view" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/card_detail_tab_layout"
@@ -55,11 +52,14 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!-- There's scrolling behaviour issues when the ViewPager2
+    is the child of the NestedScrollView, hence we have the ViewPager2 as the root
+    and the child fragments each have a NestedScrollView -->
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/card_detail_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/material_border_padding"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

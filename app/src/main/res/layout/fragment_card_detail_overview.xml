@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/card_detail_overview_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui_card_detail.CardDetailOverviewFragment" />
+    android:padding="@dimen/material_border_padding"
+    tools:context=".ui_card_detail.CardDetailOverviewFragment">
+
+    <LinearLayout
+        android:id="@+id/card_detail_overview_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" />
+</androidx.core.widget.NestedScrollView>

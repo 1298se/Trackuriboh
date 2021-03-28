@@ -1,20 +1,14 @@
 package tang.song.edu.yugiohcollectiontracker.ui_card_detail
 
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TableLayout
-import android.widget.TableRow
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.textview.MaterialTextView
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.data.db.relations.CardSetInfo
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentCardDetailSetInfoBinding
+import tang.song.edu.yugiohcollectiontracker.databinding.ItemCardDetailSetInfoBinding
 import tang.song.edu.yugiohcollectiontracker.viewBinding
 
 private const val ARG_CARD_SET_INFO = "ARG_CARD_SET_INFO"
@@ -33,7 +27,6 @@ class CardDetailSetInfoFragment : BaseFragment() {
             }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -41,7 +34,7 @@ class CardDetailSetInfoFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
     }
 
@@ -53,36 +46,15 @@ class CardDetailSetInfoFragment : BaseFragment() {
 
     private fun initTableRows() {
         mCardSetInfoList?.forEach { cardSetInfo ->
-            val setNameTextView = createTableTextView(SpannableString(cardSetInfo.setName).apply {
-                setSpan(object : ClickableSpan() {
-                    override fun onClick(p0: View) {
-                        val action = CardDetailFragmentDirections.actionCardDetailFragmentToCardSetDetailFragment(cardSetInfo.setName)
-                        findNavController().navigate(action)
-                    }
-                }, 0, cardSetInfo.setName.length, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
-            }).apply {
-                movementMethod = LinkMovementMethod.getInstance()
+            ItemCardDetailSetInfoBinding.inflate(layoutInflater, binding.cardDetailSetInfoTable, true).apply {
+                itemCardDetailSetInfoCardnumberTextview.text = cardSetInfo.cardNumber
+                itemCardDetailSetInfoRarityTextview.text = cardSetInfo.rarity
+
+                root.setOnClickListener {
+                    val action = CardDetailFragmentDirections.actionCardDetailFragmentToCardSetDetailFragment(cardSetInfo.setName)
+                    findNavController().navigate(action)
+                }
             }
-
-            val setCodeTextView = createTableTextView(cardSetInfo.cardNumber)
-
-            val rarityTextView = createTableTextView(cardSetInfo.rarity)
-
-            val priceTextView = createTableTextView(cardSetInfo.price)
-
-            val tableRow = TableRow(context).apply {
-                addView(setNameTextView)
-                addView(setCodeTextView)
-                addView(rarityTextView)
-                addView(priceTextView)
-            }
-
-            binding.cardDetailSetInfoTable.addView(tableRow)
         }
-    }
-
-    private fun createTableTextView(displayString: CharSequence?) = MaterialTextView(requireContext()).apply {
-        text = displayString
-        layoutParams = TableRow.LayoutParams(0, TableLayout.LayoutParams.WRAP_CONTENT, 1.0f)
     }
 }

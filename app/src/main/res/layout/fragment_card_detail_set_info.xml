@@ -8,41 +8,8 @@
     <TableLayout
         android:id="@+id/card_detail_set_info_table"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:divider="?android:attr/dividerHorizontal"
+        android:showDividers="middle" />
 
-        <TableRow tools:ignore="UselessParent">
-
-            <com.google.android.material.textview.MaterialTextView
-                style="@style/TextAppearance.Types.Body1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Set"
-                android:textStyle="bold" />
-
-            <com.google.android.material.textview.MaterialTextView
-                style="@style/TextAppearance.Types.Body1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Code"
-                android:textStyle="bold" />
-
-            <com.google.android.material.textview.MaterialTextView
-                style="@style/TextAppearance.Types.Body1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Rarity"
-                android:textStyle="bold" />
-
-            <com.google.android.material.textview.MaterialTextView
-                style="@style/TextAppearance.Types.Body1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Price"
-                android:textStyle="bold" />
-        </TableRow>
-    </TableLayout>
 </androidx.core.widget.NestedScrollView>

@@ -4,6 +4,7 @@
     <dimen name="material_border_padding_small">8dp</dimen>
     <dimen name="material_border_padding">16dp</dimen>
     <dimen name="material_border_padding_large">24dp</dimen>
+    <dimen name="app_bar_height">128dp</dimen>
 
     <dimen name="list_item_margin_start">16dp</dimen>
     <dimen name="list_item_margin_end">16dp</dimen>
@@ -27,8 +28,11 @@
     <dimen name="card_image_swipe_padding">16dp</dimen>
     <dimen name="card_image_height">250dp</dimen>
     <dimen name="image_slider_height">6dp</dimen>
+    <!--don't change this value because it sets the image dot to be a circle -->
     <dimen name="image_slider_margin_bottom">5dp</dimen>
+    <!--don't change this value because it sets the image dot to be a circle -->
     <dimen name="image_slider_width">10dp</dimen>
+    <dimen name="overview_line_spacing">6dp</dimen>
 
     <!-- New Transaction Form -->
     <dimen name="new_transaction_row_spacing">12dp</dimen>

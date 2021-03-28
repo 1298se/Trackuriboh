@@ -22,7 +22,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/item_card_title_textview"
-        style="@style/TextAppearance.Types.Subtitle1"
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/list_item_margin_start"
@@ -38,7 +38,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/item_card_type_textview"
-        style="@style/TextAppearance.Types.Caption"
+        style="@style/TextAppearance.MaterialComponents.Caption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/list_item_margin_start"
@@ -53,7 +53,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/item_card_race_attribute_ad_textview"
-        style="@style/TextAppearance.Types.Caption"
+        style="@style/TextAppearance.MaterialComponents.Caption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/list_item_margin_start"

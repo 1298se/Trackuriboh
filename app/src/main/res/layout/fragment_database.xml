@@ -22,7 +22,7 @@
         app:showAnimationBehavior="outward"
         app:hideAnimationBehavior="outward" />
 
-    <View style="@style/Divider" />
+    <include layout="@layout/divider_view" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/database_tab_layout"

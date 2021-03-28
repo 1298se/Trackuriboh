@@ -7,7 +7,7 @@ import tang.song.edu.yugiohcollectiontracker.databinding.BottomSheetTransactionB
 
 class TransactionFormValidatorImpl(
     private val binding: BottomSheetTransactionBinding,
-    private val cardWithSetInfo: CardWithSetInfo,
+    private val cardWithSetInfo: CardWithSetInfo?,
 ) : TransactionFormValidator {
     override val isValid
         get() = binding.newTransactionCardNameLayout.error == null
@@ -23,7 +23,7 @@ class TransactionFormValidatorImpl(
     override fun validateCardNumber(text: String?) {
         binding.newTransactionCardNumberLayout.apply {
             error = when {
-                cardWithSetInfo.sets.any { cardSetInfo -> cardSetInfo.cardNumber == text?.trim() } -> {
+                cardWithSetInfo?.sets?.any { cardSetInfo -> cardSetInfo.cardNumber == text?.trim() } == true -> {
                     null
                 }
                 text.isNullOrBlank() -> {
@@ -43,7 +43,7 @@ class TransactionFormValidatorImpl(
             error = if (text.isNullOrBlank()) {
                 context.getString(R.string.lbl_required)
             } else {
-                cardWithSetInfo.sets.forEach { cardSetInfo ->
+                cardWithSetInfo?.sets?.forEach { cardSetInfo ->
                     run {
                         if (cardSetInfo.cardNumber == binding.newTransactionCardNumberTextview.text.toString()) {
                             raritySet.add(cardSetInfo.rarity)

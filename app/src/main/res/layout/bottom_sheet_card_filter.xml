@@ -15,12 +15,12 @@
         app:title="@string/filter"
         tools:title="Filter" />
 
-    <View
+    <include
         android:id="@+id/divider1"
         app:layout_constraintTop_toBottomOf="@id/filter_toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        style="@style/Divider" />
+        layout="@layout/divider_view" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/card_category_section"
@@ -63,12 +63,12 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <View
+    <include
         android:id="@+id/divider3"
         app:layout_constraintTop_toBottomOf="@id/card_category_section"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        style="@style/Divider" />
+        layout="@layout/divider_view" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/apply_button"

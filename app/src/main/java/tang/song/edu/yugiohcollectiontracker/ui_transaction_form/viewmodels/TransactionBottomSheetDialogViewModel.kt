@@ -38,9 +38,9 @@ class TransactionBottomSheetDialogViewModel @ViewModelInject constructor(
     }
 
     suspend fun getCardDetailsById(cardId: Long) = cardRepository.getCardDetails(cardId).also {
-        transactionData.cardId = it.card.cardId
-        transactionData.cardName = it.card.name
-        transactionData.cardImageURL = it.card.getDefaultImageURL()
+        transactionData.cardId = it?.card?.cardId
+        transactionData.cardName = it?.card?.name
+        transactionData.cardImageURL = it?.card?.getDefaultImageURL()
     }
 }
 

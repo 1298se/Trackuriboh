@@ -10,7 +10,7 @@ import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
 @Dao
 interface CardDao {
     @Query("SELECT * FROM Card WHERE cardId = :cardId")
-    suspend fun getCardById(cardId: Long): Card
+    suspend fun getCardById(cardId: Long): Card?
 
     @Query("SELECT * FROM Card ORDER BY name ASC")
     fun getCardList(): PagingSource<Int, Card>

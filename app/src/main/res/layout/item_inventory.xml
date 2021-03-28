@@ -21,7 +21,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/item_inventory_title_textview"
-        style="@style/TextAppearance.Types.Subtitle1"
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/list_item_margin_start"
@@ -38,7 +38,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/item_inventory_setcode_rarity_edition_textview"
-        style="@style/TextAppearance.Types.Caption"
+        style="@style/TextAppearance.MaterialComponents.Caption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/list_item_margin_start"
@@ -52,7 +52,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/item_inventory_quantity_textview"
-        style="@style/TextAppearance.Types.Caption"
+        style="@style/TextAppearance.MaterialComponents.Caption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/list_item_margin_start"
@@ -68,7 +68,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/item_inventory_avg_purchase_price_textview"
-        style="@style/TextAppearance.Types.Caption"
+        style="@style/TextAppearance.MaterialComponents.Caption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/list_item_margin_start"

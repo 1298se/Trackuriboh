@@ -27,9 +27,7 @@ abstract class BaseSearchListFragment<T : Any> : BaseFragment() {
     }
 
     fun updateSearchList(newText: String?) {
-        (newText ?: "").trim().let {
-            search(it)
-        }
+        search((newText ?: "").trim())
     }
 
     fun lastQueryValue() = getViewModel().currentQueryValue()

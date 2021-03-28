@@ -13,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -33,21 +32,6 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
 
     private val mViewModel: DatabaseViewModel by activityViewModels()
     private lateinit var mAdapter: DatabasePagerAdapter
-    private lateinit var mViewPager: ViewPager2
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        activity?.onBackPressedDispatcher?.addCallback {
-            if (mViewPager.currentItem == 0) {
-                if (!findNavController().popBackStack()) {
-                    activity?.finish()
-                }
-            } else {
-                mViewPager.currentItem = mViewPager.currentItem - 1
-            }
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
@@ -57,6 +41,16 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
         super.onViewCreated(view, savedInstanceState)
 
         binding.databaseSyncProgressIndicator.setVisibilityAfterHide(View.GONE)
+
+        activity?.onBackPressedDispatcher?.addCallback(this) {
+            if (binding.databaseViewPager.currentItem == 0) {
+                if (!findNavController().popBackStack()) {
+                    activity?.finish()
+                }
+            } else {
+                binding.databaseViewPager.currentItem = binding.databaseViewPager.currentItem - 1
+            }
+        }
 
         initToolbar()
         initTabLayoutWithViewPager()
@@ -122,20 +116,20 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
     }
 
     private fun initTabLayoutWithViewPager() {
-        mViewPager = binding.databaseViewPager.apply {
+        binding.databaseViewPager.apply {
             adapter = DatabasePagerAdapter(this@DatabaseFragment).also {
                 mAdapter = it
             }
+        }
 
-            TabLayoutMediator(binding.databaseTabLayout, this) { tab, position ->
+        TabLayoutMediator(binding.databaseTabLayout, binding.databaseViewPager) { tab, position ->
                 tab.text = when (position) {
                     0 -> getString(R.string.tab_card_title)
                     1 -> getString(R.string.tab_set_title)
                     else -> null
                 }
 
-            }.attach()
-        }
+        }.attach()
     }
 
     private fun initToolbar() {
@@ -166,7 +160,7 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
 
     /** Queries on the current displayed fragment **/
     private fun performSearch(query: String?) {
-        val currentFragment = childFragmentManager.findFragmentByTag("f" + mAdapter.getItemId(mViewPager.currentItem))
+        val currentFragment = childFragmentManager.findFragmentByTag("f" + mAdapter.getItemId(binding.databaseViewPager.currentItem))
 
         if (currentFragment is BaseSearchListFragment<*>) {
             currentFragment.updateSearchList(query)
