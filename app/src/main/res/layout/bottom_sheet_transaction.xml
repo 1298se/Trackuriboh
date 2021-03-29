@@ -152,7 +152,7 @@
                     android:layout_marginTop="@dimen/new_transaction_row_spacing"
                     android:hint="@string/lbl_date"
                     app:endIconMode="custom"
-                    app:endIconDrawable="@drawable/ic_baseline_calendar_today_24">
+                    app:endIconDrawable="@drawable/ic_baseline_calendar_today_24dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/new_transaction_date_textview"

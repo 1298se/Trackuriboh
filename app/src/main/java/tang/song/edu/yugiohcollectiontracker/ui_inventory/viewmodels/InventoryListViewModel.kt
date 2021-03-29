@@ -9,7 +9,6 @@ import tang.song.edu.yugiohcollectiontracker.data.repository.InventoryRepository
 
 class InventoryListViewModel @ViewModelInject constructor(
     private val inventoryRepository: InventoryRepository,
-
 ) : ViewModel() {
     private var currentInventoryList: Flow<PagingData<CardInventory>>? = null
 

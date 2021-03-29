@@ -4,35 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/databaseFragment">
-
     <fragment
-        android:id="@+id/databaseFragment"
-        android:name="tang.song.edu.yugiohcollectiontracker.ui_database.DatabaseFragment"
-        android:label="Database"
-        tools:layout="@layout/fragment_database">
-        <action
-            android:id="@+id/action_databaseFragment_to_filterBottomSheetDialogFragment"
-            app:destination="@id/filterBottomSheetDialogFragment" />
-        <action
-            android:id="@+id/action_databaseFragment_to_cardDetailFragment"
-            app:destination="@id/cardDetailFragment" />
-        <action
-            android:id="@+id/action_databaseFragment_to_cardSetDetailFragment"
-            app:destination="@id/cardSetDetailFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/inventoryFragment"
-        android:name="tang.song.edu.yugiohcollectiontracker.ui_inventory.InventoryListFragment"
-        android:label="Inventory"
-        tools:layout="@layout/fragment_inventory_list" />
-    <fragment
-        android:id="@+id/summaryFragment"
-        android:name="tang.song.edu.yugiohcollectiontracker.ui_summary.SummaryFragment"
-        android:label="Summary"
-        tools:layout="@layout/fragment_summary" />
-    <dialog
-        android:id="@+id/filterBottomSheetDialogFragment"
-        android:name="tang.song.edu.yugiohcollectiontracker.ui_database.CardFilterBottomSheetDialogFragment" />
+        android:id="@+id/transactionFragment"
+        android:name="tang.song.edu.yugiohcollectiontracker.ui_transaction.TransactionFragment"
+        android:label="@string/lbl_transactions"
+        tools:layout="@layout/fragment_transaction" />
     <fragment
         android:id="@+id/cardDetailFragment"
         android:name="tang.song.edu.yugiohcollectiontracker.ui_card_detail.CardDetailFragment">
@@ -57,12 +33,48 @@
             android:id="@+id/action_cardSetDetailFragment_to_cardDetailFragment"
             app:destination="@id/cardDetailFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/databaseFragment"
+        android:name="tang.song.edu.yugiohcollectiontracker.ui_database.DatabaseFragment"
+        android:label="@string/lbl_database"
+        tools:layout="@layout/fragment_database">
+        <action
+            android:id="@+id/action_databaseFragment_to_filterBottomSheetDialogFragment"
+            app:destination="@id/filterBottomSheetDialogFragment" />
+        <action
+            android:id="@+id/action_databaseFragment_to_cardDetailFragment"
+            app:destination="@id/cardDetailFragment" />
+        <action
+            android:id="@+id/action_databaseFragment_to_cardSetDetailFragment"
+            app:destination="@id/cardSetDetailFragment" />
+    </fragment>
     <dialog
         android:id="@+id/transactionDialogFragment"
         android:name="tang.song.edu.yugiohcollectiontracker.ui_transaction_form.views.TransactionBottomSheetDialogFragment"
-        android:label="TransactionBottomSheetDialogFragment" >
+        android:label="TransactionBottomSheetDialogFragment">
         <argument
             android:name="cardId"
             app:argType="long" />
     </dialog>
+    <dialog
+        android:id="@+id/filterBottomSheetDialogFragment"
+        android:name="tang.song.edu.yugiohcollectiontracker.ui_database.CardFilterBottomSheetDialogFragment" />
+    <fragment
+        android:id="@+id/inventoryDetailFragment"
+        android:name="tang.song.edu.yugiohcollectiontracker.ui_inventory.InventoryDetailFragment"
+        android:label="fragment_inventory_detail"
+        tools:layout="@layout/fragment_inventory_detail">
+        <argument
+            android:name="inventoryId"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/inventoryFragment"
+        android:name="tang.song.edu.yugiohcollectiontracker.ui_inventory.InventoryFragment"
+        android:label="@string/lbl_inventory"
+        tools:layout="@layout/fragment_inventory">
+        <action
+            android:id="@+id/action_inventoryFragment_to_inventoryDetailFragment"
+            app:destination="@id/inventoryDetailFragment" />
+    </fragment>
 </navigation>

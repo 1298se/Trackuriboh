@@ -33,14 +33,8 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
     private val mViewModel: DatabaseViewModel by activityViewModels()
     private lateinit var mAdapter: DatabasePagerAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.databaseSyncProgressIndicator.setVisibilityAfterHide(View.GONE)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         activity?.onBackPressedDispatcher?.addCallback(this) {
             if (binding.databaseViewPager.currentItem == 0) {
@@ -51,6 +45,16 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
                 binding.databaseViewPager.currentItem = binding.databaseViewPager.currentItem - 1
             }
         }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.databaseSyncProgressIndicator.setVisibilityAfterHide(View.GONE)
 
         initToolbar()
         initTabLayoutWithViewPager()

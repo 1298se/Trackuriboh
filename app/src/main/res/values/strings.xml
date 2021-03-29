@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Trackuriboh</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Bottom Nav -->
+    <string name="lbl_inventory">Inventory</string>
+    <string name="lbl_transactions">Transactions</string>
+    <string name="lbl_database">Database</string>
 
     <!-- Resource -->
     <string name="card_type_main">Main Deck</string>
