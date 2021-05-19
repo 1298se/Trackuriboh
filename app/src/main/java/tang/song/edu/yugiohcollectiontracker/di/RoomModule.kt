@@ -4,16 +4,14 @@ import android.app.Application
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.components.SingletonComponent
 import tang.song.edu.yugiohcollectiontracker.data.db.CardDatabase
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 object RoomModule {
-
-    @Singleton
     @Provides
-    fun provideCardDatabase(application: Application): CardDatabase =
-        CardDatabase(application)
+    @Singleton
+    fun provideCardDatabase(application: Application): CardDatabase = CardDatabase(application)
 }

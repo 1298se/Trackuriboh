@@ -8,7 +8,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,11 +56,7 @@ class CardSetDetailFragment : BaseFragment(), CardListAdapter.OnItemClickListene
     }
 
     private fun initToolbar() {
-        val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
-        binding.cardSetDetailCollapseToolbar.apply {
-            setupWithNavController(binding.cardSetDetailToolbar, navController, appBarConfiguration)
-        }
+        binding.cardSetDetailCollapseToolbar.setupWithNavController(binding.cardSetDetailToolbar, findNavController())
     }
 
     private fun initRecyclerView() {

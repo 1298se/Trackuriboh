@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import tang.song.edu.yugiohcollectiontracker.BaseFragment
 import tang.song.edu.yugiohcollectiontracker.databinding.FragmentInventoryDetailBinding
 import tang.song.edu.yugiohcollectiontracker.ui_inventory.viewmodels.InventoryDetailViewModel
@@ -24,5 +26,11 @@ class InventoryDetailFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initToolbar()
+    }
+
+    private fun initToolbar() {
+        binding.inventoryDetailToolbar.setupWithNavController(findNavController())
     }
 }

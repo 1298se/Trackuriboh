@@ -12,13 +12,6 @@
     <string name="card_type_spell">Spell</string>
     <string name="card_type_trap">Trap</string>
 
-    <string-array name="card_category_list">
-        <item>@string/card_type_main</item>
-        <item>@string/card_type_extra</item>
-        <item>@string/card_type_spell</item>
-        <item>@string/card_type_trap</item>
-    </string-array>
-
     <!-- Database -->
     <string name="tab_card_title">Cards</string>
     <string name="tab_set_title">Sets</string>
@@ -47,10 +40,6 @@
     <!-- Search -->
     <string name="search_title">Search</string>
     <string name="search_hint">Search for a card or set…</string>
-
-    <!-- Filter -->
-    <string name="filter">Filter</string>
-    <string name="clear">Clear</string>
 
     <!-- Error -->
     <string name="error_title_generic">Error</string>

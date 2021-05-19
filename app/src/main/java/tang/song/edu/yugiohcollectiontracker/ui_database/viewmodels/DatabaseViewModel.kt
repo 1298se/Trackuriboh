@@ -1,15 +1,17 @@
 package tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import tang.song.edu.yugiohcollectiontracker.services.DatabaseSyncService
+import javax.inject.Inject
 
-class DatabaseViewModel @ViewModelInject constructor(
+@HiltViewModel
+class DatabaseViewModel @Inject constructor(
     private val databaseSyncService: DatabaseSyncService
 ) : ViewModel() {
     // Sync

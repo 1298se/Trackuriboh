@@ -9,12 +9,6 @@
         app:actionLayout="@layout/search_view" />
 
     <item
-        android:id="@+id/action_open_filter"
-        android:title="@string/filter"
-        android:icon="@drawable/ic_filter_list_black_24dp"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/action_database_sync"
         android:title="@string/database_sync_title"
         app:showAsAction="ifRoom" />

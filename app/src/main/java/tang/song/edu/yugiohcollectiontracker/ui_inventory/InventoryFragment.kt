@@ -64,7 +64,7 @@ class InventoryFragment : BaseFragment(), InventoryListAdapter.OnItemClickListen
         val navController = findNavController()
         val navGraphIds = setOf(R.id.inventoryFragment, R.id.transactionFragment, R.id.databaseFragment)
 
-        val appBarConfiguration = AppBarConfiguration(navGraphIds)
+        val appBarConfiguration = AppBarConfiguration(topLevelDestinationIds = navGraphIds)
 
         binding.inventoryToolbar.setupWithNavController(navController, appBarConfiguration)
     }

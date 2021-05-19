@@ -11,7 +11,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -38,11 +37,11 @@ class CardDetailFragment : BaseFragment(), Toolbar.OnMenuItemClickListener {
     private val mViewModel: CardDetailViewModel by viewModels()
     private lateinit var mCardDetailPagerAdapter: CardDetailPagerAdapter
 
-    private var mCard: CardWithSetInfo? = null
+    private var mCardWithSetInfo: CardWithSetInfo? = null
 
     init {
         lifecycleScope.launchWhenStarted {
-            mCard = mViewModel.getCardDetailsById(args.cardId).also {
+            mCardWithSetInfo = mViewModel.getCardDetailsById(args.cardId).also {
 
                 mImagePagerAdapter.setImageList(it?.card?.cardImageURLList)
                 mCardDetailPagerAdapter.setCard(it)
@@ -79,7 +78,7 @@ class CardDetailFragment : BaseFragment(), Toolbar.OnMenuItemClickListener {
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.action_add_to_inventory -> {
-                val action = CardDetailFragmentDirections.actionCardDetailFragmentToTransactionDialogFragment(mCard?.card?.cardId ?: -1)
+                val action = CardDetailFragmentDirections.actionCardDetailFragmentToTransactionDialogFragment(mCardWithSetInfo?.card?.cardId ?: -1)
                 findNavController().navigate(action)
                 true
             }
@@ -93,6 +92,7 @@ class CardDetailFragment : BaseFragment(), Toolbar.OnMenuItemClickListener {
 
             setOnMenuItemClickListener(this@CardDetailFragment)
         }
+
         binding.cardDetailAppBarLayout.addOnOffsetChangedListener(object : CollapseToolbarStateChangeListener() {
             override fun onStateChanged(appBarLayout: AppBarLayout?, state: State) {
                 if (state == State.COLLAPSED) {
@@ -103,10 +103,7 @@ class CardDetailFragment : BaseFragment(), Toolbar.OnMenuItemClickListener {
             }
         })
 
-        val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
-
-        binding.cardDetailCollapsingToolbarLayout.setupWithNavController(binding.cardDetailToolbar, navController, appBarConfiguration)
+        binding.cardDetailCollapsingToolbarLayout.setupWithNavController(binding.cardDetailToolbar, findNavController())
     }
 
     private fun initImageViewPager() {
@@ -119,7 +116,7 @@ class CardDetailFragment : BaseFragment(), Toolbar.OnMenuItemClickListener {
         binding.cardDetailViewPager.apply {
             adapter = CardDetailPagerAdapter(this@CardDetailFragment).also {
                 mCardDetailPagerAdapter = it
-                it.setCard(mCard)
+                it.setCard(mCardWithSetInfo)
             }
         }
 

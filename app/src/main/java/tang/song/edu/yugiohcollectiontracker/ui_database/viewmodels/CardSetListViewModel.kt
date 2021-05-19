@@ -1,12 +1,14 @@
 package tang.song.edu.yugiohcollectiontracker.ui_database.viewmodels
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.paging.PagingData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardSet
 import tang.song.edu.yugiohcollectiontracker.data.repository.CardSetRepository
+import javax.inject.Inject
 
-class CardSetListViewModel @ViewModelInject constructor(
+@HiltViewModel
+class CardSetListViewModel @Inject constructor(
     private val cardSetRepository: CardSetRepository,
 ) : BaseSearchViewModel<CardSet>() {
 

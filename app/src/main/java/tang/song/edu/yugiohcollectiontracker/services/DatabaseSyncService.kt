@@ -1,7 +1,7 @@
 package tang.song.edu.yugiohcollectiontracker.services
 
 import android.util.Log
-import dagger.hilt.android.scopes.ActivityScoped
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,7 +10,7 @@ import tang.song.edu.yugiohcollectiontracker.data.db.CardLocalCache
 import tang.song.edu.yugiohcollectiontracker.data.network.CardRetrofitService
 import javax.inject.Inject
 
-@ActivityScoped
+@ViewModelScoped
 class DatabaseSyncService @Inject constructor(
     private val cardRetrofitService: CardRetrofitService,
     private val cardLocalCache: CardLocalCache,

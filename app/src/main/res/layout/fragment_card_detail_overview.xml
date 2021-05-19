@@ -3,12 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/material_border_padding"
     tools:context=".ui_card_detail.CardDetailOverviewFragment">
 
     <LinearLayout
         android:id="@+id/card_detail_overview_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        android:paddingTop="@dimen/material_border_padding"
+        android:paddingBottom="@dimen/material_border_padding" />
 </androidx.core.widget.NestedScrollView>

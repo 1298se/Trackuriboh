@@ -1,14 +1,15 @@
 package tang.song.edu.yugiohcollectiontracker.ui_transaction_form.viewmodels
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import tang.song.edu.yugiohcollectiontracker.data.repository.CardRepository
 import tang.song.edu.yugiohcollectiontracker.data.repository.InventoryRepository
 import tang.song.edu.yugiohcollectiontracker.ui_transaction_form.models.TransactionDataModel
+import javax.inject.Inject
 
 
 sealed class TransactionResult {
@@ -16,7 +17,8 @@ sealed class TransactionResult {
     object ERROR: TransactionResult()
 }
 
-class TransactionBottomSheetDialogViewModel @ViewModelInject constructor(
+@HiltViewModel
+class TransactionBottomSheetDialogViewModel @Inject constructor(
     private val inventoryRepository: InventoryRepository,
     private val cardRepository: CardRepository,
 ) : ViewModel() {

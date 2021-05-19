@@ -72,10 +72,6 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         return when (item?.itemId) {
-            R.id.action_open_filter -> {
-                findNavController().navigate(R.id.action_databaseFragment_to_filterBottomSheetDialogFragment)
-                true
-            }
             R.id.action_database_sync -> {
                 mViewModel.syncDatabase()
                 true

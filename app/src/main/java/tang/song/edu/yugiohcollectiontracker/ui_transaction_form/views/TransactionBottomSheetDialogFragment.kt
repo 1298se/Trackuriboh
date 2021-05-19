@@ -10,7 +10,9 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -85,9 +87,7 @@ class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun initToolbar() {
-        binding.newTransactionToolbar.apply {
-            setNavigationOnClickListener { dismiss() }
-        }
+        binding.newTransactionToolbar.setupWithNavController(findNavController())
     }
 
     private fun initDropdowns() {

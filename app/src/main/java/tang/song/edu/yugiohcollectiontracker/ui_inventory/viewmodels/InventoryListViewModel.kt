@@ -1,13 +1,15 @@
 package tang.song.edu.yugiohcollectiontracker.ui_inventory.viewmodels
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagingData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.CardInventory
 import tang.song.edu.yugiohcollectiontracker.data.repository.InventoryRepository
+import javax.inject.Inject
 
-class InventoryListViewModel @ViewModelInject constructor(
+@HiltViewModel
+class InventoryListViewModel @Inject constructor(
     private val inventoryRepository: InventoryRepository,
 ) : ViewModel() {
     private var currentInventoryList: Flow<PagingData<CardInventory>>? = null

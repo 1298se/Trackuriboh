@@ -1,13 +1,15 @@
 package tang.song.edu.yugiohcollectiontracker.ui_card_set_detail.viewmodels
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagingData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import tang.song.edu.yugiohcollectiontracker.data.db.entities.Card
 import tang.song.edu.yugiohcollectiontracker.data.repository.CardRepository
+import javax.inject.Inject
 
-class CardSetDetailViewModel @ViewModelInject constructor(
+@HiltViewModel
+class CardSetDetailViewModel @Inject constructor(
     private val cardRepository: CardRepository,
 ) : ViewModel() {
     var currentCardListResult: Flow<PagingData<Card>>? = null
