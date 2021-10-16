@@ -5,17 +5,17 @@
 
     <data>
         <import type="java.util.List" />
-        <import type="tang.song.edu.yugiohcollectiontracker.data.types.EditionType" />
-        <import type="tang.song.edu.yugiohcollectiontracker.data.types.TransactionType" />
-        <import type="tang.song.edu.yugiohcollectiontracker.data.types.PlatformType" />
-        <import type="tang.song.edu.yugiohcollectiontracker.data.types.ConditionType" />
-        <import type="tang.song.edu.yugiohcollectiontracker.Converters" />
-        <variable name="transactionData" type="tang.song.edu.yugiohcollectiontracker.ui_transaction_form.models.TransactionDataModel" />
+        <import type="tang.song.edu.trackuriboh.data.types.EditionType" />
+        <import type="tang.song.edu.trackuriboh.data.types.TransactionType" />
+        <import type="tang.song.edu.trackuriboh.data.types.PlatformType" />
+        <import type="tang.song.edu.trackuriboh.data.types.ConditionType" />
+        <import type="tang.song.edu.trackuriboh.Converters" />
+        <variable name="transactionData" type="tang.song.edu.trackuriboh.ui_transaction_form.models.TransactionDataModel" />
         <variable name="editionTypes" type="List&lt;EditionType>" />
         <variable name="transactionTypes" type="List&lt;TransactionType>" />
         <variable name="platformTypes" type="List&lt;PlatformType>" />
         <variable name="conditionTypes" type="List&lt;ConditionType>" />
-        <variable name="validator" type="tang.song.edu.yugiohcollectiontracker.ui_transaction_form.TransactionFormValidator" />
+        <variable name="validator" type="tang.song.edu.trackuriboh.ui_transaction_form.TransactionFormValidator" />
     </data>
 
     <ScrollView
@@ -130,7 +130,7 @@
                     android:layout_marginTop="@dimen/new_transaction_row_spacing"
                     android:hint="@string/lbl_edition">
 
-                    <tang.song.edu.yugiohcollectiontracker.ui_transaction_form.views.EnumAutoCompleteTextView
+                    <tang.song.edu.trackuriboh.ui_transaction_form.views.EnumAutoCompleteTextView
                         android:id="@+id/new_transaction_edition_textview"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -174,7 +174,7 @@
                 android:layout_marginTop="@dimen/new_transaction_row_spacing"
                 android:hint="@string/lbl_condition">
 
-                <tang.song.edu.yugiohcollectiontracker.ui_transaction_form.views.EnumAutoCompleteTextView
+                <tang.song.edu.trackuriboh.ui_transaction_form.views.EnumAutoCompleteTextView
                     android:id="@+id/new_transaction_condition_textview"
                     entries="@{conditionTypes}"
                     selectedItem="@={transactionData.condition}"
@@ -255,7 +255,7 @@
                     android:layout_weight="1"
                     android:hint="@string/lbl_transaction">
 
-                    <tang.song.edu.yugiohcollectiontracker.ui_transaction_form.views.EnumAutoCompleteTextView
+                    <tang.song.edu.trackuriboh.ui_transaction_form.views.EnumAutoCompleteTextView
                         android:id="@+id/new_transaction_type_textview"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -278,7 +278,7 @@
                     android:layout_weight="1"
                     android:hint="@string/lbl_platform">
 
-                    <tang.song.edu.yugiohcollectiontracker.ui_transaction_form.views.EnumAutoCompleteTextView
+                    <tang.song.edu.trackuriboh.ui_transaction_form.views.EnumAutoCompleteTextView
                         android:id="@+id/new_transaction_platform_textview"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
