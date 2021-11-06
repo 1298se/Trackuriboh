@@ -12,5 +12,5 @@ class CardSetListViewModel @Inject constructor(
     private val cardSetRepository: CardSetRepository,
 ) : BaseSearchViewModel<CardSet>() {
 
-    override fun searchSource(queryString: String?): Flow<PagingData<CardSet>> = cardSetRepository.search(queryString)
+    override fun searchSource(query: String?): Flow<PagingData<CardSet>> = cardSetRepository.search(query)
 }

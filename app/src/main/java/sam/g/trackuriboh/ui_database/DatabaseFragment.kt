@@ -167,7 +167,7 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
         val currentFragment = childFragmentManager.findFragmentByTag("f" + mAdapter.getItemId(binding.databaseViewPager.currentItem))
 
         if (currentFragment is BaseSearchListFragment<*>) {
-            currentFragment.updateSearchList(query)
+            currentFragment.search(query)
         }
     }
 
@@ -176,7 +176,7 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
             val currentFragment = childFragmentManager.findFragmentByTag("f" + mAdapter.getItemId(it))
 
             if (currentFragment is BaseSearchListFragment<*> && !currentFragment.lastQueryValue().isNullOrBlank()) {
-                currentFragment.updateSearchList(null)
+                currentFragment.search(null)
             }
         }
     }

@@ -17,8 +17,8 @@ import javax.inject.Singleton
 class CardRepository @Inject constructor(
     private val cardLocalCache: CardLocalCache,
 ) {
-    fun getSearchResultStream(queryString: String?): Flow<PagingData<CardWithSetInfo>> {
-        val pagingSourceFactory = { cardLocalCache.searchCardByName(queryString) }
+    fun getSearchResultStream(query: String?): Flow<PagingData<CardWithSetInfo>> {
+        val pagingSourceFactory = { cardLocalCache.searchCardByName(query) }
 
         return Pager(
             config = PagingConfig(pageSize = DATABASE_PAGE_SIZE),

@@ -36,7 +36,7 @@ class CardListFragment : BaseSearchListFragment<CardWithSetInfo>(), CardListAdap
 
         initRecyclerView()
 
-        search(mViewModel.currentQueryValue())
+        this.search(mViewModel.currentQueryValue())
     }
 
     override fun onItemClick(cardId: Long) {

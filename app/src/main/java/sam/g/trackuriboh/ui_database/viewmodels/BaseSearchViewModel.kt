@@ -18,11 +18,11 @@ abstract class BaseSearchViewModel<T : Any> : ViewModel() {
      */
     @MainThread
     @WorkerThread
-    fun search(queryString: String?) = query.postValue(queryString)
+    fun search(query: String?) = this.query.postValue(query)
 
     fun currentQueryValue(): String? = query.value
 
     fun getSearchResult(): LiveData<PagingData<T>> = searchResult
 
-    protected abstract fun searchSource(queryString: String?): Flow<PagingData<T>>
+    protected abstract fun searchSource(query: String?): Flow<PagingData<T>>
 }

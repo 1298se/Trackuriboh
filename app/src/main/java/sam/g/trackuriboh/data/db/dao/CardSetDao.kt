@@ -15,8 +15,8 @@ interface CardSetDao {
     @Query("SELECT * FROM CardSet ORDER BY name ASC")
     fun getCardSetList(): PagingSource<Int, CardSet>
 
-    @Query("SELECT * FROM CardSet WHERE (name LIKE :queryString)")
-    fun searchCardSetByName(queryString: String): PagingSource<Int, CardSet>
+    @Query("SELECT * FROM CardSet WHERE (name LIKE :query)")
+    fun searchCardSetByName(query: String): PagingSource<Int, CardSet>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCardSet(cardSet: CardSet): Long

@@ -35,17 +35,14 @@ abstract class BaseSearchListFragment<T : Any> : BaseFragment() {
         }
     }
 
-    fun updateSearchList(newText: String?) {
-        search((newText ?: "").trim())
+    fun search(query: String?) {
+        getViewModel().search(query)
     }
 
     fun lastQueryValue() = getViewModel().currentQueryValue()
 
-    protected fun search(queryString: String?) {
-        getViewModel().search(queryString)
-    }
-
     protected abstract fun getViewModel(): BaseSearchViewModel<T>
     protected abstract fun getListView(): RecyclerView
     protected abstract fun getAdapter(): PagingDataAdapter<T, out RecyclerView.ViewHolder>
+    // protected abstract fun submitData(pagingData: PagingData<T>)
 }

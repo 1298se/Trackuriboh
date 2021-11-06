@@ -13,8 +13,8 @@ interface CardDao {
     @Query("SELECT * FROM Card WHERE id = :cardId")
     suspend fun getCardById(cardId: Long): Card?
 
-    @Query("SELECT * FROM Card WHERE name LIKE :queryString ORDER BY name ASC")
-    fun searchCardByName(queryString: String): PagingSource<Int, CardWithSetInfo>
+    @Query("SELECT * FROM Card WHERE name LIKE :query ORDER BY name ASC")
+    fun searchCardByName(query: String): PagingSource<Int, CardWithSetInfo>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCard(card: Card): Long

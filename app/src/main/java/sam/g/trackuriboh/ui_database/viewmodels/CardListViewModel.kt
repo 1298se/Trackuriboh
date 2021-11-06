@@ -12,7 +12,7 @@ class CardListViewModel @Inject constructor(
     private val cardRepository: CardRepository,
 ) : BaseSearchViewModel<CardWithSetInfo>() {
 
-    override fun searchSource(queryString: String?): Flow<PagingData<CardWithSetInfo>> =
-        cardRepository.getSearchResultStream(queryString)
+    override fun searchSource(query: String?): Flow<PagingData<CardWithSetInfo>> =
+        cardRepository.getSearchResultStream(query)
 
 }
