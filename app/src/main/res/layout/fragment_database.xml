@@ -17,7 +17,6 @@
         android:id="@+id/database_sync_progress_indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:indeterminate="true"
         android:visibility="gone"
         app:showAnimationBehavior="outward"
         app:hideAnimationBehavior="outward" />
