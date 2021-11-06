@@ -16,10 +16,10 @@ data class CardSetResponse(
         @SerializedName("abbreviation")
         val code: String?,
         @SerializedName("publishedOn")
-        val publishedOn: String?
+        val releaseDate: String?
     ) : CardDatabase.DatabaseEntity<CardSet> {
 
         override fun toDatabaseEntity(): CardSet =
-            CardSet(id, name, code, publishedOn)
+            CardSet(id, name, code, releaseDate)
     }
 }

@@ -47,7 +47,7 @@ class CardSetListAdapter : PagingDataAdapter<CardSet, CardSetListAdapter.CardSet
 
         internal fun bind(item: CardSet) {
             binding.cardSetTitleTextview.text = item.name
-            binding.cardSetReleaseDateTextview.text = item.publishedOn
+            binding.cardSetReleaseDateTextview.text = item.releaseDate
         }
     }
 }

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.paging.PagingData
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -46,10 +45,6 @@ class CardSetListFragment : BaseSearchListFragment<CardSet>(), CardSetListAdapte
 
     override fun getAdapter(): PagingDataAdapter<CardSet, out RecyclerView.ViewHolder> {
         return mAdapter
-    }
-
-    override suspend fun submitData(pagingData: PagingData<CardSet>) {
-        mAdapter.submitData(pagingData)
     }
 
     override fun onItemClick(setName: String) {

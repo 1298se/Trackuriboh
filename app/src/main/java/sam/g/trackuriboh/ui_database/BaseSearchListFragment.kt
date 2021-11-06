@@ -1,28 +1,24 @@
 package sam.g.trackuriboh.ui_database
 
-import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadState
-import androidx.paging.PagingData
+import android.os.Bundle
+import android.view.View
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.launch
 import sam.g.trackuriboh.BaseFragment
 import sam.g.trackuriboh.ui_database.viewmodels.BaseSearchViewModel
 
+/**
+ * Base Fragment to handle basic search list logic, such as observing a search result LiveData
+ * and submitting the data to the adapter
+ */
 abstract class BaseSearchListFragment<T : Any> : BaseFragment() {
-    private var searchJob: Job? = null
 
-    init {
-        lifecycleScope.launchWhenStarted {
-            getAdapter().loadStateFlow
-                .distinctUntilChangedBy { it.refresh }
-                .filter { it.refresh is LoadState.NotLoading }
-                .collect { getListView().scrollToPosition(0) }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        getViewModel().getSearchResult().observe(viewLifecycleOwner) {
+            getAdapter().submitData(lifecycle, it)
+            getListView().scrollToPosition(0)
         }
     }
 
@@ -33,16 +29,10 @@ abstract class BaseSearchListFragment<T : Any> : BaseFragment() {
     fun lastQueryValue() = getViewModel().currentQueryValue()
 
     protected fun search(queryString: String?) {
-        searchJob?.cancel()
-        searchJob = lifecycleScope.launch {
-            getViewModel().search(queryString).collectLatest {
-                submitData(it)
-            }
-        }
+        getViewModel().search(queryString)
     }
 
     protected abstract fun getViewModel(): BaseSearchViewModel<T>
     protected abstract fun getListView(): RecyclerView
     protected abstract fun getAdapter(): PagingDataAdapter<T, out RecyclerView.ViewHolder>
-    protected abstract suspend fun submitData(pagingData: PagingData<T>)
 }

@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 @Entity
 data class CardSet(
     @PrimaryKey(autoGenerate = false)
-    val groupId: Long,
+    val id: Long,
     val name: String?,
-    val abbreviation: String?,
-    val publishedOn: String?
+    val code: String?,
+    val releaseDate: String?
 )

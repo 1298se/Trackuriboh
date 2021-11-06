@@ -3,12 +3,13 @@ package sam.g.trackuriboh.data.db
 import androidx.paging.PagingSource
 import sam.g.trackuriboh.data.db.entities.Card
 import sam.g.trackuriboh.data.db.entities.CardSet
+import sam.g.trackuriboh.data.db.entities.CardWithSetInfo
 import javax.inject.Inject
 
 class CardLocalCache @Inject constructor(
     private val cardDatabase: CardDatabase
 ) {
-    fun searchCardByName(name: String?): PagingSource<Int, Card> {
+    fun searchCardByName(name: String?): PagingSource<Int, CardWithSetInfo> {
         val query = "%${(name ?: "").replace(' ', '%')}%"
         return cardDatabase.cardDao().searchCardByName(query)
     }

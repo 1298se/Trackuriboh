@@ -1,32 +1,28 @@
 package sam.g.trackuriboh.ui_database.viewmodels
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.annotation.MainThread
+import androidx.annotation.WorkerThread
+import androidx.lifecycle.*
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import kotlinx.coroutines.flow.Flow
 
 abstract class BaseSearchViewModel<T : Any> : ViewModel() {
-    private var currentQueryValue: String? = null
+    private var query = MutableLiveData<String?>(null)
 
-    private var currentSearchResult: Flow<PagingData<T>>? = null
+    private var searchResult: LiveData<PagingData<T>> = Transformations.switchMap(query) {
+        searchSource(it).asLiveData()
+    }
 
     /**
      * Search a repository based on a query string.
      */
-    fun search(queryString: String?): Flow<PagingData<T>> {
-        val lastResult = currentSearchResult
-        if (queryString == currentQueryValue && lastResult != null) {
-            return lastResult
-        }
+    @MainThread
+    @WorkerThread
+    fun search(queryString: String?) = query.postValue(queryString)
 
-        currentQueryValue = queryString
-        val newSearchResult = searchSource(queryString).cachedIn(viewModelScope)
-        currentSearchResult = newSearchResult
-        return newSearchResult
-    }
+    fun currentQueryValue(): String? = query.value
 
-    fun currentQueryValue(): String? = currentQueryValue
+    fun getSearchResult(): LiveData<PagingData<T>> = searchResult
 
     protected abstract fun searchSource(queryString: String?): Flow<PagingData<T>>
 }

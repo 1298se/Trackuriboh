@@ -6,13 +6,13 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
-import sam.g.trackuriboh.data.db.entities.Card
+import sam.g.trackuriboh.data.db.entities.CardWithSetInfo
 import sam.g.trackuriboh.databinding.ItemCardBinding
 import javax.inject.Inject
 
 class CardListAdapter @Inject constructor(
     val requestManager: RequestManager
-) : PagingDataAdapter<Card, CardListAdapter.CardViewHolder>(CARD_COMPARATOR) {
+) : PagingDataAdapter<CardWithSetInfo, CardListAdapter.CardViewHolder>(CARD_COMPARATOR) {
     private var mOnItemClickListener: OnItemClickListener? = null
 
     interface OnItemClickListener {
@@ -24,11 +24,11 @@ class CardListAdapter @Inject constructor(
     }
 
     companion object {
-        private val CARD_COMPARATOR = object : DiffUtil.ItemCallback<Card>() {
-            override fun areItemsTheSame(oldItem: Card, newItem: Card): Boolean =
-                oldItem.id == newItem.id
+        private val CARD_COMPARATOR = object : DiffUtil.ItemCallback<CardWithSetInfo>() {
+            override fun areItemsTheSame(oldItem: CardWithSetInfo, newItem: CardWithSetInfo): Boolean =
+                oldItem.card.id == newItem.card.id
 
-            override fun areContentsTheSame(oldItem: Card, newItem: Card): Boolean =
+            override fun areContentsTheSame(oldItem: CardWithSetInfo, newItem: CardWithSetInfo): Boolean =
                 oldItem == newItem
         }
     }
@@ -49,14 +49,19 @@ class CardListAdapter @Inject constructor(
 
     inner class CardViewHolder(private val binding: ItemCardBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
-            itemView.setOnClickListener { mOnItemClickListener?.onItemClick(getItem(bindingAdapterPosition)?.id ?: throw IllegalArgumentException("card is null")) }
+            itemView.setOnClickListener {
+                mOnItemClickListener?.onItemClick(
+                    getItem(bindingAdapterPosition)?.card?.id ?: throw IllegalArgumentException("card is null")
+                )
+            }
         }
 
-        internal fun bind(item: Card) {
-            requestManager.load(item.imageUrl).into(binding.itemCardImage)
+        internal fun bind(item: CardWithSetInfo) {
+            requestManager.load(item.card.imageUrl).into(binding.itemCardImage)
 
-            binding.itemCardTitleTextview.text = item.name
-            binding.itemCardTypeTextview.text = ""
+            binding.itemCardTitleTextview.text = item.card.name
+            binding.itemCardTypeTextview.text = item.card.attribute
+
         }
     }
 }

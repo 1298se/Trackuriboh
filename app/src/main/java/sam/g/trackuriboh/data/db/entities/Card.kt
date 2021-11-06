@@ -45,6 +45,9 @@ data class Card(
         DESCRIPTION("Description")
     }
 
+    /**
+     * Method used to parse the extended fields returned by the server
+     */
     private fun parseExtendedData(extendedData: List<CardResponse.ExtendedDataItem>) {
         val extendedDataMap = extendedData.associate { it.name to it.value }
 

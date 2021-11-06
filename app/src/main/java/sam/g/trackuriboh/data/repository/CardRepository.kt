@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import sam.g.trackuriboh.DATABASE_PAGE_SIZE
 import sam.g.trackuriboh.data.db.CardLocalCache
-import sam.g.trackuriboh.data.db.entities.Card
+import sam.g.trackuriboh.data.db.entities.CardWithSetInfo
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,7 +17,7 @@ import javax.inject.Singleton
 class CardRepository @Inject constructor(
     private val cardLocalCache: CardLocalCache,
 ) {
-    fun getSearchResultStream(queryString: String?): Flow<PagingData<Card>> {
+    fun getSearchResultStream(queryString: String?): Flow<PagingData<CardWithSetInfo>> {
         val pagingSourceFactory = { cardLocalCache.searchCardByName(queryString) }
 
         return Pager(

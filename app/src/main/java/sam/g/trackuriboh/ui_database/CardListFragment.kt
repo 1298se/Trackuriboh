@@ -6,12 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.paging.PagingData
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import sam.g.trackuriboh.data.db.entities.Card
+import sam.g.trackuriboh.data.db.entities.CardWithSetInfo
 import sam.g.trackuriboh.databinding.FragmentCardListBinding
 import sam.g.trackuriboh.ui_database.adapters.CardListAdapter
 import sam.g.trackuriboh.ui_database.viewmodels.BaseSearchViewModel
@@ -20,7 +19,7 @@ import sam.g.trackuriboh.viewBinding
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CardListFragment : BaseSearchListFragment<Card>(), CardListAdapter.OnItemClickListener {
+class CardListFragment : BaseSearchListFragment<CardWithSetInfo>(), CardListAdapter.OnItemClickListener {
     @Inject
     lateinit var mAdapter: CardListAdapter
 
@@ -47,7 +46,7 @@ class CardListFragment : BaseSearchListFragment<Card>(), CardListAdapter.OnItemC
         findNavController().navigate(action)
     }
 
-    override fun getViewModel(): BaseSearchViewModel<Card> {
+    override fun getViewModel(): BaseSearchViewModel<CardWithSetInfo> {
         return mViewModel
     }
 
@@ -55,12 +54,8 @@ class CardListFragment : BaseSearchListFragment<Card>(), CardListAdapter.OnItemC
         return binding.cardList
     }
 
-    override fun getAdapter(): PagingDataAdapter<Card, out RecyclerView.ViewHolder> {
+    override fun getAdapter(): PagingDataAdapter<CardWithSetInfo, out RecyclerView.ViewHolder> {
         return mAdapter
-    }
-
-    override suspend fun submitData(pagingData: PagingData<Card>) {
-        mAdapter.submitData(pagingData)
     }
 
     private fun initRecyclerView() {
