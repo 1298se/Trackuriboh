@@ -2,17 +2,28 @@ package sam.g.trackuriboh.data.db.entities
 
 import android.os.Parcelable
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import sam.g.trackuriboh.data.network.responses.CardResponse
+import sam.g.trackuriboh.data.types.ProductType
 
 @Parcelize
-@Entity
-data class Card(
+@Entity(
+    foreignKeys = [
+        ForeignKey(
+            entity = CardSet::class,
+            parentColumns = ["id"],
+            childColumns = ["setId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
+data class Product(
     @PrimaryKey(autoGenerate = false)
     val id: Long,
     val name: String,
-    val cleanName: String?,
+    val type: ProductType,
     val imageUrl: String?,
     val setId: Long?,
     var number: String? = null,
@@ -27,12 +38,12 @@ data class Card(
     constructor(
         id: Long,
         name: String,
-        cleanName: String?,
+        productType: ProductType,
         imageUrl: String?,
         setId: Long?,
-        extendedData: List<CardResponse.ExtendedDataItem>
-    ) : this(id, name, cleanName, imageUrl, setId) {
-        parseExtendedData(extendedData)
+        extendedData: List<CardResponse.ExtendedDataItem>?
+    ) : this(id, name, productType, imageUrl, setId) {
+        extendedData?.let { parseExtendedData(it) }
     }
 
     private enum class ExtendedDataFields(val field: String) {

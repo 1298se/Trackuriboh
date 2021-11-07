@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import sam.g.trackuriboh.data.db.CardDatabase
+import sam.g.trackuriboh.data.db.AppDatabase
 import javax.inject.Singleton
 
 @Module
@@ -13,5 +13,5 @@ import javax.inject.Singleton
 object RoomModule {
     @Provides
     @Singleton
-    fun provideCardDatabase(application: Application): CardDatabase = CardDatabase(application)
+    fun provideCardDatabase(application: Application): AppDatabase = AppDatabase(application)
 }

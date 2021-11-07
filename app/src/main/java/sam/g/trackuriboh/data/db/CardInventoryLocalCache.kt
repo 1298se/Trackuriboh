@@ -8,25 +8,25 @@ import sam.g.trackuriboh.data.types.EditionType
 import javax.inject.Inject
 
 class CardInventoryLocalCache @Inject constructor(
-    private val cardDatabase: CardDatabase
+    private val appDatabase: AppDatabase
 ) {
     fun getInventoryList(): PagingSource<Int, CardInventory> {
-        return cardDatabase.cardInventoryDao().getInventoryList()
+        return appDatabase.cardInventoryDao().getInventoryList()
     }
 
     suspend fun getInventory(cardNumber: String, rarity: String?, edition: EditionType?): CardInventory? {
-        return cardDatabase.cardInventoryDao().getInventory(cardNumber, rarity, edition)
+        return appDatabase.cardInventoryDao().getInventory(cardNumber, rarity, edition)
     }
 
     suspend fun getInventoryWithTransactions(inventoryId: Long): CardInventoryWithTransactions {
-        return cardDatabase.cardInventoryXTransactionDao().getCardInventoryWithTransaction(inventoryId)
+        return appDatabase.cardInventoryXTransactionDao().getCardInventoryWithTransaction(inventoryId)
     }
 
     suspend fun insertInventory(inventory: CardInventory): Long {
-        return cardDatabase.cardInventoryDao().insertInventory(inventory)
+        return appDatabase.cardInventoryDao().insertInventory(inventory)
     }
 
     suspend fun insertTransaction(transaction: Transaction): Long {
-        return cardDatabase.transactionDao().insertTransaction(transaction)
+        return appDatabase.transactionDao().insertTransaction(transaction)
     }
 }

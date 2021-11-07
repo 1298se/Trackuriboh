@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import sam.g.trackuriboh.data.db.relations.CardWithSetInfo
 import sam.g.trackuriboh.ui_card_detail.CardDetailOverviewFragment
-import sam.g.trackuriboh.ui_card_detail.CardDetailSetInfoFragment
+import sam.g.trackuriboh.ui_card_detail.CardDetailPricesFragment
 
 class CardDetailPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     private var mCardWithSetInfo: CardWithSetInfo? = null
@@ -15,8 +15,8 @@ class CardDetailPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> CardDetailOverviewFragment.newInstance(mCardWithSetInfo?.card)
-            1 -> CardDetailSetInfoFragment.newInstance(mCardWithSetInfo?.sets)
+            0 -> CardDetailOverviewFragment.newInstance(mCardWithSetInfo?.product)
+            1 -> CardDetailPricesFragment.newInstance(mCardWithSetInfo?.sets)
             else -> throw Exception("view pager out of bounds")
         }
     }

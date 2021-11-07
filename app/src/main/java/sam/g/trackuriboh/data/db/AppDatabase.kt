@@ -7,20 +7,30 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import sam.g.trackuriboh.data.db.converters.RoomConverter
 import sam.g.trackuriboh.data.db.dao.*
-import sam.g.trackuriboh.data.db.entities.Card
-import sam.g.trackuriboh.data.db.entities.CardInventory
-import sam.g.trackuriboh.data.db.entities.CardSet
-import sam.g.trackuriboh.data.db.entities.Transaction
+import sam.g.trackuriboh.data.db.entities.*
 
 @Database(
-    entities = [Card::class, CardSet::class, CardInventory::class, Transaction::class],
+    entities = [
+        Product::class,
+        Sku::class,
+        CardSet::class,
+        CardRarity::class,
+        Printing::class,
+        Condition::class,
+        CardInventory::class,
+        Transaction::class,
+               ],
     version = 1
 )
 @TypeConverters(RoomConverter::class)
-abstract class CardDatabase : RoomDatabase() {
+abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun cardDao(): CardDao
+    abstract fun productDao(): ProductDao
+    abstract fun productSkuDao(): SkuDao
     abstract fun cardSetDao(): CardSetDao
+    abstract fun cardRarityDao(): CardRarityDao
+    abstract fun printingDao(): PrintingDao
+    abstract fun conditionDao(): ConditionDao
 
     abstract fun cardInventoryDao(): CardInventoryDao
     abstract fun transactionDao(): TransactionDao
@@ -32,7 +42,7 @@ abstract class CardDatabase : RoomDatabase() {
 
     companion object {
         @Volatile
-        private var instance: CardDatabase? = null
+        private var instance: AppDatabase? = null
 
         operator fun invoke(application: Application) = instance
             ?: synchronized(this) {
@@ -43,7 +53,7 @@ abstract class CardDatabase : RoomDatabase() {
 
         private fun buildDatabase(application: Application) = Room.databaseBuilder(
             application,
-            CardDatabase::class.java,
+            AppDatabase::class.java,
             "cardDatabase.db"
         ).build()
     }

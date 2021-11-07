@@ -4,13 +4,14 @@ import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.*
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import kotlinx.coroutines.flow.Flow
 
 abstract class BaseSearchViewModel<T : Any> : ViewModel() {
     private var query = MutableLiveData<String?>(null)
 
     private var searchResult: LiveData<PagingData<T>> = Transformations.switchMap(query) {
-        searchSource(it).asLiveData()
+        searchSource(it).cachedIn(viewModelScope).asLiveData()
     }
 
     /**

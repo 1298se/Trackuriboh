@@ -21,8 +21,8 @@
 
     <!-- Card Item List -->
     <string name="item_card_list_content_desc">Card Image</string>
-    <string name="item_card_list_level_attribute_race_text" comment="8 \u2605 LIGHT \u2022 Dragon">%1$d \u2605 %2$s \u2022 %3$s</string>
-    <string name="item_card_list_link_attribute_race_text" comment="LINK 8 LIGHT \u2022 Dragon">LINK %1$d \u2022 %2$s \u2022 %3$s</string>
+    <string name="item_card_number_rarity_text">%1$s \u2022 %2$s</string>
+    <string name="item_card_view_prices_button_text">View Prices</string>
 
     <!-- Card Detail -->
     <string name="lbl_name">Name</string>

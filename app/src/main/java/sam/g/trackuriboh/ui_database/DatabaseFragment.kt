@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.activityViewModels
@@ -36,26 +35,14 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
     private val mViewModel: DatabaseViewModel by activityViewModels()
     private lateinit var mAdapter: DatabasePagerAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        activity?.onBackPressedDispatcher?.addCallback(this) {
-            if (binding.databaseViewPager.currentItem == 0) {
-                if (!findNavController().popBackStack()) {
-                    activity?.finish()
-                }
-            } else {
-                binding.databaseViewPager.currentItem = binding.databaseViewPager.currentItem - 1
-            }
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setViewPagerBackPressBehaviour(binding.databaseViewPager)
 
         binding.databaseSyncProgressIndicator.setVisibilityAfterHide(View.GONE)
 

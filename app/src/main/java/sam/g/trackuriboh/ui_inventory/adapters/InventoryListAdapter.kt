@@ -5,15 +5,13 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.RequestManager
+import com.bumptech.glide.Glide
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.entities.CardInventory
 import sam.g.trackuriboh.databinding.ItemInventoryBinding
 import javax.inject.Inject
 
-class InventoryListAdapter @Inject constructor(
-    val requestManager: RequestManager,
-) : PagingDataAdapter<CardInventory, InventoryListAdapter.InventoryViewHolder>(INVENTORY_COMPARATOR) {
+class InventoryListAdapter @Inject constructor() : PagingDataAdapter<CardInventory, InventoryListAdapter.InventoryViewHolder>(INVENTORY_COMPARATOR) {
     private var mOnItemClickListener: OnItemClickListener? = null
 
     interface OnItemClickListener {
@@ -51,7 +49,7 @@ class InventoryListAdapter @Inject constructor(
         }
 
         internal fun bind(item: CardInventory) {
-            requestManager.load(item.cardImageURL).into(binding.itemInventoryImage)
+            Glide.with(itemView).load(item.cardImageURL).into(binding.itemInventoryImage)
 
             binding.itemInventoryTitleTextview.text = item.cardName
             binding.itemInventoryQuantityTextview.text = itemView.context.getString(R.string.item_inventory_quantity_text, item.quantity)

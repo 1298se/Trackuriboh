@@ -9,5 +9,6 @@ import javax.inject.Inject
 class CardDetailViewModel @Inject constructor(
     private val cardRepository: CardRepository
 ) : ViewModel() {
-    var currentSelectedDetailsPage = 0
+
+
 }

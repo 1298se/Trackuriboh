@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui_card_detail.CardDetailSetInfoFragment">
+    tools:context=".ui_card_detail.CardDetailPricesFragment">
 
     <TableLayout
         android:id="@+id/card_detail_set_info_table"

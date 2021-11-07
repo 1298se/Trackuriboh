@@ -2,11 +2,11 @@ package sam.g.trackuriboh.data.network.interceptors
 
 import okhttp3.Interceptor
 import okhttp3.Response
+import sam.g.trackuriboh.di.NetworkModule.TCGPLAYER_YUGIOH_CATEGORY_ID
 
 class TCGPlayerCategoryInterceptor : Interceptor {
     companion object {
-        const val CATEGORY_QUERY_PARAM = "Category"
-        private const val TCGPLAYER_YUGIOH_CATEGORY_ID = 2
+        const val CATEGORY_QUERY_PARAM = "CategoryQuery"
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {

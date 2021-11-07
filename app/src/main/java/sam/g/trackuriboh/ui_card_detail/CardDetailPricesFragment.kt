@@ -4,23 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import sam.g.trackuriboh.BaseFragment
 import sam.g.trackuriboh.data.db.relations.CardSetInfo
-import sam.g.trackuriboh.databinding.FragmentCardDetailSetInfoBinding
+import sam.g.trackuriboh.databinding.FragmentCardDetailPricesBinding
 import sam.g.trackuriboh.databinding.ItemCardDetailSetInfoBinding
 import sam.g.trackuriboh.viewBinding
 
 private const val ARG_CARD_SET_INFO = "ARG_CARD_SET_INFO"
 
-class CardDetailSetInfoFragment : BaseFragment() {
+class CardDetailPricesFragment : BaseFragment() {
     private var mCardSetInfoList: List<CardSetInfo>? = null
 
-    private val binding by viewBinding(FragmentCardDetailSetInfoBinding::inflate)
+    private val binding by viewBinding(FragmentCardDetailPricesBinding::inflate)
+    private val mViewModel: CardDetailViewModel by viewModels({ requireParentFragment() })
 
     companion object {
         fun newInstance(cardSetInfoList: List<CardSetInfo>?) =
-            CardDetailSetInfoFragment().apply {
+            CardDetailPricesFragment().apply {
                 arguments = Bundle().apply {
                     putParcelableArrayList(ARG_CARD_SET_INFO, ArrayList(cardSetInfoList ?: emptyList()))
                 }

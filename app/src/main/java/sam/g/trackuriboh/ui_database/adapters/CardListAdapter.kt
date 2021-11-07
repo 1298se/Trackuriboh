@@ -5,14 +5,14 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.RequestManager
-import sam.g.trackuriboh.data.db.entities.CardWithSetInfo
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import sam.g.trackuriboh.R
+import sam.g.trackuriboh.data.db.relations.ProductWithSetInfo
 import sam.g.trackuriboh.databinding.ItemCardBinding
 import javax.inject.Inject
 
-class CardListAdapter @Inject constructor(
-    val requestManager: RequestManager
-) : PagingDataAdapter<CardWithSetInfo, CardListAdapter.CardViewHolder>(CARD_COMPARATOR) {
+class CardListAdapter @Inject constructor(): PagingDataAdapter<ProductWithSetInfo, CardListAdapter.CardViewHolder>(CARD_COMPARATOR) {
     private var mOnItemClickListener: OnItemClickListener? = null
 
     interface OnItemClickListener {
@@ -24,11 +24,11 @@ class CardListAdapter @Inject constructor(
     }
 
     companion object {
-        private val CARD_COMPARATOR = object : DiffUtil.ItemCallback<CardWithSetInfo>() {
-            override fun areItemsTheSame(oldItem: CardWithSetInfo, newItem: CardWithSetInfo): Boolean =
-                oldItem.card.id == newItem.card.id
+        private val CARD_COMPARATOR = object : DiffUtil.ItemCallback<ProductWithSetInfo>() {
+            override fun areItemsTheSame(oldItem: ProductWithSetInfo, newItem: ProductWithSetInfo): Boolean =
+                oldItem.product.id == newItem.product.id
 
-            override fun areContentsTheSame(oldItem: CardWithSetInfo, newItem: CardWithSetInfo): Boolean =
+            override fun areContentsTheSame(oldItem: ProductWithSetInfo, newItem: ProductWithSetInfo): Boolean =
                 oldItem == newItem
         }
     }
@@ -51,17 +51,26 @@ class CardListAdapter @Inject constructor(
         init {
             itemView.setOnClickListener {
                 mOnItemClickListener?.onItemClick(
-                    getItem(bindingAdapterPosition)?.card?.id ?: throw IllegalArgumentException("card is null")
+                    getItem(bindingAdapterPosition)?.product?.id ?: throw IllegalArgumentException("card is null")
                 )
             }
         }
 
-        internal fun bind(item: CardWithSetInfo) {
-            requestManager.load(item.card.imageUrl).into(binding.itemCardImage)
+        internal fun bind(item: ProductWithSetInfo) {
+            val requestOptions = RequestOptions
+                .placeholderOf(R.drawable.img_cardback)
+                .error(R.drawable.img_cardback)
+            Glide.with(itemView).setDefaultRequestOptions(requestOptions).load(item.product.imageUrl).into(binding.itemCardImage)
 
-            binding.itemCardTitleTextview.text = item.card.name
-            binding.itemCardTypeTextview.text = item.card.attribute
-
+            binding.apply {
+                itemCardTitleTextview.text = item.product.name
+                itemCardNumberRarityTextview.text = itemView.resources.getString(
+                    R.string.item_card_number_rarity_text,
+                    item.product.number,
+                    item.product.rarity
+                )
+                itemCardSetNameTextview.text = item.cardSet.name
+            }
         }
     }
 }

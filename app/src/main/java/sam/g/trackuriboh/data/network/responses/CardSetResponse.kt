@@ -1,7 +1,7 @@
 package sam.g.trackuriboh.data.network.responses
 
 import com.google.gson.annotations.SerializedName
-import sam.g.trackuriboh.data.db.CardDatabase
+import sam.g.trackuriboh.data.db.AppDatabase
 import sam.g.trackuriboh.data.db.entities.CardSet
 
 data class CardSetResponse(
@@ -17,7 +17,7 @@ data class CardSetResponse(
         val code: String?,
         @SerializedName("publishedOn")
         val releaseDate: String?
-    ) : CardDatabase.DatabaseEntity<CardSet> {
+    ) : AppDatabase.DatabaseEntity<CardSet> {
 
         override fun toDatabaseEntity(): CardSet =
             CardSet(id, name, code, releaseDate)

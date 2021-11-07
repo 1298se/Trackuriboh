@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -35,6 +34,7 @@ class CardDetailFragment : BaseFragment(), Toolbar.OnMenuItemClickListener {
     private val binding by viewBinding(FragmentCardDetailBinding::inflate)
 
     private val mViewModel: CardDetailViewModel by viewModels()
+
     private lateinit var mCardDetailPagerAdapter: CardDetailPagerAdapter
 
     private var mCardWithSetInfo: CardWithSetInfo? = null
@@ -45,26 +45,14 @@ class CardDetailFragment : BaseFragment(), Toolbar.OnMenuItemClickListener {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        activity?.onBackPressedDispatcher?.addCallback(this) {
-            if (binding.cardDetailViewPager.currentItem == 0) {
-                if (!findNavController().popBackStack()) {
-                    activity?.onBackPressed()
-                }
-            } else {
-                binding.cardDetailViewPager.currentItem = binding.cardDetailViewPager.currentItem - 1
-            }
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setViewPagerBackPressBehaviour(binding.cardDetailViewPager)
 
         initToolbar()
         initImageViewPager()
@@ -74,7 +62,7 @@ class CardDetailFragment : BaseFragment(), Toolbar.OnMenuItemClickListener {
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.action_add_to_inventory -> {
-                val action = CardDetailFragmentDirections.actionCardDetailFragmentToTransactionDialogFragment(mCardWithSetInfo?.card?.id ?: -1)
+                val action = CardDetailFragmentDirections.actionCardDetailFragmentToTransactionDialogFragment(mCardWithSetInfo?.product?.id ?: -1)
                 findNavController().navigate(action)
                 true
             }

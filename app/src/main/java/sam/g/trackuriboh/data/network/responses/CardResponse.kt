@@ -1,8 +1,9 @@
 package sam.g.trackuriboh.data.network.responses
 
 import com.google.gson.annotations.SerializedName
-import sam.g.trackuriboh.data.db.CardDatabase
-import sam.g.trackuriboh.data.db.entities.Card
+import sam.g.trackuriboh.data.db.AppDatabase
+import sam.g.trackuriboh.data.db.entities.Product
+import sam.g.trackuriboh.data.types.ProductType
 
 
 data class CardResponse(
@@ -18,14 +19,15 @@ data class CardResponse(
         val imageUrl: String?,
         @SerializedName("groupId")
         val setId: Long?,
-        val extendedData: List<ExtendedDataItem>
-    ) : CardDatabase.DatabaseEntity<Card> {
+        val extendedData: List<ExtendedDataItem>?,
+        val skus: List<SkuResponse.SkuItem>?
+    ) : AppDatabase.DatabaseEntity<Product> {
 
-        override fun toDatabaseEntity(): Card =
-            Card(
+        override fun toDatabaseEntity(): Product =
+            Product(
                 id,
-                name,
-                cleanName,
+                cleanName ?: name,
+                ProductType.CARD,
                 imageUrl,
                 setId,
                 extendedData

@@ -26,7 +26,4 @@ interface CardSetDao {
 
     @Query("DELETE FROM CardSet")
     suspend fun deleteTable()
-
-    @Query("SELECT * FROM CardSet WHERE (name LIKE :queryString)")
-    suspend fun _searchCardSet(queryString: String): List<CardSet>
 }

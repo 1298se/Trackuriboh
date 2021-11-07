@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.paging.PagingData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import sam.g.trackuriboh.data.db.entities.Card
+import sam.g.trackuriboh.data.db.entities.Product
 import sam.g.trackuriboh.data.repository.CardRepository
 import javax.inject.Inject
 
@@ -12,6 +12,6 @@ import javax.inject.Inject
 class CardSetDetailViewModel @Inject constructor(
     private val cardRepository: CardRepository,
 ) : ViewModel() {
-    var currentCardListResult: Flow<PagingData<Card>>? = null
+    var currentProductListResult: Flow<PagingData<Product>>? = null
 
 }
