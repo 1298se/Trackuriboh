@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -41,9 +40,9 @@ class CardListFragment : BaseSearchListFragment<ProductWithSetAndSkuIds>(), Card
     }
 
     override fun onCardItemClick(cardId: Long) {
-
-        val action = DatabaseFragmentDirections.actionDatabaseFragmentToCardDetailFragment(cardId)
-        findNavController().navigate(action)
+        handleNavigationAction(
+            DatabaseFragmentDirections.actionDatabaseFragmentToCardDetailFragment(cardId)
+        )
     }
 
     override fun onViewPricesItemClick(skuIds: List<Long>) {

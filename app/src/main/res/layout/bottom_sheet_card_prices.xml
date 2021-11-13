@@ -7,7 +7,7 @@ between the NestedScrollView and LinearLayout at the bottom -->
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context=".ui_card_detail.CardDetailPricesFragment">
+    tools:context="ui_price.CardPricesBottomSheetDialogFragment">
 
     <LinearLayout
         android:id="@+id/sku_prices_container"

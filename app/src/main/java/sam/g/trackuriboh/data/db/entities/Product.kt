@@ -8,6 +8,12 @@ import kotlinx.parcelize.Parcelize
 import sam.g.trackuriboh.data.network.responses.CardResponse
 import sam.g.trackuriboh.data.types.ProductType
 
+/**
+ * We use a single table to store all products, and we use [type] to distinguish between different product types.
+ * We choose to do this because we (may) need to have backward reference from a [Sku] to [Product], thus we'd have to
+ * search in all subtables to create the join. There also are not that many product types (or at least there isn't planned
+ * support for a lot)
+ */
 @Parcelize
 @Entity(
     foreignKeys = [

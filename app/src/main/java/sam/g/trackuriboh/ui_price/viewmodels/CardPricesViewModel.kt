@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
 import sam.g.trackuriboh.data.repository.PriceRepository
-import sam.g.trackuriboh.ui_price.CardDetailPricesFragment
+import sam.g.trackuriboh.ui_price.CardPricesBottomSheetDialogFragment
 import javax.inject.Inject
 
 @HiltViewModel
@@ -14,7 +14,7 @@ class CardPricesViewModel @Inject constructor(
     private val priceRepository: PriceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
-    private val skuIds = state.get<LongArray>(CardDetailPricesFragment.ARG_SKU_IDS)?.toList() ?: emptyList()
+    private val skuIds = state.get<LongArray>(CardPricesBottomSheetDialogFragment.ARG_SKU_IDS)?.toList() ?: emptyList()
 
     val printingToSkuMap: LiveData<Map<String?, List<SkuWithConditionAndPrinting>>>
         get() = _skuPrices

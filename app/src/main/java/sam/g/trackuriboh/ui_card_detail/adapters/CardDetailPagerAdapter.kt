@@ -2,7 +2,7 @@ package sam.g.trackuriboh.ui_card_detail.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import sam.g.trackuriboh.ui_price.CardDetailPricesFragment
+import sam.g.trackuriboh.ui_price.CardPricesBottomSheetDialogFragment
 
 class CardDetailPagerAdapter constructor(
     fragment: Fragment,
@@ -15,7 +15,7 @@ class CardDetailPagerAdapter constructor(
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> CardDetailPricesFragment.newInstance(mSkuIds)
+            0 -> CardPricesBottomSheetDialogFragment.newInstance(mSkuIds, false)
             else -> throw Exception("view pager out of bounds")
         }
     }

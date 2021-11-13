@@ -68,7 +68,7 @@
     </fragment>
     <dialog
         android:id="@+id/cardPricesBottomSheetDialogFragment"
-        android:name="sam.g.trackuriboh.ui_database.CardPricesBottomSheetDialogFragment"
+        android:name="sam.g.trackuriboh.ui_price.CardPricesBottomSheetDialogFragment"
         android:label="CardPricesBottomSheetDialogFragment" >
         <argument
             android:name="skuIds"
