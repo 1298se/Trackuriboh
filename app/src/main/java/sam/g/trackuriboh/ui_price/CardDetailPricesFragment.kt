@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.databinding.FragmentCardDetailPricesBinding
@@ -13,11 +13,10 @@ import sam.g.trackuriboh.ui_price.viewmodels.CardPricesViewModel
 import sam.g.trackuriboh.viewBinding
 
 @AndroidEntryPoint
-class CardDetailPricesFragment : Fragment() {
+class CardDetailPricesFragment : BottomSheetDialogFragment() {
     private val mViewModel: CardPricesViewModel by viewModels()
 
     private val binding by viewBinding(FragmentCardDetailPricesBinding::inflate)
-
 
     companion object {
         // This is the same value as the navArg name so that the SavedStateHandle can acess from either
@@ -38,7 +37,7 @@ class CardDetailPricesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mViewModel.printingToSkuMap.observe(viewLifecycleOwner) { map ->
+        mViewModel.printingToSkuMap.observe(this) { map ->
             map.toList().forEachIndexed { index, entry ->
                 binding.skuPricesContainer.addView(SkuPricesCardView(requireContext()).apply {
                     layoutParams = ViewGroup.MarginLayoutParams(

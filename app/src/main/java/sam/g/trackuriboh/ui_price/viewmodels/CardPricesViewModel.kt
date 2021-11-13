@@ -29,12 +29,17 @@ class CardPricesViewModel @Inject constructor(
         }
     }
 
-    private fun buildPrintingToSkuMap(skus: List<SkuWithConditionAndPrinting>): Map<String?, List<SkuWithConditionAndPrinting>>? {
+    private fun buildPrintingToSkuMap(skus: List<SkuWithConditionAndPrinting>): Map<String?, List<SkuWithConditionAndPrinting>> {
+        // Sort by printing, then prices. If null, we set to MAX_VALUE so it's at the end
+
+        val sortedList = skus.sortedWith(compareBy(
+            { it.printing?.order ?: Integer.MAX_VALUE },
+            { it.condition?.order ?: Integer.MAX_VALUE }
+        ))
+
         val map = mutableMapOf<String?, MutableList<SkuWithConditionAndPrinting>>()
 
-        skus.run {
-            // Sort by printing, then prices. If null, we set to MAX_VALUE so it's at the end
-            sortedWith(compareBy({ it.printing?.order ?: Integer.MAX_VALUE }, { it.condition?.order ?: Integer.MAX_VALUE }))
+        sortedList.run {
             forEach {
                 val skuList = map[it.printing?.name]
 
