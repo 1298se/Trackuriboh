@@ -18,16 +18,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         setupBottomNavigation()
-
-        refetchAccessTokenIfNecessary()
     }
 
     private fun setupBottomNavigation() {
         mNavController = findNavController(R.id.main_nav_host_fragment)
+
         findViewById<BottomNavigationView>(R.id.bottom_nav_view).setupWithNavController(mNavController)
-    }
-
-    private fun refetchAccessTokenIfNecessary() {
-
     }
 }

@@ -13,9 +13,11 @@ data class PrintingResponse(
         val id: Long,
         @SerializedName("name")
         val name: String,
+        @SerializedName("displayOrder")
+        val order: Long?
     ) : AppDatabase.DatabaseEntity<Printing> {
 
         override fun toDatabaseEntity(): Printing =
-            Printing(id, name)
+            Printing(id, name, order)
     }
 }

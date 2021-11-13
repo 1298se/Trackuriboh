@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -32,8 +31,6 @@ import sam.g.trackuriboh.ui_transaction_form.viewmodels.TransactionResult
 @AndroidEntryPoint
 class TransactionBottomSheetDialogFragment : BottomSheetDialogFragment() {
     private val mViewModel: TransactionBottomSheetDialogViewModel by viewModels()
-
-    private val args: TransactionBottomSheetDialogFragmentArgs by navArgs()
 
     private lateinit var binding: BottomSheetTransactionBinding
 

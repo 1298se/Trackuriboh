@@ -1,4 +1,5 @@
 <resources>
+
     <style name="Widget.AppTheme.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
         <item name="hintTextColor">?attr/colorOnPrimary</item>
         <item name="boxStrokeColor">?attr/colorOnPrimary</item>
@@ -11,14 +12,19 @@
 
     <!-- Components -->
     <style name="Widget.AppTheme.TabLayout" parent="Widget.MaterialComponents.TabLayout">
-        <item name="tabIndicatorColor">?attr/colorPrimaryDark</item>
-        <item name="tabTextColor">?attr/colorAccent</item>
         <item name="tabSelectedTextColor">?attr/colorPrimaryDark</item>
+        <item name="tabTextColor">?attr/colorPrimary</item>
+        <item name="android:elevation">8dp</item>
     </style>
 
     <style name="Widget.AppTheme.SearchView" parent="Widget.AppCompat.SearchView.ActionBar">
         <item name="searchIcon">@null</item>
         <item name="queryBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="Widget.AppTheme.AutoCompleteTextView" parent="Widget.AppCompat.Light.AutoCompleteTextView">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textColorHint">?attr/colorOnPrimary</item>
     </style>
 
     <style name="Widget.AppTheme.LinearProgressIndicator" parent="Widget.MaterialComponents.LinearProgressIndicator">
@@ -56,4 +62,7 @@
         <item name="tabMaxWidth">@dimen/image_slider_width</item>
     </style>
 
+    <style name="Widget.AppTheme.CardView" parent="Widget.MaterialComponents.CardView">
+        <item name="cardElevation">@dimen/cardview_default_elevation</item>
+    </style>
 </resources>

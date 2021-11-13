@@ -6,24 +6,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/item_card_container_margin_start"
-    android:layout_marginEnd="@dimen/item_card_container_margin_end"
-    android:layout_marginBottom="@dimen/list_item_large_row_spacing"
-    app:cardElevation="8dp"
     android:background="?android:attr/selectableItemBackground">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingStart="@dimen/list_item_padding_start"
-        android:paddingEnd="@dimen/list_item_padding_end"
         android:paddingTop="@dimen/list_item_image_large_padding_top"
+        android:paddingEnd="@dimen/list_item_padding_end"
         android:paddingBottom="@dimen/list_item_image_large_padding_bottom">
 
         <ImageView
             android:id="@+id/item_card_image"
-            android:layout_width="@dimen/list_item_card_image_width"
-            android:layout_height="@dimen/list_item_card_image_height"
+            android:layout_width="@dimen/item_card_image_width"
+            android:layout_height="@dimen/item_card_image_height"
             android:contentDescription="@string/item_card_list_content_desc"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,9 +31,9 @@
             style="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/item_card_image_text_spacing"
             android:ellipsize="end"
             android:maxLines="1"
-            android:layout_marginStart="@dimen/item_card_image_text_spacing"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@id/item_card_image"
@@ -72,13 +68,14 @@
             tools:text="The Legend of Blue Eyes White Dragon" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/item_card_view_prices_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/item_card_image_text_spacing"
             android:text="@string/item_card_view_prices_button_text"
-            app:layout_constraintTop_toBottomOf="@id/item_card_set_name_textview"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/item_card_image"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/item_card_set_name_textview" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

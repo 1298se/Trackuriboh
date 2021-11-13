@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import sam.g.trackuriboh.BaseFragment
+import androidx.fragment.app.Fragment
 import sam.g.trackuriboh.data.db.entities.Product
 import sam.g.trackuriboh.databinding.CardDetailOverviewRowBinding
 import sam.g.trackuriboh.databinding.FragmentCardDetailOverviewBinding
@@ -12,7 +12,7 @@ import sam.g.trackuriboh.viewBinding
 
 private const val ARG_CARD = "ARG_CARD"
 
-class CardDetailOverviewFragment : BaseFragment() {
+class CardDetailOverviewFragment : Fragment() {
     private val binding by viewBinding(FragmentCardDetailOverviewBinding::inflate)
 
     private var mProduct: Product? = null

@@ -26,7 +26,7 @@ data class CardResponse(
         override fun toDatabaseEntity(): Product =
             Product(
                 id,
-                cleanName ?: name,
+                name,
                 ProductType.CARD,
                 imageUrl,
                 setId,

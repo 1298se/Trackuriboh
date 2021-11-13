@@ -6,17 +6,17 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import sam.g.trackuriboh.R
-import sam.g.trackuriboh.data.db.relations.ProductWithSetInfo
+import sam.g.trackuriboh.data.db.relations.ProductWithSetAndSkuIds
 import sam.g.trackuriboh.databinding.ItemCardBinding
 import javax.inject.Inject
 
-class CardListAdapter @Inject constructor(): PagingDataAdapter<ProductWithSetInfo, CardListAdapter.CardViewHolder>(CARD_COMPARATOR) {
+class CardListAdapter @Inject constructor(): PagingDataAdapter<ProductWithSetAndSkuIds, CardListAdapter.CardViewHolder>(CARD_COMPARATOR) {
     private var mOnItemClickListener: OnItemClickListener? = null
 
     interface OnItemClickListener {
-        fun onItemClick(cardId: Long)
+        fun onCardItemClick(cardId: Long)
+        fun onViewPricesItemClick(skuIds: List<Long>)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
@@ -24,11 +24,11 @@ class CardListAdapter @Inject constructor(): PagingDataAdapter<ProductWithSetInf
     }
 
     companion object {
-        private val CARD_COMPARATOR = object : DiffUtil.ItemCallback<ProductWithSetInfo>() {
-            override fun areItemsTheSame(oldItem: ProductWithSetInfo, newItem: ProductWithSetInfo): Boolean =
+        private val CARD_COMPARATOR = object : DiffUtil.ItemCallback<ProductWithSetAndSkuIds>() {
+            override fun areItemsTheSame(oldItem: ProductWithSetAndSkuIds, newItem: ProductWithSetAndSkuIds): Boolean =
                 oldItem.product.id == newItem.product.id
 
-            override fun areContentsTheSame(oldItem: ProductWithSetInfo, newItem: ProductWithSetInfo): Boolean =
+            override fun areContentsTheSame(oldItem: ProductWithSetAndSkuIds, newItem: ProductWithSetAndSkuIds): Boolean =
                 oldItem == newItem
         }
     }
@@ -49,18 +49,25 @@ class CardListAdapter @Inject constructor(): PagingDataAdapter<ProductWithSetInf
 
     inner class CardViewHolder(private val binding: ItemCardBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
-            itemView.setOnClickListener {
-                mOnItemClickListener?.onItemClick(
+            binding.root.setOnClickListener {
+                mOnItemClickListener?.onCardItemClick(
                     getItem(bindingAdapterPosition)?.product?.id ?: throw IllegalArgumentException("card is null")
+                )
+            }
+
+            binding.itemCardViewPricesButton.setOnClickListener {
+                mOnItemClickListener?.onViewPricesItemClick(
+                    getItem(bindingAdapterPosition)?.skuIds ?: throw IllegalArgumentException("skuIds is null")
                 )
             }
         }
 
-        internal fun bind(item: ProductWithSetInfo) {
-            val requestOptions = RequestOptions
-                .placeholderOf(R.drawable.img_cardback)
-                .error(R.drawable.img_cardback)
-            Glide.with(itemView).setDefaultRequestOptions(requestOptions).load(item.product.imageUrl).into(binding.itemCardImage)
+        internal fun bind(item: ProductWithSetAndSkuIds) {
+            Glide.with(itemView)
+                .load(item.product.imageUrl)
+                .placeholder(R.drawable.img_cardback)
+                .fitCenter()
+                .into(binding.itemCardImage)
 
             binding.apply {
                 itemCardTitleTextview.text = item.product.name

@@ -10,8 +10,11 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import sam.g.trackuriboh.data.db.relations.ProductWithSetInfo
+import sam.g.trackuriboh.R
+import sam.g.trackuriboh.data.db.relations.ProductWithSetAndSkuIds
 import sam.g.trackuriboh.databinding.FragmentCardListBinding
+import sam.g.trackuriboh.handleNavigationAction
+import sam.g.trackuriboh.ui_common.VerticalSpaceItemDecoration
 import sam.g.trackuriboh.ui_database.adapters.CardListAdapter
 import sam.g.trackuriboh.ui_database.viewmodels.BaseSearchViewModel
 import sam.g.trackuriboh.ui_database.viewmodels.CardListViewModel
@@ -19,7 +22,7 @@ import sam.g.trackuriboh.viewBinding
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CardListFragment : BaseSearchListFragment<ProductWithSetInfo>(), CardListAdapter.OnItemClickListener {
+class CardListFragment : BaseSearchListFragment<ProductWithSetAndSkuIds>(), CardListAdapter.OnItemClickListener {
     @Inject
     lateinit var mAdapter: CardListAdapter
 
@@ -35,18 +38,21 @@ class CardListFragment : BaseSearchListFragment<ProductWithSetInfo>(), CardListA
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView()
-
-        this.search(mViewModel.currentQueryValue())
     }
 
-    override fun onItemClick(cardId: Long) {
-        hideSoftKeyboard()
+    override fun onCardItemClick(cardId: Long) {
 
         val action = DatabaseFragmentDirections.actionDatabaseFragmentToCardDetailFragment(cardId)
         findNavController().navigate(action)
     }
 
-    override fun getViewModel(): BaseSearchViewModel<ProductWithSetInfo> {
+    override fun onViewPricesItemClick(skuIds: List<Long>) {
+        handleNavigationAction(
+            DatabaseFragmentDirections.actionDatabaseFragmentToCardPricesBottomSheetDialogFragment(skuIds.toLongArray())
+        )
+    }
+
+    override fun getViewModel(): BaseSearchViewModel<ProductWithSetAndSkuIds> {
         return mViewModel
     }
 
@@ -54,9 +60,11 @@ class CardListFragment : BaseSearchListFragment<ProductWithSetInfo>(), CardListA
         return binding.cardList
     }
 
-    override fun getAdapter(): PagingDataAdapter<ProductWithSetInfo, out RecyclerView.ViewHolder> {
+    override fun getAdapter(): PagingDataAdapter<ProductWithSetAndSkuIds, out RecyclerView.ViewHolder> {
         return mAdapter
     }
+
+    override fun getItemDecorator() = VerticalSpaceItemDecoration(resources.getDimension(R.dimen.list_item_large_row_spacing))
 
     private fun initRecyclerView() {
         mAdapter.setOnItemClickListener(this)

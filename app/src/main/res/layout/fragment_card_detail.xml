@@ -19,23 +19,26 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/card_image_view_pager"
-                style="@style/ImageSliderViewPager"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/card_image_height"
+                android:layout_height="wrap_content"
                 app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0" />
+                app:layout_collapseParallaxMultiplier="0">
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/card_image_tab_layout"
-                style="@style/ImageSliderTabLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/image_slider_height"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_marginBottom="@dimen/image_slider_margin_bottom"
-                app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0" />
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/card_image_view_pager"
+                    style="@style/ImageSliderViewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/card_image_height" />
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/card_image_tab_layout"
+                    style="@style/ImageSliderTabLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/image_slider_height"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="@dimen/image_slider_margin_bottom" />
+            </FrameLayout>
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/card_detail_toolbar"

@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.data.db.entities.CardSet
 import sam.g.trackuriboh.databinding.FragmentCardSetListBinding
+import sam.g.trackuriboh.handleNavigationAction
 import sam.g.trackuriboh.ui_database.adapters.CardSetListAdapter
 import sam.g.trackuriboh.ui_database.viewmodels.BaseSearchViewModel
 import sam.g.trackuriboh.ui_database.viewmodels.CardSetListViewModel
@@ -32,7 +32,6 @@ class CardSetListFragment : BaseSearchListFragment<CardSet>(), CardSetListAdapte
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView()
-        this.search(mViewModel.currentQueryValue())
     }
 
     override fun getViewModel(): BaseSearchViewModel<CardSet> {
@@ -48,10 +47,8 @@ class CardSetListFragment : BaseSearchListFragment<CardSet>(), CardSetListAdapte
     }
 
     override fun onItemClick(setName: String) {
-        hideSoftKeyboard()
 
-        val action = DatabaseFragmentDirections.actionDatabaseFragmentToCardSetDetailFragment(setName)
-        findNavController().navigate(action)
+        handleNavigationAction(DatabaseFragmentDirections.actionDatabaseFragmentToCardSetDetailFragment(setName))
     }
 
     private fun initRecyclerView() {

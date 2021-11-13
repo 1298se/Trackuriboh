@@ -2,6 +2,8 @@ package sam.g.trackuriboh
 
 
 import android.app.Application
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.Configuration
 import com.facebook.stetho.Stetho
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
@@ -12,7 +14,10 @@ import sam.g.trackuriboh.data.repository.SessionManager
 import javax.inject.Inject
 
 @HiltAndroidApp
-class BaseApplication : Application() {
+class BaseApplication : Application(), Configuration.Provider {
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+
     @Inject
     lateinit var mSessionManager: SessionManager
 
@@ -25,4 +30,7 @@ class BaseApplication : Application() {
         applicationScope.launch { mSessionManager.setAccessToken() }
 
     }
+
+    override fun getWorkManagerConfiguration(): Configuration =
+        Configuration.Builder().setWorkerFactory(workerFactory).build()
 }

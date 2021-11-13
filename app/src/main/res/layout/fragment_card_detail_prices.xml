@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- Need android:fillViewport="true" because otherwise there will be some kind of weird space
+between the NestedScrollView and LinearLayout at the bottom -->
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     tools:context=".ui_card_detail.CardDetailPricesFragment">
 
-    <TableLayout
-        android:id="@+id/card_detail_set_info_table"
+    <LinearLayout
+        android:id="@+id/sku_prices_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="?android:attr/dividerHorizontal"
-        android:showDividers="middle" />
+        android:orientation="vertical"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/list_padding_top"
+        android:paddingStart="@dimen/list_padding_start"
+        android:paddingEnd="@dimen/list_padding_end" />
 
 </androidx.core.widget.NestedScrollView>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,17 +10,17 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/database_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/database_sync_progress_indicator"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:showAnimationBehavior="outward"
-        app:hideAnimationBehavior="outward" />
+        style="@style/Widget.MaterialComponents.Toolbar.Primary" />
 
-    <include layout="@layout/divider_view" />
+    <!-- Dummy view for receiving focus after SearchView clears focus -->
+    <View
+        android:id="@+id/focus_dummy_view"
+        android:focusableInTouchMode="true"
+        android:focusable="true"
+        android:background="@android:color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/database_tab_layout"

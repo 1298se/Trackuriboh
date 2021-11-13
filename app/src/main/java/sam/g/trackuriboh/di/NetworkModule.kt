@@ -23,7 +23,7 @@ object NetworkModule {
     private const val API_VERSION = "v1.39.0"
     private const val BASE_URL = "https://api.tcgplayer.com/$API_VERSION/"
     private const val CATEGORIES_URL = "${BASE_URL}catalog/categories/$TCGPLAYER_YUGIOH_CATEGORY_ID/"
-    private const val PRICES_URL = "${BASE_URL}pricing"
+    private const val PRICES_URL = "${BASE_URL}pricing/"
 
     @Singleton
     @Provides

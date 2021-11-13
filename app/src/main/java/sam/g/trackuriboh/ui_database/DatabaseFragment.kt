@@ -7,27 +7,32 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import sam.g.trackuriboh.BaseFragment
 import sam.g.trackuriboh.R
-import sam.g.trackuriboh.data.network.services.CardSetApiService
 import sam.g.trackuriboh.databinding.FragmentDatabaseBinding
-import sam.g.trackuriboh.services.DatabaseSyncService
+import sam.g.trackuriboh.setViewPagerBackPressBehaviour
 import sam.g.trackuriboh.ui_database.adapters.DatabasePagerAdapter
 import sam.g.trackuriboh.ui_database.viewmodels.DatabaseViewModel
 import sam.g.trackuriboh.viewBinding
-import javax.inject.Inject
 
+/**
+ * The SearchView is very buggy and the behaviour is sometimes hard to manage. When updating Hilt,
+ * the keyboard starting flickering when returning back from another fragment, so to workaround this
+ * we'll use activities to contain destinations that come from here.
+ */
 @AndroidEntryPoint
-class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar.OnMenuItemClickListener, MenuItem.OnActionExpandListener {
-    @Inject
-    lateinit var mCardSetWebService: CardSetApiService
-
+class DatabaseFragment :
+    Fragment(),
+    SearchView.OnQueryTextListener,
+    Toolbar.OnMenuItemClickListener,
+    MenuItem.OnActionExpandListener
+{
     private val binding by viewBinding(FragmentDatabaseBinding::inflate)
 
     private lateinit var mSearchView: SearchView
@@ -44,15 +49,18 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
 
         setViewPagerBackPressBehaviour(binding.databaseViewPager)
 
-        binding.databaseSyncProgressIndicator.setVisibilityAfterHide(View.GONE)
-
         initToolbar()
         initTabLayoutWithViewPager()
-        initObservers()
+        // TODO: Add Database Sync listener
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         performSearch(query)
+        mSearchView.clearFocus()
+
+        // Hack to stop the tablayout from getting focus after this is called
+        binding.focusDummyView.requestFocus()
+
         return true
     }
 
@@ -70,40 +78,14 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
         }
     }
 
-    override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-        binding.databaseToolbar.menu.findItem(R.id.action_database_sync).isVisible = false
-        return true
-    }
+    override fun onMenuItemActionExpand(item: MenuItem?): Boolean { return true }
 
     /** When the searchview closes, **/
     override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
         if (item?.itemId == R.id.action_search) {
             resetLists()
-
-            binding.databaseToolbar.menu.clear()
-            onCreateOptionsMenu()
         }
         return true
-    }
-
-    private fun initObservers() {
-        mViewModel.databaseSyncState.observe(viewLifecycleOwner, {
-            when(it) {
-                is DatabaseSyncService.DatabaseSyncState.FAILURE  -> showError(R.string.database_sync_error_title, R.string.database_sync_error_message)
-                DatabaseSyncService.DatabaseSyncState.IDLE -> {
-                    binding.databaseViewPager.visibility = View.VISIBLE
-                    binding.databaseSyncProgressIndicator.hide()
-                }
-                is DatabaseSyncService.DatabaseSyncState.LOADING -> {
-                    binding.databaseViewPager.visibility = View.INVISIBLE
-                    binding.databaseSyncProgressIndicator.apply {
-                        progress = it.progress
-                        show()
-                    }
-                }
-                DatabaseSyncService.DatabaseSyncState.SUCCESS -> Unit
-            }
-        })
     }
 
     private fun initTabLayoutWithViewPager() {
@@ -162,7 +144,7 @@ class DatabaseFragment : BaseFragment(), SearchView.OnQueryTextListener, Toolbar
         repeat(mAdapter.itemCount) {
             val currentFragment = childFragmentManager.findFragmentByTag("f" + mAdapter.getItemId(it))
 
-            if (currentFragment is BaseSearchListFragment<*> && !currentFragment.lastQueryValue().isNullOrBlank()) {
+            if (currentFragment is BaseSearchListFragment<*> && currentFragment.lastQueryValue() != null) {
                 currentFragment.search(null)
             }
         }

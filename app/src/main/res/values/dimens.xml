@@ -1,31 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Overwrite default values -->
+    <dimen name="cardview_default_elevation">8dp</dimen>
+
     <!-- Material -->
     <dimen name="material_border_padding_small">8dp</dimen>
     <dimen name="material_border_padding">16dp</dimen>
     <dimen name="material_border_padding_large">24dp</dimen>
     <dimen name="app_bar_height">128dp</dimen>
 
+    <dimen name="list_padding_top">8dp</dimen>
+    <dimen name="list_padding_bottom">8dp</dimen>
+    <dimen name="list_padding_start">16dp</dimen>
+    <dimen name="list_padding_end">16dp</dimen>
+
     <dimen name="list_item_padding_start">16dp</dimen>
     <dimen name="list_item_padding_end">16dp</dimen>
     <dimen name="list_item_two_line_padding_top">12dp</dimen>
-    <dimen name="list_item_two_line_padding_bottom">16dp</dimen>
+    <dimen name="list_item_two_line_padding_bottom">12dp</dimen>
     <dimen name="list_item_text_spacing">8dp</dimen>
     <dimen name="list_item_image_large_padding_top">16dp</dimen>
     <dimen name="list_item_image_large_padding_bottom">16dp</dimen>
     <dimen name="list_item_large_row_spacing">12dp</dimen>
 
-    <!-- Search -->
-    <dimen name="chip_group_marginVertical">4dp</dimen>
-    <dimen name="chip_group_paddingHorizontal">12dp</dimen>
-
     <!-- Database -->
     <!-- Item Card -->
-    <dimen name="item_card_container_margin_start">16dp</dimen>
-    <dimen name="item_card_container_margin_end">16dp</dimen>
     <dimen name="item_card_image_text_spacing">16dp</dimen>
-    <dimen name="list_item_card_image_width">92dp</dimen>
-    <dimen name="list_item_card_image_height">128dp</dimen>
+    <dimen name="item_card_image_width">92dp</dimen>
+    <dimen name="item_card_image_height">128dp</dimen>
 
     <!-- Card Detail -->
     <dimen name="card_image_swipe_padding">16dp</dimen>

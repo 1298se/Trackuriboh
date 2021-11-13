@@ -6,12 +6,6 @@
     <string name="lbl_transactions">Transactions</string>
     <string name="lbl_database">Database</string>
 
-    <!-- Resource -->
-    <string name="card_type_main">Main Deck</string>
-    <string name="card_type_extra">Extra Deck</string>
-    <string name="card_type_spell">Spell</string>
-    <string name="card_type_trap">Trap</string>
-
     <!-- Database -->
     <string name="tab_card_title">Cards</string>
     <string name="tab_set_title">Sets</string>

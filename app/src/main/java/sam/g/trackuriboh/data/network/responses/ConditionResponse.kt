@@ -15,9 +15,11 @@ data class ConditionResponse(
         val name: String,
         @SerializedName("abbreviation")
         val abbreviation: String,
+        @SerializedName("displayOrder")
+        val order: Long?
     ) : AppDatabase.DatabaseEntity<Condition> {
 
         override fun toDatabaseEntity(): Condition =
-            Condition(id, name, abbreviation)
+            Condition(id, name, abbreviation, order)
     }
 }

@@ -9,19 +9,13 @@
         android:name="sam.g.trackuriboh.ui_transaction.TransactionFragment"
         android:label="@string/lbl_transactions"
         tools:layout="@layout/fragment_transaction" />
-    <fragment
-        android:id="@+id/cardDetailFragment"
-        android:name="sam.g.trackuriboh.ui_card_detail.CardDetailFragment">
+    <activity
+        android:id="@+id/cardDetailActivity"
+        android:name="sam.g.trackuriboh.ui_card_detail.CardDetailActivity">
         <argument
             android:name="cardId"
             app:argType="long" />
-        <action
-            android:id="@+id/action_cardDetailFragment_to_cardSetDetailFragment"
-            app:destination="@id/cardSetDetailFragment" />
-        <action
-            android:id="@+id/action_cardDetailFragment_to_transactionDialogFragment"
-            app:destination="@id/transactionDialogFragment" />
-    </fragment>
+    </activity>
     <fragment
         android:id="@+id/cardSetDetailFragment"
         android:name="sam.g.trackuriboh.ui_card_set_detail.CardSetDetailFragment"
@@ -29,9 +23,6 @@
         <argument
             android:name="setName"
             app:argType="string" />
-        <action
-            android:id="@+id/action_cardSetDetailFragment_to_cardDetailFragment"
-            app:destination="@id/cardDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/databaseFragment"
@@ -40,10 +31,13 @@
         tools:layout="@layout/fragment_database">
         <action
             android:id="@+id/action_databaseFragment_to_cardDetailFragment"
-            app:destination="@id/cardDetailFragment" />
+            app:destination="@id/cardDetailActivity" />
         <action
             android:id="@+id/action_databaseFragment_to_cardSetDetailFragment"
             app:destination="@id/cardSetDetailFragment" />
+        <action
+            android:id="@+id/action_databaseFragment_to_cardPricesBottomSheetDialogFragment"
+            app:destination="@id/cardPricesBottomSheetDialogFragment" />
     </fragment>
     <dialog
         android:id="@+id/transactionDialogFragment"
@@ -72,4 +66,12 @@
             android:id="@+id/action_inventoryFragment_to_inventoryDetailFragment"
             app:destination="@id/inventoryDetailFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/cardPricesBottomSheetDialogFragment"
+        android:name="sam.g.trackuriboh.ui_database.CardPricesBottomSheetDialogFragment"
+        android:label="CardPricesBottomSheetDialogFragment" >
+        <argument
+            android:name="skuIds"
+            app:argType="long[]" />
+    </dialog>
 </navigation>

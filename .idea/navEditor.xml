@@ -3,6 +3,28 @@
   <component name="navEditor-manualLayoutAlgorithm2">
     <option name="myPositions">
       <map>
+        <entry key="card_detail_nav_graph.xml">
+          <value>
+            <LayoutPositions>
+              <option name="myPositions">
+                <map>
+                  <entry key="cardDetailFragment2">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="-238" />
+                            <option name="y" value="46" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </LayoutPositions>
+          </value>
+        </entry>
         <entry key="database_nav_graph.xml">
           <value>
             <LayoutPositions>
@@ -142,28 +164,26 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
-                  <entry key="cardDetailFragment">
+                  <entry key="cardDetailActivity">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="724" />
-                            <option name="y" value="477" />
+                            <option name="x" value="378" />
+                            <option name="y" value="680" />
                           </Point>
                         </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_cardDetailFragment_to_cardSetDetailFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                            <entry key="action_cardDetailFragment_to_transactionDialogFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="cardPricesBottomSheetDialogFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="396" />
+                            <option name="y" value="1043" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -173,18 +193,9 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="368" />
-                            <option name="y" value="501" />
+                            <option name="x" value="372" />
+                            <option name="y" value="333" />
                           </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_cardSetDetailFragment_to_cardDetailFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -194,8 +205,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="292" />
+                            <option name="x" value="4" />
+                            <option name="y" value="686" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -205,29 +216,17 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
+                            <entry key="action_databaseFragment_to_cardPricesBottomSheetDialogFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_databaseFragment_to_cardSetDetailFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_databaseFragment_to_filterBottomSheetDialogFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
                           </map>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="filterBottomSheetDialogFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="368" />
-                            <option name="y" value="256" />
-                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -270,8 +269,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="1080" />
-                            <option name="y" value="477" />
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                       </LayoutPositions>

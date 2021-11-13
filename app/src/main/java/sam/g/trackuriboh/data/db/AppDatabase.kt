@@ -26,7 +26,7 @@ import sam.g.trackuriboh.data.db.entities.*
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun productDao(): ProductDao
-    abstract fun productSkuDao(): SkuDao
+    abstract fun skuDao(): SkuDao
     abstract fun cardSetDao(): CardSetDao
     abstract fun cardRarityDao(): CardRarityDao
     abstract fun printingDao(): PrintingDao

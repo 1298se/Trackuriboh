@@ -4,15 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import sam.g.trackuriboh.BaseFragment
 import sam.g.trackuriboh.databinding.FragmentCardSetDetailBinding
 import sam.g.trackuriboh.ui_card_set_detail.viewmodels.CardSetDetailViewModel
 import sam.g.trackuriboh.ui_database.adapters.CardListAdapter
@@ -20,7 +18,7 @@ import sam.g.trackuriboh.viewBinding
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CardSetDetailFragment : BaseFragment(), CardListAdapter.OnItemClickListener {
+class CardSetDetailFragment : Fragment(), CardListAdapter.OnItemClickListener {
     @Inject
     lateinit var mAdapter: CardListAdapter
 
@@ -41,14 +39,15 @@ class CardSetDetailFragment : BaseFragment(), CardListAdapter.OnItemClickListene
         initRecyclerView()
 
        binding.cardSetDetailCollapseToolbar.title = args.setName
-
-        lifecycleScope.launch {
-        }
     }
 
-    override fun onItemClick(cardId: Long) {
-        val action = CardSetDetailFragmentDirections.actionCardSetDetailFragmentToCardDetailFragment(cardId)
-        findNavController().navigate(action)
+    override fun onCardItemClick(cardId: Long) {
+        // val action = CardSetDetailFragmentDirections.actionCardSetDetailFragmentToCardDetailFragment(cardId)
+        // findNavController().navigate(action)
+    }
+
+    override fun onViewPricesItemClick(skuIds: List<Long>) {
+        // TODO("Not yet implemented")
     }
 
     private fun initToolbar() {

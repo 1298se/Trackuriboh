@@ -6,17 +6,16 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import sam.g.trackuriboh.data.db.entities.Product
-import sam.g.trackuriboh.data.db.relations.ProductWithSetInfo
-import sam.g.trackuriboh.data.db.relations.ProductWithSkus
+import sam.g.trackuriboh.data.db.relations.ProductWithSetAndSkuIds
 import sam.g.trackuriboh.data.types.ProductType
 
 @Dao
 interface ProductDao {
-    @Query("SELECT * FROM Product WHERE id = :productId")
-    suspend fun getProductById(productId: Long): ProductWithSkus?
+    @Query("SELECT * FROM Product WHERE Product.id = :productId")
+    suspend fun getProductWithSkusById(productId: Long): ProductWithSetAndSkuIds?
 
     @Query("SELECT * FROM Product WHERE name LIKE :query AND type IS :productType ORDER BY name ASC")
-    fun searchProductByName(query: String, productType: ProductType): PagingSource<Int, ProductWithSetInfo>
+    fun searchProductByName(query: String, productType: ProductType): PagingSource<Int, ProductWithSetAndSkuIds>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertProducts(product: Product): Long

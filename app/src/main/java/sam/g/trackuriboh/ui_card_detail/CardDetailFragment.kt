@@ -6,44 +6,32 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import sam.g.trackuriboh.BaseFragment
 import sam.g.trackuriboh.R
-import sam.g.trackuriboh.data.db.relations.CardWithSetInfo
 import sam.g.trackuriboh.databinding.FragmentCardDetailBinding
+import sam.g.trackuriboh.setViewPagerBackPressBehaviour
 import sam.g.trackuriboh.ui_card_detail.adapters.CardDetailPagerAdapter
+import sam.g.trackuriboh.ui_card_detail.viewmodels.CardDetailViewModel
 import sam.g.trackuriboh.ui_common.CollapseToolbarStateChangeListener
-import sam.g.trackuriboh.ui_database.adapters.CardImagePagerAdapter
+import sam.g.trackuriboh.ui_database.adapters.ImagePagerAdapter
 import sam.g.trackuriboh.viewBinding
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class CardDetailFragment : BaseFragment(), Toolbar.OnMenuItemClickListener {
-    @Inject
-    lateinit var mImagePagerAdapter: CardImagePagerAdapter
-
-    private val args: CardDetailFragmentArgs by navArgs()
-
+class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private val binding by viewBinding(FragmentCardDetailBinding::inflate)
 
     private val mViewModel: CardDetailViewModel by viewModels()
 
+    private lateinit var mImagePagerAdapter: ImagePagerAdapter
+
     private lateinit var mCardDetailPagerAdapter: CardDetailPagerAdapter
-
-    private var mCardWithSetInfo: CardWithSetInfo? = null
-
-    init {
-        lifecycleScope.launchWhenStarted {
-
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
@@ -57,17 +45,15 @@ class CardDetailFragment : BaseFragment(), Toolbar.OnMenuItemClickListener {
         initToolbar()
         initImageViewPager()
         initCardDetailViewPager()
+
+        mViewModel.cardWithSetAndSkuIds.observe(viewLifecycleOwner) { productWithSkus ->
+            mImagePagerAdapter.setImageList(listOf(productWithSkus?.product?.imageUrl))
+            mCardDetailPagerAdapter.setSkuIds(productWithSkus?.skuIds ?: emptyList())
+        }
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
-            R.id.action_add_to_inventory -> {
-                val action = CardDetailFragmentDirections.actionCardDetailFragmentToTransactionDialogFragment(mCardWithSetInfo?.product?.id ?: -1)
-                findNavController().navigate(action)
-                true
-            }
-            else -> false
-        }
+        return true
     }
 
     private fun initToolbar() {
@@ -87,27 +73,30 @@ class CardDetailFragment : BaseFragment(), Toolbar.OnMenuItemClickListener {
             }
         })
 
-        binding.cardDetailCollapsingToolbarLayout.setupWithNavController(binding.cardDetailToolbar, findNavController())
+        binding.cardDetailCollapsingToolbarLayout.setupWithNavController(
+            binding.cardDetailToolbar,
+            findNavController(),
+            AppBarConfiguration.Builder().setFallbackOnNavigateUpListener {
+                activity?.finish()
+                true
+            }.build()
+        )
     }
 
     private fun initImageViewPager() {
-        binding.cardImageViewPager.adapter = mImagePagerAdapter
+        binding.cardImageViewPager.adapter = ImagePagerAdapter().also { mImagePagerAdapter = it }
 
         TabLayoutMediator(binding.cardImageTabLayout, binding.cardImageViewPager) { _, _ -> }.attach()
     }
 
     private fun initCardDetailViewPager() {
-        binding.cardDetailViewPager.apply {
-            adapter = CardDetailPagerAdapter(this@CardDetailFragment).also {
-                mCardDetailPagerAdapter = it
-                it.setCard(mCardWithSetInfo)
-            }
+        binding.cardDetailViewPager.adapter = CardDetailPagerAdapter(this@CardDetailFragment).also {
+            mCardDetailPagerAdapter = it
         }
 
         TabLayoutMediator(binding.cardDetailTabLayout, binding.cardDetailViewPager) { tab, position ->
             tab.text = when (position) {
-                0 -> getString(R.string.lbl_overview)
-                1 -> getString(R.string.lbl_set_details)
+                0 -> "Prices"
                 else -> null
             }
         }.attach()
