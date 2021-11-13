@@ -1,8 +1,10 @@
-package sam.g.trackuriboh.services
+package sam.g.trackuriboh.workers
 
 import android.content.Context
+import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
+import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -10,6 +12,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.ProductLocalCache
 import sam.g.trackuriboh.data.network.responses.CardResponse
 import sam.g.trackuriboh.data.network.responses.CardSetResponse
@@ -30,8 +33,19 @@ class DatabaseSyncWorker @AssistedInject constructor(
     private val productLocalCache: ProductLocalCache,
 ) : CoroutineWorker(appContext, workerParams) {
 
+    private val notificationBuilder by lazy {
+        createNotificationBuilder(
+            channelName = appContext.getString(R.string.database_worker_channel_name),
+            notificationTitle = appContext.getString(R.string.database_worker_sync_notification_title),
+            cancelText = appContext.getString(R.string.lbl_cancel),
+            showProgress = true
+        )
+    }
+
+
     companion object {
         const val WORKER_TAG = "DatabaseSyncWorker"
+        private const val NOTIFICATION_ID = 1
 
         private const val PAGINATION_LIMIT_SIZE = 100
         private const val MAX_PARALLEL_REQUESTS = 20
@@ -69,6 +83,12 @@ class DatabaseSyncWorker @AssistedInject constructor(
             throwable.printStackTrace()
             return Result.failure()
         }
+    }
+
+    override suspend fun getForegroundInfo(): ForegroundInfo {
+        return ForegroundInfo(
+            NOTIFICATION_ID, notificationBuilder.build(),
+        )
     }
 
     private suspend fun getCardList(offset: Int, limit: Int): List<CardResponse.CardItem> =
@@ -113,8 +133,18 @@ class DatabaseSyncWorker @AssistedInject constructor(
 
                 requestBatch.awaitAll()
                 delay(REQUEST_INTERVAL_DELAY)
-                // flow.emit(DatabaseSyncState.LOADING((batchOffset.toDouble() / totalCount * 100).toInt()))
+                updateProgress((batchOffset.toDouble() / totalCount * 100).toInt())
             }
+        }
+    }
+
+    /**
+     * Progress should be normalized to a percentage [0, 100]
+     */
+    private fun updateProgress(progress: Int) {
+        NotificationManagerCompat.from(applicationContext).apply {
+            notificationBuilder.setProgress(MAX_PROGRESS, progress, false)
+            notify(NOTIFICATION_ID, notificationBuilder.build())
         }
     }
 

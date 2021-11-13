@@ -87,4 +87,10 @@
     <string name="lbl_moderately_played">Moderately Played</string>
     <string name="lbl_heavily_played">Heavily Played</string>
     <string name="lbl_damaged">Damaged</string>
+    
+    <!-- Notifications -->
+    <string name="database_worker_channel_name">Trackuriboh Notifications</string>
+    <string name="database_worker_sync_notification_title">Trackuriboh: Syncing Database</string>
+
+    <string name="lbl_cancel">Cancel</string>
 </resources>

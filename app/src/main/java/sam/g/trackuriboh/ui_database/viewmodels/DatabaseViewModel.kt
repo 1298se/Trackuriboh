@@ -6,11 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import sam.g.trackuriboh.services.DatabaseSyncWorker
+import sam.g.trackuriboh.workers.DatabaseSyncWorker
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,6 +29,7 @@ class DatabaseViewModel @Inject constructor(
         syncJob?.cancel()
         syncJob = viewModelScope.launch {
             val databaseSyncWorkRequest = OneTimeWorkRequestBuilder<DatabaseSyncWorker>()
+                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                 .build()
 
             workManager.enqueueUniqueWork(DatabaseSyncWorker.WORKER_TAG, ExistingWorkPolicy.REPLACE, databaseSyncWorkRequest)
