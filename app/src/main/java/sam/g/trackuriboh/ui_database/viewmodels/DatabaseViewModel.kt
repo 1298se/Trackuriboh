@@ -1,16 +1,9 @@
 package sam.g.trackuriboh.ui_database.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.OutOfQuotaPolicy
-import androidx.work.WorkManager
+import androidx.lifecycle.*
+import androidx.work.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import sam.g.trackuriboh.SingleEvent
 import sam.g.trackuriboh.workers.DatabaseSyncWorker
 import javax.inject.Inject
 
@@ -19,20 +12,35 @@ class DatabaseViewModel @Inject constructor(
     private val workManager: WorkManager,
 ) : ViewModel() {
 
-    val databaseSyncState: LiveData<DatabaseSyncWorker.DatabaseSyncState>
+    val databaseSyncState: LiveData<SingleEvent<WorkInfo?>>
         get() = _databaseSyncState
-    private val _databaseSyncState = MutableLiveData<DatabaseSyncWorker.DatabaseSyncState>()
+    private val _databaseSyncState =  MediatorLiveData<SingleEvent<WorkInfo?>>()
 
-    private var syncJob: Job? = null
+    init {
+        _databaseSyncState.addSource(workManager.getWorkInfosForUniqueWorkLiveData(DatabaseSyncWorker.WORKER_TAG)) {
+            if (it.isEmpty()) {
+                return@addSource
+            }
+
+            val workInfo = it.first()
+            _databaseSyncState.value = SingleEvent(workInfo)
+
+            // If it's done, prune it
+            if (workInfo.state.isFinished) {
+                workManager.pruneWork()
+            }
+        }
+    }
 
     fun syncDatabase() {
-        syncJob?.cancel()
-        syncJob = viewModelScope.launch {
-            val databaseSyncWorkRequest = OneTimeWorkRequestBuilder<DatabaseSyncWorker>()
-                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
-                .build()
+        val databaseSyncWorkRequest = OneTimeWorkRequestBuilder<DatabaseSyncWorker>()
+            .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+            .build()
 
-            workManager.enqueueUniqueWork(DatabaseSyncWorker.WORKER_TAG, ExistingWorkPolicy.REPLACE, databaseSyncWorkRequest)
-        }
+        workManager.enqueueUniqueWork(
+            DatabaseSyncWorker.WORKER_TAG,
+            ExistingWorkPolicy.REPLACE,
+            databaseSyncWorkRequest
+        )
     }
 }

@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
-import sam.g.trackuriboh.ui_common.ErrorDialogFragment
+import com.google.android.material.snackbar.Snackbar
 
 fun Fragment.setViewPagerBackPressBehaviour(viewPager: ViewPager2) {
     activity?.onBackPressedDispatcher?.addCallback(this) {
@@ -19,8 +19,11 @@ fun Fragment.setViewPagerBackPressBehaviour(viewPager: ViewPager2) {
     }
 }
 
-fun Fragment.showErrorDialog(title: String, message: String) {
-    ErrorDialogFragment.newInstance(title, message).show(parentFragmentManager, null)
+fun Fragment.showSnackbar(message: String) {
+    view?.let {
+        Snackbar.make(it, message, Snackbar.LENGTH_LONG)
+        .show()
+    }
 }
 
 fun Fragment.handleNavigationAction(action: NavDirections) {

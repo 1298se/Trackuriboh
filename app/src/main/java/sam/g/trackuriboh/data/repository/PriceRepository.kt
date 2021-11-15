@@ -17,14 +17,19 @@ class PriceRepository @Inject constructor(
 ) {
 
     suspend fun getPricesForSkus(skuIds: List<Long>): Flow<List<SkuWithConditionAndPrinting>> {
-        val response = priceApiService.getPricesForSkus(skuIds.joinToString(","))
+        try {
+            val response = priceApiService.getPricesForSkus(skuIds.joinToString(","))
 
-        if (response.isSuccessful) {
-            val updates = response.body()?.results?.map { Sku.SkuPriceUpdate(
-                it.id, it.lowestListingPrice, it.lowestShippingPrice, it.marketPrice
-            ) } ?: emptyList()
+            if (response.isSuccessful) {
+                val updates = response.body()?.results?.map { Sku.SkuPriceUpdate(
+                    it.id, it.lowestListingPrice, it.lowestShippingPrice, it.marketPrice
+                ) } ?: emptyList()
 
-            productLocalCache.updateSkuPrices(updates)
+                productLocalCache.updateSkuPrices(updates)
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
 
         return productLocalCache.getSkusWithConditionAndPrinting(skuIds).flowOn(Dispatchers.IO)

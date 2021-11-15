@@ -22,7 +22,7 @@ abstract class BaseSearchListFragment<T : Any> : Fragment() {
     }
     // Handles scrolling to the top of the list. If no new query is submitted, then
     // we don't scroll to the top
-    private var mNewQuerySubmitted: Boolean = false
+    private var mShouldScrollToTop = false
 
     init {
         lifecycleScope.launchWhenStarted {
@@ -30,9 +30,9 @@ abstract class BaseSearchListFragment<T : Any> : Fragment() {
                 .distinctUntilChangedBy { it.refresh }
                 .filter { it.refresh is LoadState.NotLoading }
                 .collect {
-                    if (mNewQuerySubmitted) {
+                    if (mShouldScrollToTop) {
                         getListView().scrollToPosition(0)
-                        mNewQuerySubmitted = false
+                        mShouldScrollToTop = false
                     }
                 }
         }
@@ -49,13 +49,14 @@ abstract class BaseSearchListFragment<T : Any> : Fragment() {
                 getListView().addItemDecoration(it)
             }
         }
+
+        getViewModel().shouldScrollToTop.observe(viewLifecycleOwner) { singleEvent ->
+            singleEvent.handleEvent()?.let { mShouldScrollToTop = it }
+        }
     }
 
     fun search(query: String?) {
-        if (query != getViewModel().currentQueryValue()) {
-            getViewModel().search(query)
-            mNewQuerySubmitted = true
-        }
+        getViewModel().search(query)
     }
 
     fun lastQueryValue() = getViewModel().currentQueryValue()

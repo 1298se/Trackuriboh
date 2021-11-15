@@ -6,12 +6,10 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.ProductLocalCache
 import sam.g.trackuriboh.data.network.responses.CardResponse
@@ -45,16 +43,16 @@ class DatabaseSyncWorker @AssistedInject constructor(
 
     companion object {
         const val WORKER_TAG = "DatabaseSyncWorker"
+        const val Progress = "DatabaseSyncProgress"
         private const val NOTIFICATION_ID = 1
 
         private const val PAGINATION_LIMIT_SIZE = 100
-        private const val MAX_PARALLEL_REQUESTS = 20
-        private const val REQUEST_INTERVAL_DELAY = 2000L
+        private const val MAX_PARALLEL_REQUESTS = 10
     }
 
-    override suspend fun doWork(): Result {
+    override suspend fun doWork(): Result  = withContext(Dispatchers.Default){
         try {
-            val cardResponse = productApiService.getCards(offset = 11700)
+            val cardResponse = productApiService.getCards()
             val cardSetResponse = cardSetApiService.getSets()
             val cardRarityResponse = catalogApiService.getCardRarities()
             val printingResponse = catalogApiService.getPrintings()
@@ -78,10 +76,11 @@ class DatabaseSyncWorker @AssistedInject constructor(
                 cardResponse.totalItems,
             )
 
-            return Result.success()
+            // TODO: Created notification alerting user that sync is complete
+            Result.success()
         } catch (throwable: Throwable) {
             throwable.printStackTrace()
-            return Result.failure()
+            Result.failure()
         }
     }
 
@@ -111,7 +110,7 @@ class DatabaseSyncWorker @AssistedInject constructor(
 
     private suspend fun <T> paginateAndPopulateDatabase(
         apiServiceCall: suspend (offset: Int, limit: Int) -> List<T>,
-        databaseInsert: suspend (List<T>) -> List<Long>,
+        databaseInsert: suspend (List<T>) -> Any?,
         totalCount: Int,
     ) {
 
@@ -132,7 +131,6 @@ class DatabaseSyncWorker @AssistedInject constructor(
                 }
 
                 requestBatch.awaitAll()
-                delay(REQUEST_INTERVAL_DELAY)
                 updateProgress((batchOffset.toDouble() / totalCount * 100).toInt())
             }
         }
@@ -141,17 +139,12 @@ class DatabaseSyncWorker @AssistedInject constructor(
     /**
      * Progress should be normalized to a percentage [0, 100]
      */
-    private fun updateProgress(progress: Int) {
+    private suspend fun updateProgress(progress: Int) {
         NotificationManagerCompat.from(applicationContext).apply {
             notificationBuilder.setProgress(MAX_PROGRESS, progress, false)
             notify(NOTIFICATION_ID, notificationBuilder.build())
         }
-    }
 
-    sealed class DatabaseSyncState {
-        object IDLE : DatabaseSyncState()
-        data class LOADING(val progress: Int) : DatabaseSyncState()
-        object SUCCESS : DatabaseSyncState()
-        data class FAILURE(val msg: String?) : DatabaseSyncState()
+        setProgress(workDataOf(Progress to progress))
     }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import kotlinx.coroutines.flow.Flow
+import sam.g.trackuriboh.SingleEvent
 
 abstract class BaseSearchViewModel<T : Any> : ViewModel() {
 
@@ -14,6 +15,12 @@ abstract class BaseSearchViewModel<T : Any> : ViewModel() {
         searchSource(it).cachedIn(viewModelScope).asLiveData()
     }
 
+    val shouldScrollToTop: LiveData<SingleEvent<Boolean>>
+        get() = _shouldScrollToTop
+
+    private val _shouldScrollToTop = MutableLiveData(SingleEvent(false))
+
+
     /**
      * Search a repository based on a query string.
      * We want to check against the previous query, because if it's the same, we don't want to reload the data
@@ -22,6 +29,7 @@ abstract class BaseSearchViewModel<T : Any> : ViewModel() {
     fun search(query: String?) {
         if (query != this.query.value) {
             this.query.value = query
+            _shouldScrollToTop.value = _shouldScrollToTop.value?.copy(true)
         }
     }
 

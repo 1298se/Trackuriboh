@@ -21,6 +21,7 @@
         <item name="materialCardViewStyle">@style/Widget.AppTheme.CardView</item>
         <item name="searchViewStyle">@style/Widget.AppTheme.SearchView</item>
         <item name="autoCompleteTextViewStyle">@style/Widget.AppTheme.AutoCompleteTextView</item>
+        <item name="snackbarStyle">@style/Widget.AppTheme.Snackbar</item>
     </style>
 
     <style name="ThemeOverlay.AppTheme.MaterialCalendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">

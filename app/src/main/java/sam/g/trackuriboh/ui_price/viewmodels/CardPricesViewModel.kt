@@ -22,6 +22,7 @@ class CardPricesViewModel @Inject constructor(
     private val _skuPrices: MutableLiveData<Map<String?, List<SkuWithConditionAndPrinting>>> = MutableLiveData()
 
     init {
+        // Since this ViewModel is attached to a fragment, we don't need
         viewModelScope.launch {
             priceRepository.getPricesForSkus(skuIds).collect { result ->
                 _skuPrices.value = buildPrintingToSkuMap(result)

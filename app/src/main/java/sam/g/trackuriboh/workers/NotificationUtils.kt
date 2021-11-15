@@ -21,7 +21,7 @@ fun ListenableWorker.createNotificationBuilder(
     channelId: String = CHANNEL_ID,
     channelName: String,
     notificationTitle: String,
-    cancelText: String = "Cancel",
+    cancelText: String = applicationContext.getString(R.string.lbl_cancel),
     showProgress: Boolean = false,
     contentIntent: PendingIntent = PendingIntent.getActivity(
         applicationContext,
@@ -31,7 +31,7 @@ fun ListenableWorker.createNotificationBuilder(
             addCategory(Intent.CATEGORY_LAUNCHER)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         },
-        0
+        PendingIntent.FLAG_IMMUTABLE
     ),
 ): NotificationCompat.Builder {
 

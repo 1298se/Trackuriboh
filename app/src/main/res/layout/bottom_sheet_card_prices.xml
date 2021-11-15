@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- Need android:fillViewport="true" because otherwise there will be some kind of weird space
-between the NestedScrollView and LinearLayout at the bottom -->
+<!-- Need android:fillViewport="true" because it expands the
+ scrollview content to fill the viewport -->
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"

@@ -1,5 +1,6 @@
 package sam.g.trackuriboh.ui_database
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -12,18 +13,23 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.WorkInfo
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.databinding.FragmentDatabaseBinding
 import sam.g.trackuriboh.setViewPagerBackPressBehaviour
+import sam.g.trackuriboh.showSnackbar
 import sam.g.trackuriboh.ui_database.adapters.DatabasePagerAdapter
 import sam.g.trackuriboh.ui_database.viewmodels.DatabaseViewModel
 import sam.g.trackuriboh.viewBinding
+import sam.g.trackuriboh.workers.DatabaseSyncWorker
 
 /**
  * The SearchView is very buggy and the behaviour is sometimes hard to manage. When updating Hilt,
- * the keyboard starting flickering when returning back from another fragment, so to workaround this
+ * the keyboard starting flickering when returning back from another fragment (this is because
+ * Navigation uses replace instead of add for fragment transactions, so the fragment is recreated
+ * when returning). To workaround this
  * we'll use activities to contain destinations that come from here.
  */
 @AndroidEntryPoint
@@ -49,9 +55,9 @@ class DatabaseFragment :
 
         setViewPagerBackPressBehaviour(binding.databaseViewPager)
 
+        initDatabaseObserver()
         initToolbar()
         initTabLayoutWithViewPager()
-        // TODO: Add Database Sync listener
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -112,6 +118,74 @@ class DatabaseFragment :
         binding.databaseToolbar.setupWithNavController(navController, appBarConfiguration)
 
         onCreateOptionsMenu()
+    }
+
+    private fun initDatabaseObserver() {
+        mViewModel.databaseSyncState.observe(viewLifecycleOwner) {
+            if (it.hasBeenHandled) {
+                return@observe
+            }
+
+            var workInfo = it.getContent()
+
+            // If it's loading, we want to still have the progress indicator when we come back, so we
+            // don't set it to handled. Otherwise, if it's finished, we set it to handled so the success/failure
+            // snackbars don't appear again on screen rotation
+            if (workInfo?.state == WorkInfo.State.RUNNING) {
+                if (binding.databaseSyncProgressIndicator.visibility != View.VISIBLE) {
+                    showLoading()
+                }
+
+                setProgress(workInfo.progress.getInt(DatabaseSyncWorker.Progress, 0))
+            } else if (workInfo?.state?.isFinished == true) {
+                it.handleEvent()
+
+                showContent()
+
+                when(workInfo.state) {
+                    WorkInfo.State.SUCCEEDED -> showSnackbar("Database Sync Complete")
+                    WorkInfo.State.FAILED -> showSnackbar("Database Sync Failed")
+                    WorkInfo.State.CANCELLED -> showSnackbar("Database Sync was cancelled")
+                }
+            }
+        }
+    }
+
+    private fun setProgress(progress: Int) {
+        binding.databaseSyncProgressIndicator.apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                setProgress(progress, true)
+            } else {
+                this.progress = progress
+            }
+        }
+
+        binding.databaseSyncProgressText.text = getString(R.string.database_sync_progress_text, progress)
+    }
+
+    private fun showLoading() {
+        binding.apply {
+            databaseTabLayout.visibility = View.GONE
+            databaseViewPager.visibility = View.GONE
+
+            databaseSyncProgressIndicator.show()
+            databaseSyncProgressText.visibility = View.VISIBLE
+
+            databaseViewPager.adapter = null
+        }
+    }
+
+    private fun showContent() {
+        binding.apply {
+            databaseTabLayout.visibility = View.VISIBLE
+            databaseViewPager.visibility = View.VISIBLE
+
+            databaseSyncProgressIndicator.hide()
+            databaseSyncProgressText.visibility = View.GONE
+
+            databaseViewPager.adapter = mAdapter
+        }
+
     }
 
     private fun onCreateOptionsMenu() {

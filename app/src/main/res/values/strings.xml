@@ -12,7 +12,7 @@
     <string name="database_sync_title">Sync</string>
     <string name="database_sync_error_title">Sync Failed</string>
     <string name="database_sync_error_message">An error has occurred while attempting to sync the database. Please try again later.</string>
-
+    <string name="database_sync_progress_text">%1$d%%</string>
     <!-- Card Item List -->
     <string name="item_card_list_content_desc">Card Image</string>
     <string name="item_card_number_rarity_text">%1$s \u2022 %2$s</string>

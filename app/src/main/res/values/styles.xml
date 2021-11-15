@@ -65,4 +65,8 @@
     <style name="Widget.AppTheme.CardView" parent="Widget.MaterialComponents.CardView">
         <item name="cardElevation">@dimen/cardview_default_elevation</item>
     </style>
+
+    <style name="Widget.AppTheme.Snackbar" parent="Widget.MaterialComponents.Snackbar">
+        <item name="backgroundTint">?attr/colorPrimary</item>
+    </style>
 </resources>
