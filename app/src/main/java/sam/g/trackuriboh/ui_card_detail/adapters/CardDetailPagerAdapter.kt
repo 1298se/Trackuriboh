@@ -6,22 +6,17 @@ import sam.g.trackuriboh.ui_price.CardPricesBottomSheetDialogFragment
 
 class CardDetailPagerAdapter constructor(
     fragment: Fragment,
+    private val skuIds: List<Long>? = null
 ) : FragmentStateAdapter(fragment) {
-    private var mSkuIds: List<Long>? = null
 
     override fun getItemCount(): Int {
-        return if (mSkuIds == null) 0 else 1
+        return if (skuIds == null) 0 else 1
     }
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> CardPricesBottomSheetDialogFragment.newInstance(mSkuIds, false)
+            0 -> CardPricesBottomSheetDialogFragment.newInstance(skuIds, false)
             else -> throw Exception("view pager out of bounds")
         }
-    }
-
-    fun setSkuIds(skuIds: List<Long>) {
-        mSkuIds = skuIds
-        notifyItemRangeInserted(0, 1)
     }
 }

@@ -6,7 +6,7 @@ import sam.g.trackuriboh.data.db.entities.CardSet
 import sam.g.trackuriboh.data.db.entities.Product
 import sam.g.trackuriboh.data.db.entities.Sku
 
-data class ProductWithSetAndSkuIds(
+data class ProductWithCardSetAndSkuIds(
     @Embedded val product: Product,
     @Relation(
         parentColumn = "setId",

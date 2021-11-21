@@ -1,24 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    android:id="@+id/sku_prices_container"
+<LinearLayout android:id="@+id/sku_prices_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/sku_prices_header_text"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
         android:paddingStart="@dimen/list_item_padding_start"
         android:paddingEnd="@dimen/list_item_padding_end"
         android:paddingTop="@dimen/list_item_two_line_padding_top"
-        android:paddingBottom="@dimen/list_item_two_line_padding_bottom"
-        android:background="?attr/colorPrimary"
-        android:textColor="?attr/colorOnPrimary"
-        tools:text="1st Edition"
-        style="@style/TextAppearance.MaterialComponents.Subtitle1" />
+        android:paddingBottom="@dimen/list_item_two_line_padding_bottom">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/sku_prices_header_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnPrimary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="1st Edition"
+            style="@style/TextAppearance.MaterialComponents.Subtitle1" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/sku_prices_currency_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnPrimary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="Lowest Listing (USD)"
+            style="@style/TextAppearance.MaterialComponents.Subtitle1" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 </LinearLayout>

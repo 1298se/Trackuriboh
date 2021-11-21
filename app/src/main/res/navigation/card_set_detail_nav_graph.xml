@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_detail_nav_graph"
+    app:startDestination="@id/cardSetDetailFragment">
+
+    <fragment
+        android:id="@+id/cardSetDetailFragment"
+        android:name="sam.g.trackuriboh.ui_card_set_detail.CardSetDetailFragment"
+        android:label="CardSetDetailFragment" >
+        <argument
+            android:name="setId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_cardSetDetailFragment_to_cardDetailActivity"
+            app:destination="@id/cardDetailActivity" />
+        <action
+            android:id="@+id/action_cardSetDetailFragment_to_cardPricesBottomSheetDialogFragment"
+            app:destination="@id/cardPricesBottomSheetDialogFragment" />
+    </fragment>
+    <activity
+        android:id="@+id/cardDetailActivity"
+        android:name="sam.g.trackuriboh.ui_card_detail.CardDetailActivity">
+        <argument
+            android:name="cardId"
+            app:argType="long" />
+    </activity>
+    <dialog
+        android:id="@+id/cardPricesBottomSheetDialogFragment"
+        android:name="sam.g.trackuriboh.ui_price.CardPricesBottomSheetDialogFragment"
+        android:label="CardPricesBottomSheetDialogFragment" >
+        <argument
+            android:name="skuIds"
+            app:argType="long[]" />
+    </dialog>
+</navigation>

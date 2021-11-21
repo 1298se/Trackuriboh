@@ -2,30 +2,29 @@ package sam.g.trackuriboh.ui_price.viewmodels
 
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
+import sam.g.trackuriboh.data.network.responses.Resource
 import sam.g.trackuriboh.data.repository.PriceRepository
-import sam.g.trackuriboh.ui_price.CardPricesBottomSheetDialogFragment
+import sam.g.trackuriboh.ui_common.UiState
+import sam.g.trackuriboh.ui_price.CardPricesBottomSheetDialogFragment.Companion.ARG_SKU_IDS
 import javax.inject.Inject
 
 @HiltViewModel
 class CardPricesViewModel @Inject constructor(
     private val priceRepository: PriceRepository,
-    state: SavedStateHandle
+    private val savedState: SavedStateHandle
 ) : ViewModel() {
-    private val skuIds = state.get<LongArray>(CardPricesBottomSheetDialogFragment.ARG_SKU_IDS)?.toList() ?: emptyList()
+    private val skuIds = savedState.getLiveData<LongArray>(ARG_SKU_IDS)
 
-    val printingToSkuMap: LiveData<Map<String?, List<SkuWithConditionAndPrinting>>>
-        get() = _skuPrices
-
-    private val _skuPrices: MutableLiveData<Map<String?, List<SkuWithConditionAndPrinting>>> = MutableLiveData()
-
-    init {
-        // Since this ViewModel is attached to a fragment, we don't need
-        viewModelScope.launch {
-            priceRepository.getPricesForSkus(skuIds).collect { result ->
-                _skuPrices.value = buildPrintingToSkuMap(result)
+    val state: LiveData<UiState<Map<String?, List<SkuWithConditionAndPrinting>>>> = Transformations.switchMap(skuIds) {
+        liveData {
+            emit(UiState.Loading)
+            when (val resource = priceRepository.getPricesForSkus(it.toList())) {
+                is Resource.Success -> emit(UiState.Success(buildPrintingToSkuMap(resource.data)))
+                is Resource.Failure -> emit(UiState.Failure(
+                    resource.exception.message,
+                    resource.data?.let { buildPrintingToSkuMap(it) }
+                ))
             }
         }
     }

@@ -7,11 +7,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import sam.g.trackuriboh.R
-import sam.g.trackuriboh.data.db.relations.ProductWithSetAndSkuIds
+import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
 import sam.g.trackuriboh.databinding.ItemCardBinding
 import javax.inject.Inject
 
-class CardListAdapter @Inject constructor(): PagingDataAdapter<ProductWithSetAndSkuIds, CardListAdapter.CardViewHolder>(CARD_COMPARATOR) {
+class CardListAdapter @Inject constructor()
+    : PagingDataAdapter<ProductWithCardSetAndSkuIds, CardListAdapter.CardViewHolder>(CARD_COMPARATOR) {
+
     private var mOnItemClickListener: OnItemClickListener? = null
 
     interface OnItemClickListener {
@@ -24,11 +26,11 @@ class CardListAdapter @Inject constructor(): PagingDataAdapter<ProductWithSetAnd
     }
 
     companion object {
-        private val CARD_COMPARATOR = object : DiffUtil.ItemCallback<ProductWithSetAndSkuIds>() {
-            override fun areItemsTheSame(oldItem: ProductWithSetAndSkuIds, newItem: ProductWithSetAndSkuIds): Boolean =
+        private val CARD_COMPARATOR = object : DiffUtil.ItemCallback<ProductWithCardSetAndSkuIds>() {
+            override fun areItemsTheSame(oldItem: ProductWithCardSetAndSkuIds, newItem: ProductWithCardSetAndSkuIds): Boolean =
                 oldItem.product.id == newItem.product.id
 
-            override fun areContentsTheSame(oldItem: ProductWithSetAndSkuIds, newItem: ProductWithSetAndSkuIds): Boolean =
+            override fun areContentsTheSame(oldItem: ProductWithCardSetAndSkuIds, newItem: ProductWithCardSetAndSkuIds): Boolean =
                 oldItem == newItem
         }
     }
@@ -62,7 +64,7 @@ class CardListAdapter @Inject constructor(): PagingDataAdapter<ProductWithSetAnd
             }
         }
 
-        internal fun bind(item: ProductWithSetAndSkuIds) {
+        internal fun bind(item: ProductWithCardSetAndSkuIds) {
             Glide.with(itemView)
                 .load(item.product.imageUrl)
                 .placeholder(R.drawable.img_cardback)

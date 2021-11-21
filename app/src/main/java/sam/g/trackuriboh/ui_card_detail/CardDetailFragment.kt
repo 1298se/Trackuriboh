@@ -1,5 +1,8 @@
 package sam.g.trackuriboh.ui_card_detail
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -9,6 +12,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.AppBarLayout
@@ -16,7 +20,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.databinding.FragmentCardDetailBinding
+import sam.g.trackuriboh.di.NetworkModule
 import sam.g.trackuriboh.setViewPagerBackPressBehaviour
+import sam.g.trackuriboh.showSnackbar
 import sam.g.trackuriboh.ui_card_detail.adapters.CardDetailPagerAdapter
 import sam.g.trackuriboh.ui_card_detail.viewmodels.CardDetailViewModel
 import sam.g.trackuriboh.ui_common.CollapseToolbarStateChangeListener
@@ -28,6 +34,8 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private val binding by viewBinding(FragmentCardDetailBinding::inflate)
 
     private val mViewModel: CardDetailViewModel by viewModels()
+
+    private val args: CardDetailFragmentArgs by navArgs()
 
     private lateinit var mImagePagerAdapter: ImagePagerAdapter
 
@@ -43,12 +51,18 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         setViewPagerBackPressBehaviour(binding.cardDetailViewPager)
 
         initToolbar()
-        initImageViewPager()
-        initCardDetailViewPager()
+        initTCGPlayerFab()
 
-        mViewModel.cardWithSetAndSkuIds.observe(viewLifecycleOwner) { productWithSkus ->
-            mImagePagerAdapter.setImageList(listOf(productWithSkus?.product?.imageUrl))
-            mCardDetailPagerAdapter.setSkuIds(productWithSkus?.skuIds ?: emptyList())
+        mViewModel.cardWithCardSetAndSkuIds.observe(viewLifecycleOwner) {
+            binding.cardDetailNameTextview.text = it?.product?.name
+            binding.cardDetailSetNameTextview.text = it?.cardSet?.name
+
+            /**
+             * FOR PROPER VIEWSTATE RESTORATION TO OCCUR, THE ADAPTERS MUST BE REATTACHED
+             * ONCHANGE INSTEAD OF EXPOSIING A setItems METHOD AND CALLING NOTIFYCHANGE
+             */
+            initImageViewPager(listOf(it?.product?.imageUrl))
+            initCardDetailViewPager(it?.skuIds)
         }
     }
 
@@ -83,14 +97,17 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         )
     }
 
-    private fun initImageViewPager() {
-        binding.cardImageViewPager.adapter = ImagePagerAdapter().also { mImagePagerAdapter = it }
+    private fun initImageViewPager(imageList: List<String?>) {
+        binding.cardImageViewPager.adapter = ImagePagerAdapter(imageList).also { mImagePagerAdapter = it }
 
         TabLayoutMediator(binding.cardImageTabLayout, binding.cardImageViewPager) { _, _ -> }.attach()
     }
 
-    private fun initCardDetailViewPager() {
-        binding.cardDetailViewPager.adapter = CardDetailPagerAdapter(this@CardDetailFragment).also {
+    private fun initCardDetailViewPager(skuIds: List<Long>?) {
+        binding.cardDetailViewPager.adapter = CardDetailPagerAdapter(
+            this@CardDetailFragment,
+            skuIds
+        ).also {
             mCardDetailPagerAdapter = it
         }
 
@@ -100,5 +117,21 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
                 else -> null
             }
         }.attach()
+    }
+
+    private fun initTCGPlayerFab() {
+        binding.cardDetailTcgplayerExtendedFab.setOnClickListener {
+            openTCGPlayer()
+        }
+    }
+
+    private fun openTCGPlayer() {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(NetworkModule.TCGPLAYER_PRODUCT_URL + args.cardId))
+
+        try {
+            startActivity(browserIntent)
+        } catch (e: ActivityNotFoundException) {
+            showSnackbar("Please install a browser to continue")
+        }
     }
 }

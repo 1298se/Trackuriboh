@@ -6,9 +6,10 @@ import sam.g.trackuriboh.data.db.entities.CardSet
 
 data class CardSetResponse(
     val totalItems: Int,
-    val errors: List<String>,
-    val results: List<CardSetItem>,
-) {
+    override val errors: List<String>,
+    override val results: List<CardSetItem>,
+) : BaseTCGPlayerResponse<CardSetResponse.CardSetItem> {
+
     data class CardSetItem(
         @SerializedName("groupId")
         val id: Long,

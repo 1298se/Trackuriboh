@@ -13,10 +13,12 @@
     <string name="database_sync_error_title">Sync Failed</string>
     <string name="database_sync_error_message">An error has occurred while attempting to sync the database. Please try again later.</string>
     <string name="database_sync_progress_text">%1$d%%</string>
-    <!-- Card Item List -->
+    <!-- Card Item -->
     <string name="item_card_list_content_desc">Card Image</string>
     <string name="item_card_number_rarity_text">%1$s \u2022 %2$s</string>
     <string name="item_card_view_prices_button_text">View Prices</string>
+    <!-- Card Set Item -->
+    <string name="lbl_no_date_available">No Date Available</string>
 
     <!-- Card Detail -->
     <string name="lbl_name">Name</string>
@@ -60,6 +62,9 @@
     <string name="lbl_tracking_number">Tracking Number</string>
     <string name="lbl_save">Save</string>
 
+    <!-- Price -->
+    <string name="lbl_not_available">Not Available</string>
+
     <string name="lbl_buyer">Buyer</string>
     <string name="lbl_seller">Seller</string>
 
@@ -87,10 +92,16 @@
     <string name="lbl_moderately_played">Moderately Played</string>
     <string name="lbl_heavily_played">Heavily Played</string>
     <string name="lbl_damaged">Damaged</string>
-    
+
     <!-- Notifications -->
     <string name="database_worker_channel_name">Trackuriboh Notifications</string>
     <string name="database_worker_sync_notification_title">Trackuriboh: Syncing Database</string>
 
     <string name="lbl_cancel">Cancel</string>
+
+    <!-- Facebook -->
+    <string name="facebook_app_id">236802761727077</string>
+    <string name="fb_login_protocol_scheme">fb236802761727077</string>
+    <string name="facebook_client_token">5cbc3e0fd15bc7c41b702053ea1d1f62</string>
+
 </resources>

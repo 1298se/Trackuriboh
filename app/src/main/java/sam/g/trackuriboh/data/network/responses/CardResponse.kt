@@ -7,10 +7,11 @@ import sam.g.trackuriboh.data.types.ProductType
 
 
 data class CardResponse(
+    override val errors: List<String>,
+    override val results: List<CardItem>,
     val totalItems: Int,
-    val errors: List<String>,
-    val results: List<CardItem>,
-) {
+) : BaseTCGPlayerResponse<CardResponse.CardItem> {
+
     data class CardItem (
         @SerializedName("productId")
         val id: Long,

@@ -16,28 +16,27 @@
             android:name="cardId"
             app:argType="long" />
     </activity>
-    <fragment
-        android:id="@+id/cardSetDetailFragment"
-        android:name="sam.g.trackuriboh.ui_card_set_detail.CardSetDetailFragment"
-        tools:layout="@layout/fragment_card_set_detail">
+    <activity
+        android:id="@+id/cardSetDetailActivity"
+        android:name="sam.g.trackuriboh.ui_card_set_detail.CardSetDetailActivity">
         <argument
-            android:name="setName"
-            app:argType="string" />
-    </fragment>
+            android:name="setId"
+            app:argType="long" />
+    </activity>
     <fragment
         android:id="@+id/databaseFragment"
         android:name="sam.g.trackuriboh.ui_database.DatabaseFragment"
         android:label="@string/lbl_database"
         tools:layout="@layout/fragment_database">
         <action
-            android:id="@+id/action_databaseFragment_to_cardDetailFragment"
+            android:id="@+id/action_databaseFragment_to_cardDetailActivity"
             app:destination="@id/cardDetailActivity" />
-        <action
-            android:id="@+id/action_databaseFragment_to_cardSetDetailFragment"
-            app:destination="@id/cardSetDetailFragment" />
         <action
             android:id="@+id/action_databaseFragment_to_cardPricesBottomSheetDialogFragment"
             app:destination="@id/cardPricesBottomSheetDialogFragment" />
+        <action
+            android:id="@+id/action_databaseFragment_to_cardSetDetailActivity"
+            app:destination="@id/cardSetDetailActivity" />
     </fragment>
     <dialog
         android:id="@+id/transactionDialogFragment"

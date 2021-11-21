@@ -1,11 +1,10 @@
 package sam.g.trackuriboh.data.repository
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOn
 import sam.g.trackuriboh.data.db.ProductLocalCache
 import sam.g.trackuriboh.data.db.entities.Sku
 import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
+import sam.g.trackuriboh.data.network.ApiResponseHandler
+import sam.g.trackuriboh.data.network.responses.Resource
 import sam.g.trackuriboh.data.network.services.PriceApiService
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -13,25 +12,31 @@ import javax.inject.Singleton
 @Singleton
 class PriceRepository @Inject constructor(
     private val priceApiService: PriceApiService,
-    private val productLocalCache: ProductLocalCache
+    private val productLocalCache: ProductLocalCache,
+    private val apiResponseHandler: ApiResponseHandler
 ) {
 
-    suspend fun getPricesForSkus(skuIds: List<Long>): Flow<List<SkuWithConditionAndPrinting>> {
-        try {
-            val response = priceApiService.getPricesForSkus(skuIds.joinToString(","))
-
-            if (response.isSuccessful) {
-                val updates = response.body()?.results?.map { Sku.SkuPriceUpdate(
-                    it.id, it.lowestListingPrice, it.lowestShippingPrice, it.marketPrice
-                ) } ?: emptyList()
-
-                productLocalCache.updateSkuPrices(updates)
-            }
-
-        } catch (e: Exception) {
-            e.printStackTrace()
+    suspend fun getPricesForSkus(skuIds: List<Long>): Resource<List<SkuWithConditionAndPrinting>> {
+        val resource = apiResponseHandler.getTCGPlayerResource {
+            priceApiService.getPricesForSkus(skuIds.joinToString(","))
         }
 
-        return productLocalCache.getSkusWithConditionAndPrinting(skuIds).flowOn(Dispatchers.IO)
+        return when (resource) {
+            is Resource.Success -> {
+                val updates = resource.data.results.map {
+                    Sku.SkuPriceUpdate(
+                        it.id, it.lowestListingPrice, it.lowestShippingPrice, it.marketPrice
+                    )
+                }
+
+                productLocalCache.updateSkuPrices(updates)
+
+                Resource.Success(productLocalCache.getSkusWithConditionAndPrinting(skuIds))
+            }
+            is Resource.Failure -> Resource.Failure(
+                resource.exception,
+                productLocalCache.getSkusWithConditionAndPrinting(skuIds)
+            )
+        }
     }
 }

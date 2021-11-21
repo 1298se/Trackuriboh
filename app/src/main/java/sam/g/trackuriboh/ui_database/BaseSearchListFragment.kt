@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
+import sam.g.trackuriboh.addItemDecorationIfExists
 import sam.g.trackuriboh.ui_database.viewmodels.BaseSearchViewModel
 
 /**
@@ -45,8 +46,7 @@ abstract class BaseSearchListFragment<T : Any> : Fragment() {
             getAdapter().submitData(lifecycle, pagingData)
 
             mItemDecoration?.let {
-                getListView().removeItemDecoration(it)
-                getListView().addItemDecoration(it)
+                getListView().addItemDecorationIfExists(it)
             }
         }
 

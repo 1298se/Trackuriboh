@@ -1,10 +1,13 @@
 package sam.g.trackuriboh
 
+import android.view.View
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 
 fun Fragment.setViewPagerBackPressBehaviour(viewPager: ViewPager2) {
@@ -28,4 +31,15 @@ fun Fragment.showSnackbar(message: String) {
 
 fun Fragment.handleNavigationAction(action: NavDirections) {
     findNavController().navigate(action)
+}
+
+fun BottomSheetDialogFragment.setDefaultExpanded() {
+    dialog?.setOnShowListener {
+        dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)?.let {
+            BottomSheetBehavior.from(it).apply {
+                state = BottomSheetBehavior.STATE_EXPANDED
+                skipCollapsed = true
+            }
+        }
+    }
 }

@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <dimen name="text_spacing">4dp</dimen>
+    <dimen name="text_spacing_large">8dp</dimen>
+    <dimen name="extended_fab_height">48dp</dimen>
+
     <!-- Overwrite default values -->
     <dimen name="cardview_default_elevation">8dp</dimen>
+
+    <!-- Progress Indicator -->
+    <dimen name="dialog_progress_indicator_margin_top">16dp</dimen>
+    <dimen name="dialog_progress_indicator_margin_bottom">16dp</dimen>
 
     <!-- Material -->
     <dimen name="material_border_padding_small">8dp</dimen>
@@ -19,7 +27,6 @@
     <dimen name="list_item_padding_end">16dp</dimen>
     <dimen name="list_item_two_line_padding_top">12dp</dimen>
     <dimen name="list_item_two_line_padding_bottom">12dp</dimen>
-    <dimen name="list_item_text_spacing">8dp</dimen>
     <dimen name="list_item_image_large_padding_top">16dp</dimen>
     <dimen name="list_item_image_large_padding_bottom">16dp</dimen>
     <dimen name="list_item_large_row_spacing">12dp</dimen>
@@ -34,6 +41,7 @@
     <dimen name="card_image_swipe_padding">16dp</dimen>
     <dimen name="card_image_height">250dp</dimen>
     <dimen name="image_slider_height">6dp</dimen>
+    <dimen name="line_text_padding_top"></dimen>
     <!--don't change this value because it sets the image dot to be a circle -->
     <dimen name="image_slider_margin_bottom">5dp</dimen>
     <!--don't change this value because it sets the image dot to be a circle -->
@@ -43,4 +51,5 @@
     <!-- New Transaction Form -->
     <dimen name="new_transaction_row_spacing">12dp</dimen>
     <dimen name="new_transaction_column_spacing">12dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

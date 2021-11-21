@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import sam.g.trackuriboh.R
+import sam.g.trackuriboh.*
+import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
 import sam.g.trackuriboh.databinding.BottomSheetCardPricesBinding
+import sam.g.trackuriboh.ui_common.UiState
 import sam.g.trackuriboh.ui_price.viewmodels.CardPricesViewModel
-import sam.g.trackuriboh.viewBinding
 
 /**
  * This fragment can be used as a bottom sheet by itself and an embedded fragment
@@ -24,7 +25,7 @@ class CardPricesBottomSheetDialogFragment : BottomSheetDialogFragment() {
     companion object {
         // This is the same value as the navArg name so that the SavedStateHandle can acess from either
         const val ARG_SKU_IDS = "skuIds"
-        /**
+        /*
          * Arg that sets [mShowsDialog] by force. Usually this value is handled depending on its use case
          * (i.e. normally it's true, if it's inflated into a container view it's false), however ViewPager2
          * doesn't inflate, so we have to manually set it if we're embedding it into a ViewPager2
@@ -56,21 +57,50 @@ class CardPricesBottomSheetDialogFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mViewModel.printingToSkuMap.observe(this) { map ->
-            map.toList().forEachIndexed { index, entry ->
-                binding.skuPricesContainer.addView(SkuPricesCardView(requireContext()).apply {
-                    layoutParams = ViewGroup.MarginLayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ).apply {
-                        if (index != map.size - 1){
-                            bottomMargin = context.resources.getDimension(R.dimen.list_item_large_row_spacing).toInt()
+        setDefaultExpanded()
+
+        // According to docs, don't use viewLifeCycleOwner for observe because of the dialog lifecycle being different
+        mViewModel.run {
+            state.observe(if (showsDialog) this@CardPricesBottomSheetDialogFragment else viewLifecycleOwner) { uiState ->
+                when (uiState) {
+                    UiState.Loading -> binding.contentContainer.showOnly(binding.progressIndicator)
+                    is UiState.Failure, is UiState.Success -> {
+                        binding.progressIndicator.hide()
+
+                        binding.contentContainer.showAllExcept(binding.progressIndicator)
+                        uiState.data?.let { buildSkuPriceViews(it) }
+
+                        if (uiState is UiState.Failure) {
+                            uiState.errorMessage?.let { showSnackbar(it) }
                         }
                     }
-                    setHeader(entry.first)
-                    setRowItems(entry.second)
-                })
+                }
             }
+        }
+    }
+
+    private fun buildSkuPriceViews(data: Map<String?, List<SkuWithConditionAndPrinting>>) {
+        data.toList().forEachIndexed { index, entry ->
+            binding.contentContainer.addView(SkuPricesCardView(requireContext()).apply {
+                layoutParams = ViewGroup.MarginLayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                ).apply {
+                    if (index == 0) {
+                        topMargin = context.resources.getDimension(R.dimen.list_padding_top).toInt()
+                    }
+
+                    if (index == data.size - 1) {
+                        bottomMargin = context.resources.getDimension(R.dimen.list_padding_bottom).toInt()
+                    }
+
+                    if (index != data.size - 1){
+                        bottomMargin = context.resources.getDimension(R.dimen.list_item_large_row_spacing).toInt()
+                    }
+                }
+                setHeader(entry.first)
+                setRowItems(entry.second)
+            })
         }
     }
 }

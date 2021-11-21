@@ -3,9 +3,10 @@ package sam.g.trackuriboh.data.network.responses
 import com.google.gson.annotations.SerializedName
 
 data class SkuPriceResponse(
-    val errors: List<String>,
-    val results: List<SkuPriceResponseItem>,
-) {
+    override val errors: List<String>,
+    override val results: List<SkuPriceResponseItem>,
+) : BaseTCGPlayerResponse<SkuPriceResponse.SkuPriceResponseItem> {
+
     data class SkuPriceResponseItem(
         @SerializedName("skuId")
         val id: Long,

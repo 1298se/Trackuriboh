@@ -27,7 +27,11 @@ class BaseApplication : Application(), Configuration.Provider {
         super.onCreate()
         Stetho.initializeWithDefaults(this)
 
-        applicationScope.launch { mSessionManager.setAccessToken() }
+        applicationScope.launch {
+            mSessionManager.apply {
+                fetchTCGPlayerAccessToken()
+            }
+        }
 
     }
 

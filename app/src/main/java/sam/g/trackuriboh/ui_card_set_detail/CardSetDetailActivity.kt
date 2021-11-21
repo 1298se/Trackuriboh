@@ -1,4 +1,4 @@
-package sam.g.trackuriboh.ui_card_detail
+package sam.g.trackuriboh.ui_card_set_detail
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -11,10 +11,10 @@ import sam.g.trackuriboh.R
  * from the CardDetailFragment where the keyboard flickers
  */
 @AndroidEntryPoint
-class CardDetailActivity : AppCompatActivity() {
+class CardSetDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card_detail)
-        findNavController(R.id.card_set_detail_nav_host_fragment).setGraph(R.navigation.card_detail_nav_graph, intent.extras)
+        findNavController(R.id.card_set_detail_nav_host_fragment).setGraph(R.navigation.card_set_detail_nav_graph, intent.extras)
     }
 }

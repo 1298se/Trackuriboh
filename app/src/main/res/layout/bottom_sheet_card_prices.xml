@@ -10,13 +10,22 @@
     tools:context="ui_price.CardPricesBottomSheetDialogFragment">
 
     <LinearLayout
-        android:id="@+id/sku_prices_container"
+        android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:clipToPadding="false"
-        android:paddingTop="@dimen/list_padding_top"
         android:paddingStart="@dimen/list_padding_start"
-        android:paddingEnd="@dimen/list_padding_end" />
+        android:paddingEnd="@dimen/list_padding_end">
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress_indicator"
+            android:layout_width="144dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dialog_progress_indicator_margin_top"
+            android:layout_marginBottom="@dimen/dialog_progress_indicator_margin_bottom"
+            android:indeterminate="true" />
+
+    </LinearLayout>
 </androidx.core.widget.NestedScrollView>

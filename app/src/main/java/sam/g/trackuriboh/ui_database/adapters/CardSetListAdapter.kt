@@ -5,8 +5,12 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.entities.CardSet
 import sam.g.trackuriboh.databinding.ItemCardSetBinding
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 private val SET_COMPARATOR = object : DiffUtil.ItemCallback<CardSet>() {
     override fun areItemsTheSame(oldItem: CardSet, newItem: CardSet): Boolean =
@@ -20,7 +24,7 @@ class CardSetListAdapter : PagingDataAdapter<CardSet, CardSetListAdapter.CardSet
     private var mOnItemClickListener: OnItemClickListener? = null
 
     interface OnItemClickListener {
-        fun onItemClick(setName: String)
+        fun onItemClick(setId: Long)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
@@ -41,13 +45,25 @@ class CardSetListAdapter : PagingDataAdapter<CardSet, CardSetListAdapter.CardSet
     inner class CardSetViewHolder(private val binding: ItemCardSetBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener{
-                mOnItemClickListener?.onItemClick(getItem(bindingAdapterPosition)?.name ?: throw IllegalArgumentException("card set is null"))
+                mOnItemClickListener?.onItemClick(
+                    getItem(bindingAdapterPosition)?.id ?:
+                    throw IllegalArgumentException("card set id is null")
+                )
             }
         }
 
         internal fun bind(item: CardSet) {
+            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+            val releaseDate = item.releaseDate?.let {
+                sdf.run {
+                    parse(it)?.let {
+                        DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault()).format(it)
+                    }
+                }
+            } ?: itemView.context.getString(R.string.lbl_no_date_available)
+
             binding.cardSetTitleTextview.text = item.name
-            binding.cardSetReleaseDateTextview.text = item.releaseDate
+            binding.cardSetReleaseDateTextview.text = releaseDate
         }
     }
 }

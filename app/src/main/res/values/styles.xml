@@ -69,4 +69,16 @@
     <style name="Widget.AppTheme.Snackbar" parent="Widget.MaterialComponents.Snackbar">
         <item name="backgroundTint">?attr/colorPrimary</item>
     </style>
+
+    <style name="Widget.AppTheme.ExtendedFloatingActionButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton.Icon">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.AppTheme.ExtendedFloatingActionButton</item>
+    </style>
+
+    <style name="AppTheme.CardRecyclerView" parent="">
+        <item name="android:paddingTop">@dimen/list_padding_top</item>
+        <item name="android:paddingBottom">@dimen/list_padding_bottom</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:paddingStart">@dimen/list_padding_start</item>
+        <item name="android:paddingEnd">@dimen/list_padding_end</item>
+    </style>
 </resources>

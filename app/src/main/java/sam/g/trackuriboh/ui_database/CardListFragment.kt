@@ -4,15 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.R
-import sam.g.trackuriboh.data.db.relations.ProductWithSetAndSkuIds
+import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
 import sam.g.trackuriboh.databinding.FragmentCardListBinding
-import sam.g.trackuriboh.handleNavigationAction
 import sam.g.trackuriboh.ui_common.VerticalSpaceItemDecoration
 import sam.g.trackuriboh.ui_database.adapters.CardListAdapter
 import sam.g.trackuriboh.ui_database.viewmodels.BaseSearchViewModel
@@ -21,13 +22,20 @@ import sam.g.trackuriboh.viewBinding
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CardListFragment : BaseSearchListFragment<ProductWithSetAndSkuIds>(), CardListAdapter.OnItemClickListener {
+class CardListFragment : BaseSearchListFragment<ProductWithCardSetAndSkuIds>(), CardListAdapter.OnItemClickListener {
     @Inject
     lateinit var mAdapter: CardListAdapter
 
     private val binding by viewBinding(FragmentCardListBinding::inflate)
 
     private val mViewModel: CardListViewModel by viewModels()
+
+    companion object {
+        const val CARD_ITEM_CLICK_REQUEST_KEY = "CardListFragment_onCardItemClick"
+        const val CARD_ITEM_CLICK_RESULT_KEY = "cardId"
+        const val VIEW_PRICE_CLICK_REQUEST_KEY = "CardListFragment_onViewPriceItemClick"
+        const val VIEW_PRICE_CLICK_RESULT_KEY = "skuIds"
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
@@ -39,31 +47,25 @@ class CardListFragment : BaseSearchListFragment<ProductWithSetAndSkuIds>(), Card
         initRecyclerView()
     }
 
+    override fun getViewModel(): BaseSearchViewModel<ProductWithCardSetAndSkuIds> = mViewModel
+
+    override fun getListView(): RecyclerView = binding.cardList
+
+    override fun getAdapter(): PagingDataAdapter<ProductWithCardSetAndSkuIds, out RecyclerView.ViewHolder> = mAdapter
+
+    override fun getItemDecorator() = VerticalSpaceItemDecoration(resources.getDimension(R.dimen.list_item_large_row_spacing))
+
+    /**
+     * Some new whack way to communicate between fragments, but we do it this way because [CardListFragment] needs to perform
+     * different actions based on where it's being used
+     */
     override fun onCardItemClick(cardId: Long) {
-        handleNavigationAction(
-            DatabaseFragmentDirections.actionDatabaseFragmentToCardDetailFragment(cardId)
-        )
+        setFragmentResult(CARD_ITEM_CLICK_REQUEST_KEY, bundleOf(CARD_ITEM_CLICK_RESULT_KEY to cardId))
     }
 
     override fun onViewPricesItemClick(skuIds: List<Long>) {
-        handleNavigationAction(
-            DatabaseFragmentDirections.actionDatabaseFragmentToCardPricesBottomSheetDialogFragment(skuIds.toLongArray())
-        )
+       setFragmentResult(VIEW_PRICE_CLICK_REQUEST_KEY, bundleOf(VIEW_PRICE_CLICK_RESULT_KEY to skuIds.toLongArray()))
     }
-
-    override fun getViewModel(): BaseSearchViewModel<ProductWithSetAndSkuIds> {
-        return mViewModel
-    }
-
-    override fun getListView(): RecyclerView {
-        return binding.cardList
-    }
-
-    override fun getAdapter(): PagingDataAdapter<ProductWithSetAndSkuIds, out RecyclerView.ViewHolder> {
-        return mAdapter
-    }
-
-    override fun getItemDecorator() = VerticalSpaceItemDecoration(resources.getDimension(R.dimen.list_item_large_row_spacing))
 
     private fun initRecyclerView() {
         mAdapter.setOnItemClickListener(this)

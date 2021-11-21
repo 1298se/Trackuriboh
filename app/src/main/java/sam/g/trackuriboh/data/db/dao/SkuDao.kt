@@ -1,7 +1,6 @@
 package sam.g.trackuriboh.data.db.dao
 
 import androidx.room.*
-import kotlinx.coroutines.flow.Flow
 import sam.g.trackuriboh.data.db.entities.Sku
 import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
 
@@ -15,7 +14,7 @@ interface SkuDao {
     suspend fun updateSkuPrices(vararg skuPrices: Sku.SkuPriceUpdate)
 
     @Query("SELECT * FROM Sku WHERE id IN (:skuIds)")
-    fun getSkusWithConditionAndPrinting(
+    suspend fun getSkusWithConditionAndPrinting(
         skuIds: List<Long>
-    ): Flow<List<SkuWithConditionAndPrinting>>
+    ): List<SkuWithConditionAndPrinting>
 }

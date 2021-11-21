@@ -7,11 +7,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/card_list"
-        android:paddingTop="@dimen/list_padding_top"
-        android:paddingBottom="@dimen/list_padding_bottom"
-        android:clipToPadding="false"
-        android:paddingStart="@dimen/list_padding_start"
-        android:paddingEnd="@dimen/list_padding_end"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        style="@style/AppTheme.CardRecyclerView" />
 </LinearLayout>

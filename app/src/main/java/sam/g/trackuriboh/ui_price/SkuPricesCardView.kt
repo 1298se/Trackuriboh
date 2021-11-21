@@ -22,7 +22,7 @@ class SkuPricesCardView(
     private val binding = SkuPricesCardViewBinding.inflate(LayoutInflater.from(context), this, true)
 
     fun setHeader(header: String?) {
-        binding.skuPricesHeaderText.setTextOrHideIfNull(header)
+        binding.skuPricesHeaderTextview.setTextOrHideIfNull(header)
     }
 
     fun setRowItems(skuList: List<SkuWithConditionAndPrinting>) {
@@ -35,7 +35,7 @@ class SkuPricesCardView(
 
             rowBinding.apply {
                 skuPricesRowConditionText.text = it.condition?.name
-                skuPricesRowPriceText.text = it.sku.lowestListingPrice?.toString()
+                skuPricesRowPriceText.text = it.sku.lowestListingPrice?.toString() ?: context.getString(R.string.lbl_not_available)
             }
 
             binding.skuPricesContainer.addView(rowBinding.root)

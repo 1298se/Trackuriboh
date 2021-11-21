@@ -5,9 +5,10 @@ import sam.g.trackuriboh.data.db.AppDatabase
 import sam.g.trackuriboh.data.db.entities.Sku
 
 data class SkuResponse(
-    val errors: List<String>,
-    val results: List<SkuItem>,
-) {
+    override val errors: List<String>,
+    override val results: List<SkuItem>,
+) : BaseTCGPlayerResponse<SkuResponse.SkuItem> {
+
     data class SkuItem(
         @SerializedName("skuId")
         val id: Long,

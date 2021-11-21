@@ -8,7 +8,7 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/dark_green</item>
         <item name="colorOnSurface">@color/gray</item>
-        <item name="colorAccent">@color/dark_green</item>
+        <item name="colorAccent">@color/light_blue</item>
         <item name="colorSecondary">@color/white</item>
 
         <!-- Sets the color of the back button for toolbar -->
@@ -22,10 +22,15 @@
         <item name="searchViewStyle">@style/Widget.AppTheme.SearchView</item>
         <item name="autoCompleteTextViewStyle">@style/Widget.AppTheme.AutoCompleteTextView</item>
         <item name="snackbarStyle">@style/Widget.AppTheme.Snackbar</item>
+        <item name="extendedFloatingActionButtonStyle">@style/Widget.AppTheme.ExtendedFloatingActionButton</item>
     </style>
 
     <style name="ThemeOverlay.AppTheme.MaterialCalendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
         <item name="buttonBarPositiveButtonStyle">@style/Widget.AppTheme.Button.TextButton.Dialog</item>
         <item name="buttonBarNegativeButtonStyle">@style/Widget.AppTheme.Button.TextButton.Dialog</item>
+    </style>
+
+    <style name="ThemeOverlay.AppTheme.ExtendedFloatingActionButton" parent="AppTheme">
+        <item name="colorSecondary">@color/light_blue</item>
     </style>
 </resources>

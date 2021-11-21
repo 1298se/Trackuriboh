@@ -5,9 +5,10 @@ import sam.g.trackuriboh.data.db.AppDatabase
 import sam.g.trackuriboh.data.db.entities.Condition
 
 data class ConditionResponse(
-    val errors: List<String>,
-    val results: List<CardPrintingItem>,
-) {
+    override val errors: List<String>,
+    override val results: List<CardPrintingItem>,
+) : BaseTCGPlayerResponse<ConditionResponse.CardPrintingItem> {
+
     data class CardPrintingItem(
         @SerializedName("conditionId")
         val id: Long,

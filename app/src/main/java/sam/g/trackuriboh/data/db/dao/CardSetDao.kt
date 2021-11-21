@@ -9,8 +9,8 @@ import sam.g.trackuriboh.data.db.entities.CardSet
 
 @Dao
 interface CardSetDao {
-    @Query("SELECT * FROM CardSet WHERE name = :setName")
-    suspend fun getCardSet(setName: String): CardSet
+    @Query("SELECT * FROM CardSet WHERE id = :setId")
+    suspend fun getCardSet(setId: Long): CardSet
 
     @Query("SELECT * FROM CardSet ORDER BY name ASC")
     fun getCardSetList(): PagingSource<Int, CardSet>

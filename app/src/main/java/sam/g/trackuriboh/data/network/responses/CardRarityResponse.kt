@@ -5,9 +5,10 @@ import sam.g.trackuriboh.data.db.AppDatabase
 import sam.g.trackuriboh.data.db.entities.CardRarity
 
 data class CardRarityResponse(
-    val errors: List<String>,
-    val results: List<CardRarityItem>,
-) {
+    override val errors: List<String>,
+    override val results: List<CardRarityItem>,
+) : BaseTCGPlayerResponse<CardRarityResponse.CardRarityItem> {
+
     data class CardRarityItem(
         @SerializedName("rarityId")
         val id: Long,

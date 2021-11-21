@@ -1,7 +1,7 @@
 package sam.g.trackuriboh.data.repository
 
 import android.content.SharedPreferences
-import sam.g.trackuriboh.data.network.interceptors.AuthorizationInterceptor
+import sam.g.trackuriboh.data.network.interceptors.TCGPlayerAuthorizationInterceptor
 import sam.g.trackuriboh.data.network.services.AccessTokenApiService
 import java.text.SimpleDateFormat
 import java.util.*
@@ -15,10 +15,10 @@ private const val ACCESS_TOKEN = "AccessToken"
 class SessionManager @Inject constructor(
     private val accessTokenApiService: AccessTokenApiService,
     private val sharedPreferences: SharedPreferences,
-    private val authorizationInterceptor: AuthorizationInterceptor
+    private val TCGPlayerAuthorizationInterceptor: TCGPlayerAuthorizationInterceptor
 ) {
 
-    suspend fun setAccessToken() {
+    suspend fun fetchTCGPlayerAccessToken() {
         val tokenExpiry = sharedPreferences.getString(ACCESS_TOKEN_EXPIRY, null)
 
         val accessToken = if (tokenExpiry == null || isExpired(tokenExpiry)) {
@@ -34,7 +34,7 @@ class SessionManager @Inject constructor(
             sharedPreferences.getString(ACCESS_TOKEN, null) ?: throw IllegalStateException("")
         }
 
-        authorizationInterceptor.accessToken = accessToken
+        TCGPlayerAuthorizationInterceptor.accessToken = accessToken
     }
 
     private fun isExpired(date: String): Boolean {

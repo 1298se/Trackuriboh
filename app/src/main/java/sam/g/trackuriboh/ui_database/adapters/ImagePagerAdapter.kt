@@ -5,10 +5,10 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import sam.g.trackuriboh.R
-import javax.inject.Inject
 
-class ImagePagerAdapter @Inject constructor() : RecyclerView.Adapter<ImagePagerAdapter.CardImageViewHolder>() {
-    private var mImageList: List<String?>? = null
+class ImagePagerAdapter(
+    private val imageList: List<String?>?
+) : RecyclerView.Adapter<ImagePagerAdapter.CardImageViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardImageViewHolder {
         return CardImageViewHolder(ImageView(parent.context).apply {
@@ -20,16 +20,11 @@ class ImagePagerAdapter @Inject constructor() : RecyclerView.Adapter<ImagePagerA
     }
 
     override fun onBindViewHolder(holder: CardImageViewHolder, position: Int) {
-        holder.bind(mImageList?.get(position))
+        holder.bind(imageList?.get(position))
     }
 
     override fun getItemCount(): Int {
-        return mImageList?.size ?: 0
-    }
-
-    fun setImageList(imageList: List<String?>) {
-        mImageList = imageList
-        notifyItemRangeInserted(0, imageList.size)
+        return imageList?.size ?: 0
     }
 
     inner class CardImageViewHolder(private val imageView: ImageView) : RecyclerView.ViewHolder(imageView) {

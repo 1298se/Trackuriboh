@@ -5,9 +5,10 @@ import sam.g.trackuriboh.data.db.AppDatabase
 import sam.g.trackuriboh.data.db.entities.Printing
 
 data class PrintingResponse(
-    val errors: List<String>,
-    val results: List<CardPrintingItem>,
-) {
+    override val errors: List<String>,
+    override val results: List<CardPrintingItem>,
+) : BaseTCGPlayerResponse<PrintingResponse.CardPrintingItem> {
+
     data class CardPrintingItem(
         @SerializedName("printingId")
         val id: Long,

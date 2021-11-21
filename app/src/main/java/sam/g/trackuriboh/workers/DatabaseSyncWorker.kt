@@ -40,7 +40,6 @@ class DatabaseSyncWorker @AssistedInject constructor(
         )
     }
 
-
     companion object {
         const val WORKER_TAG = "DatabaseSyncWorker"
         const val Progress = "DatabaseSyncProgress"
@@ -79,7 +78,6 @@ class DatabaseSyncWorker @AssistedInject constructor(
             // TODO: Created notification alerting user that sync is complete
             Result.success()
         } catch (throwable: Throwable) {
-            throwable.printStackTrace()
             Result.failure()
         }
     }

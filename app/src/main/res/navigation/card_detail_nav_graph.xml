@@ -2,10 +2,10 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_detail_nav_graph"
-    app:startDestination="@id/cardDetailFragment2">
+    app:startDestination="@id/cardDetailFragment">
 
     <fragment
-        android:id="@+id/cardDetailFragment2"
+        android:id="@+id/cardDetailFragment"
         android:name="sam.g.trackuriboh.ui_card_detail.CardDetailFragment"
         android:label="CardDetailFragment" >
         <argument

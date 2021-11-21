@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_detail_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -44,27 +45,70 @@
                 android:id="@+id/card_detail_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:titleTextColor="?attr/colorOnPrimary"
                 app:layout_collapseMode="pin" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-        <include layout="@layout/divider_view" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/card_detail_name_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/material_border_padding"
+            android:layout_marginEnd="@dimen/material_border_padding"
+            android:layout_marginTop="@dimen/material_border_padding"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            tools:text="Blue-Eyes White Dragon" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/card_detail_set_name_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_spacing_large"
+            android:layout_marginStart="@dimen/material_border_padding"
+            android:layout_marginEnd="@dimen/material_border_padding"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_detail_name_textview"
+            style="@style/TextAppearance.MaterialComponents.Subtitle1"
+            tools:text="The Legend of Blue-Eyes White Dragon" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/card_detail_tab_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/material_border_padding"
+            app:layout_constraintTop_toBottomOf="@id/card_detail_set_name_textview" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+        <!-- There's scrolling behaviour issues when the ViewPager2
+             is the child of the NestedScrollView, hence we have the ViewPager2 as the root
+             and the child fragments each have a NestedScrollView -->
 
-    <!-- There's scrolling behaviour issues when the ViewPager2
-    is the child of the NestedScrollView, hence we have the ViewPager2 as the root
-    and the child fragments each have a NestedScrollView -->
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/card_detail_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:paddingBottom="@dimen/extended_fab_height"
+            app:layout_constraintTop_toBottomOf="@id/card_detail_tab_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/card_detail_view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/card_detail_tcgplayer_extended_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/extended_fab_height"
+        android:layout_margin="@dimen/material_border_padding"
+        android:layout_gravity="bottom|end"
+        android:text="View on TCGPlayer"
+        app:icon="@drawable/ic_baseline_storefront_24" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

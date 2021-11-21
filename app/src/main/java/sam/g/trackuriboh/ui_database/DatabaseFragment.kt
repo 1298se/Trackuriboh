@@ -16,13 +16,16 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.work.WorkInfo
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import sam.g.trackuriboh.R
+import sam.g.trackuriboh.*
 import sam.g.trackuriboh.databinding.FragmentDatabaseBinding
-import sam.g.trackuriboh.setViewPagerBackPressBehaviour
-import sam.g.trackuriboh.showSnackbar
+import sam.g.trackuriboh.ui_database.CardListFragment.Companion.CARD_ITEM_CLICK_REQUEST_KEY
+import sam.g.trackuriboh.ui_database.CardListFragment.Companion.CARD_ITEM_CLICK_RESULT_KEY
+import sam.g.trackuriboh.ui_database.CardListFragment.Companion.VIEW_PRICE_CLICK_REQUEST_KEY
+import sam.g.trackuriboh.ui_database.CardListFragment.Companion.VIEW_PRICE_CLICK_RESULT_KEY
+import sam.g.trackuriboh.ui_database.CardSetListFragment.Companion.SET_ITEM_CLICK_REQUEST_KEY
+import sam.g.trackuriboh.ui_database.CardSetListFragment.Companion.SET_ITEM_CLICK_RESULT_KEY
 import sam.g.trackuriboh.ui_database.adapters.DatabasePagerAdapter
 import sam.g.trackuriboh.ui_database.viewmodels.DatabaseViewModel
-import sam.g.trackuriboh.viewBinding
 import sam.g.trackuriboh.workers.DatabaseSyncWorker
 
 /**
@@ -45,6 +48,12 @@ class DatabaseFragment :
 
     private val mViewModel: DatabaseViewModel by activityViewModels()
     private lateinit var mAdapter: DatabasePagerAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setupFragmentResultListeners()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
@@ -220,6 +229,30 @@ class DatabaseFragment :
 
             if (currentFragment is BaseSearchListFragment<*> && currentFragment.lastQueryValue() != null) {
                 currentFragment.search(null)
+            }
+        }
+    }
+
+    private fun setupFragmentResultListeners() {
+        childFragmentManager.apply {
+            setFragmentResultListener(CARD_ITEM_CLICK_REQUEST_KEY, this@DatabaseFragment) { _, bundle ->
+                handleNavigationAction(
+                    DatabaseFragmentDirections.actionDatabaseFragmentToCardDetailActivity(bundle.getLong(CARD_ITEM_CLICK_RESULT_KEY))
+                )
+            }
+
+            setFragmentResultListener(VIEW_PRICE_CLICK_REQUEST_KEY, this@DatabaseFragment) { _, bundle ->
+                handleNavigationAction(
+                    DatabaseFragmentDirections.actionDatabaseFragmentToCardPricesBottomSheetDialogFragment(
+                        bundle.getLongArray(VIEW_PRICE_CLICK_RESULT_KEY) ?: longArrayOf()
+                    )
+                )
+            }
+
+            setFragmentResultListener(SET_ITEM_CLICK_REQUEST_KEY, this@DatabaseFragment) { _, bundle ->
+                handleNavigationAction(
+                    DatabaseFragmentDirections.actionDatabaseFragmentToCardSetDetailActivity(bundle.getLong(SET_ITEM_CLICK_RESULT_KEY))
+                )
             }
         }
     }
