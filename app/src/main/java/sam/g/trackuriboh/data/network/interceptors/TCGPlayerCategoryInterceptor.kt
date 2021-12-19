@@ -6,6 +6,7 @@ import sam.g.trackuriboh.di.NetworkModule.TCGPLAYER_YUGIOH_CATEGORY_ID
 
 class TCGPlayerCategoryInterceptor : Interceptor {
     companion object {
+        //
         const val CATEGORY_QUERY_PARAM = "CategoryQuery"
     }
 

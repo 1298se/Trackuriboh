@@ -5,14 +5,9 @@
         <item name="boxStrokeColor">?attr/colorOnPrimary</item>
     </style>
 
-    <style name="Widget.AppTheme.TextInputLayout.ExposedDropdown" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu">
-        <item name="hintTextColor">?attr/colorOnPrimary</item>
-        <item name="boxStrokeColor">?attr/colorOnPrimary</item>
-    </style>
-
     <!-- Components -->
     <style name="Widget.AppTheme.TabLayout" parent="Widget.MaterialComponents.TabLayout">
-        <item name="tabSelectedTextColor">?attr/colorPrimaryDark</item>
+        <item name="tabSelectedTextColor">?attr/colorPrimaryVariant</item>
         <item name="tabTextColor">?attr/colorPrimary</item>
         <item name="android:elevation">8dp</item>
     </style>
@@ -22,7 +17,7 @@
         <item name="queryBackground">@android:color/transparent</item>
     </style>
 
-    <style name="Widget.AppTheme.AutoCompleteTextView" parent="Widget.AppCompat.Light.AutoCompleteTextView">
+    <style name="Widget.AppTheme.SearchView.AutoCompleteTextView" parent="Widget.AppCompat.AutoCompleteTextView">
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:textColorHint">?attr/colorOnPrimary</item>
     </style>
@@ -31,17 +26,6 @@
         <item name="materialThemeOverlay">@style/ThemeOverlay.AppTheme.LinearProgressIndicator</item>
     </style>
 
-    <style name="ThemeOverlay.AppTheme.LinearProgressIndicator" parent="">
-        <item name="colorPrimary">?attr/colorPrimaryDark</item>
-    </style>
-
-    <style name="Widget.AppTheme.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="backgroundTint">@color/button_outlined_states</item>
-    </style>
-
-    <style name="Widget.AppTheme.Button.TextButton.Dialog" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">?attr/colorOnPrimary</item>
-    </style>
 
     <style name="Widget.AppTheme.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
         <item name="itemIconTint">@color/bottom_nav_states</item>
@@ -66,12 +50,25 @@
         <item name="cardElevation">@dimen/cardview_default_elevation</item>
     </style>
 
-    <style name="Widget.AppTheme.Snackbar" parent="Widget.MaterialComponents.Snackbar">
-        <item name="backgroundTint">?attr/colorPrimary</item>
+    <style name="Widget.AppTheme.Button.IconOnly" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="iconPadding">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
     </style>
 
-    <style name="Widget.AppTheme.ExtendedFloatingActionButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton.Icon">
-        <item name="materialThemeOverlay">@style/ThemeOverlay.AppTheme.ExtendedFloatingActionButton</item>
+    <style name="Widget.Apptheme.Button.IconOnly.PrimaryAlpha" parent="Widget.AppTheme.Button.IconOnly">
+        <item name="iconTint">?attr/colorPrimaryVariant</item>
+        <item name="backgroundTint">@color/icon_button_color_primary_alpha_selector</item>
+    </style>
+
+    <style name="AppTheme.Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?attr/colorOnSurface</item>
     </style>
 
     <style name="AppTheme.CardRecyclerView" parent="">

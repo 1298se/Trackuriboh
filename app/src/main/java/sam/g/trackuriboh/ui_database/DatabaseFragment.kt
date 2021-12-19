@@ -1,32 +1,34 @@
 package sam.g.trackuriboh.ui_database
 
+import android.app.SearchManager
+import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AutoCompleteTextView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
-import androidx.work.WorkInfo
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.*
 import sam.g.trackuriboh.databinding.FragmentDatabaseBinding
+import sam.g.trackuriboh.ui_database.CardListFragment.Companion.CARD_ITEM_CARD_ID
 import sam.g.trackuriboh.ui_database.CardListFragment.Companion.CARD_ITEM_CLICK_REQUEST_KEY
-import sam.g.trackuriboh.ui_database.CardListFragment.Companion.CARD_ITEM_CLICK_RESULT_KEY
 import sam.g.trackuriboh.ui_database.CardListFragment.Companion.VIEW_PRICE_CLICK_REQUEST_KEY
-import sam.g.trackuriboh.ui_database.CardListFragment.Companion.VIEW_PRICE_CLICK_RESULT_KEY
+import sam.g.trackuriboh.ui_database.CardListFragment.Companion.VIEW_PRICE_SKU_IDS
 import sam.g.trackuriboh.ui_database.CardSetListFragment.Companion.SET_ITEM_CLICK_REQUEST_KEY
-import sam.g.trackuriboh.ui_database.CardSetListFragment.Companion.SET_ITEM_CLICK_RESULT_KEY
-import sam.g.trackuriboh.ui_database.adapters.DatabasePagerAdapter
+import sam.g.trackuriboh.ui_database.CardSetListFragment.Companion.SET_ITEM_ID
+import sam.g.trackuriboh.ui_database.adapters.DatabaseStateAdapter
+import sam.g.trackuriboh.ui_database.adapters.SearchSuggestionsAdapter
 import sam.g.trackuriboh.ui_database.viewmodels.DatabaseViewModel
-import sam.g.trackuriboh.workers.DatabaseSyncWorker
+import sam.g.trackuriboh.utils.*
 
 /**
  * The SearchView is very buggy and the behaviour is sometimes hard to manage. When updating Hilt,
@@ -38,22 +40,19 @@ import sam.g.trackuriboh.workers.DatabaseSyncWorker
 @AndroidEntryPoint
 class DatabaseFragment :
     Fragment(),
-    SearchView.OnQueryTextListener,
-    Toolbar.OnMenuItemClickListener,
-    MenuItem.OnActionExpandListener
-{
+    Toolbar.OnMenuItemClickListener {
+
+    companion object {
+        const val CARD_PAGE_POSITION = 0
+        const val SET_PAGE_POSITION = 1
+    }
     private val binding by viewBinding(FragmentDatabaseBinding::inflate)
 
-    private lateinit var mSearchView: SearchView
+    private lateinit var searchView: SearchView
 
-    private val mViewModel: DatabaseViewModel by activityViewModels()
-    private lateinit var mAdapter: DatabasePagerAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setupFragmentResultListeners()
-    }
+    private val viewModel: DatabaseViewModel by activityViewModels()
+    private lateinit var stateAdapter: DatabaseStateAdapter
+    private lateinit var searchSuggestionsAdapter: SearchSuggestionsAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
@@ -64,104 +63,133 @@ class DatabaseFragment :
 
         setViewPagerBackPressBehaviour(binding.databaseViewPager)
 
-        initDatabaseObserver()
         initToolbar()
         initTabLayoutWithViewPager()
-    }
-
-    override fun onQueryTextSubmit(query: String?): Boolean {
-        performSearch(query)
-        mSearchView.clearFocus()
-
-        // Hack to stop the tablayout from getting focus after this is called
-        binding.focusDummyView.requestFocus()
-
-        return true
-    }
-
-    override fun onQueryTextChange(newText: String?): Boolean {
-        return true
+        initActionObserver()
+        initSearchSuggestionObserver()
+        initFragmentResultListeners()
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         return when (item?.itemId) {
-            R.id.action_database_sync -> {
-                mViewModel.syncDatabase()
+            R.id.action_database_update_check -> {
+                viewModel.checkForDatabaseUpdates()
+
+                true
+            }
+            R.id.action_database_download -> {
+                viewModel.downloadDatabase()
+
                 true
             }
             else -> false
         }
     }
 
-    override fun onMenuItemActionExpand(item: MenuItem?): Boolean { return true }
-
-    /** When the searchview closes, **/
-    override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-        if (item?.itemId == R.id.action_search) {
-            resetLists()
-        }
-        return true
-    }
-
     private fun initTabLayoutWithViewPager() {
         binding.databaseViewPager.apply {
-            adapter = DatabasePagerAdapter(this@DatabaseFragment).also {
-                mAdapter = it
+            adapter = DatabaseStateAdapter(this@DatabaseFragment).also {
+                stateAdapter = it
             }
+
+            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    when(position) {
+                        CARD_PAGE_POSITION -> searchView.suggestionsAdapter = searchSuggestionsAdapter
+                        SET_PAGE_POSITION -> searchView.suggestionsAdapter = null
+                    }
+                }
+            })
         }
 
         TabLayoutMediator(binding.databaseTabLayout, binding.databaseViewPager) { tab, position ->
-                tab.text = when (position) {
-                    0 -> getString(R.string.tab_card_title)
-                    1 -> getString(R.string.tab_set_title)
-                    else -> null
-                }
-
+            tab.text = when (position) {
+                CARD_PAGE_POSITION -> getString(R.string.tab_card_title)
+                SET_PAGE_POSITION -> getString(R.string.tab_set_title)
+                else -> null
+            }
         }.attach()
     }
 
     private fun initToolbar() {
-        val navController = findNavController()
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        binding.databaseToolbar.setupAsTopLevelDestinationToolbar()
 
-        binding.databaseToolbar.setupWithNavController(navController, appBarConfiguration)
-
-        onCreateOptionsMenu()
+        createOptionsMenu()
     }
 
-    private fun initDatabaseObserver() {
-        mViewModel.databaseSyncState.observe(viewLifecycleOwner) {
+    private fun initActionObserver() {
+        viewModel.action.observe(viewLifecycleOwner) {
             if (it.hasBeenHandled) {
                 return@observe
             }
 
-            var workInfo = it.getContent()
-
-            // If it's loading, we want to still have the progress indicator when we come back, so we
-            // don't set it to handled. Otherwise, if it's finished, we set it to handled so the success/failure
-            // snackbars don't appear again on screen rotation
-            if (workInfo?.state == WorkInfo.State.RUNNING) {
-                if (binding.databaseSyncProgressIndicator.visibility != View.VISIBLE) {
-                    showLoading()
+            when (val action = it.getContent()) {
+                is DatabaseViewModel.UiAction.Loading -> {
+                    binding.databaseToolbar.setMenuEnabled(false)
+                    showLoading(action.message)
+                    setProgress(action.progress, action.indeterminate)
                 }
+                else -> {
+                    it.handleEvent()
+                    showContent()
+                    binding.databaseToolbar.setMenuEnabled(true)
 
-                setProgress(workInfo.progress.getInt(DatabaseSyncWorker.Progress, 0))
-            } else if (workInfo?.state?.isFinished == true) {
-                it.handleEvent()
-
-                showContent()
-
-                when(workInfo.state) {
-                    WorkInfo.State.SUCCEEDED -> showSnackbar("Database Sync Complete")
-                    WorkInfo.State.FAILED -> showSnackbar("Database Sync Failed")
-                    WorkInfo.State.CANCELLED -> showSnackbar("Database Sync was cancelled")
+                    when (action) {
+                        is DatabaseViewModel.UiAction.Snackbar -> showSnackbar(action.message, action.snackbarType)
+                        is DatabaseViewModel.UiAction.UpdateAvailable -> {
+                            context?.createAlertDialog(
+                                title = getString(R.string.database_update_check_update_available_title),
+                                message = getString(R.string.database_update_check_update_available_message),
+                                positiveButtonText = getString(R.string.lbl_update),
+                                negativeButtonText = getString(R.string.lbl_cancel),
+                                onPositiveButtonClick = { _, _ -> viewModel.updateDatabase(action.cardSetIds) }
+                            )?.show()
+                        }
+                    }
                 }
             }
         }
     }
 
-    private fun setProgress(progress: Int) {
+    private fun initSearchSuggestionObserver() {
+        with(searchView) {
+            suggestionsAdapter = SearchSuggestionsAdapter(
+                context, null
+            ).also {
+                searchSuggestionsAdapter = it
+            }
+
+            setOnSuggestionListener(object : SearchView.OnSuggestionListener {
+                override fun onSuggestionSelect(position: Int): Boolean = false
+
+                override fun onSuggestionClick(position: Int): Boolean {
+                    val cursor = (suggestionsAdapter.getItem(position) as Cursor)
+                    val suggestion = cursor.getString(cursor.getColumnIndexOrThrow(SearchManager.SUGGEST_COLUMN_TEXT_1))
+                    setQuery(suggestion, true)
+
+                    return true
+                }
+            })
+        }
+
+        viewModel.searchSuggestionsCursor.observe(viewLifecycleOwner) {
+            with(searchView) {
+                if (suggestionsAdapter != null) {
+                    suggestionsAdapter.changeCursor(it)
+
+                    findViewById<AutoCompleteTextView>(R.id.search_src_text).dropDownHeight =
+                        minOf(5, it.count) * resources.getDimension(R.dimen.list_item_one_line_height).toInt()
+                }
+            }
+
+        }
+    }
+
+    private fun setProgress(progress: Int, indeterminate: Boolean = false) {
         binding.databaseSyncProgressIndicator.apply {
+            binding.databaseSyncProgressTextview.show(!indeterminate)
+            isIndeterminate = indeterminate
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 setProgress(progress, true)
             } else {
@@ -169,16 +197,21 @@ class DatabaseFragment :
             }
         }
 
-        binding.databaseSyncProgressText.text = getString(R.string.database_sync_progress_text, progress)
+        binding.databaseSyncProgressTextview.text = getString(R.string.progress_percent, progress)
     }
 
-    private fun showLoading() {
+    private fun showLoading(message: String?) {
         binding.apply {
             databaseTabLayout.visibility = View.GONE
             databaseViewPager.visibility = View.GONE
 
             databaseSyncProgressIndicator.show()
-            databaseSyncProgressText.visibility = View.VISIBLE
+            databaseSyncProgressTextview.visibility = View.VISIBLE
+
+            with(databaseSyncInfoTextview) {
+                visibility = View.VISIBLE
+                text = message
+            }
 
             databaseViewPager.adapter = null
         }
@@ -190,24 +223,41 @@ class DatabaseFragment :
             databaseViewPager.visibility = View.VISIBLE
 
             databaseSyncProgressIndicator.hide()
-            databaseSyncProgressText.visibility = View.GONE
+            databaseSyncProgressTextview.visibility = View.GONE
+            databaseSyncInfoTextview.visibility = View.GONE
 
-            databaseViewPager.adapter = mAdapter
+            databaseViewPager.adapter = stateAdapter
         }
 
     }
 
-    private fun onCreateOptionsMenu() {
+    private fun createOptionsMenu() {
         binding.databaseToolbar.apply {
             inflateMenu(R.menu.database_toolbar_menu)
 
             menu.findItem(R.id.action_search).apply {
-                mSearchView = (this.actionView.findViewById(R.id.search_view) as SearchView).apply {
-                    setIconifiedByDefault(true)
-                    setOnQueryTextListener(this@DatabaseFragment)
-                }
+                searchView = setIconifiedSearchViewBehaviour(this, object : SearchViewQueryHandler {
+                    override fun handleQueryTextSubmit(query: String?) {
+                        performSearch(query)
+                    }
 
-                setOnActionExpandListener(this@DatabaseFragment)
+                    override fun handleQueryTextChanged(newText: String?) {
+                        viewModel.getSuggestions(newText)
+                    }
+
+                    override fun handleSearchViewExpanded() {
+                        menu.children.forEach {
+                            it.isVisible = it.itemId == itemId
+                        }
+                    }
+
+                    override fun handleSearchViewCollapse() {
+                        menu.children.forEach {
+                            it.isVisible = true
+                        }
+                        resetLists()
+                    }
+                })
             }
 
             setOnMenuItemClickListener(this@DatabaseFragment)
@@ -216,16 +266,19 @@ class DatabaseFragment :
 
     /** Queries on the current displayed fragment **/
     private fun performSearch(query: String?) {
-        val currentFragment = childFragmentManager.findFragmentByTag("f" + mAdapter.getItemId(binding.databaseViewPager.currentItem))
+        val currentFragment = childFragmentManager.findFragmentByTag("f" + stateAdapter.getItemId(binding.databaseViewPager.currentItem))
 
         if (currentFragment is BaseSearchListFragment<*>) {
             currentFragment.search(query)
         }
+
+        searchView.clearFocus()
+        binding.focusDummyView.requestFocus()
     }
 
     private fun resetLists() {
-        repeat(mAdapter.itemCount) {
-            val currentFragment = childFragmentManager.findFragmentByTag("f" + mAdapter.getItemId(it))
+        repeat(stateAdapter.itemCount) {
+            val currentFragment = childFragmentManager.findFragmentByTag("f" + stateAdapter.getItemId(it))
 
             if (currentFragment is BaseSearchListFragment<*> && currentFragment.lastQueryValue() != null) {
                 currentFragment.search(null)
@@ -233,25 +286,25 @@ class DatabaseFragment :
         }
     }
 
-    private fun setupFragmentResultListeners() {
+    private fun initFragmentResultListeners() {
         childFragmentManager.apply {
             setFragmentResultListener(CARD_ITEM_CLICK_REQUEST_KEY, this@DatabaseFragment) { _, bundle ->
                 handleNavigationAction(
-                    DatabaseFragmentDirections.actionDatabaseFragmentToCardDetailActivity(bundle.getLong(CARD_ITEM_CLICK_RESULT_KEY))
+                    DatabaseFragmentDirections.actionDatabaseFragmentToCardDetailActivity(bundle.getLong(CARD_ITEM_CARD_ID))
                 )
             }
 
             setFragmentResultListener(VIEW_PRICE_CLICK_REQUEST_KEY, this@DatabaseFragment) { _, bundle ->
                 handleNavigationAction(
                     DatabaseFragmentDirections.actionDatabaseFragmentToCardPricesBottomSheetDialogFragment(
-                        bundle.getLongArray(VIEW_PRICE_CLICK_RESULT_KEY) ?: longArrayOf()
+                        bundle.getLongArray(VIEW_PRICE_SKU_IDS) ?: longArrayOf()
                     )
                 )
             }
 
             setFragmentResultListener(SET_ITEM_CLICK_REQUEST_KEY, this@DatabaseFragment) { _, bundle ->
                 handleNavigationAction(
-                    DatabaseFragmentDirections.actionDatabaseFragmentToCardSetDetailActivity(bundle.getLong(SET_ITEM_CLICK_RESULT_KEY))
+                    DatabaseFragmentDirections.actionDatabaseFragmentToCardSetDetailActivity(bundle.getLong(SET_ITEM_ID))
                 )
             }
         }

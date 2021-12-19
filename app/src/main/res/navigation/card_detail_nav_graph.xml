@@ -7,9 +7,19 @@
     <fragment
         android:id="@+id/cardDetailFragment"
         android:name="sam.g.trackuriboh.ui_card_detail.CardDetailFragment"
-        android:label="CardDetailFragment" >
+        android:label="Card Details" >
         <argument
             android:name="cardId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_cardDetailFragment_to_cardSetDetailActivity"
+            app:destination="@id/cardSetDetailActivity" />
     </fragment>
+    <activity
+        android:id="@+id/cardSetDetailActivity"
+        android:name="sam.g.trackuriboh.ui_card_set_detail.CardSetDetailActivity">
+        <argument
+            android:name="setId"
+            app:argType="long" />
+    </activity>
 </navigation>

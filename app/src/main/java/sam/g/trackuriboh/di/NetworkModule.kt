@@ -10,6 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import sam.g.trackuriboh.data.network.interceptors.TCGPlayerAuthorizationInterceptor
 import sam.g.trackuriboh.data.network.interceptors.TCGPlayerCategoryInterceptor
+import sam.g.trackuriboh.data.network.interceptors.TCGPlayerResponseInterceptor
 import sam.g.trackuriboh.data.network.services.*
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -18,6 +19,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
     const val DEFAULT_QUERY_LIMIT = 100
+    const val MAX_PARALLEL_REQUESTS = 10
+
     const val TCGPLAYER_YUGIOH_CATEGORY_ID = 2
     const val TCGPLAYER_PRODUCT_URL = "https://www.tcgplayer.com/product/"
 
@@ -36,7 +39,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideAuthorizationInterceptor(): TCGPlayerAuthorizationInterceptor =
+    fun provideTCGPlayerAuthorizationInterceptor(): TCGPlayerAuthorizationInterceptor =
         TCGPlayerAuthorizationInterceptor()
 
     @Singleton
@@ -50,6 +53,7 @@ object NetworkModule {
             .addNetworkInterceptor(StethoInterceptor())
             .addInterceptor(TCGPlayerAuthorizationInterceptor)
             .addInterceptor(TCGPlayerCategoryInterceptor())
+            .addInterceptor(TCGPlayerResponseInterceptor())
             .build()
 
     @Singleton

@@ -1,41 +1,72 @@
 <resources>
     <string name="app_name">Trackuriboh</string>
     <string name="preference_file_key">tang.song.edu.PREFERENCE_FILE_KEY</string>
+
+    <string name="lbl_cancel">Cancel</string>
+    <string name="lbl_update">Update</string>
+    <string name="lbl_save">Save</string>
+    <string name="progress_percent">%1$d%%</string>
+
     <!-- Bottom Nav -->
     <string name="lbl_inventory">Inventory</string>
     <string name="lbl_transactions">Transactions</string>
     <string name="lbl_database">Database</string>
+    <string name="lbl_notifications">Notifications</string>
 
     <!-- Database -->
     <string name="tab_card_title">Cards</string>
     <string name="tab_set_title">Sets</string>
     <string name="database_sync_title">Sync</string>
-    <string name="database_sync_error_title">Sync Failed</string>
-    <string name="database_sync_error_message">An error has occurred while attempting to sync the database. Please try again later.</string>
-    <string name="database_sync_progress_text">%1$d%%</string>
+    <string name="database_download_title">Force download</string>
+    <string name="database_update_check_title">Check for updates</string>
+    <string name="database_download_info">This process may take a up to a few minutes. Please feel free to background the app. We\'ll notify you when it\'s done.</string>
+    <string name="database_download_worker_notification_title">Downloading database</string>
+    <string name="database_download_enqueued_info">The download is queued and will continue once a Wi-Fi connection is established</string>
+    <string name="database_download_failed">Database download failed</string>
+    <string name="database_download_cancelled">Database download cancelled</string>
+    <string name="database_download_success">Database download successful</string>
+
+    <string name="database_update_info">Updating…</string>
+    <string name="database_update_failed">Database update failed</string>
+    <string name="database_update_cancelled">Database update cancelled</string>
+    <string name="database_update_success">Database update successful</string>
+
+
+    <string name="database_update_check_info">Checking for updates…</string>
+    <string name="database_update_check_failed">Checking for updates failed</string>
+    <string name="database_update_check_cancelled">Checking for updates cancelled</string>
+    <string name="database_update_check_update_available_title">Update Trackuriboh Database?</string>
+    <string name="database_update_check_update_available_message">A new update is available to download. Please update for the newest card info.</string>
+    <string name="database_update_check_no_update_available">The database is up to date.</string>
     <!-- Card Item -->
-    <string name="item_card_list_content_desc">Card Image</string>
+    <string name="item_card_list_content_desc">Card image</string>
     <string name="item_card_number_rarity_text">%1$s \u2022 %2$s</string>
-    <string name="item_card_view_prices_button_text">View Prices</string>
     <!-- Card Set Item -->
     <string name="lbl_no_date_available">No Date Available</string>
 
     <!-- Card Detail -->
+    <string name="lbl_prices">Prices</string>
+    <string name="lbl_details">Details</string>
+    <string name="lbl_view_on_tcgplayer">View on TCGPlayer</string>
+
+    <!-- Card Detail Overview -->
     <string name="lbl_name">Name</string>
+    <string name="lbl_number">Number</string>
+    <string name="lbl_rarity">Rarity</string>
     <string name="lbl_type">Type</string>
-    <string name="lbl_levelrank">Level/Rank</string>
-    <string name="lbl_race">Race</string>
     <string name="lbl_attribute">Attribute</string>
     <string name="lbl_atkdef">A/D</string>
     <string name="lbl_description">Description</string>
     <string name="lbl_card_details">Card Details</string>
-    <string name="lbl_overview">Overview</string>
-    <string name="lbl_set_details">Set Details</string>
+    <string name="lbl_set">Set</string>
     <string name="card_detail_atk_def">%1$d \/ %2$d</string>
+
+    <!-- Prices -->
+    <string name="lbl_not_available">Not Available</string>
+    <string name="lbl_price_lowest_listing_usd">Lowest Listing (USD)</string>
 
     <!-- Search -->
     <string name="search_title">Search</string>
-    <string name="search_hint">Search for a card or set…</string>
 
     <!-- Error -->
     <string name="error_title_generic">Error</string>
@@ -47,61 +78,41 @@
     <string name="item_inventory_quantity_text" comment="Qty: 6">Qty: %1$d</string>
     <string name="item_inventory_avg_purchase_price" comment="Avg. Purchase Price: $50">Avg. Purchase Price: %1$.2f</string>
 
-    <!-- Transaction Form -->
-    <string name="lbl_card_name">Card Name</string>
-    <string name="lbl_card_number">Card Number</string>
-    <string name="lbl_rarity">Rarity</string>
-    <string name="lbl_edition">Edition</string>
-    <string name="lbl_date">Date</string>
-    <string name="lbl_price">Price</string>
-    <string name="lbl_quantity">Quantity</string>
-    <string name="lbl_transaction">Transaction</string>
-    <string name="lbl_platform">Platform</string>
-    <string name="lbl_condition">Condition</string>
-    <string name="lbl_party_name">Party Name</string>
-    <string name="lbl_tracking_number">Tracking Number</string>
-    <string name="lbl_save">Save</string>
-
-    <!-- Price -->
-    <string name="lbl_not_available">Not Available</string>
-
-    <string name="lbl_buyer">Buyer</string>
-    <string name="lbl_seller">Seller</string>
-
-    <string name="lbl_required">Required</string>
-    <string name="lbl_invalid">Invalid</string>
-
-    <!-- Editions -->
-    <string name="lbl_first_edition">1st Edition</string>
-    <string name="lbl_limited_edition">Limited Edition</string>
-    <string name="lbl_unlimited_edition">Unlimited</string>
-
-    <!-- Transaction Types -->
-    <string name="lbl_purchase">Purchase</string>
-    <string name="lbl_sale">Sale</string>
-
-    <!-- Platforms -->
-    <string name="lbl_ebay">Ebay</string>
-    <string name="lbl_facebook">Facebook</string>
-    <string name="lbl_other">Other</string>
-
-    <!-- Conditions -->
-    <string name="lbl_near_mint">Near Mint</string>
-    <string name="lbl_very_lightly_played">Very Lightly Played</string>
-    <string name="lbl_lightly_played">Lightly Played</string>
-    <string name="lbl_moderately_played">Moderately Played</string>
-    <string name="lbl_heavily_played">Heavily Played</string>
-    <string name="lbl_damaged">Damaged</string>
 
     <!-- Notifications -->
-    <string name="database_worker_channel_name">Trackuriboh Notifications</string>
-    <string name="database_worker_sync_notification_title">Trackuriboh: Syncing Database</string>
-
-    <string name="lbl_cancel">Cancel</string>
+    <string name="app_notification_channel_name">Trackuriboh Notifications</string>
 
     <!-- Facebook -->
     <string name="facebook_app_id">236802761727077</string>
     <string name="fb_login_protocol_scheme">fb236802761727077</string>
     <string name="facebook_client_token">5cbc3e0fd15bc7c41b702053ea1d1f62</string>
 
+    <!-- Reminders -->
+    <string name="lbl_set_reminder">Set Reminder</string>
+    <string name="reminder_type_auction">Auction</string>
+    <string name="reminder_type_claim_sale">Claim Sale</string>
+    <string name="reminder_type_other">Other</string>
+    <string name="reminder_notification_title">Reminder: %1$s is starting now.</string>
+
+    <string-array name="reminder_types">
+        <item>Claim Sale</item>
+        <item>Auction</item>
+        <item>Other</item>
+    </string-array>
+
+    <!-- Time Zones -->
+    <!-- We have map each time zone to an actual ID in TimeZone.getAvailableIds() because using 3-letter
+    time zone IDs is deprecated because of ambiguity -->
+    <string-array name="time_zone_keys">
+        <item>EST/EDT (Eastern Time)</item>
+        <item>PST/PDT (Pacific Time)</item>
+        <item>MST/MDT (Mountain Time)</item>
+        <item>CST/CDT (Central Time)</item>
+    </string-array>
+    <string-array name="time_zone_values">
+        <item>America/New_York</item>
+        <item>America/Los_Angeles</item>
+        <item>America/Denver</item>
+        <item>America/Winnipeg</item>
+    </string-array>
 </resources>

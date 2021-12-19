@@ -9,16 +9,27 @@
         android:name="sam.g.trackuriboh.ui_transaction.TransactionFragment"
         android:label="@string/lbl_transactions"
         tools:layout="@layout/fragment_transaction" />
+    <fragment
+        android:id="@+id/notificationsFragment"
+        android:name="sam.g.trackuriboh.ui_notification.NotificationsFragment"
+        android:label="@string/lbl_notifications"
+        tools:layout="@layout/fragment_notifications" >
+        <action
+            android:id="@+id/action_notificationsFragment_to_notificationFormFragment"
+            app:destination="@id/notificationFormFragment" />
+    </fragment>
     <activity
         android:id="@+id/cardDetailActivity"
-        android:name="sam.g.trackuriboh.ui_card_detail.CardDetailActivity">
+        android:name="sam.g.trackuriboh.ui_card_detail.CardDetailActivity"
+        tools:layout="@layout/fragment_card_detail">
         <argument
             android:name="cardId"
             app:argType="long" />
     </activity>
     <activity
         android:id="@+id/cardSetDetailActivity"
-        android:name="sam.g.trackuriboh.ui_card_set_detail.CardSetDetailActivity">
+        android:name="sam.g.trackuriboh.ui_card_set_detail.CardSetDetailActivity"
+        tools:layout="@layout/fragment_card_set_detail">
         <argument
             android:name="setId"
             app:argType="long" />
@@ -39,38 +50,15 @@
             app:destination="@id/cardSetDetailActivity" />
     </fragment>
     <dialog
-        android:id="@+id/transactionDialogFragment"
-        android:name="sam.g.trackuriboh.ui_transaction_form.views.TransactionBottomSheetDialogFragment"
-        android:label="TransactionBottomSheetDialogFragment"
-        tools:layout="@layout/bottom_sheet_transaction">
-        <argument
-            android:name="cardId"
-            app:argType="long" />
-    </dialog>
-    <fragment
-        android:id="@+id/inventoryDetailFragment"
-        android:name="sam.g.trackuriboh.ui_inventory.InventoryDetailFragment"
-        android:label="fragment_inventory_detail"
-        tools:layout="@layout/fragment_inventory_detail">
-        <argument
-            android:name="inventoryId"
-            app:argType="long" />
-    </fragment>
-    <fragment
-        android:id="@+id/inventoryFragment"
-        android:name="sam.g.trackuriboh.ui_inventory.InventoryFragment"
-        android:label="@string/lbl_inventory"
-        tools:layout="@layout/fragment_inventory">
-        <action
-            android:id="@+id/action_inventoryFragment_to_inventoryDetailFragment"
-            app:destination="@id/inventoryDetailFragment" />
-    </fragment>
-    <dialog
         android:id="@+id/cardPricesBottomSheetDialogFragment"
         android:name="sam.g.trackuriboh.ui_price.CardPricesBottomSheetDialogFragment"
-        android:label="CardPricesBottomSheetDialogFragment" >
+        tools:layout="@layout/bottom_sheet_card_prices">
         <argument
             android:name="skuIds"
             app:argType="long[]" />
     </dialog>
+    <dialog
+        android:id="@+id/notificationFormFragment"
+        android:name="sam.g.trackuriboh.ui_notification.NotificationFormFragment"
+        tools:layout="@layout/fragment_notification_form" />
 </navigation>

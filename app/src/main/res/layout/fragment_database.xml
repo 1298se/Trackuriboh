@@ -1,68 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    tools:context=".ui_database.DatabaseFragment">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/database_toolbar"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        style="@style/Widget.MaterialComponents.Toolbar.Primary" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ui_database.DatabaseFragment">
 
-    <!-- Dummy view for receiving focus after SearchView clears focus -->
-    <View
-        android:id="@+id/focus_dummy_view"
-        android:focusableInTouchMode="true"
-        android:focusable="true"
-        android:background="@android:color/transparent"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        app:layout_constraintTop_toBottomOf="@id/database_toolbar" />
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/database_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary" />
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/database_sync_progress_indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/database_toolbar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:trackColor="?attr/colorPrimaryDark"
-        app:indicatorSize="200dp"
-        app:trackThickness="8dp"
-        tools:visibility="visible" />
+        <!-- Dummy view for receiving focus after SearchView clears focus -->
+        <View
+            android:id="@+id/focus_dummy_view"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
+            android:background="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintTop_toBottomOf="@id/database_toolbar" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/database_sync_progress_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/database_toolbar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        style="@style/TextAppearance.MaterialComponents.Headline4"
-        tools:text="100%"
-        tools:visibility="visible" />
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/database_sync_progress_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/database_toolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:indicatorColor="?attr/colorSecondary"
+            app:trackColor="?attr/colorSecondaryVariant"
+            app:indicatorSize="200dp"
+            app:trackThickness="8dp"
+            tools:visibility="visible" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/database_tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/focus_dummy_view" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/database_sync_info_textview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_marginStart="@dimen/material_border_padding_large"
+            android:layout_marginEnd="@dimen/material_border_padding_large"
+            app:layout_constraintTop_toBottomOf="@id/database_sync_progress_indicator"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_bias="0.2"
+            tools:visibility="visible"
+            style="@style/TextAppearance.MaterialComponents.Body1" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/database_view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        app:layout_constraintTop_toBottomOf="@id/database_tab_layout"
-        app:layout_constraintBottom_toBottomOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/database_sync_progress_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/database_toolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/TextAppearance.MaterialComponents.Headline4"
+            tools:text="100%"
+            tools:visibility="visible" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/database_tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/focus_dummy_view" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/database_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/database_tab_layout"
+            app:layout_constraintVertical_bias="1.0"
+            tools:layout_editor_absoluteX="0dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

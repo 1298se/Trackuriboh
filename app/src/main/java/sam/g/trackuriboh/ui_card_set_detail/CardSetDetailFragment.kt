@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -12,25 +13,28 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import sam.g.trackuriboh.R
+import sam.g.trackuriboh.*
 import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
 import sam.g.trackuriboh.databinding.FragmentCardSetDetailBinding
-import sam.g.trackuriboh.handleNavigationAction
 import sam.g.trackuriboh.ui_card_set_detail.viewmodels.CardSetDetailViewModel
 import sam.g.trackuriboh.ui_common.VerticalSpaceItemDecoration
 import sam.g.trackuriboh.ui_database.BaseSearchListFragment
 import sam.g.trackuriboh.ui_database.adapters.CardListAdapter
 import sam.g.trackuriboh.ui_database.viewmodels.BaseSearchViewModel
-import sam.g.trackuriboh.viewBinding
+import sam.g.trackuriboh.utils.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CardSetDetailFragment : BaseSearchListFragment<ProductWithCardSetAndSkuIds>(), CardListAdapter.OnItemClickListener {
+class CardSetDetailFragment :
+    BaseSearchListFragment<ProductWithCardSetAndSkuIds>(),
+    CardListAdapter.OnItemClickListener {
     @Inject
     lateinit var mAdapter: CardListAdapter
 
     private val binding by viewBinding(FragmentCardSetDetailBinding::inflate)
     private val mViewModel: CardSetDetailViewModel by viewModels()
+
+    private lateinit var mSearchView: SearchView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
@@ -69,6 +73,10 @@ class CardSetDetailFragment : BaseSearchListFragment<ProductWithCardSetAndSkuIds
         )
     }
 
+    override fun onOpenTCGPlayerClick(cardId: Long) {
+        openTCGPlayer(cardId)
+    }
+
     private fun initRecyclerView() {
         mAdapter.setOnItemClickListener(this)
 
@@ -86,5 +94,25 @@ class CardSetDetailFragment : BaseSearchListFragment<ProductWithCardSetAndSkuIds
                 true
             }.build()
         )
+
+        createOptionsMenu()
+    }
+
+    private fun createOptionsMenu() {
+        binding.cardSetDetailToolbar.apply {
+            inflateMenu(R.menu.card_set_detail_toolbar_menu)
+
+            menu.findItem(R.id.action_search).apply {
+                mSearchView = setIconifiedSearchViewBehaviour(this, object : SearchViewQueryHandler {
+                    override fun handleQueryTextSubmit(query: String?) {
+                        this@CardSetDetailFragment.search(query)
+                    }
+
+                    override fun handleSearchViewCollapse() {
+                        this@CardSetDetailFragment.search(null)
+                    }
+                })
+            }
+        }
     }
 }

@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
-import sam.g.trackuriboh.addItemDecorationIfExists
 import sam.g.trackuriboh.ui_database.viewmodels.BaseSearchViewModel
+import sam.g.trackuriboh.utils.addItemDecorationIfExists
 
 /**
  * Base Fragment to handle basic search list logic, such as observing a search result LiveData

@@ -9,7 +9,6 @@ import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.entities.CardSet
 import sam.g.trackuriboh.databinding.ItemCardSetBinding
 import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.util.*
 
 private val SET_COMPARATOR = object : DiffUtil.ItemCallback<CardSet>() {
@@ -53,13 +52,8 @@ class CardSetListAdapter : PagingDataAdapter<CardSet, CardSetListAdapter.CardSet
         }
 
         internal fun bind(item: CardSet) {
-            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
             val releaseDate = item.releaseDate?.let {
-                sdf.run {
-                    parse(it)?.let {
-                        DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault()).format(it)
-                    }
-                }
+                DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault()).format(item.releaseDate)
             } ?: itemView.context.getString(R.string.lbl_no_date_available)
 
             binding.cardSetTitleTextview.text = item.name

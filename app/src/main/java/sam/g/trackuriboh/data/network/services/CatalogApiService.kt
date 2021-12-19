@@ -1,5 +1,6 @@
 package sam.g.trackuriboh.data.network.services
 
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import sam.g.trackuriboh.data.network.interceptors.TCGPlayerAuthorizationInterceptor
@@ -14,13 +15,13 @@ interface CatalogApiService {
 
     @Headers("${TCGPlayerAuthorizationInterceptor.AUTHORIZATION_HEADER}: true")
     @GET("rarities")
-    suspend fun getCardRarities(): CardRarityResponse
+    suspend fun getCardRarities(): Response<CardRarityResponse>
 
     @Headers("${TCGPlayerAuthorizationInterceptor.AUTHORIZATION_HEADER}: true")
     @GET("printings")
-    suspend fun getPrintings(): PrintingResponse
+    suspend fun getPrintings(): Response<PrintingResponse>
 
     @Headers("${TCGPlayerAuthorizationInterceptor.AUTHORIZATION_HEADER}: true")
     @GET("conditions")
-    suspend fun getConditions(): ConditionResponse
+    suspend fun getConditions(): Response<ConditionResponse>
 }

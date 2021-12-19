@@ -62,6 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/item_card_image_text_spacing"
             android:layout_marginTop="@dimen/text_spacing"
+            android:layout_marginBottom="@dimen/text_spacing"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/item_card_image"
             app:layout_constraintTop_toBottomOf="@id/item_card_number_rarity_textview"
@@ -69,13 +70,41 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/item_card_view_prices_button"
+            style="@style/Widget.Apptheme.Button.IconOnly.PrimaryAlpha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/item_card_image_text_spacing"
-            android:text="@string/item_card_view_prices_button_text"
+            android:layout_marginEnd="@dimen/item_card_button_spacing"
+            app:icon="@drawable/ic_baseline_attach_money_24"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/item_card_tcgplayer_button"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@id/item_card_image"
             app:layout_constraintTop_toBottomOf="@id/item_card_set_name_textview" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/item_card_tcgplayer_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_outline_shopping_cart_24"
+            app:layout_constraintTop_toBottomOf="@id/item_card_set_name_textview"
+            app:layout_constraintStart_toEndOf="@id/item_card_view_prices_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            style="@style/Widget.Apptheme.Button.IconOnly.PrimaryAlpha" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/item_card_favourite_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_outline_visibility_24"
+            app:layout_constraintTop_toBottomOf="@id/item_card_set_name_textview"
+            app:layout_constraintStart_toEndOf="@id/item_card_tcgplayer_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            style="@style/Widget.Apptheme.Button.IconOnly.PrimaryAlpha" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

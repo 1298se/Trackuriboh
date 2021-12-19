@@ -5,7 +5,7 @@ import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import kotlinx.coroutines.flow.Flow
-import sam.g.trackuriboh.SingleEvent
+import sam.g.trackuriboh.utils.SingleEvent
 
 abstract class BaseSearchViewModel<T : Any> : ViewModel() {
 

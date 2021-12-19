@@ -18,7 +18,8 @@ import sam.g.trackuriboh.ui_common.VerticalSpaceItemDecoration
 import sam.g.trackuriboh.ui_database.adapters.CardListAdapter
 import sam.g.trackuriboh.ui_database.viewmodels.BaseSearchViewModel
 import sam.g.trackuriboh.ui_database.viewmodels.CardListViewModel
-import sam.g.trackuriboh.viewBinding
+import sam.g.trackuriboh.utils.openTCGPlayer
+import sam.g.trackuriboh.utils.viewBinding
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -32,9 +33,9 @@ class CardListFragment : BaseSearchListFragment<ProductWithCardSetAndSkuIds>(), 
 
     companion object {
         const val CARD_ITEM_CLICK_REQUEST_KEY = "CardListFragment_onCardItemClick"
-        const val CARD_ITEM_CLICK_RESULT_KEY = "cardId"
+        const val CARD_ITEM_CARD_ID = "CardListFragment_cardId"
         const val VIEW_PRICE_CLICK_REQUEST_KEY = "CardListFragment_onViewPriceItemClick"
-        const val VIEW_PRICE_CLICK_RESULT_KEY = "skuIds"
+        const val VIEW_PRICE_SKU_IDS = "CardListFragment_skuIds"
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -60,11 +61,15 @@ class CardListFragment : BaseSearchListFragment<ProductWithCardSetAndSkuIds>(), 
      * different actions based on where it's being used
      */
     override fun onCardItemClick(cardId: Long) {
-        setFragmentResult(CARD_ITEM_CLICK_REQUEST_KEY, bundleOf(CARD_ITEM_CLICK_RESULT_KEY to cardId))
+        setFragmentResult(CARD_ITEM_CLICK_REQUEST_KEY, bundleOf(CARD_ITEM_CARD_ID to cardId))
     }
 
     override fun onViewPricesItemClick(skuIds: List<Long>) {
-       setFragmentResult(VIEW_PRICE_CLICK_REQUEST_KEY, bundleOf(VIEW_PRICE_CLICK_RESULT_KEY to skuIds.toLongArray()))
+       setFragmentResult(VIEW_PRICE_CLICK_REQUEST_KEY, bundleOf(VIEW_PRICE_SKU_IDS to skuIds.toLongArray()))
+    }
+
+    override fun onOpenTCGPlayerClick(cardId: Long) {
+        openTCGPlayer(cardId)
     }
 
     private fun initRecyclerView() {

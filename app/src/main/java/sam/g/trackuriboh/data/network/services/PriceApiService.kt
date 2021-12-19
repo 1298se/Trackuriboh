@@ -11,6 +11,7 @@ interface PriceApiService {
     @Headers("${TCGPlayerAuthorizationInterceptor.AUTHORIZATION_HEADER}: true")
     @GET("sku/{skuIds}")
     suspend fun getPricesForSkus(
+        // List of comma delimited skuIds
         @Path(value="skuIds", encoded = true) skuIds: String
     ): Response<SkuPriceResponse>
 }

@@ -1,8 +1,10 @@
 package sam.g.trackuriboh.di
 
+import android.app.AlarmManager
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
 import androidx.work.WorkManager
 import dagger.Module
 import dagger.Provides
@@ -27,4 +29,16 @@ object AppModule {
         application: Application
     ): WorkManager =
         WorkManager.getInstance(application)
+
+    @Singleton
+    @Provides
+    fun provideAlarmManager(
+        application: Application
+    ): AlarmManager = application.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+    @Singleton
+    @Provides
+    fun provideConnectivityManager(
+        application: Application
+    ): ConnectivityManager = application.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 }

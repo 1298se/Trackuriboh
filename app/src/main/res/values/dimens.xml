@@ -8,15 +8,11 @@
     <!-- Overwrite default values -->
     <dimen name="cardview_default_elevation">8dp</dimen>
 
-    <!-- Progress Indicator -->
-    <dimen name="dialog_progress_indicator_margin_top">16dp</dimen>
-    <dimen name="dialog_progress_indicator_margin_bottom">16dp</dimen>
-
     <!-- Material -->
     <dimen name="material_border_padding_small">8dp</dimen>
     <dimen name="material_border_padding">16dp</dimen>
     <dimen name="material_border_padding_large">24dp</dimen>
-    <dimen name="app_bar_height">128dp</dimen>
+    <dimen name="material_leading_icon_padding">12dp</dimen>
 
     <dimen name="list_padding_top">8dp</dimen>
     <dimen name="list_padding_bottom">8dp</dimen>
@@ -25,31 +21,40 @@
 
     <dimen name="list_item_padding_start">16dp</dimen>
     <dimen name="list_item_padding_end">16dp</dimen>
-    <dimen name="list_item_two_line_padding_top">12dp</dimen>
-    <dimen name="list_item_two_line_padding_bottom">12dp</dimen>
+    <dimen name="list_item_one_line_height">48dp</dimen>
+    <dimen name="list_item_one_line_padding_top">12dp</dimen>
+    <dimen name="list_item_one_line_padding_bottom">12dp</dimen>
+    <dimen name="list_item_two_line_height">64dp</dimen>
+    <dimen name="list_item_two_line_padding_top">8dp</dimen>
+    <dimen name="list_item_two_line_padding_bottom">8dp</dimen>
     <dimen name="list_item_image_large_padding_top">16dp</dimen>
     <dimen name="list_item_image_large_padding_bottom">16dp</dimen>
     <dimen name="list_item_large_row_spacing">12dp</dimen>
 
-    <!-- Database -->
     <!-- Item Card -->
     <dimen name="item_card_image_text_spacing">16dp</dimen>
     <dimen name="item_card_image_width">92dp</dimen>
     <dimen name="item_card_image_height">128dp</dimen>
+    <dimen name="item_card_button_spacing">12dp</dimen>
 
     <!-- Card Detail -->
     <dimen name="card_image_swipe_padding">16dp</dimen>
     <dimen name="card_image_height">250dp</dimen>
     <dimen name="image_slider_height">6dp</dimen>
-    <dimen name="line_text_padding_top"></dimen>
     <!--don't change this value because it sets the image dot to be a circle -->
     <dimen name="image_slider_margin_bottom">5dp</dimen>
     <!--don't change this value because it sets the image dot to be a circle -->
     <dimen name="image_slider_width">10dp</dimen>
-    <dimen name="overview_line_spacing">6dp</dimen>
 
-    <!-- New Transaction Form -->
-    <dimen name="new_transaction_row_spacing">12dp</dimen>
-    <dimen name="new_transaction_column_spacing">12dp</dimen>
-    <dimen name="text_margin">16dp</dimen>
+
+    <!-- Forms -->
+    <dimen name="form_input_row_spacing">16dp</dimen>
+    <dimen name="form_input_dense_height">40dp</dimen>
+    <dimen name="text_field_dense_paddingTop">8dp</dimen>
+    <dimen name="text_field_dense_paddingStart">16dp</dimen>
+    <dimen name="text_field_dense_paddingBottom">8dp</dimen>
+    <dimen name="text_field_dense_paddingEnd">12dp</dimen>
+
+    <!-- DateTimePicker -->
+    <dimen name="date_time_picker_min_height">584dp</dimen>
 </resources>

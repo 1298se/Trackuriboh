@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui_card_detail.CardDetailActivity">
+    tools:context=".ui_card_set_detail.CardSetDetailActivity">
 
     <fragment
         android:id="@+id/card_set_detail_nav_host_fragment"

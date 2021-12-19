@@ -14,7 +14,7 @@ import sam.g.trackuriboh.R
 class CardSetDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_card_detail)
+        setContentView(R.layout.activity_card_set_detail)
         findNavController(R.id.card_set_detail_nav_host_fragment).setGraph(R.navigation.card_set_detail_nav_graph, intent.extras)
     }
 }

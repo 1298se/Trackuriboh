@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/list_item_two_line_height"
     android:paddingStart="@dimen/list_item_padding_start"
     android:paddingEnd="@dimen/list_item_padding_end"
     android:paddingTop="@dimen/list_item_two_line_padding_top"

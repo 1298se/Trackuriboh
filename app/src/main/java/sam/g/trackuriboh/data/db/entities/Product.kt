@@ -29,6 +29,8 @@ data class Product(
     @PrimaryKey(autoGenerate = false)
     val id: Long,
     val name: String,
+    // Name with no hyphens, parentheses, etc
+    val cleanName: String,
     val type: ProductType,
     val imageUrl: String?,
     val setId: Long?,
@@ -44,11 +46,12 @@ data class Product(
     constructor(
         id: Long,
         name: String,
+        cleanName: String,
         productType: ProductType,
         imageUrl: String?,
         setId: Long?,
         extendedData: List<CardResponse.ExtendedDataItem>?
-    ) : this(id, name, productType, imageUrl, setId) {
+    ) : this(id, name, cleanName, productType, imageUrl, setId) {
         extendedData?.let { parseExtendedData(it) }
     }
 

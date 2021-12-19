@@ -17,9 +17,8 @@ import sam.g.trackuriboh.data.db.entities.*
         CardRarity::class,
         Printing::class,
         Condition::class,
-        CardInventory::class,
-        Transaction::class,
-               ],
+        Reminder::class,
+    ],
     version = 1
 )
 @TypeConverters(RoomConverter::class)
@@ -32,17 +31,31 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun printingDao(): PrintingDao
     abstract fun conditionDao(): ConditionDao
 
-    abstract fun cardInventoryDao(): CardInventoryDao
-    abstract fun transactionDao(): TransactionDao
-    abstract fun cardInventoryXTransactionDao(): CardInventoryXTransactionDao
+    abstract fun reminderDao(): ReminderDao
 
     interface DatabaseEntity<out T> {
         fun toDatabaseEntity(): T
     }
 
+    /**
+     * We do this because [clearAllTables] doesn't work with coroutines - we can't monitor when it ends
+      */
+    suspend fun clearCardDatabaseTables() {
+        skuDao().clearTable()
+        productDao().clearTable()
+        cardSetDao().clearTable()
+
+        cardRarityDao().clearTable()
+        printingDao().clearTable()
+        conditionDao().clearTable()
+    }
+
     companion object {
         @Volatile
         private var instance: AppDatabase? = null
+
+        private const val DATABASE_NAME = "cardDatabase.db"
+        private const val DATABASE_FILE_PATH = "db/$DATABASE_NAME"
 
         operator fun invoke(application: Application) = instance
             ?: synchronized(this) {
@@ -51,10 +64,9 @@ abstract class AppDatabase : RoomDatabase() {
                 ).also { instance = it }
             }
 
-        private fun buildDatabase(application: Application) = Room.databaseBuilder(
-            application,
-            AppDatabase::class.java,
-            "cardDatabase.db"
-        ).build()
+        private fun buildDatabase(application: Application) =
+            Room.databaseBuilder(application, AppDatabase::class.java, DATABASE_NAME)
+                .createFromAsset(DATABASE_FILE_PATH)
+                .build()
     }
 }

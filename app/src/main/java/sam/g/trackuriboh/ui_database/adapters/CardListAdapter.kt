@@ -19,6 +19,7 @@ class CardListAdapter @Inject constructor()
     interface OnItemClickListener {
         fun onCardItemClick(cardId: Long)
         fun onViewPricesItemClick(skuIds: List<Long>)
+        fun onOpenTCGPlayerClick(cardId: Long)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
@@ -51,16 +52,25 @@ class CardListAdapter @Inject constructor()
 
     inner class CardViewHolder(private val binding: ItemCardBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
-            binding.root.setOnClickListener {
-                mOnItemClickListener?.onCardItemClick(
-                    getItem(bindingAdapterPosition)?.product?.id ?: throw IllegalArgumentException("card is null")
-                )
-            }
+            with(binding) {
+                root.setOnClickListener {
+                    mOnItemClickListener?.onCardItemClick(
+                        getItem(bindingAdapterPosition)?.product?.id ?: throw IllegalArgumentException("card is null")
+                    )
+                }
 
-            binding.itemCardViewPricesButton.setOnClickListener {
-                mOnItemClickListener?.onViewPricesItemClick(
-                    getItem(bindingAdapterPosition)?.skuIds ?: throw IllegalArgumentException("skuIds is null")
-                )
+                itemCardViewPricesButton.setOnClickListener {
+                    mOnItemClickListener?.onViewPricesItemClick(
+                        getItem(bindingAdapterPosition)?.skuIds ?: throw IllegalArgumentException("skuIds is null")
+                    )
+                }
+
+                itemCardTcgplayerButton.setOnClickListener {
+                    mOnItemClickListener?.onOpenTCGPlayerClick(
+                        getItem(bindingAdapterPosition)?.product?.id ?: throw IllegalArgumentException("card is null")
+                    )
+                }
+
             }
         }
 

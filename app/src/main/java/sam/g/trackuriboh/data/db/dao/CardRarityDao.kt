@@ -1,13 +1,11 @@
 package sam.g.trackuriboh.data.db.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import sam.g.trackuriboh.data.db.entities.CardRarity
 
 @Dao
-interface CardRarityDao {
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCardRarities(rarities: List<CardRarity>): List<Long>
+interface CardRarityDao : BaseDao<CardRarity> {
+    @Query("DELETE FROM CardRarity")
+    suspend fun clearTable()
 }

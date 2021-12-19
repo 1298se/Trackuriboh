@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/list_item_padding_start"
+    android:paddingEnd="@dimen/list_item_padding_end"
+    android:paddingTop="@dimen/list_item_one_line_padding_top"
+    android:paddingBottom="@dimen/list_item_one_line_padding_bottom"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+   <com.google.android.material.textview.MaterialTextView
+       android:id="@+id/one_line_attribute_title_textview"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       style="@style/TextAppearance.MaterialComponents.Subtitle2"
+       android:textColor="@color/black"
+       tools:text="Near Mint" />
+
+   <com.google.android.material.textview.MaterialTextView
+       android:id="@+id/one_line_attribute_value_textview"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       app:layout_constraintStart_toEndOf="@id/one_line_attribute_title_textview"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintHorizontal_bias="1"
+       android:textColor="@color/black"
+       style="@style/TextAppearance.MaterialComponents.Subtitle2"
+       tools:text="69.69" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

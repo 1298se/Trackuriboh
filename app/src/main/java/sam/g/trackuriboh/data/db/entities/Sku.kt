@@ -18,13 +18,11 @@ import kotlinx.parcelize.Parcelize
             entity = Condition::class,
             parentColumns = ["id"],
             childColumns = ["conditionId"],
-            onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
             entity = Printing::class,
             parentColumns = ["id"],
             childColumns = ["printingId"],
-            onDelete = ForeignKey.CASCADE
         )
     ]
 )

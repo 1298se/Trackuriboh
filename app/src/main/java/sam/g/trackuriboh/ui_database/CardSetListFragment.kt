@@ -17,7 +17,7 @@ import sam.g.trackuriboh.databinding.FragmentCardSetListBinding
 import sam.g.trackuriboh.ui_database.adapters.CardSetListAdapter
 import sam.g.trackuriboh.ui_database.viewmodels.BaseSearchViewModel
 import sam.g.trackuriboh.ui_database.viewmodels.CardSetListViewModel
-import sam.g.trackuriboh.viewBinding
+import sam.g.trackuriboh.utils.viewBinding
 
 @AndroidEntryPoint
 class CardSetListFragment : BaseSearchListFragment<CardSet>(), CardSetListAdapter.OnItemClickListener {
@@ -28,7 +28,7 @@ class CardSetListFragment : BaseSearchListFragment<CardSet>(), CardSetListAdapte
 
     companion object {
         const val SET_ITEM_CLICK_REQUEST_KEY = "CardSetListFragment_onItemClick"
-        const val SET_ITEM_CLICK_RESULT_KEY = "setId"
+        const val SET_ITEM_ID = "CardSetListFragment_setId"
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -54,7 +54,7 @@ class CardSetListFragment : BaseSearchListFragment<CardSet>(), CardSetListAdapte
     }
 
     override fun onItemClick(setId: Long) {
-        setFragmentResult(SET_ITEM_CLICK_REQUEST_KEY, bundleOf(SET_ITEM_CLICK_RESULT_KEY to setId))
+        setFragmentResult(SET_ITEM_CLICK_REQUEST_KEY, bundleOf(SET_ITEM_ID to setId))
     }
 
     override fun getItemDecorator(): RecyclerView.ItemDecoration {

@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.databinding.FragmentTransactionBinding
-import sam.g.trackuriboh.viewBinding
+import sam.g.trackuriboh.utils.viewBinding
 
 @AndroidEntryPoint
 class TransactionFragment : Fragment() {

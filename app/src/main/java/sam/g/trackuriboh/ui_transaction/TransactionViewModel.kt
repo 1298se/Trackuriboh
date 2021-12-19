@@ -9,7 +9,7 @@ import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import sam.g.trackuriboh.data.repository.SessionManager
+import sam.g.trackuriboh.managers.SessionManager
 import javax.inject.Inject
 
 @HiltViewModel

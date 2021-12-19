@@ -1,13 +1,11 @@
 package sam.g.trackuriboh.data.db.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import sam.g.trackuriboh.data.db.entities.Printing
 
 @Dao
-interface PrintingDao {
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPrintings(printings: List<Printing>): List<Long>
+interface PrintingDao : BaseDao<Printing> {
+    @Query("DELETE FROM Printing")
+    suspend fun clearTable()
 }

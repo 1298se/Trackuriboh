@@ -1,8 +1,5 @@
 package sam.g.trackuriboh.ui_card_detail
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -18,16 +15,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import sam.g.trackuriboh.R
+import sam.g.trackuriboh.*
+import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
 import sam.g.trackuriboh.databinding.FragmentCardDetailBinding
-import sam.g.trackuriboh.di.NetworkModule
-import sam.g.trackuriboh.setViewPagerBackPressBehaviour
-import sam.g.trackuriboh.showSnackbar
 import sam.g.trackuriboh.ui_card_detail.adapters.CardDetailPagerAdapter
 import sam.g.trackuriboh.ui_card_detail.viewmodels.CardDetailViewModel
 import sam.g.trackuriboh.ui_common.CollapseToolbarStateChangeListener
 import sam.g.trackuriboh.ui_database.adapters.ImagePagerAdapter
-import sam.g.trackuriboh.viewBinding
+import sam.g.trackuriboh.utils.*
 
 @AndroidEntryPoint
 class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
@@ -52,17 +47,27 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
         initToolbar()
         initTCGPlayerFab()
+        initFragmentResultListeners()
 
-        mViewModel.cardWithCardSetAndSkuIds.observe(viewLifecycleOwner) {
-            binding.cardDetailNameTextview.text = it?.product?.name
-            binding.cardDetailSetNameTextview.text = it?.cardSet?.name
+        mViewModel.cardWithCardSetAndSkuIds.observe(viewLifecycleOwner) { productWithCardSetAndSkus ->
+            binding.cardDetailNameTextview.text = productWithCardSetAndSkus?.product?.name
+            binding.cardDetailSetNameTextview.apply {
+                text = productWithCardSetAndSkus?.cardSet?.name
+                setOnClickListener { _ ->
+                    productWithCardSetAndSkus?.cardSet?.id?.let { it ->
+                        handleNavigationAction(
+                            CardDetailFragmentDirections.actionCardDetailFragmentToCardSetDetailActivity(it)
+                        )
+                    }
+                }
+            }
 
             /**
              * FOR PROPER VIEWSTATE RESTORATION TO OCCUR, THE ADAPTERS MUST BE REATTACHED
              * ONCHANGE INSTEAD OF EXPOSIING A setItems METHOD AND CALLING NOTIFYCHANGE
              */
-            initImageViewPager(listOf(it?.product?.imageUrl))
-            initCardDetailViewPager(it?.skuIds)
+            initImageViewPager(listOf(productWithCardSetAndSkus?.product?.imageUrl))
+            initCardDetailViewPager(productWithCardSetAndSkus)
         }
     }
 
@@ -77,7 +82,7 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             setOnMenuItemClickListener(this@CardDetailFragment)
         }
 
-        binding.cardDetailAppBarLayout.addOnOffsetChangedListener(object : CollapseToolbarStateChangeListener() {
+       binding.cardDetailAppBarLayout.addOnOffsetChangedListener(object : CollapseToolbarStateChangeListener() {
             override fun onStateChanged(appBarLayout: AppBarLayout?, state: State) {
                 if (state == State.COLLAPSED) {
                     binding.cardDetailToolbar.title = getString(R.string.lbl_card_details)
@@ -103,17 +108,18 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         TabLayoutMediator(binding.cardImageTabLayout, binding.cardImageViewPager) { _, _ -> }.attach()
     }
 
-    private fun initCardDetailViewPager(skuIds: List<Long>?) {
+    private fun initCardDetailViewPager(productWithCardSetAndSkuIds: ProductWithCardSetAndSkuIds?) {
         binding.cardDetailViewPager.adapter = CardDetailPagerAdapter(
             this@CardDetailFragment,
-            skuIds
+            productWithCardSetAndSkuIds
         ).also {
             mCardDetailPagerAdapter = it
         }
 
         TabLayoutMediator(binding.cardDetailTabLayout, binding.cardDetailViewPager) { tab, position ->
             tab.text = when (position) {
-                0 -> "Prices"
+                0 -> getString(R.string.lbl_details)
+                1 -> getString(R.string.lbl_prices)
                 else -> null
             }
         }.attach()
@@ -121,17 +127,16 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
     private fun initTCGPlayerFab() {
         binding.cardDetailTcgplayerExtendedFab.setOnClickListener {
-            openTCGPlayer()
+            openTCGPlayer(args.cardId)
         }
     }
 
-    private fun openTCGPlayer() {
-        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(NetworkModule.TCGPLAYER_PRODUCT_URL + args.cardId))
+    private fun initFragmentResultListeners() {
+        childFragmentManager.setFragmentResultListener(SNACKBAR_SHOW_REQUEST_KEY, this) { _, bundle ->
+            val type = SnackbarType.valueOf(bundle.getString(SNACKBAR_TYPE) ?: SnackbarType.INFO.name)
+            val message = bundle.getString(SNACKBAR_MESSAGE) ?: getString(R.string.error_message_generic)
 
-        try {
-            startActivity(browserIntent)
-        } catch (e: ActivityNotFoundException) {
-            showSnackbar("Please install a browser to continue")
+            showSnackbar(message, type, binding.cardDetailTcgplayerExtendedFab)
         }
     }
 }
