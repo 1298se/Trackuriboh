@@ -1,5 +1,6 @@
 package sam.g.trackuriboh.ui_notification
 
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,8 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.databinding.FragmentNotificationFormBinding
-import sam.g.trackuriboh.ui_common.DateTimePickerView
+import sam.g.trackuriboh.ui_common.*
+import sam.g.trackuriboh.ui_notification.components.NotificationForm
 import sam.g.trackuriboh.utils.viewBinding
 import java.util.*
 
@@ -26,6 +28,11 @@ import java.util.*
 class NotificationFormFragment : DialogFragment(), DateTimePickerView.OnInteractionListener {
     private val binding: FragmentNotificationFormBinding by viewBinding(FragmentNotificationFormBinding::inflate)
     private val viewModel: NotificationFormViewModel by viewModels()
+
+    companion object {
+        const val NOTIFICATION_FORM_DATA_REQUEST_KEY = "NotificationFormFragment_formRequestKey"
+        const val NOTIFICATION_FORM_DATA_RESULT = "NotificationFormFragment_formData"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,7 +88,7 @@ class NotificationFormFragment : DialogFragment(), DateTimePickerView.OnInteract
     }
 
     private fun setReminder() {
-        viewModel.save()
+
     }
 
     private fun showDateTimePicker() {

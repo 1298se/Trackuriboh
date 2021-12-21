@@ -33,9 +33,9 @@ class CardListFragment : BaseSearchListFragment<ProductWithCardSetAndSkuIds>(), 
 
     companion object {
         const val CARD_ITEM_CLICK_REQUEST_KEY = "CardListFragment_onCardItemClick"
-        const val CARD_ITEM_CARD_ID = "CardListFragment_cardId"
+        const val CARD_ITEM_CARD_ID_RESULT = "CardListFragment_cardId"
         const val VIEW_PRICE_CLICK_REQUEST_KEY = "CardListFragment_onViewPriceItemClick"
-        const val VIEW_PRICE_SKU_IDS = "CardListFragment_skuIds"
+        const val VIEW_PRICE_SKU_IDS_RESULT = "CardListFragment_skuIds"
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -61,11 +61,11 @@ class CardListFragment : BaseSearchListFragment<ProductWithCardSetAndSkuIds>(), 
      * different actions based on where it's being used
      */
     override fun onCardItemClick(cardId: Long) {
-        setFragmentResult(CARD_ITEM_CLICK_REQUEST_KEY, bundleOf(CARD_ITEM_CARD_ID to cardId))
+        setFragmentResult(CARD_ITEM_CLICK_REQUEST_KEY, bundleOf(CARD_ITEM_CARD_ID_RESULT to cardId))
     }
 
     override fun onViewPricesItemClick(skuIds: List<Long>) {
-       setFragmentResult(VIEW_PRICE_CLICK_REQUEST_KEY, bundleOf(VIEW_PRICE_SKU_IDS to skuIds.toLongArray()))
+       setFragmentResult(VIEW_PRICE_CLICK_REQUEST_KEY, bundleOf(VIEW_PRICE_SKU_IDS_RESULT to skuIds.toLongArray()))
     }
 
     override fun onOpenTCGPlayerClick(cardId: Long) {

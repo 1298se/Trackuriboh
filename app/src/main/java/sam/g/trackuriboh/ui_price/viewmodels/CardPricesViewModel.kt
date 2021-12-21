@@ -1,7 +1,9 @@
 package sam.g.trackuriboh.ui_price.viewmodels
 
+import android.app.Application
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
 import sam.g.trackuriboh.data.network.responses.Resource
 import sam.g.trackuriboh.data.repository.PriceRepository
@@ -12,19 +14,21 @@ import javax.inject.Inject
 @HiltViewModel
 class CardPricesViewModel @Inject constructor(
     private val priceRepository: PriceRepository,
-    private val savedState: SavedStateHandle
+    savedState: SavedStateHandle,
+    private val application: Application,
 ) : ViewModel() {
     private val skuIds = savedState.getLiveData<LongArray>(ARG_SKU_IDS)
 
     val state: LiveData<UiState<Map<String?, List<SkuWithConditionAndPrinting>>>> = Transformations.switchMap(skuIds) {
         liveData {
-            emit(UiState.Loading)
+            emit(UiState.Loading())
             when (val resource = priceRepository.getPricesForSkus(it.toList())) {
                 is Resource.Success -> emit(UiState.Success(buildPrintingToSkuMap(resource.data)))
                 is Resource.Failure -> emit(UiState.Failure(
-                    resource.exception.message,
-                    resource.data?.let { buildPrintingToSkuMap(it) }
+                    message = application.getString(R.string.error_message_generic),
+                    data = resource.data?.let { buildPrintingToSkuMap(it) }
                 ))
+                else -> return@liveData
             }
         }
     }

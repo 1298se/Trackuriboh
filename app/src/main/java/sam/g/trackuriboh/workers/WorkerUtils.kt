@@ -14,6 +14,8 @@ const val DB_SYNC_STATE_NOTIFICATION_ID = 2
 
 const val TAG_USER_TRIGGERED = "UserTriggered"
 
+const val WORKER_PROGRESS_KEY = "WorkerProgress"
+
 
 suspend fun <T> paginate(
     totalCount: Int,

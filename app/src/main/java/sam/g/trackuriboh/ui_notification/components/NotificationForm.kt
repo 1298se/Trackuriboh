@@ -1,4 +1,4 @@
-package sam.g.trackuriboh.ui_notification
+package sam.g.trackuriboh.ui_notification.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +21,7 @@ import sam.g.trackuriboh.ui_common.AppThemeDenseOutlinedEnumAutoCompleteTextFiel
 import sam.g.trackuriboh.ui_common.AppThemeDenseOutlinedTextField
 import sam.g.trackuriboh.ui_common.AppThemeDialogButtons
 import sam.g.trackuriboh.ui_common.AppThemeOutlinedTextButton
+import sam.g.trackuriboh.ui_notification.NotificationFormViewModel
 import java.text.DateFormat
 import java.util.*
 
@@ -57,12 +58,12 @@ fun NotificationForm(
 
             AppThemeDenseOutlinedEnumAutoCompleteTextField(
                 options = state?.reminderTypeOptions ?: emptyList(),
-                selectedOption = state?.reminderType,
+                selectedOption = state?.form?.reminderType,
                 onOptionSelected = onReminderTypeSelected
             )
 
             AppThemeDenseOutlinedTextField(
-                text = state?.link,
+                text = state?.form?.link,
                 onValueChange = onLinkValueChanged,
                 hintText = "Link",
                 trailingIcon = {
@@ -74,7 +75,7 @@ fun NotificationForm(
                 })
 
             AppThemeOutlinedTextButton(
-                text = state?.date?.let {
+                text = state?.form?.date?.let {
                     DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault()).format(it)
                 } ?: "Set Date & Time",
                 onButtonClick = showDateTimePicker,
@@ -88,14 +89,16 @@ fun NotificationForm(
         }
 
         AppThemeDialogButtons(
+            positiveButtonEnabled = state?.canSave ?: false,
+            negativeButtonEnabled = true,
             positiveButtonText = stringResource(id = R.string.lbl_save).uppercase(),
             negativeButtonText = stringResource(id = R.string.lbl_cancel).uppercase(),
             onPositiveButtonClick = onSaveClick,
             onNegativeButtonClick = onCancelClick
         )
     }
-
 }
+
 
 
 

@@ -186,32 +186,33 @@ fun AppThemeDenseOutlinedEnumAutoCompleteTextField(
 
 @Composable
 fun ColumnScope.AppThemeDialogButtons(
-    positiveButtonText: String?,
-    negativeButtonText: String?,
+    positiveButtonText: String,
+    negativeButtonText: String,
+    positiveButtonEnabled: Boolean = true,
+    negativeButtonEnabled: Boolean = true,
     onPositiveButtonClick: () -> Unit = { },
     onNegativeButtonClick: () -> Unit = { },
 ) {
     Row(
         modifier = Modifier.align(Alignment.End)
     ) {
-        negativeButtonText?.let {
-            TextButton(
-                onClick = onNegativeButtonClick,
-            ) {
-                Text(
-                    text = it,
-                    style = MaterialTheme.typography.button
-                )
-            }
+        TextButton(
+            onClick = onNegativeButtonClick,
+            enabled = negativeButtonEnabled,
+        ) {
+            Text(
+                text = negativeButtonText,
+                style = MaterialTheme.typography.button
+            )
         }
-        positiveButtonText?.let {
-            TextButton(onClick = onPositiveButtonClick) {
-                Text(
-                    text = positiveButtonText,
-                    style = MaterialTheme.typography.button
-                )
-            }
+        TextButton(
+            onClick = onPositiveButtonClick,
+            enabled = positiveButtonEnabled,
+        ) {
+            Text(
+                text = positiveButtonText,
+                style = MaterialTheme.typography.button
+            )
         }
-
     }
 }

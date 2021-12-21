@@ -14,7 +14,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NotificationsScheduler @Inject constructor(
+class ReminderScheduler @Inject constructor(
     private val alarmManager: AlarmManager,
     @ApplicationContext private val applicationContext: Context
 ) {
@@ -25,7 +25,6 @@ class NotificationsScheduler @Inject constructor(
             true
         }
     }
-
 
     fun setReminder(reminder: Reminder) {
         val intent = Intent(applicationContext, ReminderBroadcastReceiver::class.java).apply {

@@ -10,9 +10,7 @@ import sam.g.trackuriboh.data.db.entities.Reminder
 import sam.g.trackuriboh.utils.getPendingIntent
 import sam.g.trackuriboh.workers.createNotificationBuilder
 
-class ReminderBroadcastReceiver(
-
-) : BroadcastReceiver() {
+class ReminderBroadcastReceiver : BroadcastReceiver() {
     companion object {
         const val ARG_REMINDER = "Reminder"
         private const val REMINDER_NOTIFICATION_CHANNEL_ID = "TrackuribohReminder"

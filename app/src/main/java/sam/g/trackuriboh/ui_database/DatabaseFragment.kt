@@ -15,20 +15,24 @@ import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
+import androidx.work.WorkInfo
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.*
 import sam.g.trackuriboh.databinding.FragmentDatabaseBinding
-import sam.g.trackuriboh.ui_database.CardListFragment.Companion.CARD_ITEM_CARD_ID
+import sam.g.trackuriboh.ui_common.UiState
+import sam.g.trackuriboh.ui_database.CardListFragment.Companion.CARD_ITEM_CARD_ID_RESULT
 import sam.g.trackuriboh.ui_database.CardListFragment.Companion.CARD_ITEM_CLICK_REQUEST_KEY
 import sam.g.trackuriboh.ui_database.CardListFragment.Companion.VIEW_PRICE_CLICK_REQUEST_KEY
-import sam.g.trackuriboh.ui_database.CardListFragment.Companion.VIEW_PRICE_SKU_IDS
+import sam.g.trackuriboh.ui_database.CardListFragment.Companion.VIEW_PRICE_SKU_IDS_RESULT
 import sam.g.trackuriboh.ui_database.CardSetListFragment.Companion.SET_ITEM_CLICK_REQUEST_KEY
 import sam.g.trackuriboh.ui_database.CardSetListFragment.Companion.SET_ITEM_ID
 import sam.g.trackuriboh.ui_database.adapters.DatabaseStateAdapter
 import sam.g.trackuriboh.ui_database.adapters.SearchSuggestionsAdapter
 import sam.g.trackuriboh.ui_database.viewmodels.DatabaseViewModel
 import sam.g.trackuriboh.utils.*
+import sam.g.trackuriboh.workers.DatabaseUpdateCheckWorker
+import sam.g.trackuriboh.workers.WORKER_PROGRESS_KEY
 
 /**
  * The SearchView is very buggy and the behaviour is sometimes hard to manage. When updating Hilt,
@@ -65,7 +69,7 @@ class DatabaseFragment :
 
         initToolbar()
         initTabLayoutWithViewPager()
-        initActionObserver()
+        initDatabaseSyncObservers()
         initSearchSuggestionObserver()
         initFragmentResultListeners()
     }
@@ -117,35 +121,110 @@ class DatabaseFragment :
         createOptionsMenu()
     }
 
-    private fun initActionObserver() {
-        viewModel.action.observe(viewLifecycleOwner) {
-            if (it.hasBeenHandled) {
-                return@observe
-            }
-
-            when (val action = it.getContent()) {
-                is DatabaseViewModel.UiAction.Loading -> {
-                    binding.databaseToolbar.setMenuEnabled(false)
-                    showLoading(action.message)
-                    setProgress(action.progress, action.indeterminate)
+    private fun initDatabaseSyncObservers() {
+        viewModel.databaseDownloadState.observe(viewLifecycleOwner) { event ->
+            handleWorkUpdated(
+                workEvent = event,
+                onLoading = { uiState ->
+                    uiState.data?.progress?.getInt(WORKER_PROGRESS_KEY, 0)?.let { progress ->
+                        setProgress(progress, uiState.message)
+                    }
+                },
+                onSuccess = { uiState ->
+                    uiState.message?.let { showSnackbar(it, SnackbarType.SUCCESS) }
+                },
+                onFailure = { uiState ->
+                    uiState.message?.let { showSnackbar(it, SnackbarType.ERROR) }
+                },
+                onCancelled = { uiState ->
+                    uiState.message?.let { showSnackbar(it, SnackbarType.INFO) }
                 }
-                else -> {
-                    it.handleEvent()
-                    showContent()
-                    binding.databaseToolbar.setMenuEnabled(true)
+            )
+        }
 
-                    when (action) {
-                        is DatabaseViewModel.UiAction.Snackbar -> showSnackbar(action.message, action.snackbarType)
-                        is DatabaseViewModel.UiAction.UpdateAvailable -> {
-                            context?.createAlertDialog(
-                                title = getString(R.string.database_update_check_update_available_title),
-                                message = getString(R.string.database_update_check_update_available_message),
-                                positiveButtonText = getString(R.string.lbl_update),
-                                negativeButtonText = getString(R.string.lbl_cancel),
-                                onPositiveButtonClick = { _, _ -> viewModel.updateDatabase(action.cardSetIds) }
-                            )?.show()
+        viewModel.databaseUpdateState.observe(viewLifecycleOwner) { event ->
+            handleWorkUpdated(
+                workEvent = event,
+                onLoading = { uiState ->
+                    setProgress(indeterminate = true, progress = -1, message = uiState.message)
+                },
+                onSuccess = { uiState ->
+                    uiState.message?.let { showSnackbar(it, SnackbarType.SUCCESS) }
+                },
+                onFailure = { uiState ->
+                    uiState.message?.let { showSnackbar(it, SnackbarType.ERROR) }
+                },
+                onCancelled = { uiState ->
+                    uiState.message?.let { showSnackbar(it, SnackbarType.INFO) }
+                }
+            )
+        }
+
+        viewModel.databaseUpdateCheckState.observe(viewLifecycleOwner) { event ->
+            handleWorkUpdated(
+                workEvent = event,
+                onLoading = { uiState ->
+                    setProgress(indeterminate = true, progress = -1, message = uiState.message)
+                },
+                onSuccess = { uiState ->
+                    if (uiState.data != null) {
+                        context?.createAlertDialog(
+                            title = getString(R.string.database_update_check_update_available_title),
+                            message = uiState.message,
+                            positiveButtonText = getString(R.string.lbl_update),
+                            onPositiveButtonClick = { _, _ ->
+                                viewModel.updateDatabase(
+                                    uiState.data?.outputData?.getLongArray(DatabaseUpdateCheckWorker.UPDATE_CARD_SET_IDS_RESULT)
+                                )
+                            }
+                        )?.show()
+                    } else {
+                        uiState.message?.let { showSnackbar(it, SnackbarType.INFO) }
+                    }
+
+                },
+                onFailure = { uiState ->
+                    uiState.message?.let { showSnackbar(it, SnackbarType.ERROR) }
+                },
+                onCancelled = { uiState ->
+                    uiState.message?.let { showSnackbar(it, SnackbarType.INFO) }
+                }
+            )
+        }
+    }
+
+    private fun handleWorkUpdated(
+        workEvent: SingleEvent<UiState<WorkInfo>>,
+        onLoading: (uiState: UiState<WorkInfo>) -> Unit,
+        onSuccess: (uiState: UiState<WorkInfo>) -> Unit,
+        onFailure: (uiState: UiState<WorkInfo>) -> Unit,
+        onCancelled: (uiState: UiState<WorkInfo>) -> Unit,
+    ) {
+        if (workEvent.hasBeenHandled) {
+            return
+        }
+
+        when (val uiState = workEvent.getContent()) {
+            is UiState.Loading -> {
+                showLoading()
+                binding.databaseToolbar.setMenuEnabled(false)
+                onLoading(uiState)
+            }
+            else -> {
+                workEvent.handleEvent()
+                showContent()
+                binding.databaseToolbar.setMenuEnabled(true)
+
+                when (uiState) {
+                    is UiState.Failure -> {
+                        if (uiState.data?.state == WorkInfo.State.CANCELLED) {
+                            onCancelled(uiState)
+                        } else {
+                            onFailure(uiState)
                         }
                     }
+                    is UiState.Success -> onSuccess(uiState)
+                    else -> return
                 }
             }
         }
@@ -185,9 +264,19 @@ class DatabaseFragment :
         }
     }
 
-    private fun setProgress(progress: Int, indeterminate: Boolean = false) {
-        binding.databaseSyncProgressIndicator.apply {
-            binding.databaseSyncProgressTextview.show(!indeterminate)
+    private fun setProgress(progress: Int, message: String? = null, indeterminate: Boolean = false) {
+        with(binding.databaseSyncProgressTextview) {
+            show(!indeterminate)
+            text = getString(R.string.progress_percent, progress)
+
+        }
+
+        with(binding.databaseSyncInfoTextview) {
+            visibility = View.VISIBLE
+            binding.databaseSyncInfoTextview.text = message
+        }
+
+        with(binding.databaseSyncProgressIndicator) {
             isIndeterminate = indeterminate
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -196,11 +285,9 @@ class DatabaseFragment :
                 this.progress = progress
             }
         }
-
-        binding.databaseSyncProgressTextview.text = getString(R.string.progress_percent, progress)
     }
 
-    private fun showLoading(message: String?) {
+    private fun showLoading() {
         binding.apply {
             databaseTabLayout.visibility = View.GONE
             databaseViewPager.visibility = View.GONE
@@ -208,10 +295,7 @@ class DatabaseFragment :
             databaseSyncProgressIndicator.show()
             databaseSyncProgressTextview.visibility = View.VISIBLE
 
-            with(databaseSyncInfoTextview) {
-                visibility = View.VISIBLE
-                text = message
-            }
+            databaseSyncInfoTextview.visibility = View.VISIBLE
 
             databaseViewPager.adapter = null
         }
@@ -226,7 +310,9 @@ class DatabaseFragment :
             databaseSyncProgressTextview.visibility = View.GONE
             databaseSyncInfoTextview.visibility = View.GONE
 
-            databaseViewPager.adapter = stateAdapter
+            if (databaseViewPager.adapter == null) {
+                databaseViewPager.adapter = stateAdapter
+            }
         }
 
     }
@@ -290,14 +376,14 @@ class DatabaseFragment :
         childFragmentManager.apply {
             setFragmentResultListener(CARD_ITEM_CLICK_REQUEST_KEY, this@DatabaseFragment) { _, bundle ->
                 handleNavigationAction(
-                    DatabaseFragmentDirections.actionDatabaseFragmentToCardDetailActivity(bundle.getLong(CARD_ITEM_CARD_ID))
+                    DatabaseFragmentDirections.actionDatabaseFragmentToCardDetailActivity(bundle.getLong(CARD_ITEM_CARD_ID_RESULT))
                 )
             }
 
             setFragmentResultListener(VIEW_PRICE_CLICK_REQUEST_KEY, this@DatabaseFragment) { _, bundle ->
                 handleNavigationAction(
                     DatabaseFragmentDirections.actionDatabaseFragmentToCardPricesBottomSheetDialogFragment(
-                        bundle.getLongArray(VIEW_PRICE_SKU_IDS) ?: longArrayOf()
+                        bundle.getLongArray(VIEW_PRICE_SKU_IDS_RESULT) ?: longArrayOf()
                     )
                 )
             }

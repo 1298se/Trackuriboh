@@ -2,6 +2,7 @@
     <string name="app_name">Trackuriboh</string>
     <string name="preference_file_key">tang.song.edu.PREFERENCE_FILE_KEY</string>
 
+    <string name="lbl_ok">Ok</string>
     <string name="lbl_cancel">Cancel</string>
     <string name="lbl_update">Update</string>
     <string name="lbl_save">Save</string>
@@ -12,6 +13,7 @@
     <string name="lbl_transactions">Transactions</string>
     <string name="lbl_database">Database</string>
     <string name="lbl_notifications">Notifications</string>
+    <string name="lbl_permission_required">Permission Required</string>
 
     <!-- Database -->
     <string name="tab_card_title">Cards</string>
@@ -30,7 +32,6 @@
     <string name="database_update_failed">Database update failed</string>
     <string name="database_update_cancelled">Database update cancelled</string>
     <string name="database_update_success">Database update successful</string>
-
 
     <string name="database_update_check_info">Checking for updates…</string>
     <string name="database_update_check_failed">Checking for updates failed</string>
@@ -93,6 +94,7 @@
     <string name="reminder_type_claim_sale">Claim Sale</string>
     <string name="reminder_type_other">Other</string>
     <string name="reminder_notification_title">Reminder: %1$s is starting now.</string>
+    <string name="reminder_permission_request_message">This reminder is currently saved, but alarm permissions are required to activated it.</string>
 
     <string-array name="reminder_types">
         <item>Claim Sale</item>

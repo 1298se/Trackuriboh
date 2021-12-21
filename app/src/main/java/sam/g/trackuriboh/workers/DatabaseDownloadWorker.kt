@@ -31,11 +31,11 @@ class DatabaseDownloadWorker @AssistedInject constructor(
     private val catalogRepository: CatalogRepository,
     private val appDatabase: AppDatabase,
     private val sharedPreferences: SharedPreferences,
+    private val workManager: WorkManager,
 ) : CoroutineWorker(appContext, workerParams) {
 
     companion object {
-        const val WORKER_TAG = "DatabaseDownloadWorker"
-        const val Progress = "DatabaseDownloadProgress"
+        const val WORKER_NAME = "DatabaseDownloadWorker"
     }
 
     private val progressNotificationBuilder by lazy {
@@ -43,7 +43,7 @@ class DatabaseDownloadWorker @AssistedInject constructor(
             context = applicationContext,
             channelId = DB_SYNC_NOTIFICATION_CHANNEL_ID,
             notificationTitle = appContext.getString(R.string.database_download_worker_notification_title),
-            cancelIntent = WorkManager.getInstance(applicationContext).createCancelPendingIntent(id),
+            cancelIntent = workManager.createCancelPendingIntent(id),
             showProgress = true,
             ongoing = true,
             autoCancel = false
@@ -131,7 +131,7 @@ class DatabaseDownloadWorker @AssistedInject constructor(
             notify(DB_SYNC_PROGRESS_NOTIFICATION_ID, progressNotificationBuilder.build())
         }
 
-        setProgress(workDataOf(Progress to progress))
+        setProgress(workDataOf(WORKER_PROGRESS_KEY to progress))
     }
 
     private suspend fun downloadDatabase() {

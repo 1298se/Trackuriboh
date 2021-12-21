@@ -29,7 +29,8 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
     private val sharedPreferences: SharedPreferences,
 ) : CoroutineWorker(appContext, workerParams) {
     companion object {
-        const val WORKER_TAG = "DatabaseUpdateCheckWorker"
+        const val USER_TRIGGERED_WORKER_NAME = "DatabaseUpdateCheckWorker_UserTriggered"
+        const val BACKGROUND_WORKER_NAME = "DatabaseUpdateCheckWorker_Background"
 
         const val UPDATE_CARD_SET_IDS_RESULT = "DatabaseUpdateCheckWorker_CardSetIdsResult"
     }

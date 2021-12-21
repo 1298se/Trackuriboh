@@ -68,7 +68,7 @@ class CardPricesBottomSheetDialogFragment : BottomSheetDialogFragment() {
         mViewModel.run {
             state.observe(if (showsDialog) this@CardPricesBottomSheetDialogFragment else viewLifecycleOwner) { uiState ->
                 when (uiState) {
-                    UiState.Loading -> binding.contentContainer.showOnly(binding.progressIndicator)
+                    is UiState.Loading -> binding.contentContainer.showOnly(binding.progressIndicator)
                     is UiState.Failure, is UiState.Success -> {
                         binding.progressIndicator.hide()
 
@@ -77,7 +77,7 @@ class CardPricesBottomSheetDialogFragment : BottomSheetDialogFragment() {
                         uiState.data?.let { buildSkuPriceViews(it) }
 
                         if (uiState is UiState.Failure) {
-                            uiState.errorMessage?.let {
+                            uiState.message?.let {
                                 if (showsDialog) {
                                     showSnackbar(it)
                                 } else {

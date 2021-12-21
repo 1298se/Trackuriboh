@@ -82,7 +82,7 @@ fun View?.showSnackbar(message: String, type: SnackbarType = SnackbarType.INFO, 
 fun Context.createAlertDialog(
     title: String? = null,
     message: String? = null,
-    positiveButtonText: String? = this.getString(R.string.lbl_update),
+    positiveButtonText: String? = this.getString(R.string.lbl_ok),
     negativeButtonText: String? = this.getString(R.string.lbl_cancel),
     onPositiveButtonClick: (dialog: DialogInterface, id: Int) -> Unit = { _, _ -> },
     onNegativeButtonClick: (dialog: DialogInterface, id: Int) -> Unit = { _, _ -> }
