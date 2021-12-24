@@ -8,6 +8,7 @@ import androidx.work.WorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import sam.g.trackuriboh.R
+import sam.g.trackuriboh.data.repository.CardSetRepository
 import sam.g.trackuriboh.data.repository.ProductRepository
 import sam.g.trackuriboh.ui_common.UiState
 import sam.g.trackuriboh.utils.SingleEvent
@@ -22,12 +23,19 @@ class DatabaseViewModel @Inject constructor(
     private val workRequestManager: WorkRequestManager,
     private val workManager: WorkManager,
     private val productRepository: ProductRepository,
+    private val cardSetRepository: CardSetRepository,
     private val application: Application,
 ) : ViewModel() {
 
+    enum class Page(val position: Int) {
+        CARDS(0),
+        CARD_SETS(1),
+    }
+
     val searchSuggestionsCursor: LiveData<Cursor>
         get() = _searchSuggestionsCursor
-    private val _searchSuggestionsCursor = MutableLiveData<Cursor>()
+
+    private val _searchSuggestionsCursor = MediatorLiveData<Cursor>()
 
     val databaseDownloadState: LiveData<SingleEvent<UiState<WorkInfo>>>
         get() = _databaseDownloadState
@@ -42,31 +50,51 @@ class DatabaseViewModel @Inject constructor(
     private val _databaseUpdateCheckState = MediatorLiveData<SingleEvent<UiState<WorkInfo>>>()
     private val _databaseUpdateState = MediatorLiveData<SingleEvent<UiState<WorkInfo>>>()
 
+    private val currentPage = MutableLiveData<Page>()
+
+    private var suggestionsQuery = MutableLiveData<String?>(null)
+
     init {
+        _searchSuggestionsCursor.addSource(suggestionsQuery) {
+            getSearchSuggestions(it)
+        }
+
+        _searchSuggestionsCursor.addSource(currentPage) {
+            getSearchSuggestions(suggestionsQuery.value)
+        }
+
 
         // Observating database downloads
         _databaseDownloadState.addSource(
-            workManager.getWorkInfosForUniqueWorkLiveData(DatabaseDownloadWorker.WORKER_NAME)
+            workManager.getWorkInfosForUniqueWorkLiveData(DatabaseDownloadWorker::class.java.name)
         ) {
             onWorkInfoChanged(
                 workInfoList = it,
                 observable = _databaseDownloadState,
-                runningUiState = { workInfo ->  UiState.Loading(
-                    message = application.getString(R.string.database_download_info),
-                    data = workInfo
-                )},
-                succeededUiState = { workInfo -> UiState.Success(
-                    data = workInfo,
-                    message = application.getString(R.string.database_download_success)
-                )},
-                failedUiState = { workInfo -> UiState.Failure(
-                    data = workInfo,
-                    message = application.getString(R.string.database_download_failed),
-                )},
-                cancelledUiState = { workInfo -> UiState.Failure(
-                    data = workInfo,
-                    message = application.getString(R.string.database_download_cancelled)
-                )},
+                runningUiState = { workInfo ->
+                    UiState.Loading(
+                        message = application.getString(R.string.database_download_info),
+                        data = workInfo
+                    )
+                },
+                succeededUiState = { workInfo ->
+                    UiState.Success(
+                        data = workInfo,
+                        message = application.getString(R.string.database_download_success)
+                    )
+                },
+                failedUiState = { workInfo ->
+                    UiState.Failure(
+                        data = workInfo,
+                        message = application.getString(R.string.database_download_failed),
+                    )
+                },
+                cancelledUiState = { workInfo ->
+                    UiState.Failure(
+                        data = workInfo,
+                        message = application.getString(R.string.database_download_cancelled)
+                    )
+                },
             )
         }
 
@@ -77,19 +105,37 @@ class DatabaseViewModel @Inject constructor(
             onWorkInfoChanged(
                 workInfoList = it,
                 observable = _databaseUpdateCheckState,
-                runningUiState = { workInfo ->  UiState.Loading(
-                    message = application.getString(R.string.database_update_check_info),
-                    data = workInfo
-                )},
-                succeededUiState = { workInfo -> handleDatabaseUpdateCheckComplete(workInfo) },
-                failedUiState = { workInfo -> UiState.Failure(
-                    data = workInfo,
-                    message = application.getString(R.string.database_update_check_failed),
-                )},
-                cancelledUiState = { workInfo -> UiState.Failure(
-                    data = workInfo,
-                    message = application.getString(R.string.database_update_check_cancelled)
-                )},
+                runningUiState = { workInfo ->
+                    UiState.Loading(
+                        message = application.getString(R.string.database_update_check_info),
+                        data = workInfo
+                    )
+                },
+                succeededUiState = { workInfo ->
+                    if (workInfo.outputData.getLongArray(DatabaseUpdateCheckWorker.UPDATE_CARD_SET_IDS_RESULT)?.size != 0) {
+                        UiState.Success(
+                            data = workInfo,
+                            message = application.getString(R.string.database_update_check_update_available_message)
+                        )
+                    } else {
+                        UiState.Success(
+                            data = null,
+                            message = application.getString(R.string.database_update_check_no_update_available),
+                        )
+                    }
+                },
+                failedUiState = { workInfo ->
+                    UiState.Failure(
+                        data = workInfo,
+                        message = application.getString(R.string.database_update_check_failed),
+                    )
+                },
+                cancelledUiState = { workInfo ->
+                    UiState.Failure(
+                        data = workInfo,
+                        message = application.getString(R.string.database_update_check_cancelled)
+                    )
+                },
             )
         }
 
@@ -100,49 +146,73 @@ class DatabaseViewModel @Inject constructor(
             onWorkInfoChanged(
                 workInfoList = it,
                 observable = _databaseUpdateCheckState,
-                succeededUiState = { workInfo -> handleDatabaseUpdateCheckComplete(workInfo) },
+                succeededUiState = { workInfo ->
+                    if (workInfo.outputData.getLongArray(DatabaseUpdateCheckWorker.UPDATE_CARD_SET_IDS_RESULT)?.size != 0) {
+                        UiState.Success(
+                            data = workInfo,
+                            message = application.getString(R.string.database_update_check_update_available_message)
+                        )
+                    } else {
+                        null
+                    }
+                },
             )
         }
 
         // Observing database updates
         _databaseUpdateState.addSource(
-            workManager.getWorkInfosForUniqueWorkLiveData(DatabaseUpdateWorker.WORKER_NAME)
+            workManager.getWorkInfosForUniqueWorkLiveData(DatabaseUpdateWorker::class.java.name)
         ) {
             onWorkInfoChanged(
                 workInfoList = it,
                 observable = _databaseUpdateState,
-                runningUiState = { workInfo ->  UiState.Loading(
-                    message = application.getString(R.string.database_update_info),
-                    data = workInfo
-                )},
-                succeededUiState = { workInfo -> UiState.Success(
-                    data = workInfo,
-                    message = application.getString(R.string.database_update_success),
-                )},
-                failedUiState = { workInfo -> UiState.Failure(
-                    data = workInfo,
-                    message = application.getString(R.string.database_update_failed),
-                )},
-                cancelledUiState = { workInfo -> UiState.Failure(
-                    data = workInfo,
-                    message = application.getString(R.string.database_update_cancelled)
-                )},
+                runningUiState = { workInfo ->
+                    UiState.Loading(
+                        message = application.getString(R.string.database_update_info),
+                        data = workInfo
+                    )
+                },
+                succeededUiState = { workInfo ->
+                    UiState.Success(
+                        data = workInfo,
+                        message = application.getString(R.string.database_update_success),
+                    )
+                },
+                failedUiState = { workInfo ->
+                    UiState.Failure(
+                        data = workInfo,
+                        message = application.getString(R.string.database_update_failed),
+                    )
+                },
+                cancelledUiState = { workInfo ->
+                    UiState.Failure(
+                        data = workInfo,
+                        message = application.getString(R.string.database_update_cancelled)
+                    )
+                },
             )
         }
     }
 
-    private fun handleDatabaseUpdateCheckComplete(workInfo: WorkInfo) =
-        if (workInfo.outputData.getLongArray(DatabaseUpdateCheckWorker.UPDATE_CARD_SET_IDS_RESULT)?.size != 0) {
-            UiState.Success(
-                data = workInfo,
-                message = application.getString(R.string.database_update_check_update_available_message)
-            )
-        } else {
-            UiState.Success(
-                data = null,
-                message = application.getString(R.string.database_update_check_no_update_available),
-            )
-        }
+    fun downloadDatabase() {
+        workRequestManager.enqueueDatabaseDownloadWorker()
+    }
+
+    fun updateDatabase(updateCardSetIds: LongArray?) {
+        workRequestManager.enqueueDatabaseUpdateWorker(updateCardSetIds)
+    }
+
+    fun checkForDatabaseUpdates() {
+        workRequestManager.enqueueDatabaseUpdateCheck(true)
+    }
+
+    fun setSearchSuggestion(query: String?) {
+        suggestionsQuery.value = query
+    }
+
+    fun setCurrentPage(page: Page) {
+        currentPage.value = page
+    }
 
     private fun onWorkInfoChanged(
         workInfoList: List<WorkInfo>,
@@ -180,21 +250,14 @@ class DatabaseViewModel @Inject constructor(
         }
     }
 
-    fun downloadDatabase() {
-        workRequestManager.enqueueDatabaseDownloadWorker()
-    }
-
-    fun updateDatabase(updateCardSetIds: LongArray?) {
-        workRequestManager.enqueueDatabaseUpdateWorker(updateCardSetIds)
-    }
-
-    fun checkForDatabaseUpdates() {
-        workRequestManager.enqueueDatabaseUpdateCheck(true)
-    }
-
-    fun getSuggestions(query: String?) {
+    private fun getSearchSuggestions(query: String?) {
         viewModelScope.launch {
-            _searchSuggestionsCursor.value = productRepository.getSuggestionsCursor(query)
+
+            _searchSuggestionsCursor.value = when (currentPage.value) {
+                Page.CARDS -> productRepository.getSuggestionsCursor(query)
+                Page.CARD_SETS -> cardSetRepository.getSuggestionsCursor(query)
+                else -> return@launch
+            }
         }
     }
 }

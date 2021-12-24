@@ -3,7 +3,7 @@ package sam.g.trackuriboh.utils
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
+import android.net.Uri
 import sam.g.trackuriboh.MainActivity
 
 fun getMainLauncherIntent(context: Context): PendingIntent =
@@ -16,6 +16,9 @@ fun getMainLauncherIntent(context: Context): PendingIntent =
         }
     )
 
+fun getOpenLinkIntent(url: String): Intent =
+    Intent(Intent.ACTION_VIEW, Uri.parse(url))
+
 fun getPendingIntent(
     context: Context,
     requestCode: Int = 0,
@@ -24,15 +27,11 @@ fun getPendingIntent(
 ): PendingIntent =
     PendingIntent.getActivity(
         context.applicationContext,
-        0,
+        requestCode,
         intent,
-        getPendingIntentFlags()
+        flags,
     )
 
 fun getPendingIntentFlags(): Int {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-    } else {
-        PendingIntent.FLAG_UPDATE_CURRENT
-    }
+    return PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
 }

@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.Flow
 import sam.g.trackuriboh.data.db.cache.ProductLocalCache
 import sam.g.trackuriboh.data.db.entities.*
 import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
-import sam.g.trackuriboh.data.network.NetworkRequestHandler
 import sam.g.trackuriboh.data.network.services.ProductApiService
 import sam.g.trackuriboh.di.NetworkModule.DEFAULT_QUERY_LIMIT
+import sam.g.trackuriboh.managers.NetworkRequestHandler
 import sam.g.trackuriboh.utils.DATABASE_PAGE_SIZE
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -68,4 +68,5 @@ class ProductRepository @Inject constructor(
 
     suspend fun getSuggestionsCursor(query: String?) = productLocalCache.getSearchSuggestions(query)
 
+    suspend fun getSuggestionsCursorInSet(setId: Long, query: String?) = productLocalCache.getSearchSuggestionsInSet(setId, query)
 }

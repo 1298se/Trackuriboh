@@ -2,6 +2,7 @@ package sam.g.trackuriboh.data.db.cache
 
 import androidx.paging.PagingSource
 import sam.g.trackuriboh.data.db.AppDatabase
+import sam.g.trackuriboh.data.db.dao.toSearchSuggestionsCursor
 import sam.g.trackuriboh.data.db.entities.CardSet
 import javax.inject.Inject
 
@@ -20,4 +21,6 @@ class CardSetLocalCache @Inject constructor(
 
     suspend fun getCardSetsWithCount() =
         appDatabase.cardSetDao().getCardSetsWithCount()
+
+    suspend fun getSearchSuggestions(query: String?) = appDatabase.cardSetDao().getSearchSuggestions(query ?: "").toSearchSuggestionsCursor()
 }

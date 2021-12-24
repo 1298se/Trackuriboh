@@ -12,23 +12,13 @@
             app:argType="long" />
         <action
             android:id="@+id/action_cardSetDetailFragment_to_cardDetailActivity"
-            app:destination="@id/cardDetailActivity" />
-        <action
-            android:id="@+id/action_cardSetDetailFragment_to_cardPricesBottomSheetDialogFragment"
-            app:destination="@id/cardPricesBottomSheetDialogFragment" />
+            app:destination="@id/cardDetailFragment" />
     </fragment>
     <activity
-        android:id="@+id/cardDetailActivity"
+        android:id="@+id/cardDetailFragment"
         android:name="sam.g.trackuriboh.ui_card_detail.CardDetailActivity">
         <argument
             android:name="cardId"
             app:argType="long" />
     </activity>
-    <dialog
-        android:id="@+id/cardPricesBottomSheetDialogFragment"
-        android:name="sam.g.trackuriboh.ui_price.CardPricesBottomSheetDialogFragment">
-        <argument
-            android:name="skuIds"
-            app:argType="long[]" />
-    </dialog>
 </navigation>

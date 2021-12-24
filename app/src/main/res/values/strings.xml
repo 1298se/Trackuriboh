@@ -2,18 +2,21 @@
     <string name="app_name">Trackuriboh</string>
     <string name="preference_file_key">tang.song.edu.PREFERENCE_FILE_KEY</string>
 
-    <string name="lbl_ok">Ok</string>
+    <string name="lbl_ok">OK</string>
     <string name="lbl_cancel">Cancel</string>
     <string name="lbl_update">Update</string>
     <string name="lbl_save">Save</string>
+    <string name="lbl_upcoming">Upcoming</string>
+    <string name="lbl_earlier">Earlier</string>
+    <string name="lbl_date">Date</string>
+    <string name="lbl_time">Time</string>
     <string name="progress_percent">%1$d%%</string>
 
     <!-- Bottom Nav -->
-    <string name="lbl_inventory">Inventory</string>
-    <string name="lbl_transactions">Transactions</string>
     <string name="lbl_database">Database</string>
-    <string name="lbl_notifications">Notifications</string>
+    <string name="lbl_reminders">Reminders</string>
     <string name="lbl_permission_required">Permission Required</string>
+    <string name="lbl_grant_permission">Grant Permissions</string>
 
     <!-- Database -->
     <string name="tab_card_title">Cards</string>
@@ -23,7 +26,6 @@
     <string name="database_update_check_title">Check for updates</string>
     <string name="database_download_info">This process may take a up to a few minutes. Please feel free to background the app. We\'ll notify you when it\'s done.</string>
     <string name="database_download_worker_notification_title">Downloading database</string>
-    <string name="database_download_enqueued_info">The download is queued and will continue once a Wi-Fi connection is established</string>
     <string name="database_download_failed">Database download failed</string>
     <string name="database_download_cancelled">Database download cancelled</string>
     <string name="database_download_success">Database download successful</string>
@@ -38,6 +40,7 @@
     <string name="database_update_check_cancelled">Checking for updates cancelled</string>
     <string name="database_update_check_update_available_title">Update Trackuriboh Database?</string>
     <string name="database_update_check_update_available_message">A new update is available to download. Please update for the newest card info.</string>
+
     <string name="database_update_check_no_update_available">The database is up to date.</string>
     <!-- Card Item -->
     <string name="item_card_list_content_desc">Card image</string>
@@ -75,9 +78,6 @@
 
     <!-- Inventory -->
     <string name="lbl_new_transaction">New Transaction</string>
-    <string name="item_inventory_setcode_rarity_edition_text" comment="LOB-001 \u2022 Ultra Rare \u2022 1st Edition">%1$s \u2022 %2$s \u2022 %3$s</string>
-    <string name="item_inventory_quantity_text" comment="Qty: 6">Qty: %1$d</string>
-    <string name="item_inventory_avg_purchase_price" comment="Avg. Purchase Price: $50">Avg. Purchase Price: %1$.2f</string>
 
 
     <!-- Notifications -->
@@ -89,18 +89,17 @@
     <string name="facebook_client_token">5cbc3e0fd15bc7c41b702053ea1d1f62</string>
 
     <!-- Reminders -->
-    <string name="lbl_set_reminder">Set Reminder</string>
+    <string name="lbl_create_reminder">Create Reminder</string>
+    <string name="lbl_edit_reminder">Edit Reminder</string>
     <string name="reminder_type_auction">Auction</string>
     <string name="reminder_type_claim_sale">Claim Sale</string>
-    <string name="reminder_type_other">Other</string>
-    <string name="reminder_notification_title">Reminder: %1$s is starting now.</string>
-    <string name="reminder_permission_request_message">This reminder is currently saved, but alarm permissions are required to activated it.</string>
+    <string name="reminder_type_post">Post</string>
+    <string name="reminder_type_other_event">Other Event</string>
+    <string name="reminder_notification_title">Reminder: %1$s is starting soon.</string>
+    <string name="reminder_permission_request_message">This reminder is currently saved, but Trackuriboh needs alarm permissions to activated it. Please</string>
 
-    <string-array name="reminder_types">
-        <item>Claim Sale</item>
-        <item>Auction</item>
-        <item>Other</item>
-    </string-array>
+    <!-- Reminder Item -->
+    <string name="reminder_title" comment="E.g. Billy's Claim Sale">%1$s\'s %2$s</string>
 
     <!-- Time Zones -->
     <!-- We have map each time zone to an actual ID in TimeZone.getAvailableIds() because using 3-letter

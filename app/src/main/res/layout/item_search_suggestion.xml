@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:layout_height="@dimen/list_item_one_line_height"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingStart="@dimen/list_padding_start"
     android:paddingEnd="@dimen/list_padding_end"
     android:background="?attr/selectableItemBackground">
@@ -11,10 +12,11 @@
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/search_suggestion_textview"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/list_item_one_line_height"
-        android:gravity="center_vertical"
-        android:maxLines="1"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
         android:ellipsize="end"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         style="@style/TextAppearance.MaterialComponents.Subtitle1"
         tools:text="Suggestion" />
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

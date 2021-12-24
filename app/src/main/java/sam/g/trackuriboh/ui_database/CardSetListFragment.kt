@@ -31,7 +31,7 @@ class CardSetListFragment : BaseSearchListFragment<CardSet>(), CardSetListAdapte
         const val SET_ITEM_ID = "CardSetListFragment_setId"
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
     }
 
@@ -57,17 +57,14 @@ class CardSetListFragment : BaseSearchListFragment<CardSet>(), CardSetListAdapte
         setFragmentResult(SET_ITEM_CLICK_REQUEST_KEY, bundleOf(SET_ITEM_ID to setId))
     }
 
-    override fun getItemDecorator(): RecyclerView.ItemDecoration {
-        return DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
-    }
-
     private fun initRecyclerView() {
         mAdapter = CardSetListAdapter().apply {
             setOnItemClickListener(this@CardSetListFragment)
         }
         binding.cardSetList.apply {
-            this.layoutManager = LinearLayoutManager(context)
-            this.adapter = mAdapter
+            layoutManager = LinearLayoutManager(context)
+            adapter = mAdapter
+            addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
         }
     }
 }

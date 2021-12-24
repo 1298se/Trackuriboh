@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".ui_card_set_detail.CardSetDetailActivity">
 
-    <fragment
-        android:id="@+id/card_set_detail_nav_host_fragment"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/card_set_detail_nav_host"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"

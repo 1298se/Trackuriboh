@@ -29,6 +29,21 @@ interface CardSetDao : BaseDao<CardSet> {
             "END, INSTR(LOWER(name), :query), name")
     fun searchCardSetByName(query: String, fuzzyQuery: String = getFuzzySearchQuery(query)): PagingSource<Int, CardSet>
 
+    @Query("SELECT DISTINCT name FROM CardSet " +
+            "WHERE name LIKE :fuzzyQuery " +
+            "ORDER BY CASE " +
+            "WHEN name LIKE :query THEN 1 " +
+            "WHEN name LIKE :query || '%' THEN 2 " +
+            "WHEN name LIKE '%' || :query || '%' THEN 3 " +
+            "WHEN name LIKE '%' || :query THEN 4 " +
+            "ELSE 5 " +
+            "END, INSTR(LOWER(name), :query), name LIMIT :limit")
+    suspend fun getSearchSuggestions(
+        query: String,
+        fuzzyQuery: String = getFuzzySearchQuery(query),
+        limit: Int = SEARCH_SUGGESTIONS_RESULT_SIZE
+    ): List<String>
+
     @Query("DELETE FROM CardSet")
     suspend fun clearTable()
 }

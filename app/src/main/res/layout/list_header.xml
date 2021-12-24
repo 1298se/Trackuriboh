@@ -2,15 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="@dimen/material_border_padding_small">
 
-
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/header_title_textview"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
-        android:textSize="16sp" />
+        style="@style/TextAppearance.MaterialComponents.Subtitle2"
+        tools:text="Title"/>
 
 </LinearLayout>

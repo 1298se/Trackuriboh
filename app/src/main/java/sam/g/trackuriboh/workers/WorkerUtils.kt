@@ -12,8 +12,6 @@ const val DB_SYNC_PROGRESS_NOTIFICATION_ID = 1
 // because it is provided in Worker.getForegroundInfo
 const val DB_SYNC_STATE_NOTIFICATION_ID = 2
 
-const val TAG_USER_TRIGGERED = "UserTriggered"
-
 const val WORKER_PROGRESS_KEY = "WorkerProgress"
 
 

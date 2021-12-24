@@ -3,9 +3,9 @@ package sam.g.trackuriboh.data.repository
 import sam.g.trackuriboh.data.db.cache.ProductLocalCache
 import sam.g.trackuriboh.data.db.entities.Sku
 import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
-import sam.g.trackuriboh.data.network.NetworkRequestHandler
 import sam.g.trackuriboh.data.network.responses.Resource
 import sam.g.trackuriboh.data.network.services.PriceApiService
+import sam.g.trackuriboh.managers.NetworkRequestHandler
 import javax.inject.Inject
 import javax.inject.Singleton
 

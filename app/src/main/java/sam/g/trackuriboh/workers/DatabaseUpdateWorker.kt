@@ -22,7 +22,6 @@ class DatabaseUpdateWorker @AssistedInject constructor(
     private val sharedPreferences: SharedPreferences,
 ) : CoroutineWorker(appContext, workerParams) {
     companion object {
-        const val WORKER_NAME = "DatabaseUpdateWorker"
 
         const val DATABASE_LAST_UPDATED_DATE = "DatabaseUpdateCheckWorker_LastUpdatedDate"
 

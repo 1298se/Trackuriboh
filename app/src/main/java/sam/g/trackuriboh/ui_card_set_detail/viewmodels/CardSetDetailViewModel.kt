@@ -1,11 +1,11 @@
 package sam.g.trackuriboh.ui_card_set_detail.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.liveData
+import android.database.Cursor
+import androidx.lifecycle.*
 import androidx.paging.PagingData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import sam.g.trackuriboh.data.db.entities.CardSet
 import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
 import sam.g.trackuriboh.data.repository.CardSetRepository
@@ -20,13 +20,24 @@ class CardSetDetailViewModel @Inject constructor(
     state: SavedStateHandle
 ) : BaseSearchViewModel<ProductWithCardSetAndSkuIds>() {
 
-    private val setId = state.get<Long>("setId")
+    val searchSuggestionsCursor: LiveData<Cursor>
+        get() = _searchSuggestionsCursor
+
+    private val _searchSuggestionsCursor = MediatorLiveData<Cursor>()
+
+    // TODO: Fix Magic Strings
+    private val setId = state.get<Long>("setId")!!
+
     override fun searchSource(query: String?): Flow<PagingData<ProductWithCardSetAndSkuIds>> =
         productRepository.getSearchResultStreamInSet(setId, query)
 
     val cardSet: LiveData<CardSet> = liveData {
-        setId?.let {
-            emit(cardSetRepository.getCardSet(setId))
+        emit(cardSetRepository.getCardSet(setId))
+    }
+
+    fun setSearchSuggestion(query: String?) {
+        viewModelScope.launch {
+            _searchSuggestionsCursor.value = productRepository.getSuggestionsCursorInSet(setId, query)
         }
     }
 }

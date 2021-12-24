@@ -12,5 +12,11 @@ class ReminderRepository @Inject constructor(
 
     suspend fun insertReminder(reminder: Reminder) = reminderLocalCache.insertReminder(reminder)
 
-    suspend fun getReminder(reminderId: Long): Reminder = reminderLocalCache.getReminder(reminderId)
+    suspend fun getReminder(reminderId: Long) = reminderLocalCache.getReminder(reminderId)
+
+    fun getRemindersFlow() = reminderLocalCache.getRemindersFlow()
+
+    suspend fun getReminders(): List<Reminder> = reminderLocalCache.getReminders()
+
+    suspend fun deleteReminder(reminder: Reminder) = reminderLocalCache.deleteReminder(reminder)
 }

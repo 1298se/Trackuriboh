@@ -1,17 +1,16 @@
 package sam.g.trackuriboh.data.repository
 
-import android.content.SharedPreferences
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import sam.g.trackuriboh.data.db.cache.CardSetLocalCache
 import sam.g.trackuriboh.data.db.entities.CardSet
-import sam.g.trackuriboh.data.network.NetworkRequestHandler
 import sam.g.trackuriboh.data.network.responses.CardSetResponse
 import sam.g.trackuriboh.data.network.responses.Resource
 import sam.g.trackuriboh.data.network.services.CardSetApiService
 import sam.g.trackuriboh.di.NetworkModule.DEFAULT_QUERY_LIMIT
+import sam.g.trackuriboh.managers.NetworkRequestHandler
 import sam.g.trackuriboh.utils.DATABASE_PAGE_SIZE
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -21,7 +20,6 @@ class CardSetRepository @Inject constructor(
     private val cardSetLocalCache: CardSetLocalCache,
     private val cardSetApiService: CardSetApiService,
     private val networkRequestHandler: NetworkRequestHandler,
-    private val sharedPreferences: SharedPreferences,
 ) {
 
     suspend fun fetchCardSets(offset: Int = 0, limit: Int = DEFAULT_QUERY_LIMIT) : Resource<CardSetResponse> =
@@ -45,4 +43,7 @@ class CardSetRepository @Inject constructor(
     suspend fun insertCardSets(cardSets: List<CardSet>) = cardSetLocalCache.insertCardSets(cardSets)
 
     suspend fun getCardSetsWithCount() = cardSetLocalCache.getCardSetsWithCount()
+
+    suspend fun getSuggestionsCursor(query: String?) = cardSetLocalCache.getSearchSuggestions(query)
+
 }

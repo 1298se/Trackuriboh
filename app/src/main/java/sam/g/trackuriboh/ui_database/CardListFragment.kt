@@ -18,14 +18,11 @@ import sam.g.trackuriboh.ui_common.VerticalSpaceItemDecoration
 import sam.g.trackuriboh.ui_database.adapters.CardListAdapter
 import sam.g.trackuriboh.ui_database.viewmodels.BaseSearchViewModel
 import sam.g.trackuriboh.ui_database.viewmodels.CardListViewModel
-import sam.g.trackuriboh.utils.openTCGPlayer
 import sam.g.trackuriboh.utils.viewBinding
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class CardListFragment : BaseSearchListFragment<ProductWithCardSetAndSkuIds>(), CardListAdapter.OnItemClickListener {
-    @Inject
-    lateinit var mAdapter: CardListAdapter
+    private lateinit var mAdapter: CardListAdapter
 
     private val binding by viewBinding(FragmentCardListBinding::inflate)
 
@@ -34,8 +31,6 @@ class CardListFragment : BaseSearchListFragment<ProductWithCardSetAndSkuIds>(), 
     companion object {
         const val CARD_ITEM_CLICK_REQUEST_KEY = "CardListFragment_onCardItemClick"
         const val CARD_ITEM_CARD_ID_RESULT = "CardListFragment_cardId"
-        const val VIEW_PRICE_CLICK_REQUEST_KEY = "CardListFragment_onViewPriceItemClick"
-        const val VIEW_PRICE_SKU_IDS_RESULT = "CardListFragment_skuIds"
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -54,8 +49,6 @@ class CardListFragment : BaseSearchListFragment<ProductWithCardSetAndSkuIds>(), 
 
     override fun getAdapter(): PagingDataAdapter<ProductWithCardSetAndSkuIds, out RecyclerView.ViewHolder> = mAdapter
 
-    override fun getItemDecorator() = VerticalSpaceItemDecoration(resources.getDimension(R.dimen.list_item_large_row_spacing))
-
     /**
      * Some new whack way to communicate between fragments, but we do it this way because [CardListFragment] needs to perform
      * different actions based on where it's being used
@@ -64,19 +57,15 @@ class CardListFragment : BaseSearchListFragment<ProductWithCardSetAndSkuIds>(), 
         setFragmentResult(CARD_ITEM_CLICK_REQUEST_KEY, bundleOf(CARD_ITEM_CARD_ID_RESULT to cardId))
     }
 
-    override fun onViewPricesItemClick(skuIds: List<Long>) {
-       setFragmentResult(VIEW_PRICE_CLICK_REQUEST_KEY, bundleOf(VIEW_PRICE_SKU_IDS_RESULT to skuIds.toLongArray()))
-    }
-
-    override fun onOpenTCGPlayerClick(cardId: Long) {
-        openTCGPlayer(cardId)
-    }
-
     private fun initRecyclerView() {
-        mAdapter.setOnItemClickListener(this)
+        mAdapter = CardListAdapter().apply {
+            setOnItemClickListener(this@CardListFragment)
+        }
+
         binding.cardList.apply {
-            this.layoutManager = LinearLayoutManager(context)
-            this.adapter = mAdapter
+            layoutManager = LinearLayoutManager(context)
+            adapter = mAdapter
+            addItemDecoration(VerticalSpaceItemDecoration(resources.getDimension(R.dimen.list_item_large_row_spacing)))
         }
     }
 }

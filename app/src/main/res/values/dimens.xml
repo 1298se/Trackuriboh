@@ -12,7 +12,6 @@
     <dimen name="material_border_padding_small">8dp</dimen>
     <dimen name="material_border_padding">16dp</dimen>
     <dimen name="material_border_padding_large">24dp</dimen>
-    <dimen name="material_leading_icon_padding">12dp</dimen>
 
     <dimen name="list_padding_top">8dp</dimen>
     <dimen name="list_padding_bottom">8dp</dimen>
@@ -30,12 +29,12 @@
     <dimen name="list_item_image_large_padding_top">16dp</dimen>
     <dimen name="list_item_image_large_padding_bottom">16dp</dimen>
     <dimen name="list_item_large_row_spacing">12dp</dimen>
+    <dimen name="list_item_row_spacing">8dp</dimen>
+    <dimen name="list_item_text_drawable_spacing">16dp</dimen>
 
     <!-- Item Card -->
-    <dimen name="item_card_image_text_spacing">16dp</dimen>
     <dimen name="item_card_image_width">92dp</dimen>
     <dimen name="item_card_image_height">128dp</dimen>
-    <dimen name="item_card_button_spacing">12dp</dimen>
 
     <!-- Card Detail -->
     <dimen name="card_image_swipe_padding">16dp</dimen>
@@ -48,8 +47,8 @@
 
 
     <!-- Forms -->
-    <dimen name="form_input_row_spacing">16dp</dimen>
-    <dimen name="form_input_dense_height">40dp</dimen>
+    <dimen name="form_row_spacing">16dp</dimen>
+    <dimen name="text_field_dense_height">40dp</dimen>
     <dimen name="text_field_dense_paddingTop">8dp</dimen>
     <dimen name="text_field_dense_paddingStart">16dp</dimen>
     <dimen name="text_field_dense_paddingBottom">8dp</dimen>
@@ -57,4 +56,7 @@
 
     <!-- DateTimePicker -->
     <dimen name="date_time_picker_min_height">584dp</dimen>
+
+    <!-- Item Reminder -->
+    <dimen name="item_reminder_reveal_width">128dp</dimen>
 </resources>

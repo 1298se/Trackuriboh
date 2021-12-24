@@ -1,7 +1,7 @@
 package sam.g.trackuriboh.data.repository
 
-import sam.g.trackuriboh.data.network.NetworkRequestHandler
 import sam.g.trackuriboh.data.network.services.CatalogApiService
+import sam.g.trackuriboh.managers.NetworkRequestHandler
 import javax.inject.Inject
 import javax.inject.Singleton
 

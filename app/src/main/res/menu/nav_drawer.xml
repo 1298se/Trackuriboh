@@ -1,23 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
-        <!--
-        <item
-            android:id="@+id/inventoryFragment"
-            android:icon="@drawable/ic_inventory_black_24dp"
-            android:title="@string/lbl_inventory" />
-        <item
-            android:id="@+id/transactionFragment"
-            android:icon="@drawable/ic_transaction_black_24dp"
-            android:title="@string/lbl_transactions" /> -->
 
         <item
-            android:id="@+id/databaseFragment"
+            android:id="@+id/database"
             android:icon="@drawable/ic_baseline_dns_24"
             android:title="@string/lbl_database" />
         <item
-            android:id="@+id/notificationsFragment"
-            android:icon="@drawable/ic_baseline_notifications_24"
-            android:title="@string/lbl_notifications" />
+            android:id="@+id/reminders"
+            android:icon="@drawable/ic_baseline_event_note_24"
+            android:title="@string/lbl_reminders" />
     </group>
 </menu>

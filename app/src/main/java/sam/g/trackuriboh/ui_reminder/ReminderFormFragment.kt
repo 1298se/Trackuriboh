@@ -1,4 +1,4 @@
-package sam.g.trackuriboh.ui_notification
+package sam.g.trackuriboh.ui_reminder
 
 
 import android.os.Bundle
@@ -9,13 +9,15 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
-import sam.g.trackuriboh.databinding.FragmentNotificationFormBinding
+import sam.g.trackuriboh.databinding.FragmentRemindersFormBinding
 import sam.g.trackuriboh.ui_common.*
-import sam.g.trackuriboh.ui_notification.components.NotificationForm
+import sam.g.trackuriboh.ui_reminder.components.RemindersForm
 import sam.g.trackuriboh.utils.viewBinding
 import java.util.*
 
@@ -25,9 +27,9 @@ import java.util.*
  */
 @ExperimentalMaterialApi
 @AndroidEntryPoint
-class NotificationFormFragment : DialogFragment(), DateTimePickerView.OnInteractionListener {
-    private val binding: FragmentNotificationFormBinding by viewBinding(FragmentNotificationFormBinding::inflate)
-    private val viewModel: NotificationFormViewModel by viewModels()
+class ReminderFormFragment : DialogFragment(), DateTimePickerView.OnInteractionListener {
+    private val binding: FragmentRemindersFormBinding by viewBinding(FragmentRemindersFormBinding::inflate)
+    private val viewModel: ReminderFormViewModel by viewModels()
 
     companion object {
         const val NOTIFICATION_FORM_DATA_REQUEST_KEY = "NotificationFormFragment_formRequestKey"
@@ -47,7 +49,7 @@ class NotificationFormFragment : DialogFragment(), DateTimePickerView.OnInteract
             }
         }
 
-        binding.dateTimePicker.setOnInteractionListener(this@NotificationFormFragment)
+        binding.dateTimePicker.setOnInteractionListener(this@ReminderFormFragment)
 
         return binding.root
     }
@@ -69,9 +71,10 @@ class NotificationFormFragment : DialogFragment(), DateTimePickerView.OnInteract
 
     @Composable
     private fun RemindersFormContent() {
-        NotificationForm(
+        RemindersForm(
             formState = viewModel.formState,
-            onLinkValueChanged = viewModel::onLinkValueChanged,
+            onHostChanged = viewModel::onHostChanged,
+            onLinkChanged = viewModel::onLinkValueChanged,
             onReminderTypeSelected = viewModel::onReminderTypeChanged,
             showDateTimePicker = ::showDateTimePicker,
             onSaveClick = ::setReminder,
@@ -81,14 +84,18 @@ class NotificationFormFragment : DialogFragment(), DateTimePickerView.OnInteract
 
     @Preview
     @Composable
-    private fun Preview() {
+    fun Preview() {
         MdcTheme {
             RemindersFormContent()
         }
     }
 
     private fun setReminder() {
-
+        setFragmentResult(
+            NOTIFICATION_FORM_DATA_REQUEST_KEY, bundleOf(
+                NOTIFICATION_FORM_DATA_RESULT to viewModel.formState.value?.formData?.toDatabaseEntity())
+        )
+        dismiss()
     }
 
     private fun showDateTimePicker() {

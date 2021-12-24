@@ -14,6 +14,12 @@ class CardDetailViewModel @Inject constructor(
     private val productRepository: ProductRepository,
     private val state: SavedStateHandle
 ) : ViewModel() {
+
+    enum class Page(val position: Int) {
+        PRICES(0),
+        OVERVIEW(1),
+    }
+
     val cardWithCardSetAndSkuIds: LiveData<ProductWithCardSetAndSkuIds?> = liveData {
         state.get<Long>("cardId")?.let {
             emit(productRepository.getProductWithSkusById(it))

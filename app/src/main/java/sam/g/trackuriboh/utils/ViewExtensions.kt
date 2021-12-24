@@ -1,29 +1,23 @@
 package sam.g.trackuriboh.utils
 
+import android.app.SearchManager
 import android.content.Context
 import android.content.DialogInterface
+import android.database.Cursor
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AutoCompleteTextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
 import sam.g.trackuriboh.R
-
-/**
- * Use this method to add [RecyclerView.ItemDecoration] without stacking behaviour
- * We need to remove the [RecyclerView.ItemDecoration] and add it again
- * because otherwise the item decoration will stack every LiveData callback
- */
-fun RecyclerView.addItemDecorationIfExists(decor: RecyclerView.ItemDecoration) {
-    removeItemDecoration(decor)
-    addItemDecoration(decor)
-}
+import sam.g.trackuriboh.ui_database.adapters.SearchSuggestionsAdapter
 
 fun ViewGroup.showOnly(vararg views: View) {
     children.forEach {
@@ -104,7 +98,7 @@ fun Context.createAlertDialog(
     }
 }
 
-fun getAppBarConfiguration() : AppBarConfiguration = AppBarConfiguration(setOf(R.id.databaseFragment, R.id.notificationsFragment))
+fun getAppBarConfiguration() : AppBarConfiguration = AppBarConfiguration(setOf(R.id.databaseFragment, R.id.remindersFragment))
 
 fun MaterialToolbar.setupAsTopLevelDestinationToolbar() {
     setupWithNavController(findNavController(), getAppBarConfiguration())
@@ -115,3 +109,37 @@ fun MaterialToolbar.setMenuEnabled(enabled: Boolean) {
         it.isEnabled = enabled
     }
 }
+
+fun SearchView.initSearchSuggestions() {
+    suggestionsAdapter = SearchSuggestionsAdapter(
+        context, null
+    )
+
+    setOnSuggestionListener(object : SearchView.OnSuggestionListener {
+        override fun onSuggestionSelect(position: Int): Boolean = false
+
+        override fun onSuggestionClick(position: Int): Boolean {
+            val cursor = (suggestionsAdapter.getItem(position) as Cursor)
+            val suggestion = cursor.getString(cursor.getColumnIndexOrThrow(SearchManager.SUGGEST_COLUMN_TEXT_1))
+            setQuery(suggestion, true)
+
+            return true
+        }
+    })
+}
+
+fun SearchView.setSuggestionsCursor(cursor: Cursor) {
+    var newCursor: Cursor? = null
+
+    // We only want to set the cursor if the threshold is reached, otherwise
+    // we want to set it to null so there's no flickering of the previously
+    // set cursor suggestions
+    if (query.trim().length >= findViewById<AutoCompleteTextView>(R.id.search_src_text).threshold) {
+        newCursor = cursor
+    }
+
+    post {
+        suggestionsAdapter.changeCursor(newCursor)
+    }
+}
+

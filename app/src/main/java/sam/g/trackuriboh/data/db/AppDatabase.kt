@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import sam.g.trackuriboh.BuildConfig
 import sam.g.trackuriboh.data.db.converters.RoomConverter
 import sam.g.trackuriboh.data.db.dao.*
 import sam.g.trackuriboh.data.db.entities.*
@@ -24,6 +25,7 @@ import sam.g.trackuriboh.data.db.entities.*
 @TypeConverters(RoomConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
+    // NOTE: DAOs automatically switches thread when using suspend
     abstract fun productDao(): ProductDao
     abstract fun skuDao(): SkuDao
     abstract fun cardSetDao(): CardSetDao
@@ -65,8 +67,10 @@ abstract class AppDatabase : RoomDatabase() {
             }
 
         private fun buildDatabase(application: Application) =
-            Room.databaseBuilder(application, AppDatabase::class.java, DATABASE_NAME)
-                .createFromAsset(DATABASE_FILE_PATH)
-                .build()
+            Room.databaseBuilder(application, AppDatabase::class.java, DATABASE_NAME).apply {
+                if (!BuildConfig.DEBUG) {
+                    createFromAsset(DATABASE_FILE_PATH)
+                }
+            }.build()
     }
 }

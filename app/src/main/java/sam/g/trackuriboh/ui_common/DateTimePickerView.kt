@@ -5,6 +5,8 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -87,6 +89,12 @@ class DateTimePickerView @JvmOverloads constructor(
                         onOptionSelected = { position -> selectedTimeZoneIndex = position}
                     )
 
+                    val daylightSavingsActive = TimeZone.getDefault().inDaylightTime(Date())
+
+
+                   Text(text = "Daylight Savings is currently active", style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onSurface))
+
+
                     AppThemeDialogButtons(
                         positiveButtonEnabled = true,
                         negativeButtonEnabled = true,
@@ -99,8 +107,8 @@ class DateTimePickerView @JvmOverloads constructor(
                                         binding.datePicker.year,
                                         binding.datePicker.month,
                                         binding.datePicker.dayOfMonth,
-                                        binding.timePicker.currentHour,
-                                        binding.timePicker.currentMinute
+                                        binding.timePicker.hour,
+                                        binding.timePicker.minute
                                     )
                                     timeZone = TimeZone.getTimeZone(timeZoneValues[selectedTimeZoneIndex])
                                 }

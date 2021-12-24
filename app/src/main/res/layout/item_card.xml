@@ -21,23 +21,35 @@
             android:layout_width="@dimen/item_card_image_width"
             android:layout_height="@dimen/item_card_image_height"
             android:contentDescription="@string/item_card_list_content_desc"
+            android:layout_marginEnd="@dimen/list_item_text_drawable_spacing"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/item_card_image_text_barrier"
             tools:src="@drawable/img_cardback" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/item_card_image_text_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/item_card_image"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:barrierDirection="left" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/item_card_title_textview"
             style="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/item_card_image_text_spacing"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:singleLine="true"
+            app:layout_constraintBottom_toTopOf="@id/item_card_number_rarity_textview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@id/item_card_image"
+            app:layout_constraintStart_toEndOf="@id/item_card_image_text_barrier"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
             tools:text="Blue-Eyes White Dragon Blue-Eyes White Dragon Blue-Eyes White Dragon" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -45,13 +57,13 @@
             style="@style/TextAppearance.MaterialComponents.Subtitle2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/item_card_image_text_spacing"
             android:layout_marginTop="@dimen/text_spacing"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:singleLine="true"
+            app:layout_constraintBottom_toTopOf="@id/item_card_set_name_textview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@id/item_card_image"
+            app:layout_constraintStart_toEndOf="@id/item_card_image_text_barrier"
             app:layout_constraintTop_toBottomOf="@id/item_card_title_textview"
             tools:text="Ultra Rare \u2022 LOB-001" />
 
@@ -60,51 +72,15 @@
             style="@style/TextAppearance.MaterialComponents.Caption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/item_card_image_text_spacing"
             android:layout_marginTop="@dimen/text_spacing"
             android:layout_marginBottom="@dimen/text_spacing"
+            android:ellipsize="end"
+            android:singleLine="true"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/item_card_image"
+            app:layout_constraintStart_toEndOf="@id/item_card_image_text_barrier"
             app:layout_constraintTop_toBottomOf="@id/item_card_number_rarity_textview"
-            tools:text="The Legend of Blue Eyes White Dragon" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/item_card_view_prices_button"
-            style="@style/Widget.Apptheme.Button.IconOnly.PrimaryAlpha"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/item_card_image_text_spacing"
-            android:layout_marginEnd="@dimen/item_card_button_spacing"
-            app:icon="@drawable/ic_baseline_attach_money_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/item_card_tcgplayer_button"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toEndOf="@id/item_card_image"
-            app:layout_constraintTop_toBottomOf="@id/item_card_set_name_textview" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/item_card_tcgplayer_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:icon="@drawable/ic_outline_shopping_cart_24"
-            app:layout_constraintTop_toBottomOf="@id/item_card_set_name_textview"
-            app:layout_constraintStart_toEndOf="@id/item_card_view_prices_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            style="@style/Widget.Apptheme.Button.IconOnly.PrimaryAlpha" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/item_card_favourite_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:icon="@drawable/ic_outline_visibility_24"
-            app:layout_constraintTop_toBottomOf="@id/item_card_set_name_textview"
-            app:layout_constraintStart_toEndOf="@id/item_card_tcgplayer_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="1"
-            style="@style/Widget.Apptheme.Button.IconOnly.PrimaryAlpha" />
+            tools:text="The Legend of Blue Eyes White Dragon The Legend of Blue Eyes White Dragon The Legend of Blue Eyes White Dragon The Legend of Blue Eyes White Dragon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

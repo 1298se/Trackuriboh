@@ -17,12 +17,12 @@ class CardPricesViewModel @Inject constructor(
     savedState: SavedStateHandle,
     private val application: Application,
 ) : ViewModel() {
-    private val skuIds = savedState.getLiveData<LongArray>(ARG_SKU_IDS)
+    private val skuIds = savedState.get<LongArray>(ARG_SKU_IDS)
 
-    val state: LiveData<UiState<Map<String?, List<SkuWithConditionAndPrinting>>>> = Transformations.switchMap(skuIds) {
+    val state: LiveData<UiState<Map<String?, List<SkuWithConditionAndPrinting>>>> =
         liveData {
             emit(UiState.Loading())
-            when (val resource = priceRepository.getPricesForSkus(it.toList())) {
+            when (val resource = priceRepository.getPricesForSkus(skuIds!!.toList())) {
                 is Resource.Success -> emit(UiState.Success(buildPrintingToSkuMap(resource.data)))
                 is Resource.Failure -> emit(UiState.Failure(
                     message = application.getString(R.string.error_message_generic),
@@ -31,7 +31,6 @@ class CardPricesViewModel @Inject constructor(
                 else -> return@liveData
             }
         }
-    }
 
     private fun buildPrintingToSkuMap(skus: List<SkuWithConditionAndPrinting>): Map<String?, List<SkuWithConditionAndPrinting>> {
         // Sort by printing, then prices. If null, we set to MAX_VALUE so it's at the end

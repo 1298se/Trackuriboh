@@ -1,12 +1,8 @@
 package sam.g.trackuriboh.data.db.cache
 
-import android.app.SearchManager
-import android.database.MatrixCursor
-import android.provider.BaseColumns
 import androidx.paging.PagingSource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import sam.g.trackuriboh.data.db.AppDatabase
+import sam.g.trackuriboh.data.db.dao.toSearchSuggestionsCursor
 import sam.g.trackuriboh.data.db.entities.*
 import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
 import sam.g.trackuriboh.data.types.ProductType
@@ -18,15 +14,10 @@ class ProductLocalCache @Inject constructor(
     private val appDatabase: AppDatabase
 ) {
     fun searchCardByName(name: String?): PagingSource<Int, ProductWithCardSetAndSkuIds> =
-        appDatabase.productDao().searchProductByName(listOf(ProductType.CARD), name ?: "")
+        searchCardInSetByName(null, name)
 
-    fun searchCardInSetByName(setId: Long?, name: String?): PagingSource<Int, ProductWithCardSetAndSkuIds> {
-        return if (setId == null) {
-            searchCardByName(name)
-        } else {
-            appDatabase.productDao().searchProductInSetByName(setId, name ?: "")
-        }
-    }
+    fun searchCardInSetByName(setId: Long?, name: String?): PagingSource<Int, ProductWithCardSetAndSkuIds> =
+            appDatabase.productDao().searchProductByName(listOf(ProductType.CARD), setId, name ?: "")
 
     suspend fun getProductWithSkusById(id: Long) =
         appDatabase.productDao().getProductWithSkusById(id)
@@ -52,11 +43,10 @@ class ProductLocalCache @Inject constructor(
     suspend fun getSkusWithConditionAndPrinting(skuIds: List<Long>) =
         appDatabase.skuDao().getSkusWithConditionAndPrinting(skuIds)
 
-    suspend fun getSearchSuggestions(query: String?) = withContext(Dispatchers.IO) {
-        return@withContext MatrixCursor(arrayOf(BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1)).apply {
-            appDatabase.productDao().getSearchSuggestions(listOf(ProductType.CARD), query ?: "").forEachIndexed { index, s ->
-                addRow(arrayOf(index, s))
-            }
-        }
-    }
+    suspend fun getSearchSuggestions(query: String?) =
+        getSearchSuggestionsInSet(null, query)
+
+    suspend fun getSearchSuggestionsInSet(setId: Long?, query: String?) =
+        appDatabase.productDao().getSearchSuggestions(listOf(ProductType.CARD), setId, query ?: "")
+            .toSearchSuggestionsCursor()
 }

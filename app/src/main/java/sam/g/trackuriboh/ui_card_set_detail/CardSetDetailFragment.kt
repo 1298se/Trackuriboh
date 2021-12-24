@@ -22,19 +22,17 @@ import sam.g.trackuriboh.ui_database.BaseSearchListFragment
 import sam.g.trackuriboh.ui_database.adapters.CardListAdapter
 import sam.g.trackuriboh.ui_database.viewmodels.BaseSearchViewModel
 import sam.g.trackuriboh.utils.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class CardSetDetailFragment :
     BaseSearchListFragment<ProductWithCardSetAndSkuIds>(),
     CardListAdapter.OnItemClickListener {
-    @Inject
-    lateinit var mAdapter: CardListAdapter
+    private lateinit var mAdapter: CardListAdapter
 
     private val binding by viewBinding(FragmentCardSetDetailBinding::inflate)
-    private val mViewModel: CardSetDetailViewModel by viewModels()
+    private val viewModel: CardSetDetailViewModel by viewModels()
 
-    private lateinit var mSearchView: SearchView
+    private lateinit var searchView: SearchView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
@@ -45,54 +43,49 @@ class CardSetDetailFragment :
 
         initRecyclerView()
         initToolbar()
+        initSearchSuggestions()
 
-        mViewModel.getSearchResult().observe(viewLifecycleOwner) {
+        viewModel.getSearchResult().observe(viewLifecycleOwner) {
             mAdapter.submitData(lifecycle, it)
         }
 
-        mViewModel.cardSet.observe(viewLifecycleOwner) {
+        viewModel.cardSet.observe(viewLifecycleOwner) {
             binding.cardSetDetailToolbar.title = it.name
         }
     }
 
-    override fun getViewModel(): BaseSearchViewModel<ProductWithCardSetAndSkuIds> = mViewModel
+    override fun getViewModel(): BaseSearchViewModel<ProductWithCardSetAndSkuIds> = viewModel
 
     override fun getListView(): RecyclerView = binding.cardSetDetailProductList
 
     override fun getAdapter(): PagingDataAdapter<ProductWithCardSetAndSkuIds, out RecyclerView.ViewHolder> = mAdapter
 
-    override fun getItemDecorator() = VerticalSpaceItemDecoration(resources.getDimension(R.dimen.list_item_large_row_spacing))
-
     override fun onCardItemClick(cardId: Long) {
-        handleNavigationAction(CardSetDetailFragmentDirections.actionCardSetDetailFragmentToCardDetailActivity(cardId))
-    }
-
-    override fun onViewPricesItemClick(skuIds: List<Long>) {
-        handleNavigationAction(
-            CardSetDetailFragmentDirections.actionCardSetDetailFragmentToCardPricesBottomSheetDialogFragment(skuIds.toLongArray())
-        )
-    }
-
-    override fun onOpenTCGPlayerClick(cardId: Long) {
-        openTCGPlayer(cardId)
+        findNavController().safeNavigate(CardSetDetailFragmentDirections.actionCardSetDetailFragmentToCardDetailActivity(cardId))
     }
 
     private fun initRecyclerView() {
-        mAdapter.setOnItemClickListener(this)
+        mAdapter = CardListAdapter().apply {
+            setOnItemClickListener(this@CardSetDetailFragment)
+        }
 
         binding.cardSetDetailProductList.apply {
-            this.layoutManager = LinearLayoutManager(context)
-            this.adapter = mAdapter
+            layoutManager = LinearLayoutManager(context)
+            adapter = mAdapter
+            addItemDecoration(VerticalSpaceItemDecoration(resources.getDimension(R.dimen.list_item_large_row_spacing)))
         }
     }
 
     private fun initToolbar() {
         binding.cardSetDetailToolbar.setupWithNavController(
             findNavController(),
-            AppBarConfiguration.Builder().setFallbackOnNavigateUpListener {
-                activity?.finish()
-                true
-            }.build()
+            AppBarConfiguration(
+                topLevelDestinationIds = setOf(),
+                fallbackOnNavigateUpListener = {
+                    activity?.finish()
+                    true
+                }
+            )
         )
 
         createOptionsMenu()
@@ -103,16 +96,29 @@ class CardSetDetailFragment :
             inflateMenu(R.menu.card_set_detail_toolbar_menu)
 
             menu.findItem(R.id.action_search).apply {
-                mSearchView = setIconifiedSearchViewBehaviour(this, object : SearchViewQueryHandler {
+                searchView = setIconifiedSearchViewBehaviour(object : SearchViewQueryHandler {
                     override fun handleQueryTextSubmit(query: String?) {
-                        this@CardSetDetailFragment.search(query)
+                        search(query)
+                    }
+
+                    override fun handleQueryTextChanged(newText: String?) {
+                        viewModel.setSearchSuggestion(newText)
                     }
 
                     override fun handleSearchViewCollapse() {
-                        this@CardSetDetailFragment.search(null)
+                        search(null)
                     }
                 })
             }
+        }
+    }
+
+    private fun initSearchSuggestions() {
+
+        searchView.initSearchSuggestions()
+
+        viewModel.searchSuggestionsCursor.observe(viewLifecycleOwner) {
+            searchView.setSuggestionsCursor(it)
         }
     }
 }

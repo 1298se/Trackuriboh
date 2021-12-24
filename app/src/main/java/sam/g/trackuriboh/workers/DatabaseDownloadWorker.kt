@@ -17,6 +17,8 @@ import sam.g.trackuriboh.data.repository.CardSetRepository
 import sam.g.trackuriboh.data.repository.CatalogRepository
 import sam.g.trackuriboh.data.repository.ProductRepository
 import sam.g.trackuriboh.di.NetworkModule.DEFAULT_QUERY_LIMIT
+import sam.g.trackuriboh.utils.MAX_PROGRESS
+import sam.g.trackuriboh.utils.createNotificationBuilder
 import java.util.*
 
 /**
@@ -33,10 +35,6 @@ class DatabaseDownloadWorker @AssistedInject constructor(
     private val sharedPreferences: SharedPreferences,
     private val workManager: WorkManager,
 ) : CoroutineWorker(appContext, workerParams) {
-
-    companion object {
-        const val WORKER_NAME = "DatabaseDownloadWorker"
-    }
 
     private val progressNotificationBuilder by lazy {
         createNotificationBuilder(

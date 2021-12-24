@@ -1,8 +1,7 @@
-package sam.g.trackuriboh.data.network
+package sam.g.trackuriboh.managers
 
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import retrofit2.Response
 import sam.g.trackuriboh.data.network.responses.BaseTCGPlayerResponse
 import sam.g.trackuriboh.data.network.responses.Resource
@@ -11,6 +10,8 @@ import javax.inject.Inject
 
 class NetworkRequestHandler @Inject constructor(
     private val connectivityManager: ConnectivityManager,
+    private val sessionManager: SessionManager,
+
 ) {
 
     suspend fun <T: BaseTCGPlayerResponse<*>> getTCGPlayerResource(call: suspend () -> Response<T>): Resource<T> {
@@ -18,6 +19,8 @@ class NetworkRequestHandler @Inject constructor(
             if (!isConnectedToNetwork()) {
                 return Resource.Offline
             }
+
+            sessionManager.setTCGPlayerAccessTokenIfNecessary()
 
             val response = call()
             val body = response.body()
@@ -37,18 +40,14 @@ class NetworkRequestHandler @Inject constructor(
     }
 
     private fun isConnectedToNetwork(): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val networkCapabilities =
-                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) ?: return false
+        val networkCapabilities =
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) ?: return false
 
-            return when {
-                networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-                else -> false
-            }
-        } else {
-            return connectivityManager.activeNetworkInfo?.isConnected == true
+        return when {
+            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> false
         }
     }
 }

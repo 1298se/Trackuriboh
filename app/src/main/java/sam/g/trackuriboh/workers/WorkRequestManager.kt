@@ -20,7 +20,7 @@ class WorkRequestManager @Inject constructor(
             .build()
 
         workManager.enqueueUniqueWork(
-            DatabaseDownloadWorker.WORKER_NAME,
+            DatabaseDownloadWorker::class.java.name,
             ExistingWorkPolicy.REPLACE,
             databaseDownloadRequest
         )
@@ -32,7 +32,7 @@ class WorkRequestManager @Inject constructor(
             .build()
 
         workManager.enqueueUniqueWork(
-            DatabaseUpdateWorker.WORKER_NAME,
+            DatabaseUpdateWorker::class.java.name,
             ExistingWorkPolicy.REPLACE,
             databaseUpdateRequest
         )
@@ -54,15 +54,28 @@ class WorkRequestManager @Inject constructor(
         )
     }
 
+    /**
+     * Checks for database updates in the background
+     */
     fun enqueuePeriodicDatabaseUpdateCheck() {
-        // Check for database updates on the background
         val databaseUpdateScheduleRequest = PeriodicWorkRequestBuilder<DatabaseUpdateCheckScheduleWorker>(24, TimeUnit.HOURS)
             .build()
 
         workManager.enqueueUniquePeriodicWork(
-            DatabaseUpdateCheckScheduleWorker.WORKER_NAME,
+            DatabaseUpdateCheckScheduleWorker::class.java.name,
             ExistingPeriodicWorkPolicy.KEEP,
             databaseUpdateScheduleRequest
+        )
+    }
+
+    fun enqueueReminderScheduler() {
+        val reminderScheduleRequest = OneTimeWorkRequestBuilder<ReminderScheduleWorker>()
+            .build()
+
+        workManager.enqueueUniqueWork(
+            ReminderScheduleWorker::class.java.name,
+            ExistingWorkPolicy.REPLACE,
+            reminderScheduleRequest
         )
     }
 }

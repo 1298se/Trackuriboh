@@ -7,9 +7,9 @@ import androidx.paging.cachedIn
 import kotlinx.coroutines.flow.Flow
 import sam.g.trackuriboh.utils.SingleEvent
 
-abstract class BaseSearchViewModel<T : Any> : ViewModel() {
+abstract class BaseSearchViewModel<T : Any>(initialQuery: String? = null) : ViewModel() {
 
-    private var query = MutableLiveData<String?>(null)
+    private var query = MutableLiveData<String?>(initialQuery)
 
     private var searchResult: LiveData<PagingData<T>> = Transformations.switchMap(query) {
         searchSource(it).cachedIn(viewModelScope).asLiveData()

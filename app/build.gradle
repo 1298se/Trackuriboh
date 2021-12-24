@@ -25,7 +25,7 @@ android {
     }
     defaultConfig {
         applicationId 'sam.g.trackuriboh'
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
@@ -62,7 +62,11 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.0'
+
+    // This is currently broken. https://issuetracker.google.com/issues/206015966
+    // We should update once it's fixed, otherwise we have to use multiple activities to prevent flickering
     implementation "androidx.fragment:fragment-ktx:1.4.0"
+    implementation files('../libs/swipe-reveal-layout-1.4.1.aar')
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'

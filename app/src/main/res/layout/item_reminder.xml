@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/list_item_two_line_height">
+
+    <com.chauthai.swipereveallayout.SwipeRevealLayout
+        android:id="@+id/item_reminder_swipe_reveal_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:dragEdge="right"
+        app:mode="normal">
+
+        <!-- Background layout -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/item_reminder_background"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/item_reminder_reveal_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="@dimen/item_reminder_reveal_width" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/item_reminder_edit_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/background_color_secondary_selectable"
+                android:padding="@dimen/material_border_padding"
+                android:src="@drawable/ic_baseline_edit_24"
+                app:layout_constraintStart_toEndOf="@id/item_reminder_reveal_guideline"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/item_reminder_delete_button"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/item_reminder_delete_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/background_color_error_selectable"
+                android:padding="@dimen/material_border_padding"
+                android:src="@drawable/ic_baseline_delete_forever_24"
+                app:layout_constraintStart_toEndOf="@id/item_reminder_edit_button"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Foreground Layout -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/item_reminder_foreground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="@dimen/list_item_padding_start"
+            android:paddingTop="@dimen/list_item_two_line_padding_top"
+            android:paddingEnd="@dimen/list_item_padding_end"
+            android:paddingBottom="@dimen/list_item_two_line_padding_bottom"
+            android:background="@drawable/background_color_surface_selectable"
+            tools:visibility="gone">
+
+            <ImageView
+                android:id="@+id/item_reminder_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/list_item_text_drawable_spacing"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/item_reminder_image_text_barrier"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="?attr/colorOnSurface"
+                tools:src="@drawable/ic_baseline_gavel_24"
+                tools:ignore="ContentDescription" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/item_reminder_image_text_barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="left"
+                app:constraint_referenced_ids="item_reminder_title_textview"
+                app:layout_constraintStart_toEndOf="@id/item_reminder_image" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/item_reminder_title_textview"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/list_item_padding_end"
+                android:ellipsize="end"
+                android:singleLine="true"
+                app:layout_constraintBottom_toTopOf="@id/item_reminder_description_textview"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/item_reminder_image_text_barrier"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="Claim Sale" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/item_reminder_description_textview"
+                style="@style/TextAppearance.MaterialComponents.Caption"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_spacing"
+                android:layout_marginEnd="@dimen/list_item_padding_end"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/item_reminder_image_text_barrier"
+                app:layout_constraintTop_toBottomOf="@id/item_reminder_title_textview"
+                tools:text="Dec. 21, 2021 7:00 PM EST" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.chauthai.swipereveallayout.SwipeRevealLayout>
+
+</com.google.android.material.card.MaterialCardView>
+

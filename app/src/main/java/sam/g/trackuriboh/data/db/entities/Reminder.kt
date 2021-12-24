@@ -13,6 +13,7 @@ data class Reminder(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val type: ReminderType,
-    val link: String?,
+    val link: String,
     val date: Date,
+    val host: String?,
 ) : Parcelable

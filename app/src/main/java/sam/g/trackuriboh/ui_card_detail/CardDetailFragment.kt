@@ -49,25 +49,15 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         initTCGPlayerFab()
         initFragmentResultListeners()
 
-        mViewModel.cardWithCardSetAndSkuIds.observe(viewLifecycleOwner) { productWithCardSetAndSkus ->
-            binding.cardDetailNameTextview.text = productWithCardSetAndSkus?.product?.name
-            binding.cardDetailSetNameTextview.apply {
-                text = productWithCardSetAndSkus?.cardSet?.name
-                setOnClickListener { _ ->
-                    productWithCardSetAndSkus?.cardSet?.id?.let { it ->
-                        handleNavigationAction(
-                            CardDetailFragmentDirections.actionCardDetailFragmentToCardSetDetailActivity(it)
-                        )
-                    }
-                }
-            }
+        mViewModel.cardWithCardSetAndSkuIds.observe(viewLifecycleOwner) {
 
+            initLayout(it)
             /**
              * FOR PROPER VIEWSTATE RESTORATION TO OCCUR, THE ADAPTERS MUST BE REATTACHED
              * ONCHANGE INSTEAD OF EXPOSIING A setItems METHOD AND CALLING NOTIFYCHANGE
              */
-            initImageViewPager(listOf(productWithCardSetAndSkus?.product?.imageUrl))
-            initCardDetailViewPager(productWithCardSetAndSkus)
+            initImageViewPager(listOf(it?.product?.imageUrl))
+            initCardDetailViewPager(it)
         }
     }
 
@@ -118,11 +108,35 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
         TabLayoutMediator(binding.cardDetailTabLayout, binding.cardDetailViewPager) { tab, position ->
             tab.text = when (position) {
-                0 -> getString(R.string.lbl_details)
-                1 -> getString(R.string.lbl_prices)
+                CardDetailViewModel.Page.PRICES.position -> getString(R.string.lbl_prices)
+                CardDetailViewModel.Page.OVERVIEW.position -> getString(R.string.lbl_details)
                 else -> null
             }
         }.attach()
+    }
+
+    private fun initLayout(productWithCardSetAndSkuIds: ProductWithCardSetAndSkuIds?) {
+        binding.cardDetailNameTextview.apply {
+            text = productWithCardSetAndSkuIds?.product?.name
+            setOnClickListener {
+                productWithCardSetAndSkuIds?.product?.name?.let {
+                    findNavController().safeNavigate(
+                        CardDetailFragmentDirections.actionCardDetailFragmentToCardPrintingsActivity(it)
+                    )
+                }
+            }
+        }
+
+        binding.cardDetailSetNameTextview.apply {
+            text = productWithCardSetAndSkuIds?.cardSet?.name
+            setOnClickListener { _ ->
+                productWithCardSetAndSkuIds?.cardSet?.id?.let { it ->
+                    findNavController().safeNavigate(
+                        CardDetailFragmentDirections.actionCardDetailFragmentToCardSetDetailActivity(it)
+                    )
+                }
+            }
+        }
     }
 
     private fun initTCGPlayerFab() {

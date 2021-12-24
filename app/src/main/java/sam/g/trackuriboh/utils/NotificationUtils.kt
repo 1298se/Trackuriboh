@@ -1,4 +1,4 @@
-package sam.g.trackuriboh.workers
+package sam.g.trackuriboh.utils
 
 import android.annotation.TargetApi
 import android.app.NotificationChannel
@@ -8,7 +8,6 @@ import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import sam.g.trackuriboh.R
-import sam.g.trackuriboh.utils.getMainLauncherIntent
 
 const val MAX_PROGRESS = 100
 

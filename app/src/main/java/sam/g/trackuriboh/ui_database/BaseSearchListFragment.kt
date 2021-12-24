@@ -11,16 +11,12 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
 import sam.g.trackuriboh.ui_database.viewmodels.BaseSearchViewModel
-import sam.g.trackuriboh.utils.addItemDecorationIfExists
 
 /**
  * Base Fragment to handle basic search list logic, such as observing a search result LiveData
  * and submitting the data to the adapter
  */
 abstract class BaseSearchListFragment<T : Any> : Fragment() {
-    private val mItemDecoration by lazy {
-        getItemDecorator()
-    }
     // Handles scrolling to the top of the list. If no new query is submitted, then
     // we don't scroll to the top
     private var mShouldScrollToTop = false
@@ -45,9 +41,7 @@ abstract class BaseSearchListFragment<T : Any> : Fragment() {
         getViewModel().getSearchResult().observe(viewLifecycleOwner) { pagingData ->
             getAdapter().submitData(lifecycle, pagingData)
 
-            mItemDecoration?.let {
-                getListView().addItemDecorationIfExists(it)
-            }
+            getListView().invalidateItemDecorations()
         }
 
         getViewModel().shouldScrollToTop.observe(viewLifecycleOwner) { singleEvent ->
@@ -64,5 +58,4 @@ abstract class BaseSearchListFragment<T : Any> : Fragment() {
     protected abstract fun getViewModel(): BaseSearchViewModel<T>
     protected abstract fun getListView(): RecyclerView
     protected abstract fun getAdapter(): PagingDataAdapter<T, out RecyclerView.ViewHolder>
-    protected open fun getItemDecorator(): RecyclerView.ItemDecoration? = null
 }

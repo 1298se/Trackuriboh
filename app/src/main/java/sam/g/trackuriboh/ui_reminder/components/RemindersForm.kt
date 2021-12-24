@@ -1,4 +1,4 @@
-package sam.g.trackuriboh.ui_notification.components
+package sam.g.trackuriboh.ui_reminder.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,19 +21,20 @@ import sam.g.trackuriboh.ui_common.AppThemeDenseOutlinedEnumAutoCompleteTextFiel
 import sam.g.trackuriboh.ui_common.AppThemeDenseOutlinedTextField
 import sam.g.trackuriboh.ui_common.AppThemeDialogButtons
 import sam.g.trackuriboh.ui_common.AppThemeOutlinedTextButton
-import sam.g.trackuriboh.ui_notification.NotificationFormViewModel
+import sam.g.trackuriboh.ui_reminder.ReminderFormViewModel
 import java.text.DateFormat
 import java.util.*
 
 @ExperimentalMaterialApi
 @Composable
-fun NotificationForm(
-    formState: LiveData<NotificationFormViewModel.RemindersFormState>,
-    onLinkValueChanged: (String) -> Unit,
+fun RemindersForm(
+    formState: LiveData<ReminderFormViewModel.ReminderFormState>,
     onReminderTypeSelected: (Int) -> Unit,
-    showDateTimePicker: () -> Unit,
+    onHostChanged: (String) -> Unit,
+    onLinkChanged: (String) -> Unit,
     onSaveClick: () -> Unit,
     onCancelClick: () -> Unit,
+    showDateTimePicker: () -> Unit,
 ) {
     val state by formState.observeAsState()
 
@@ -47,24 +48,40 @@ fun NotificationForm(
         )
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.form_input_row_spacing))
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.form_row_spacing))
         ) {
 
             Text(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                text = stringResource(id = R.string.lbl_set_reminder),
+                text = stringResource(id = if (state?.mode == ReminderFormViewModel.Mode.EDIT) {
+                    R.string.lbl_edit_reminder
+                } else {
+                    R.string.lbl_create_reminder
+                }),
                 style = MaterialTheme.typography.h6
             )
 
             AppThemeDenseOutlinedEnumAutoCompleteTextField(
                 options = state?.reminderTypeOptions ?: emptyList(),
-                selectedOption = state?.form?.reminderType,
+                selectedOption = state?.formData?.reminderType,
                 onOptionSelected = onReminderTypeSelected
             )
 
             AppThemeDenseOutlinedTextField(
-                text = state?.form?.link,
-                onValueChange = onLinkValueChanged,
+                text = state?.formData?.host,
+                onValueChange = onHostChanged,
+                hintText = "Host",
+                trailingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_baseline_person_outline_24),
+                        contentDescription = null,
+                        tint = MaterialTheme.colors.onSurface,
+                    )
+                })
+
+            AppThemeDenseOutlinedTextField(
+                text = state?.formData?.link,
+                onValueChange = onLinkChanged,
                 hintText = "Link",
                 trailingIcon = {
                     Icon(
@@ -75,9 +92,9 @@ fun NotificationForm(
                 })
 
             AppThemeOutlinedTextButton(
-                text = state?.form?.date?.let {
+                text = state?.formData?.date?.let {
                     DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault()).format(it)
-                } ?: "Set Date & Time",
+                } ?: "Date & Time",
                 onButtonClick = showDateTimePicker,
                 trailingIcon = {
                     Icon(
@@ -91,7 +108,11 @@ fun NotificationForm(
         AppThemeDialogButtons(
             positiveButtonEnabled = state?.canSave ?: false,
             negativeButtonEnabled = true,
-            positiveButtonText = stringResource(id = R.string.lbl_save).uppercase(),
+            positiveButtonText = stringResource(id = if (state?.mode == ReminderFormViewModel.Mode.EDIT) {
+                R.string.lbl_update
+            } else {
+                R.string.lbl_save
+            }).uppercase(),
             negativeButtonText = stringResource(id = R.string.lbl_cancel).uppercase(),
             onPositiveButtonClick = onSaveClick,
             onNegativeButtonClick = onCancelClick

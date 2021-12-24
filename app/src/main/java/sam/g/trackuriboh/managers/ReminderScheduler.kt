@@ -28,6 +28,7 @@ class ReminderScheduler @Inject constructor(
 
     fun setReminder(reminder: Reminder) {
         val intent = Intent(applicationContext, ReminderBroadcastReceiver::class.java).apply {
+            action = ReminderBroadcastReceiver.ACTION_SET_REMINDER
             putExtra(ReminderBroadcastReceiver.ARG_REMINDER, reminder)
         }
 

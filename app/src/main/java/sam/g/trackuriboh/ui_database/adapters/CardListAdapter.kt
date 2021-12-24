@@ -9,17 +9,13 @@ import com.bumptech.glide.Glide
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
 import sam.g.trackuriboh.databinding.ItemCardBinding
-import javax.inject.Inject
 
-class CardListAdapter @Inject constructor()
-    : PagingDataAdapter<ProductWithCardSetAndSkuIds, CardListAdapter.CardViewHolder>(CARD_COMPARATOR) {
+class CardListAdapter : PagingDataAdapter<ProductWithCardSetAndSkuIds, CardListAdapter.CardViewHolder>(CARD_COMPARATOR) {
 
     private var mOnItemClickListener: OnItemClickListener? = null
 
     interface OnItemClickListener {
         fun onCardItemClick(cardId: Long)
-        fun onViewPricesItemClick(skuIds: List<Long>)
-        fun onOpenTCGPlayerClick(cardId: Long)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
@@ -58,19 +54,6 @@ class CardListAdapter @Inject constructor()
                         getItem(bindingAdapterPosition)?.product?.id ?: throw IllegalArgumentException("card is null")
                     )
                 }
-
-                itemCardViewPricesButton.setOnClickListener {
-                    mOnItemClickListener?.onViewPricesItemClick(
-                        getItem(bindingAdapterPosition)?.skuIds ?: throw IllegalArgumentException("skuIds is null")
-                    )
-                }
-
-                itemCardTcgplayerButton.setOnClickListener {
-                    mOnItemClickListener?.onOpenTCGPlayerClick(
-                        getItem(bindingAdapterPosition)?.product?.id ?: throw IllegalArgumentException("card is null")
-                    )
-                }
-
             }
         }
 

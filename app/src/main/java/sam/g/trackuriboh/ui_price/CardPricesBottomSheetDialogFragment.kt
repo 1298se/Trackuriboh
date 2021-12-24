@@ -31,18 +31,19 @@ class CardPricesBottomSheetDialogFragment : BottomSheetDialogFragment() {
         const val ARG_SKU_IDS = "skuIds"
 
         /*
-         * Arg that sets [mShowsDialog] by force. Usually this value is handled depending on its use case
+         * Arg for if the fragment is embedded in a parent fragment. The result of setting this is changing the value for
+         * [showsDialog]. Usually [showsDialog] is handled depending on its use case
          * (i.e. normally it's true, if it's inflated into a container view it's false), however ViewPager2
          * doesn't inflate, so we have to manually set it if we're embedding it into a ViewPager2
          */
-        const val SHOWS_DIALOG = "SHOULD_SHOW_DIALOG"
+        const val EMBEDDED = "EMBEDDED"
 
-        fun newInstance(skus: List<Long>?, shouldShowDialog: Boolean? = null) =
+        fun newInstance(skus: List<Long>?, embedded: Boolean? = null) =
             CardPricesBottomSheetDialogFragment().apply {
                 arguments = Bundle().apply {
                     putLongArray(ARG_SKU_IDS, skus?.toLongArray())
 
-                    shouldShowDialog?.let { putBoolean(SHOWS_DIALOG, shouldShowDialog) }
+                    embedded?.let { putBoolean(EMBEDDED, embedded) }
                 }
             }
     }
@@ -50,8 +51,9 @@ class CardPricesBottomSheetDialogFragment : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        arguments?.getBoolean(SHOWS_DIALOG, showsDialog)?.let {
-            showsDialog = it
+        // If it's embedded, we don't want to show the dialog because it will dim the background
+        arguments?.getBoolean(EMBEDDED, showsDialog)?.let {
+            showsDialog = !it
         }
     }
 
@@ -77,7 +79,7 @@ class CardPricesBottomSheetDialogFragment : BottomSheetDialogFragment() {
                         uiState.data?.let { buildSkuPriceViews(it) }
 
                         if (uiState is UiState.Failure) {
-                            uiState.message?.let {
+                            uiState.message.let {
                                 if (showsDialog) {
                                     showSnackbar(it)
                                 } else {
@@ -106,9 +108,9 @@ class CardPricesBottomSheetDialogFragment : BottomSheetDialogFragment() {
                     }
                 }
                 setHeader(entry.first, getString(R.string.lbl_price_lowest_listing_usd))
-                setRowItems(entry.second.associate {
-                    (it.condition?.name ?: getString(R.string.lbl_not_available)) to
-                            (it.sku.lowestListingPrice?.toString() ?: getString(R.string.lbl_not_available))
+                setRowItems(entry.second.associate { skuWithConditionAndPrinting ->
+                    (skuWithConditionAndPrinting.condition?.name ?: getString(R.string.lbl_not_available)) to
+                            (skuWithConditionAndPrinting.sku.lowestListingPrice?.let { String.format("%.2f", it) } ?: getString(R.string.lbl_not_available))
                 })
             })
         }

@@ -9,6 +9,7 @@ import android.view.WindowManager
 import androidx.activity.addCallback
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.navigateUp
@@ -54,40 +55,37 @@ interface SearchViewQueryHandler {
 }
 
 
-fun setIconifiedSearchViewBehaviour(
-    menuItem: MenuItem,
+fun MenuItem.setIconifiedSearchViewBehaviour(
     handler: SearchViewQueryHandler,
 ): SearchView {
-    menuItem.let {
-        (it.actionView.findViewById(R.id.search_view) as SearchView).apply {
-            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    handler.handleQueryTextSubmit(query)
+    (actionView.findViewById(R.id.search_view) as SearchView).apply {
+        setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                handler.handleQueryTextSubmit(query)
 
-                    return true
-                }
+                return true
+            }
 
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    handler.handleQueryTextChanged(newText)
+            override fun onQueryTextChange(newText: String?): Boolean {
+                handler.handleQueryTextChanged(newText)
 
-                    return true
-                }
-            })
+                return true
+            }
+        })
 
-            it.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-                override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
-                    handler.handleSearchViewExpanded()
-                    return true
-                }
+        setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+                handler.handleSearchViewExpanded()
+                return true
+            }
 
-                override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
-                    handler.handleSearchViewCollapse()
-                    return true
-                }
-            })
+            override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+                handler.handleSearchViewCollapse()
+                return true
+            }
+        })
 
-            return this
-        }
+        return this
     }
 }
 
@@ -103,10 +101,8 @@ fun Fragment.showSnackbar(message: String, type: SnackbarType = SnackbarType.INF
 /**
  * Should use this to handle navigation so that triggering the same action twice doesn't crash...
  */
-fun Fragment.handleNavigationAction(action: NavDirections) {
-    with(findNavController()) {
+fun NavController.safeNavigate(action: NavDirections) {
         currentDestination?.getAction(action.actionId)?.let { navigate(action) }
-    }
 }
 
 fun Fragment.openTCGPlayer(productId: Long) {

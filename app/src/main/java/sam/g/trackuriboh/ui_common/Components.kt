@@ -20,6 +20,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.types.StringResourceEnum
@@ -38,7 +39,7 @@ fun AppThemeDenseOutlinedTextField(
     trailingIcon: @Composable () -> Unit = { },
 ) {
     var curHintText by rememberSaveable { mutableStateOf(hintText) }
-
+TextAlign.Justify
     AppThemeOutlinedDenseRow(
         modifier = modifier,
         borderColor = borderColor
@@ -72,7 +73,7 @@ private fun AppThemeOutlinedDenseRow(
 
     Row(
         modifier = modifier
-            .height(dimensionResource(id = R.dimen.form_input_dense_height))
+            .height(dimensionResource(id = R.dimen.text_field_dense_height))
             .clip(MaterialTheme.shapes.small)
             .then(
                 if (onClick != null) {
@@ -87,11 +88,12 @@ private fun AppThemeOutlinedDenseRow(
             )
             .border(BorderStroke(2.dp, borderColor))
             .padding(
-                start = dimensionResource(id = R.dimen.text_field_dense_paddingStart),
+                top = dimensionResource(id = R.dimen.text_field_dense_paddingTop),
+                bottom = dimensionResource(id = R.dimen.text_field_dense_paddingBottom),
+                start = dimensionResource (id = R.dimen.text_field_dense_paddingStart),
                 end = dimensionResource(id = R.dimen.text_field_dense_paddingEnd)
             )
             .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
     ) {
         content()
     }
@@ -112,6 +114,7 @@ fun AppThemeOutlinedTextButton(
         modifier = modifier,
         borderColor = borderColor,
         onClick = onButtonClick) {
+
         Text(
             text = text,
             style = MaterialTheme.typography.subtitle1.copy(color = MaterialTheme.colors.onSurface),
@@ -132,7 +135,7 @@ fun AppThemeDenseOutlinedAutoCompleteTextField(
     var expanded by rememberSaveable { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
-        modifier = Modifier.height(dimensionResource(id = R.dimen.form_input_dense_height)),
+        modifier = Modifier.height(dimensionResource(id = R.dimen.text_field_dense_height)),
         expanded = expanded,
         onExpandedChange = {
             expanded = !expanded

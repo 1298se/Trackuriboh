@@ -1,19 +1,17 @@
 package sam.g.trackuriboh.ui_database
 
-import android.app.SearchManager
-import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AutoCompleteTextView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import androidx.work.WorkInfo
 import com.google.android.material.tabs.TabLayoutMediator
@@ -23,12 +21,9 @@ import sam.g.trackuriboh.databinding.FragmentDatabaseBinding
 import sam.g.trackuriboh.ui_common.UiState
 import sam.g.trackuriboh.ui_database.CardListFragment.Companion.CARD_ITEM_CARD_ID_RESULT
 import sam.g.trackuriboh.ui_database.CardListFragment.Companion.CARD_ITEM_CLICK_REQUEST_KEY
-import sam.g.trackuriboh.ui_database.CardListFragment.Companion.VIEW_PRICE_CLICK_REQUEST_KEY
-import sam.g.trackuriboh.ui_database.CardListFragment.Companion.VIEW_PRICE_SKU_IDS_RESULT
 import sam.g.trackuriboh.ui_database.CardSetListFragment.Companion.SET_ITEM_CLICK_REQUEST_KEY
 import sam.g.trackuriboh.ui_database.CardSetListFragment.Companion.SET_ITEM_ID
 import sam.g.trackuriboh.ui_database.adapters.DatabaseStateAdapter
-import sam.g.trackuriboh.ui_database.adapters.SearchSuggestionsAdapter
 import sam.g.trackuriboh.ui_database.viewmodels.DatabaseViewModel
 import sam.g.trackuriboh.utils.*
 import sam.g.trackuriboh.workers.DatabaseUpdateCheckWorker
@@ -46,17 +41,12 @@ class DatabaseFragment :
     Fragment(),
     Toolbar.OnMenuItemClickListener {
 
-    companion object {
-        const val CARD_PAGE_POSITION = 0
-        const val SET_PAGE_POSITION = 1
-    }
     private val binding by viewBinding(FragmentDatabaseBinding::inflate)
 
     private lateinit var searchView: SearchView
 
     private val viewModel: DatabaseViewModel by activityViewModels()
     private lateinit var stateAdapter: DatabaseStateAdapter
-    private lateinit var searchSuggestionsAdapter: SearchSuggestionsAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
@@ -70,7 +60,7 @@ class DatabaseFragment :
         initToolbar()
         initTabLayoutWithViewPager()
         initDatabaseSyncObservers()
-        initSearchSuggestionObserver()
+        initSearchSuggestions()
         initFragmentResultListeners()
     }
 
@@ -99,8 +89,12 @@ class DatabaseFragment :
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     when(position) {
-                        CARD_PAGE_POSITION -> searchView.suggestionsAdapter = searchSuggestionsAdapter
-                        SET_PAGE_POSITION -> searchView.suggestionsAdapter = null
+                        DatabaseViewModel.Page.CARDS.position -> {
+                            viewModel.setCurrentPage(DatabaseViewModel.Page.CARDS)
+                        }
+                        DatabaseViewModel.Page.CARD_SETS.position -> {
+                            viewModel.setCurrentPage(DatabaseViewModel.Page.CARD_SETS)
+                        }
                     }
                 }
             })
@@ -108,8 +102,8 @@ class DatabaseFragment :
 
         TabLayoutMediator(binding.databaseTabLayout, binding.databaseViewPager) { tab, position ->
             tab.text = when (position) {
-                CARD_PAGE_POSITION -> getString(R.string.tab_card_title)
-                SET_PAGE_POSITION -> getString(R.string.tab_set_title)
+                DatabaseViewModel.Page.CARDS.position -> getString(R.string.tab_card_title)
+                DatabaseViewModel.Page.CARD_SETS.position -> getString(R.string.tab_set_title)
                 else -> null
             }
         }.attach()
@@ -230,37 +224,12 @@ class DatabaseFragment :
         }
     }
 
-    private fun initSearchSuggestionObserver() {
-        with(searchView) {
-            suggestionsAdapter = SearchSuggestionsAdapter(
-                context, null
-            ).also {
-                searchSuggestionsAdapter = it
-            }
+    private fun initSearchSuggestions() {
 
-            setOnSuggestionListener(object : SearchView.OnSuggestionListener {
-                override fun onSuggestionSelect(position: Int): Boolean = false
-
-                override fun onSuggestionClick(position: Int): Boolean {
-                    val cursor = (suggestionsAdapter.getItem(position) as Cursor)
-                    val suggestion = cursor.getString(cursor.getColumnIndexOrThrow(SearchManager.SUGGEST_COLUMN_TEXT_1))
-                    setQuery(suggestion, true)
-
-                    return true
-                }
-            })
-        }
+        searchView.initSearchSuggestions()
 
         viewModel.searchSuggestionsCursor.observe(viewLifecycleOwner) {
-            with(searchView) {
-                if (suggestionsAdapter != null) {
-                    suggestionsAdapter.changeCursor(it)
-
-                    findViewById<AutoCompleteTextView>(R.id.search_src_text).dropDownHeight =
-                        minOf(5, it.count) * resources.getDimension(R.dimen.list_item_one_line_height).toInt()
-                }
-            }
-
+            searchView.setSuggestionsCursor(it)
         }
     }
 
@@ -322,13 +291,13 @@ class DatabaseFragment :
             inflateMenu(R.menu.database_toolbar_menu)
 
             menu.findItem(R.id.action_search).apply {
-                searchView = setIconifiedSearchViewBehaviour(this, object : SearchViewQueryHandler {
+                searchView = setIconifiedSearchViewBehaviour(object : SearchViewQueryHandler {
                     override fun handleQueryTextSubmit(query: String?) {
                         performSearch(query)
                     }
 
                     override fun handleQueryTextChanged(newText: String?) {
-                        viewModel.getSuggestions(newText)
+                        viewModel.setSearchSuggestion(newText)
                     }
 
                     override fun handleSearchViewExpanded() {
@@ -375,21 +344,13 @@ class DatabaseFragment :
     private fun initFragmentResultListeners() {
         childFragmentManager.apply {
             setFragmentResultListener(CARD_ITEM_CLICK_REQUEST_KEY, this@DatabaseFragment) { _, bundle ->
-                handleNavigationAction(
+                findNavController().safeNavigate(
                     DatabaseFragmentDirections.actionDatabaseFragmentToCardDetailActivity(bundle.getLong(CARD_ITEM_CARD_ID_RESULT))
                 )
             }
 
-            setFragmentResultListener(VIEW_PRICE_CLICK_REQUEST_KEY, this@DatabaseFragment) { _, bundle ->
-                handleNavigationAction(
-                    DatabaseFragmentDirections.actionDatabaseFragmentToCardPricesBottomSheetDialogFragment(
-                        bundle.getLongArray(VIEW_PRICE_SKU_IDS_RESULT) ?: longArrayOf()
-                    )
-                )
-            }
-
             setFragmentResultListener(SET_ITEM_CLICK_REQUEST_KEY, this@DatabaseFragment) { _, bundle ->
-                handleNavigationAction(
+                findNavController().safeNavigate(
                     DatabaseFragmentDirections.actionDatabaseFragmentToCardSetDetailActivity(bundle.getLong(SET_ITEM_ID))
                 )
             }

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui_notification.NotificationsFragment">
+    tools:context=".ui_reminder.RemindersFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/reminders_toolbar"
@@ -15,10 +15,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reminders_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/reminders_toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/reminders_toolbar"
+        style="@style/AppTheme.CardRecyclerView" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/reminders_fab"
@@ -26,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/material_border_padding"
+        android:contentDescription="@string/lbl_create_reminder"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_baseline_add_24dp" />
