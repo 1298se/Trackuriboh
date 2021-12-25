@@ -86,7 +86,10 @@ class ReminderFormViewModel @Inject constructor(
 
     private fun validate(formDataState: ReminderFormData): Boolean {
         with (formDataState) {
-            return date != null && link != null && link.contains("www") && reminderType != null
+            return date != null &&
+                    link != null &&
+                    (link.startsWith("http://") or link.startsWith("https://")) &&
+                    reminderType != null
         }
     }
 

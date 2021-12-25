@@ -75,7 +75,8 @@ class RemindersAdapter : ListAdapter<RemindersViewModel.UiModel, BaseViewHolder<
 
             val reminderIcon = when (reminder.type) {
                 ReminderType.AUCTION -> AppCompatResources.getDrawable(context, R.drawable.ic_baseline_gavel_24)
-                ReminderType.CLAIM_SALE -> AppCompatResources.getDrawable(context, R.drawable.ic_baseline_card_giftcard_24)
+                ReminderType.CLAIM_SALE -> AppCompatResources.getDrawable(context, R.drawable.ic_outline_groups_24)
+                ReminderType.LISTING -> AppCompatResources.getDrawable(context, R.drawable.ic_outline_assignment_24)
                 ReminderType.OTHER -> AppCompatResources.getDrawable(context, R.drawable.ic_baseline_event_note_24)
             }
 

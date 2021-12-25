@@ -1,6 +1,5 @@
 package sam.g.trackuriboh
 
-
 import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
@@ -25,7 +24,10 @@ class BaseApplication : Application(), Configuration.Provider {
         super.onCreate()
         Stetho.initializeWithDefaults(this)
 
-        workRequestManager.enqueuePeriodicDatabaseUpdateCheck()
+        with(workRequestManager) {
+            enqueuePeriodicDatabaseUpdateCheck()
+            enqueuePeriodicPriceSync()
+        }
     }
 
     override fun getWorkManagerConfiguration(): Configuration =

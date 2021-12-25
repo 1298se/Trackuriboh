@@ -16,6 +16,9 @@ class PriceRepository @Inject constructor(
     private val networkRequestHandler: NetworkRequestHandler
 ) {
 
+    /**
+     * Fetches price from API and updates database
+     */
     suspend fun getPricesForSkus(skuIds: List<Long>): Resource<List<SkuWithConditionAndPrinting>> {
         val resource = networkRequestHandler.getTCGPlayerResource {
             priceApiService.getPricesForSkus(skuIds.joinToString(","))

@@ -115,7 +115,7 @@ class DatabaseViewModel @Inject constructor(
                     if (workInfo.outputData.getLongArray(DatabaseUpdateCheckWorker.UPDATE_CARD_SET_IDS_RESULT)?.size != 0) {
                         UiState.Success(
                             data = workInfo,
-                            message = application.getString(R.string.database_update_check_update_available_message)
+                            message = application.getString(R.string.database_update_check_prompt_message)
                         )
                     } else {
                         UiState.Success(
@@ -150,7 +150,7 @@ class DatabaseViewModel @Inject constructor(
                     if (workInfo.outputData.getLongArray(DatabaseUpdateCheckWorker.UPDATE_CARD_SET_IDS_RESULT)?.size != 0) {
                         UiState.Success(
                             data = workInfo,
-                            message = application.getString(R.string.database_update_check_update_available_message)
+                            message = application.getString(R.string.database_update_check_prompt_message)
                         )
                     } else {
                         null

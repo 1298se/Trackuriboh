@@ -8,8 +8,12 @@ import sam.g.trackuriboh.data.network.interceptors.TCGPlayerAuthorizationInterce
 import sam.g.trackuriboh.data.network.responses.SkuPriceResponse
 
 interface PriceApiService {
+    companion object {
+        const val PRICE_URL = "pricing/"
+    }
+
     @Headers("${TCGPlayerAuthorizationInterceptor.AUTHORIZATION_HEADER}: true")
-    @GET("sku/{skuIds}")
+    @GET("${PRICE_URL}sku/{skuIds}")
     suspend fun getPricesForSkus(
         // List of comma delimited skuIds
         @Path(value="skuIds", encoded = true) skuIds: String

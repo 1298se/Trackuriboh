@@ -18,8 +18,8 @@
 
     <dialog
         android:id="@+id/remindersFormFragment"
-        android:name="sam.g.trackuriboh.ui_reminder.ReminderFormFragment"
-        tools:layout="@layout/fragment_reminders_form" >
+        android:name="sam.g.trackuriboh.ui_reminder.ReminderFormDialogFragment"
+        tools:layout="@layout/dialog_reminders_form" >
         <argument
             android:name="reminder"
             app:argType="sam.g.trackuriboh.data.db.entities.Reminder"

@@ -72,7 +72,13 @@ class DatabaseFragment :
                 true
             }
             R.id.action_database_download -> {
-                viewModel.downloadDatabase()
+                context?.createAlertDialog(
+                    title = getString(R.string.database_download_prompt_title),
+                    message = getString(R.string.database_download_prompt_message),
+                    positiveButtonText = getString(R.string.lbl_download),
+                    negativeButtonText = getString(R.string.lbl_cancel),
+                    onPositiveButtonClick = { _, _ -> viewModel.downloadDatabase() }
+                )?.show()
 
                 true
             }
@@ -163,7 +169,7 @@ class DatabaseFragment :
                 onSuccess = { uiState ->
                     if (uiState.data != null) {
                         context?.createAlertDialog(
-                            title = getString(R.string.database_update_check_update_available_title),
+                            title = getString(R.string.database_update_check_prompt_title),
                             message = uiState.message,
                             positiveButtonText = getString(R.string.lbl_update),
                             onPositiveButtonClick = { _, _ ->

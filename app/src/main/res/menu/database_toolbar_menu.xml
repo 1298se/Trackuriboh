@@ -4,23 +4,23 @@
 
     <item
         android:id="@+id/action_search"
-        android:title="@string/search_title"
+        android:title="@string/search_action_title"
         android:icon="@drawable/ic_baseline_search_24dp"
         app:showAsAction="always|collapseActionView"
         app:actionLayout="@layout/search_view" />
 
     <item
         android:id="@+id/action_database_sync"
-        android:title="@string/database_sync_title"
+        android:title="@string/database_sync_action_title"
         android:icon="@drawable/ic_baseline_update_24"
         app:showAsAction="always">
         <menu>
             <item
                 android:id="@+id/action_database_update_check"
-                android:title="@string/database_update_check_title" />
+                android:title="@string/database_update_check_action_title" />
             <item
                 android:id="@+id/action_database_download"
-                android:title="@string/database_download_title" />
+                android:title="@string/database_download_action_title" />
         </menu>
     </item>
 </menu>

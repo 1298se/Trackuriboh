@@ -12,7 +12,6 @@ import sam.g.trackuriboh.data.network.interceptors.TCGPlayerAuthorizationInterce
 import sam.g.trackuriboh.data.network.interceptors.TCGPlayerCategoryInterceptor
 import sam.g.trackuriboh.data.network.interceptors.TCGPlayerResponseInterceptor
 import sam.g.trackuriboh.data.network.services.*
-import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -24,18 +23,8 @@ object NetworkModule {
     const val TCGPLAYER_YUGIOH_CATEGORY_ID = 2
     const val TCGPLAYER_PRODUCT_URL = "https://www.tcgplayer.com/product/"
 
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class CategoryRetrofitInstance
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class PriceRetrofitInstance
-
     private const val TCGPLAYER_API_VERSION = "v1.39.0"
     private const val TCGPLAYER_API_BASE_URL = "https://api.tcgplayer.com/$TCGPLAYER_API_VERSION/"
-    private const val TCGPLAYER_API_CATEGORIES_URL = "${TCGPLAYER_API_BASE_URL}catalog/categories/$TCGPLAYER_YUGIOH_CATEGORY_ID/"
-    private const val TCGPLAYER_API_PRICES_URL = "${TCGPLAYER_API_BASE_URL}pricing/"
 
     @Singleton
     @Provides
@@ -65,26 +54,6 @@ object NetworkModule {
             .addConverterFactory(converterFactory)
             .build()
 
-    @CategoryRetrofitInstance
-    @Singleton
-    @Provides
-    fun provideCategoryRetrofitIntance(okHttpClient: OkHttpClient, converterFactory: GsonConverterFactory): Retrofit =
-        Retrofit.Builder()
-            .baseUrl(TCGPLAYER_API_CATEGORIES_URL)
-            .client(okHttpClient)
-            .addConverterFactory(converterFactory)
-            .build()
-
-    @PriceRetrofitInstance
-    @Singleton
-    @Provides
-    fun providePriceRetrofitInstance(okHttpClient: OkHttpClient, converterFactory: GsonConverterFactory): Retrofit =
-        Retrofit.Builder()
-            .baseUrl(TCGPLAYER_API_PRICES_URL)
-            .client(okHttpClient)
-            .addConverterFactory(converterFactory)
-            .build()
-
     @Singleton
     @Provides
     fun provideProductApiService(retrofit: Retrofit): ProductApiService =
@@ -102,11 +71,11 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideCatalogApiService(@CategoryRetrofitInstance retrofit: Retrofit): CatalogApiService =
+    fun provideCatalogApiService(retrofit: Retrofit): CatalogApiService =
         retrofit.create(CatalogApiService::class.java)
 
     @Singleton
     @Provides
-    fun providePriceApiService(@PriceRetrofitInstance retrofit: Retrofit): PriceApiService =
+    fun providePriceApiService(retrofit: Retrofit): PriceApiService =
         retrofit.create(PriceApiService::class.java)
 }

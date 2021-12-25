@@ -10,6 +10,7 @@
     <string name="lbl_earlier">Earlier</string>
     <string name="lbl_date">Date</string>
     <string name="lbl_time">Time</string>
+    <string name="lbl_download">Download</string>
     <string name="progress_percent">%1$d%%</string>
 
     <!-- Bottom Nav -->
@@ -21,9 +22,12 @@
     <!-- Database -->
     <string name="tab_card_title">Cards</string>
     <string name="tab_set_title">Sets</string>
-    <string name="database_sync_title">Sync</string>
-    <string name="database_download_title">Force download</string>
-    <string name="database_update_check_title">Check for updates</string>
+    <string name="database_sync_action_title">Sync</string>
+    <string name="database_download_action_title">Force download</string>
+    <string name="database_update_check_action_title">Check for updates</string>
+    <string name="database_download_prompt_title">Force download database?</string>
+    <string name="database_download_prompt_message">This will reset the database and may take several minutes to complete. This task requires a Wi-Fi connection.
+        If no Wi-Fi connection is available this process will start once connected.</string>
     <string name="database_download_info">This process may take a up to a few minutes. Please feel free to background the app. We\'ll notify you when it\'s done.</string>
     <string name="database_download_worker_notification_title">Downloading database</string>
     <string name="database_download_failed">Database download failed</string>
@@ -38,8 +42,8 @@
     <string name="database_update_check_info">Checking for updates…</string>
     <string name="database_update_check_failed">Checking for updates failed</string>
     <string name="database_update_check_cancelled">Checking for updates cancelled</string>
-    <string name="database_update_check_update_available_title">Update Trackuriboh Database?</string>
-    <string name="database_update_check_update_available_message">A new update is available to download. Please update for the newest card info.</string>
+    <string name="database_update_check_prompt_title">Update Trackuriboh Database?</string>
+    <string name="database_update_check_prompt_message">A new update is available to download. Please update for the newest card info.</string>
 
     <string name="database_update_check_no_update_available">The database is up to date.</string>
     <!-- Card Item -->
@@ -70,7 +74,7 @@
     <string name="lbl_price_lowest_listing_usd">Lowest Listing (USD)</string>
 
     <!-- Search -->
-    <string name="search_title">Search</string>
+    <string name="search_action_title">Search</string>
 
     <!-- Error -->
     <string name="error_title_generic">Error</string>
@@ -93,10 +97,11 @@
     <string name="lbl_edit_reminder">Edit Reminder</string>
     <string name="reminder_type_auction">Auction</string>
     <string name="reminder_type_claim_sale">Claim Sale</string>
-    <string name="reminder_type_post">Post</string>
-    <string name="reminder_type_other_event">Other Event</string>
+    <string name="reminder_type_listing">Listing</string>
+    <string name="reminder_type_other_event">Other</string>
     <string name="reminder_notification_title">Reminder: %1$s is starting soon.</string>
     <string name="reminder_permission_request_message">This reminder is currently saved, but Trackuriboh needs alarm permissions to activated it. Please</string>
+    <string name="reminder_open_fail_message">There seems to be an issue with the attached link. Please verify it is valid.</string>
 
     <!-- Reminder Item -->
     <string name="reminder_title" comment="E.g. Billy's Claim Sale">%1$s\'s %2$s</string>

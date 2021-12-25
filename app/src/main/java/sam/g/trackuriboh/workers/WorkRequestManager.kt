@@ -68,6 +68,22 @@ class WorkRequestManager @Inject constructor(
         )
     }
 
+    fun enqueuePeriodicPriceSync() {
+        val priceSyncRequest = PeriodicWorkRequestBuilder<PriceSyncWorker>(24, TimeUnit.HOURS)
+            .setConstraints(
+                Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build()
+            )
+            .build()
+
+        workManager.enqueueUniquePeriodicWork(
+            PriceSyncWorker::class.java.name,
+            ExistingPeriodicWorkPolicy.KEEP,
+            priceSyncRequest
+        )
+    }
+
     fun enqueueReminderScheduler() {
         val reminderScheduleRequest = OneTimeWorkRequestBuilder<ReminderScheduleWorker>()
             .build()

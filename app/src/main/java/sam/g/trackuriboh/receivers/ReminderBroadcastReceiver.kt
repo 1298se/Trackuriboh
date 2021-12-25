@@ -42,6 +42,7 @@ class ReminderBroadcastReceiver : BroadcastReceiver() {
                         reminderType
                     }
 
+                    // We don't need to worry about ActivityNotFoundException here because it's a PendingIntent
                     with(reminder) {
                         val builder = createNotificationBuilder(
                             context = context,

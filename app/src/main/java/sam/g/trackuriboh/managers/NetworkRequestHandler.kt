@@ -25,15 +25,16 @@ class NetworkRequestHandler @Inject constructor(
             val response = call()
             val body = response.body()
 
+            // If the errors array is not empty, the request failed
             if (body != null && body.errors.isNotEmpty()) {
                 return Resource.Failure(IOException(body.errors.first()))
             }
 
-            if (response.isSuccessful && body != null) {
+            if (body != null && response.isSuccessful) {
                 return Resource.Success(body)
             }
 
-            return Resource.Failure(IOException("fAIL"))
+            return Resource.Failure(IOException(response.code().toString()))
         } catch (e: Exception) {
             return Resource.Failure(e)
         }

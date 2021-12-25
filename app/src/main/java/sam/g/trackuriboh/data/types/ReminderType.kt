@@ -7,5 +7,6 @@ import sam.g.trackuriboh.R
 enum class ReminderType(override val resourceId: Int) : StringResourceEnum {
     AUCTION(R.string.reminder_type_auction),
     CLAIM_SALE(R.string.reminder_type_claim_sale),
+    LISTING(R.string.reminder_type_listing),
     OTHER(R.string.reminder_type_other_event);
 }

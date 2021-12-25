@@ -1,5 +1,6 @@
 package sam.g.trackuriboh.ui_reminder
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -52,7 +53,11 @@ class RemindersFragment : Fragment(), RemindersAdapter.OnItemClickListener {
     }
 
     override fun onItemClick(reminder: Reminder) {
-        startActivity(getOpenLinkIntent(reminder.link))
+        try {
+            startActivity(getOpenLinkIntent(reminder.link))
+        } catch (e: ActivityNotFoundException) {
+            showSnackbar(getString(R.string.reminder_open_fail_message), SnackbarType.ERROR, binding.remindersFab)
+        }
     }
 
     override fun onItemEditClick(reminder: Reminder) {
@@ -77,11 +82,11 @@ class RemindersFragment : Fragment(), RemindersAdapter.OnItemClickListener {
 
     private fun initFragmentResultListeners() {
         parentFragmentManager.setFragmentResultListener(
-            ReminderFormFragment.NOTIFICATION_FORM_DATA_REQUEST_KEY,
+            ReminderFormDialogFragment.NOTIFICATION_FORM_DATA_REQUEST_KEY,
             this@RemindersFragment
         ) { _, bundle ->
 
-            bundle.getParcelable<Reminder>(ReminderFormFragment.NOTIFICATION_FORM_DATA_RESULT)?.let {
+            bundle.getParcelable<Reminder>(ReminderFormDialogFragment.NOTIFICATION_FORM_DATA_RESULT)?.let {
                 viewModel.save(it)
             }
         }
