@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/database_nav">
+
+    <include app:graph="@navigation/database" />
+
+    <include app:graph="@navigation/user_lists" />
+
+    <include app:graph="@navigation/reminders" />
+
+    <activity
+        android:id="@+id/cardDetailActivity"
+        android:name="sam.g.trackuriboh.ui.card_detail.CardDetailActivity"
+        tools:layout="@layout/fragment_card_detail">
+        <argument
+            android:name="cardId"
+            app:argType="long" />
+    </activity>
+
+    <action
+        android:id="@+id/action_global_cardDetailActivity"
+        app:destination="@id/cardDetailActivity" />
+
+</navigation>

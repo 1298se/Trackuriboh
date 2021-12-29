@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_set_detail_nav"
+    app:startDestination="@id/cardSetDetailFragment">
+
+    <fragment
+        android:id="@+id/cardSetDetailFragment"
+        android:name="sam.g.trackuriboh.ui.card_set_detail.CardSetDetailFragment">
+        <argument
+            android:name="setId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_cardSetDetailFragment_to_cardDetailActivity"
+            app:destination="@id/cardDetailFragment" />
+    </fragment>
+    <activity
+        android:id="@+id/cardDetailFragment"
+        android:name="sam.g.trackuriboh.ui.card_detail.CardDetailActivity">
+        <argument
+            android:name="cardId"
+            app:argType="long" />
+    </activity>
+</navigation>

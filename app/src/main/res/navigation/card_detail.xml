@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_detail_nav"
+    app:startDestination="@id/cardDetailFragment">
+
+    <fragment
+        android:id="@+id/cardDetailFragment"
+        android:name="sam.g.trackuriboh.ui.card_detail.CardDetailFragment"
+        tools:layout="@layout/fragment_card_detail">
+        <argument
+            android:name="cardId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_cardDetailFragment_to_cardSetDetailActivity"
+            app:destination="@id/cardSetDetailActivity" />
+        <action
+            android:id="@+id/action_cardDetailFragment_to_cardPrintingsActivity"
+            app:destination="@id/cardPrintingsActivity" />
+        <action
+            android:id="@+id/action_cardDetailFragment_to_userListSelectionBottomSheetDialogFragment"
+            app:destination="@id/userListSelectionBottomSheetDialogFragment" />
+
+    </fragment>
+
+    <activity
+        android:id="@+id/cardPrintingsActivity"
+        android:name="sam.g.trackuriboh.ui.card_printings.CardPrintingsActivity"
+        tools:layout="@layout/fragment_card_list">
+        <argument
+            android:name="cardName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+    </activity>
+    <activity
+        android:id="@+id/cardSetDetailActivity"
+        android:name="sam.g.trackuriboh.ui.card_set_detail.CardSetDetailActivity"
+        tools:layout="@layout/fragment_card_set_detail">
+        <argument
+            android:name="setId"
+            app:argType="long" />
+    </activity>
+    <dialog
+        android:id="@+id/userListSelectionBottomSheetDialogFragment"
+        android:name="sam.g.trackuriboh.ui.user_list.UserListSelectionBottomSheetDialogFragment"
+        tools:layout="@layout/bottom_sheet_user_list_selection" />
+</navigation>
