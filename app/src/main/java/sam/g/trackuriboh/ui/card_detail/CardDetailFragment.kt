@@ -23,10 +23,10 @@ import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
 import sam.g.trackuriboh.databinding.FragmentCardDetailBinding
 import sam.g.trackuriboh.ui.card_detail.adapters.CardDetailStateAdapter
 import sam.g.trackuriboh.ui.card_detail.viewmodels.CardDetailViewModel
-import sam.g.trackuriboh.ui.collection.CollectionSelectionBottomSheetDialogFragment
-import sam.g.trackuriboh.ui.collection.viewmodels.CollectionsViewModel
 import sam.g.trackuriboh.ui.common.CollapseToolbarStateChangeListener
 import sam.g.trackuriboh.ui.database.adapters.ImagePagerAdapter
+import sam.g.trackuriboh.ui.user_list.UserListSelectionBottomSheetDialogFragment
+import sam.g.trackuriboh.ui.user_list.viewmodels.UserListsViewModel
 import sam.g.trackuriboh.utils.*
 
 @AndroidEntryPoint
@@ -35,7 +35,7 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
     private val cardDetailViewModel: CardDetailViewModel by viewModels()
 
-    private val collectionsViewModel: CollectionsViewModel by viewModels()
+    private val userListsViewModel: UserListsViewModel by viewModels()
 
     private val args: CardDetailFragmentArgs by navArgs()
 
@@ -71,7 +71,7 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         when (item?.itemId) {
             R.id.action_add_to_watchlist -> {
                 findNavController().safeNavigate(
-                    CardDetailFragmentDirections.actionCardDetailFragmentToCollectionSelectionBottomSheetDialogFragment()
+                    CardDetailFragmentDirections.actionCardDetailFragmentToUserListSelectionBottomSheetDialogFragment()
                 )
             }
         }
@@ -165,19 +165,19 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             showSnackbar(message, type)
         }
 
-        parentFragmentManager.setFragmentResultListener(CollectionSelectionBottomSheetDialogFragment.FRAGMENT_RESULT_REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
-            val selectedCollection = bundle.getParcelable<UserList>(CollectionSelectionBottomSheetDialogFragment.SELECTED_COLLECTION_DATA_KEY)
+        parentFragmentManager.setFragmentResultListener(UserListSelectionBottomSheetDialogFragment.FRAGMENT_RESULT_REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
+            val selectedList = bundle.getParcelable<UserList>(UserListSelectionBottomSheetDialogFragment.SELECTED_USER_LIST_DATA_KEY)
 
-            if (selectedCollection != null && skuId != null) {
+            if (selectedList != null && skuId != null) {
                 lifecycleScope.launch {
-                    val job = collectionsViewModel.insertToCollection(
-                        listId = selectedCollection.id,
+                    val job = userListsViewModel.insertToUserList(
+                        listId = selectedList.id,
                         skuId = skuId
                     )
 
                     job.join()
 
-                    showSnackbar(getString(R.string.add_to_collection_success_message, selectedCollection.name))
+                    showSnackbar(getString(R.string.add_to_user_list_success_message, selectedList.name))
                 }
 
             }

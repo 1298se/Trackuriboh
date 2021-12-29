@@ -1,4 +1,4 @@
-package sam.g.trackuriboh.ui.collection
+package sam.g.trackuriboh.ui.user_list
 
 import android.os.Bundle
 import android.view.*
@@ -11,39 +11,39 @@ import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.MainNavDirections
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.entities.UserListEntry
-import sam.g.trackuriboh.databinding.FragmentCollectionDetailBinding
-import sam.g.trackuriboh.ui.collection.CollectionsFragment.Companion.ACTION_FINISH_ACTION_MODE
-import sam.g.trackuriboh.ui.collection.adapters.CollectionEntryAdapter
-import sam.g.trackuriboh.ui.collection.viewmodels.CollectionDetailViewModel
+import sam.g.trackuriboh.databinding.FragmentUserListDetailBinding
+import sam.g.trackuriboh.ui.user_list.UserListsFragment.Companion.ACTION_FINISH_ACTION_MODE
+import sam.g.trackuriboh.ui.user_list.adapters.UserListEntryAdapter
+import sam.g.trackuriboh.ui.user_list.viewmodels.UserListDetailViewModel
 import sam.g.trackuriboh.utils.safeNavigate
 import sam.g.trackuriboh.utils.viewBinding
 
 @AndroidEntryPoint
-class CollectionDetailFragment : Fragment(), CollectionEntryAdapter.OnItemClickListener {
+class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListener {
 
     companion object {
         // This is the same value as the navArg name so that the SavedStateHandle can acess from either
         const val ARG_WATCHLIST_ID = "watchlistId"
 
         fun newInstance(watchlistId: Long) =
-            CollectionDetailFragment().apply {
+            UserListDetailFragment().apply {
                 arguments = Bundle().apply {
                     putLong(ARG_WATCHLIST_ID, watchlistId)
                 }
             }
     }
 
-    private val binding: FragmentCollectionDetailBinding by viewBinding(FragmentCollectionDetailBinding::inflate)
+    private val binding: FragmentUserListDetailBinding by viewBinding(FragmentUserListDetailBinding::inflate)
 
-    private val viewModel: CollectionDetailViewModel by viewModels()
+    private val viewModel: UserListDetailViewModel by viewModels()
 
-    private lateinit var collectionEntryAdapter: CollectionEntryAdapter
+    private lateinit var userListEntryAdapter: UserListEntryAdapter
 
     private var actionMode: ActionMode? = null
 
     private val actionModeCallback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
-            mode.menuInflater?.inflate(R.menu.collection_contextual_action, menu)
+            mode.menuInflater?.inflate(R.menu.user_list_detail_contextual_action, menu)
             return true
         }
 
@@ -53,7 +53,7 @@ class CollectionDetailFragment : Fragment(), CollectionEntryAdapter.OnItemClickL
 
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
             return when (item.itemId) {
-                R.id.action_remove_collection_entries -> {
+                R.id.action_remove_user_list_entries -> {
                     viewModel.deleteSelectedItems()
                     true
                 }
@@ -83,12 +83,12 @@ class CollectionDetailFragment : Fragment(), CollectionEntryAdapter.OnItemClickL
     }
 
     private fun initRecyclerView() {
-        binding.collectionDetailList.apply {
+        binding.userListDetailList.apply {
             layoutManager = LinearLayoutManager(context)
 
-            adapter = CollectionEntryAdapter().apply {
-                setOnItemClickListener(this@CollectionDetailFragment)
-                collectionEntryAdapter = this
+            adapter = UserListEntryAdapter().apply {
+                setOnItemClickListener(this@UserListDetailFragment)
+                userListEntryAdapter = this
             }
 
             addItemDecoration(MaterialDividerItemDecoration(context, (layoutManager as LinearLayoutManager).orientation))
@@ -110,15 +110,15 @@ class CollectionDetailFragment : Fragment(), CollectionEntryAdapter.OnItemClickL
 
     private fun initObservers() {
         viewModel.state.observe(viewLifecycleOwner) {
-            collectionEntryAdapter.submitList(it.entries)
+            userListEntryAdapter.submitList(it.entries)
 
              if (it.actionModeActive) {
                  if (actionMode == null) {
                      actionMode = activity?.startActionMode(actionModeCallback)
-                     collectionEntryAdapter.setInActionMode(true)
+                     userListEntryAdapter.setInActionMode(true)
                  }
             } else {
-                collectionEntryAdapter.setInActionMode(false)
+                userListEntryAdapter.setInActionMode(false)
                 actionMode?.finish()
                 actionMode = null
             }
@@ -127,7 +127,7 @@ class CollectionDetailFragment : Fragment(), CollectionEntryAdapter.OnItemClickL
         }
     }
 
-    override fun onCollectionEntryClick(entry: UserListEntry) {
+    override fun onListEntryClick(entry: UserListEntry) {
         findNavController().safeNavigate(
             MainNavDirections.actionGlobalCardDetailActivity(entry.skuId)
         )
@@ -137,12 +137,12 @@ class CollectionDetailFragment : Fragment(), CollectionEntryAdapter.OnItemClickL
         TODO("Not yet implemented")
     }
 
-    override fun onCollectionEntryLongClick(entry: UserListEntry) {
+    override fun onListEntryLongClick(entry: UserListEntry) {
         viewModel.setActionMode(true)
-        viewModel.setCollectionEntryChecked(entry, true)
+        viewModel.setUserListEntryChecked(entry, true)
     }
 
-    override fun onCollectionEntryChecked(entry: UserListEntry, isChecked: Boolean) {
-        viewModel.setCollectionEntryChecked(entry, isChecked)
+    override fun onListEntryChecked(entry: UserListEntry, isChecked: Boolean) {
+        viewModel.setUserListEntryChecked(entry, isChecked)
     }
 }

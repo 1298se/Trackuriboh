@@ -99,7 +99,7 @@ fun Context.createAlertDialog(
     }
 }
 
-fun getAppBarConfiguration() : AppBarConfiguration = AppBarConfiguration(setOf(R.id.databaseFragment, R.id.collectionsFragment, R.id.remindersFragment))
+fun getAppBarConfiguration() : AppBarConfiguration = AppBarConfiguration(setOf(R.id.databaseFragment, R.id.userListsFragment, R.id.remindersFragment))
 
 fun MaterialToolbar.setupAsTopLevelDestinationToolbar() {
     setupWithNavController(findNavController(), getAppBarConfiguration())

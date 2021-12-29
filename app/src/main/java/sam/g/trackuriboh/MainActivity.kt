@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val FRAGMENT_RESULT_REQUEST_KEY = "MainActivity_fragmentResultRequestKey"
-        const val ACTION_SET_BOTTOM_NAV_ENABLED = "CollectionsFragment_actionFinishActionMode"
+        const val ACTION_SET_BOTTOM_NAV_ENABLED = "MainActivity_setBottomNavEnabled"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

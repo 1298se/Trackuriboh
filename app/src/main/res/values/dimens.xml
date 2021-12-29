@@ -56,9 +56,9 @@
     <dimen name="image_slider_width">10dp</dimen>
 
 
-    <!-- Item Collection Entry -->
-    <dimen name="item_collection_entry_image_width">56dp</dimen>
-    <dimen name="item_collection_entry_image_height">80dp</dimen>
+    <!-- Item User List Entry -->
+    <dimen name="item_user_list_entry_image_width">56dp</dimen>
+    <dimen name="item_user_list_entry_image_height">80dp</dimen>
 
     <!-- Forms -->
     <dimen name="form_row_spacing">16dp</dimen>

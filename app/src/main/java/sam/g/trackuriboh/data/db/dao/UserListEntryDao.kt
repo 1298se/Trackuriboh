@@ -9,8 +9,8 @@ import sam.g.trackuriboh.data.db.relations.UserListEntryWithSkuAndProduct
 @Dao
 interface UserListEntryDao : BaseDao<UserListEntry> {
 
-    @Query("SELECT * FROM UserListEntry WHERE listId = :collectionId")
-    fun getEntriesInUserListObservable(collectionId: Long): Flow<List<UserListEntryWithSkuAndProduct>>
+    @Query("SELECT * FROM UserListEntry WHERE listId = :listId")
+    fun getEntriesInUserListObservable(listId: Long): Flow<List<UserListEntryWithSkuAndProduct>>
 
     @Query("DELETE FROM UserListEntry WHERE listId = :listId AND skuId in (:skuIds)")
     suspend fun deleteUserListEntries(listId: Long, skuIds: List<Long>)

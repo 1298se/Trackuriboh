@@ -7,12 +7,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CollectionLocalCache @Inject constructor(
+class UserListLocalCache @Inject constructor(
     private val appDatabase: AppDatabase
 ) {
     fun getUserListsObservable() = appDatabase.userListDao().getUserListsObservable()
 
-    fun getEntriesInUserListObservable(collectionId: Long) = appDatabase.userListEntryDao().getEntriesInUserListObservable(collectionId)
+    fun getEntriesInUserListObservable(listId: Long) = appDatabase.userListEntryDao().getEntriesInUserListObservable(listId)
 
     suspend fun insertUserList(userList: UserList) = appDatabase.userListDao().insert(userList)
 

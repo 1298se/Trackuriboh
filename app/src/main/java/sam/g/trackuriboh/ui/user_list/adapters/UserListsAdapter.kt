@@ -1,14 +1,14 @@
-package sam.g.trackuriboh.ui.collection.adapters
+package sam.g.trackuriboh.ui.user_list.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import sam.g.trackuriboh.data.db.entities.UserList
-import sam.g.trackuriboh.databinding.ItemCollectionBinding
+import sam.g.trackuriboh.databinding.ItemUserListBinding
 import sam.g.trackuriboh.ui.common.BaseViewHolder
 
-class CollectionsAdapter : ListAdapter<UserList, CollectionsAdapter.CollectionViewHolder>(
+class UserListsAdapter : ListAdapter<UserList, UserListsAdapter.UserListViewHolder>(
     object : DiffUtil.ItemCallback<UserList>() {
         override fun areItemsTheSame(oldItem: UserList, newItem: UserList): Boolean =
             oldItem.id == newItem.id
@@ -18,29 +18,29 @@ class CollectionsAdapter : ListAdapter<UserList, CollectionsAdapter.CollectionVi
     }
 ) {
 
-    inner class CollectionViewHolder(val binding: ItemCollectionBinding) : BaseViewHolder<UserList>(binding.root) {
+    inner class UserListViewHolder(val binding: ItemUserListBinding) : BaseViewHolder<UserList>(binding.root) {
         init {
            binding.root.setOnClickListener {
-                onItemClickListener?.onCollectionItemClick(getItem(bindingAdapterPosition))
+                onItemClickListener?.onUserListItemClick(getItem(bindingAdapterPosition))
             }
         }
 
         override fun bind(item: UserList) {
-            binding.itemCollectionTitleTextview.text = item.name
+            binding.itemUserListTitleTextview.text = item.name
         }
     }
 
     private var onItemClickListener: OnItemClickListener? = null
 
     interface OnItemClickListener {
-        fun onCollectionItemClick(list: UserList)
+        fun onUserListItemClick(list: UserList)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectionViewHolder {
-        return CollectionViewHolder(ItemCollectionBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserListViewHolder {
+        return UserListViewHolder(ItemUserListBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    override fun onBindViewHolder(holder: CollectionViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: UserListViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 

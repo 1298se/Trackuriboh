@@ -7,12 +7,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ListView
-        android:id="@+id/create_collection_list"
+        android:id="@+id/create_user_list_options_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:paddingTop="@dimen/list_padding_top"
         android:paddingBottom="@dimen/list_padding_bottom"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/item_collection_type" />
+        tools:listitem="@layout/item_create_user_list_option" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

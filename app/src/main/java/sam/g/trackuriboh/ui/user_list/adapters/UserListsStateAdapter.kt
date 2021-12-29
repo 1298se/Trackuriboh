@@ -1,11 +1,11 @@
-package sam.g.trackuriboh.ui.collection.adapters
+package sam.g.trackuriboh.ui.user_list.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import sam.g.trackuriboh.data.db.entities.UserList
-import sam.g.trackuriboh.ui.collection.CollectionDetailFragment
+import sam.g.trackuriboh.ui.user_list.UserListDetailFragment
 
-class CollectionsStateAdapter(
+class UserListsStateAdapter(
     fragment: Fragment,
 ) : FragmentStateAdapter(fragment) {
     private var lists: List<UserList> = mutableListOf()
@@ -13,9 +13,9 @@ class CollectionsStateAdapter(
 
     override fun getItemCount(): Int = lists.size
 
-    override fun createFragment(position: Int): Fragment = CollectionDetailFragment.newInstance(lists[position].id)
+    override fun createFragment(position: Int): Fragment = UserListDetailFragment.newInstance(lists[position].id)
 
-    fun setCollections(data: List<UserList>) {
+    fun setUserLists(data: List<UserList>) {
         lists = data
         notifyDataSetChanged()
     }

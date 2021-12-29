@@ -1,4 +1,4 @@
-package sam.g.trackuriboh.ui.collection
+package sam.g.trackuriboh.ui.user_list
 
 import android.content.Context
 import android.os.Bundle
@@ -13,23 +13,23 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.entities.UserList
-import sam.g.trackuriboh.data.types.CollectionType
-import sam.g.trackuriboh.databinding.BottomSheetCreateCollectionBinding
-import sam.g.trackuriboh.databinding.ItemCollectionTypeBinding
+import sam.g.trackuriboh.data.types.UserListType
+import sam.g.trackuriboh.databinding.BottomSheetCreateUserListBinding
+import sam.g.trackuriboh.databinding.ItemCreateUserListOptionBinding
 import sam.g.trackuriboh.utils.safeNavigate
 import sam.g.trackuriboh.utils.viewBinding
 import java.util.*
 
 
-class CreateCollectionBottomSheetDialogFragment : BottomSheetDialogFragment() {
+class CreateUserListBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
-    private val binding: BottomSheetCreateCollectionBinding by viewBinding(BottomSheetCreateCollectionBinding::inflate)
+    private val binding: BottomSheetCreateUserListBinding by viewBinding(BottomSheetCreateUserListBinding::inflate)
 
-    private var selectedType: CollectionType? = null
+    private var selectedType: UserListType? = null
 
     companion object {
-        const val FRAGMENT_RESULT_REQUEST_KEY = "CreateCollectionBottomSheetDialogFragment_fragmentResultRequestKey"
-        const val COLLECTION_DATA_KEY = "CreateCollectionBottomSheetDialogFragment_collection"
+        const val FRAGMENT_RESULT_REQUEST_KEY = "CreateUserListBottomSheetDialogFragment_fragmentResultRequestKey"
+        const val USER_LIST_DATA_KEY = "CreateUserListBottomSheetDialogFragment_userList"
     }
 
     override fun onCreateView(
@@ -49,16 +49,16 @@ class CreateCollectionBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     private fun initFragmentObservers() {
         parentFragmentManager.setFragmentResultListener(
-            AddEditCollectionDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
+            AddEditUserListDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
             viewLifecycleOwner
         ) { _, bundle ->
             val type = selectedType
-            val name = bundle.getString(AddEditCollectionDialogFragment.COLLECTION_NAME_DATA_KEY)
+            val name = bundle.getString(AddEditUserListDialogFragment.USER_LIST_NAME_DATA_KEY)
 
             if (type != null && name != null) {
                 setFragmentResult(
                     FRAGMENT_RESULT_REQUEST_KEY,
-                    bundleOf(COLLECTION_DATA_KEY to UserList(name = name, creationDate = Date(), type = type))
+                    bundleOf(USER_LIST_DATA_KEY to UserList(name = name, creationDate = Date(), type = type))
                 )
 
                 findNavController().popBackStack()
@@ -67,43 +67,43 @@ class CreateCollectionBottomSheetDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun initOptions() {
-        with(binding.createCollectionList) {
-            adapter = CollectionTypeAdapter(requireContext())
+        with(binding.createUserListOptionsList) {
+            adapter = CreateUserListOptionsAdapter(requireContext())
         }
     }
 
-    inner class CollectionTypeAdapter(
+    inner class CreateUserListOptionsAdapter(
         context: Context
-    ) : ArrayAdapter<CollectionType>(context, 0, CollectionType.values()) {
+    ) : ArrayAdapter<UserListType>(context, 0, UserListType.values()) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             var curView = convertView
 
             if (curView == null) {
-                val binding = ItemCollectionTypeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding = ItemCreateUserListOptionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
                 with(binding) {
                     val type = getItem(position)!!.also { selectedType = it }
 
                     val icon = when (selectedType) {
-                        CollectionType.COLLECTION -> R.drawable.ic_outline_add_photo_alternate_24
+                        UserListType.USER_LIST -> R.drawable.ic_baseline_playlist_add_24
                         // CollectionType.CHECKLIST -> R.drawable.ic_baseline_playlist_add_24
                         else -> null
                     }
 
-                    icon?.let { itemCollectionTypeImage.setImageDrawable(AppCompatResources.getDrawable(context, it)) }
+                    icon?.let { itemCreateUserListOptionImage.setImageDrawable(AppCompatResources.getDrawable(context, it)) }
 
                     val text = when (selectedType) {
-                        CollectionType.COLLECTION -> R.string.create_collection_option
+                        UserListType.USER_LIST -> R.string.create_user_list_option
                         // CollectionType.CHECKLIST -> R.string.create_checklist_option
                         else -> null
                     }
 
-                    itemCollectionTypeTextview.text = text?.let { getString(it) }
+                    itemCreateUserListOptionTextview.text = text?.let { getString(it) }
 
                     root.setOnClickListener { _ ->
                         findNavController().safeNavigate(
-                            CreateCollectionBottomSheetDialogFragmentDirections
-                                .actionCreateCollectionBottomSheetDialogFragmentToAddEditCollectionDialogFragment(type)
+                            CreateUserListBottomSheetDialogFragmentDirections
+                                .actionCreateUserListBottomSheetDialogFragmentToAddEditUserListDialogFragment(type)
                         )
                     }
                 }

@@ -22,7 +22,7 @@
     <!-- Bottom Nav -->
     <string name="lbl_database">Database</string>
     <string name="lbl_reminders">Reminders</string>
-    <string name="lbl_collections">Collections</string>
+    <string name="lbl_user_lists">Lists</string>
 
     <string name="lbl_add_to">Add to</string>
     <string name="lbl_all_printings">All Printings</string>
@@ -67,9 +67,8 @@
     <string name="lbl_details">Details</string>
     <string name="lbl_view_on_tcgplayer">View on TCGPlayer</string>
     <string name="lbl_buy_now">Buy now</string>
-    <string name="add_to_collection_action_title">Add to collection</string>
-    <string name="create_checklist_action_title">Create checklist</string>
-    <string name="add_to_collection_success_message">Added to %1$s</string>
+    <string name="add_to_user_list_action_title">Add to list</string>
+    <string name="add_to_user_list_success_message">Added to %1$s</string>
 
     <!-- Card Detail Overview -->
     <string name="lbl_number">Number</string>
@@ -101,29 +100,25 @@
     <string name="fb_login_protocol_scheme">fb236802761727077</string>
     <string name="facebook_client_token">5cbc3e0fd15bc7c41b702053ea1d1f62</string>
 
-    <!-- Collections -->
-    <string name="create_collection_prompt_title">Create Collection</string>
-    <string name="create_collection_option">Create a collection</string>
-    <string name="create_checklist_option">Create a checklist</string>
-    <string name="collection_remove_entries_action_title">Remove items</string>
+    <!-- User Lists -->
+    <string name="create_user_list_prompt_title">Create a list</string>
+    <string name="create_user_list_option">Create a list</string>
+    <string name="user_list_remove_entries_action_title">Remove items</string>
 
-    <string name="collection_type_collection">Collection</string>
-    <string name="collection_type_checklist">Checklist</string>
+    <string name="user_list_type_list">List</string>
 
-    <!-- Item Collection -->
-    <string name="item_collection_created_date">Created on %1$s</string>
-    <string name="item_collection_edition_condition">%1$s \u2022 %2$s</string>
-
-
-    <!-- Collection Detail -->
-    <plurals name="collection_detail_total_count">
+    <!-- User List Detail -->
+    <plurals name="user_list_detail_total_count">
         <item quantity="one">Total: %1$d card</item>
         <item quantity="other">Total: %1$d cards</item>
     </plurals>
 
-    <string name="collection_detail_selected_count">%1$d selected</string>
+    <string name="user_list_detail_selected_count">%1$d selected</string>
 
-    <string name="collection_detail_add_new_card">Add a new card</string>
+    <string name="user_list_detail_add_new_card">Add a new card</string>
+
+    <!-- Item User List Entry -->
+    <string name="item_user_list_edition_condition">%1$s \u2022 %2$s</string>
 
     <!-- Reminders -->
     <string name="lbl_create_reminder">Create Reminder</string>

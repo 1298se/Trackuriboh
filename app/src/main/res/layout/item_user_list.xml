@@ -12,7 +12,7 @@
     android:background="@drawable/background_color_surface_selectable">
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/item_collection_title_textview"
+        android:id="@+id/item_user_list_title_textview"
         style="@style/TextAppearance.MaterialComponents.Subtitle1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

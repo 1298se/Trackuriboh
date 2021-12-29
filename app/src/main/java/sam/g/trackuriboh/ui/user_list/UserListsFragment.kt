@@ -1,4 +1,4 @@
-package sam.g.trackuriboh.ui.collection
+package sam.g.trackuriboh.ui.user_list
 
 import android.os.Bundle
 import android.view.*
@@ -11,9 +11,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.entities.UserList
-import sam.g.trackuriboh.databinding.FragmentCollectionsBinding
-import sam.g.trackuriboh.ui.collection.adapters.CollectionsStateAdapter
-import sam.g.trackuriboh.ui.collection.viewmodels.CollectionsViewModel
+import sam.g.trackuriboh.databinding.FragmentUserListsBinding
+import sam.g.trackuriboh.ui.user_list.adapters.UserListsStateAdapter
+import sam.g.trackuriboh.ui.user_list.viewmodels.UserListsViewModel
 import sam.g.trackuriboh.utils.safeNavigate
 import sam.g.trackuriboh.utils.setupAsTopLevelDestinationToolbar
 import sam.g.trackuriboh.utils.viewBinding
@@ -22,22 +22,22 @@ import sam.g.trackuriboh.utils.viewBinding
  * Fragment accessed from clicking "Watchlist" in bottom nav
  */
 @AndroidEntryPoint
-class CollectionsFragment : Fragment() {
-    private val binding: FragmentCollectionsBinding by viewBinding(FragmentCollectionsBinding::inflate)
+class UserListsFragment : Fragment() {
+    private val binding: FragmentUserListsBinding by viewBinding(FragmentUserListsBinding::inflate)
 
-    private val viewModel: CollectionsViewModel by hiltNavGraphViewModels(R.id.collections_nav)
+    private val viewModel: UserListsViewModel by hiltNavGraphViewModels(R.id.user_lists_nav)
 
-    private lateinit var collectionsStateAdapter: CollectionsStateAdapter
+    private lateinit var userListsStateAdapter: UserListsStateAdapter
 
     private val navigationDestinationChangedListener = NavController.OnDestinationChangedListener { navController, destination, _ ->
-        if (destination.parent?.id != R.id.collections_nav) {
+        if (destination.parent?.id != R.id.user_lists_nav) {
             // When we change tabs we want to remove actionmode
             finishActionMode()
         }
     }
 
     companion object {
-        const val ACTION_FINISH_ACTION_MODE = "CollectionsFragment_actionFinishActionMode"
+        const val ACTION_FINISH_ACTION_MODE = "UserListsFragment_actionFinishActionMode"
     }
 
     override fun onCreateView(
@@ -58,24 +58,24 @@ class CollectionsFragment : Fragment() {
     }
 
     private fun initToolbar() {
-        binding.collectionsToolbar.setupAsTopLevelDestinationToolbar()
+        binding.userListsToolbar.setupAsTopLevelDestinationToolbar()
     }
 
     private fun initFab() {
-        with(binding.collectionsFab) {
+        with(binding.userListsFab) {
             setOnClickListener {
                 findNavController().safeNavigate(
-                    CollectionsFragmentDirections.actionCollectionsFragmentToCreateCollectionBottomSheetDialogFragment()
+                    UserListsFragmentDirections.actionUserListsFragmentToCreateUserListBottomSheetDialogFragment()
                 )
             }
         }
     }
 
     private fun initViewPager(lists: List<UserList>) {
-        with(binding.collectionsViewPager) {
-            adapter = CollectionsStateAdapter(this@CollectionsFragment).also {
-                it.setCollections(lists)
-                collectionsStateAdapter = it
+        with(binding.userListsViewPager) {
+            adapter = UserListsStateAdapter(this@UserListsFragment).also {
+                it.setUserLists(lists)
+                userListsStateAdapter = it
             }
 
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -85,8 +85,8 @@ class CollectionsFragment : Fragment() {
             })
         }
 
-        TabLayoutMediator(binding.collectionsTabLayout, binding.collectionsViewPager) { tab, position ->
-            tab.text = viewModel.collections.value?.get(position)?.name
+        TabLayoutMediator(binding.userListsTabLayout, binding.userListsViewPager) { tab, position ->
+            tab.text = viewModel.userLists.value?.get(position)?.name
         }.attach()
     }
 
@@ -94,32 +94,31 @@ class CollectionsFragment : Fragment() {
 
         with(parentFragmentManager) {
             setFragmentResultListener(
-                CreateCollectionBottomSheetDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
+                CreateUserListBottomSheetDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
                 viewLifecycleOwner
             ) { _, bundle ->
-                val collection = bundle.getParcelable<UserList>(CreateCollectionBottomSheetDialogFragment.COLLECTION_DATA_KEY)!!
-                viewModel.createCollection(collection)
+                val userList = bundle.getParcelable<UserList>(CreateUserListBottomSheetDialogFragment.USER_LIST_DATA_KEY)!!
+                viewModel.createUserList(userList)
             }
         }
     }
 
     private fun initViewModelObservers() {
         viewModel.state.observe(viewLifecycleOwner) {
-            with(binding.collectionsViewPager) {
-                // When we change tabs we want to remove actionmode
-                finishActionMode()
+            finishActionMode()
 
-                if (binding.collectionsViewPager.currentItem != it.currentSelectedTabPosition) {
+            with(binding.userListsViewPager) {
+                if (currentItem != it.currentSelectedTabPosition) {
                     setCurrentItem(it.currentSelectedTabPosition, true)
                 }
             }
         }
 
-        viewModel.collections.observe(viewLifecycleOwner) {
-            if (binding.collectionsViewPager.adapter == null) {
+        viewModel.userLists.observe(viewLifecycleOwner) {
+            if (binding.userListsViewPager.adapter == null) {
                 initViewPager(it)
             } else {
-                collectionsStateAdapter.setCollections(it)
+                userListsStateAdapter.setUserLists(it)
             }
         }
     }

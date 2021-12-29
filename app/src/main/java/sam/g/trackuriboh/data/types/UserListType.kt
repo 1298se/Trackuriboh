@@ -4,7 +4,7 @@ import kotlinx.parcelize.Parcelize
 import sam.g.trackuriboh.R
 
 @Parcelize
-enum class CollectionType(override val resourceId: Int) : StringResourceEnum {
-    COLLECTION(R.string.collection_type_collection),
+enum class UserListType(override val resourceId: Int) : StringResourceEnum {
+    USER_LIST(R.string.user_list_type_list),
     // CHECKLIST(R.string.collection_type_checklist),
 }

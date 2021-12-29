@@ -13,43 +13,43 @@
     tools:ignore="RtlSymmetry">
 
     <ImageView
-        android:id="@+id/item_collection_entry_image"
-        android:layout_width="@dimen/item_collection_entry_image_width"
-        android:layout_height="@dimen/item_collection_entry_image_height"
+        android:id="@+id/item_user_list_entry_image"
+        android:layout_width="@dimen/item_user_list_entry_image_width"
+        android:layout_height="@dimen/item_user_list_entry_image_height"
         android:contentDescription="@string/item_card_list_content_desc"
         android:layout_marginEnd="@dimen/list_item_image_content_spacing"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/item_collection_entry_image_text_barrier"
+        app:layout_constraintEnd_toStartOf="@id/item_user_list_entry_image_text_barrier"
         tools:src="@drawable/img_cardback" />
 
     <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/item_collection_entry_image_text_barrier"
+        android:id="@+id/item_user_list_entry_image_text_barrier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/item_collection_entry_image"
+        app:layout_constraintStart_toEndOf="@id/item_user_list_entry_image"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:barrierDirection="left" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/item_collection_entry_title_textview"
+        android:id="@+id/item_user_list_entry_title_textview"
         style="@style/TextAppearance.MaterialComponents.Subtitle1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
         android:layout_marginTop="@dimen/list_item_three_line_image_padding_top"
-        app:layout_constraintBottom_toTopOf="@id/item_collection_entry_rarity_number_textview"
-        app:layout_constraintStart_toEndOf="@id/item_collection_entry_image_text_barrier"
-        app:layout_constraintEnd_toStartOf="@id/item_collection_entry_checkbox"
+        app:layout_constraintBottom_toTopOf="@id/item_user_list_rarity_number_textview"
+        app:layout_constraintStart_toEndOf="@id/item_user_list_entry_image_text_barrier"
+        app:layout_constraintEnd_toStartOf="@id/item_user_list_entry_checkbox"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="Blue-Eyes White Dragon Blue-Eyes White Dragon Blue-Eyes White Dragon" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/item_collection_entry_rarity_number_textview"
+        android:id="@+id/item_user_list_rarity_number_textview"
         style="@style/TextAppearance.MaterialComponents.Caption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -57,14 +57,14 @@
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="1"
-        app:layout_constraintBottom_toTopOf="@id/item_collection_entry_edition_condition_textview"
-        app:layout_constraintStart_toEndOf="@id/item_collection_entry_image_text_barrier"
-        app:layout_constraintTop_toBottomOf="@id/item_collection_entry_title_textview"
-        app:layout_constraintEnd_toStartOf="@id/item_collection_entry_checkbox"
+        app:layout_constraintBottom_toTopOf="@id/item_user_list_entry_edition_condition_textview"
+        app:layout_constraintStart_toEndOf="@id/item_user_list_entry_image_text_barrier"
+        app:layout_constraintTop_toBottomOf="@id/item_user_list_entry_title_textview"
+        app:layout_constraintEnd_toStartOf="@id/item_user_list_entry_checkbox"
         tools:text="Ultra Rare \u2022 LOB-001" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/item_collection_entry_edition_condition_textview"
+        android:id="@+id/item_user_list_entry_edition_condition_textview"
         style="@style/TextAppearance.MaterialComponents.Caption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -74,13 +74,13 @@
         android:gravity="center_vertical"
         android:maxLines="1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/item_collection_entry_image_text_barrier"
-        app:layout_constraintTop_toBottomOf="@id/item_collection_entry_rarity_number_textview"
-        app:layout_constraintEnd_toStartOf="@id/item_collection_entry_checkbox"
+        app:layout_constraintStart_toEndOf="@id/item_user_list_entry_image_text_barrier"
+        app:layout_constraintTop_toBottomOf="@id/item_user_list_rarity_number_textview"
+        app:layout_constraintEnd_toStartOf="@id/item_user_list_entry_checkbox"
         tools:text="1st Edition \u2022 Near Mint" />
 
     <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/item_collection_entry_checkbox"
+        android:id="@+id/item_user_list_entry_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="false"

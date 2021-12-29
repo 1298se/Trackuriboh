@@ -9,7 +9,7 @@
     android:background="@drawable/background_color_surface_selectable">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/item_collection_type_image"
+        android:id="@+id/item_create_user_list_option_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,17 +19,17 @@
         tools:src="@drawable/ic_outline_add_photo_alternate_24" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/item_collection_type_textview"
+        android:id="@+id/item_create_user_list_option_textview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:maxLines="1"
         android:layout_marginStart="@dimen/list_item_icon_content_spacing"
-        app:layout_constraintStart_toEndOf="@id/item_collection_type_image"
+        app:layout_constraintStart_toEndOf="@id/item_create_user_list_option_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         style="@style/TextAppearance.MaterialComponents.Subtitle1"
-        tools:text="Create Collection" />
+        tools:text="@string/create_user_list_option" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

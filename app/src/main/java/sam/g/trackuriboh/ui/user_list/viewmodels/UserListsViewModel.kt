@@ -1,4 +1,4 @@
-package sam.g.trackuriboh.ui.collection.viewmodels
+package sam.g.trackuriboh.ui.user_list.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.*
@@ -10,7 +10,7 @@ import sam.g.trackuriboh.data.repository.UserListRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class CollectionsViewModel @Inject constructor(
+class UserListsViewModel @Inject constructor(
     private val userListRepository: UserListRepository,
     private val application: Application,
 ) : ViewModel() {
@@ -22,30 +22,30 @@ class CollectionsViewModel @Inject constructor(
     val state: LiveData<UiState>
         get() = _state
 
-    val collections = userListRepository.getUserListsObervable().asLiveData()
+    val userLists = userListRepository.getUserListsObervable().asLiveData()
 
     private val _state = MediatorLiveData<UiState>().apply {
         value = (UiState(0))
     }
 
-    private var newCreatedCollection: Long? = null
+    private var newCreatedList: Long? = null
 
     init {
-        _state.addSource(collections) { collections ->
-            if (newCreatedCollection != null) {
-                _state.value = _state.value?.copy(currentSelectedTabPosition = collections.indexOfFirst { it.id == newCreatedCollection })
-                newCreatedCollection = null
+        _state.addSource(userLists) { lists ->
+            if (newCreatedList != null) {
+                _state.value = _state.value?.copy(currentSelectedTabPosition = lists.indexOfFirst { it.id == newCreatedList })
+                newCreatedList = null
             }
         }
     }
 
 
-    fun createCollection(list: UserList) =
+    fun createUserList(list: UserList) =
         viewModelScope.launch {
-            newCreatedCollection = userListRepository.insertUserList(list)
+            newCreatedList = userListRepository.insertUserList(list)
         }
 
-    fun insertToCollection(listId: Long, skuId: Long) =
+    fun insertToUserList(listId: Long, skuId: Long) =
         viewModelScope.launch {
             userListRepository.insertUserListEntry(UserListEntry(listId, skuId))
         }

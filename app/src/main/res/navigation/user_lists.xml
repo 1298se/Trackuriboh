@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/user_lists_nav"
+    app:startDestination="@id/userListsFragment">
+
+    <fragment
+        android:id="@+id/userListsFragment"
+        android:name="sam.g.trackuriboh.ui.user_list.UserListsFragment"
+        android:label="@string/lbl_user_lists"
+        tools:layout="@layout/fragment_user_lists" >
+
+        <action
+            android:id="@+id/action_userListsFragment_to_createUserListBottomSheetDialogFragment"
+            app:destination="@id/createUserListBottomSheetDialogFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/addEditUserListDialogFragment"
+        android:name="sam.g.trackuriboh.ui.user_list.AddEditUserListDialogFragment"
+        tools:layout="@layout/dialog_add_edit_user_list" >
+        <argument
+            android:name="userListType"
+            app:argType="sam.g.trackuriboh.data.types.UserListType" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/createUserListBottomSheetDialogFragment"
+        android:name="sam.g.trackuriboh.ui.user_list.CreateUserListBottomSheetDialogFragment"
+        tools:layout="@layout/bottom_sheet_create_user_list" >
+        <action
+            android:id="@+id/action_createUserListBottomSheetDialogFragment_to_addEditUserListDialogFragment"
+            app:destination="@id/addEditUserListDialogFragment" />
+    </dialog>
+
+</navigation>
