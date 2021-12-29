@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_remove_user_list_entries"
+        android:title="@string/user_list_remove_entries_action_title"
+        android:icon="@drawable/ic_baseline_delete_forever_24" />
+
+</menu>
