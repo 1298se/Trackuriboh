@@ -3,11 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui_database.CardListFragment">
+    tools:context=".ui.database.CardListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/card_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        style="@style/AppTheme.CardRecyclerView" />
+        style="@style/AppTheme.CardRecyclerView"
+        tools:listitem="@layout/item_card" />
 </LinearLayout>

@@ -17,6 +17,6 @@ class ReminderLocalCache @Inject constructor(
 
     suspend fun deleteReminder(reminder: Reminder) = appDatabase.reminderDao().delete(reminder)
 
-    fun getRemindersFlow() = appDatabase.reminderDao().getRemindersFlow()
+    fun getRemindersObservable() = appDatabase.reminderDao().getRemindersObservable()
 
 }

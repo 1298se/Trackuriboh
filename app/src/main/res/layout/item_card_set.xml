@@ -9,7 +9,7 @@
     android:paddingEnd="@dimen/list_item_padding_end"
     android:paddingTop="@dimen/list_item_two_line_padding_top"
     android:paddingBottom="@dimen/list_item_two_line_padding_bottom"
-    android:background="?android:attr/selectableItemBackground">
+    android:background="@drawable/background_color_surface_selectable">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/card_set_title_textview"

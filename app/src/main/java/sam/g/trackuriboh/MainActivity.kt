@@ -9,11 +9,19 @@ import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.databinding.ActivityMainBinding
 import sam.g.trackuriboh.utils.getAppBarConfiguration
+import sam.g.trackuriboh.utils.setEnabled
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+
+    private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
+
+    companion object {
+        const val FRAGMENT_RESULT_REQUEST_KEY = "MainActivity_fragmentResultRequestKey"
+        const val ACTION_SET_BOTTOM_NAV_ENABLED = "CollectionsFragment_actionFinishActionMode"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,13 +30,23 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        navController = (supportFragmentManager.findFragmentById(binding.mainNavHostFragment.id) as NavHostFragment).navController
+        navHostFragment = supportFragmentManager.findFragmentById(binding.mainNavHostFragment.id) as NavHostFragment
+        navController = navHostFragment.navController
 
-        setupBottomNavigation()
+        initBottomNavigation()
+        initFragmentResultListeners()
     }
 
-    private fun setupBottomNavigation() {
+    private fun initBottomNavigation() {
         binding.bottomNavView.setupWithNavController(navController)
+    }
+
+    private fun initFragmentResultListeners() {
+        navController.getBackStackEntry(R.id.main_nav).savedStateHandle.getLiveData<Boolean>(ACTION_SET_BOTTOM_NAV_ENABLED).observe(
+            this
+        ) {
+            binding.bottomNavView.menu.setEnabled(it)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

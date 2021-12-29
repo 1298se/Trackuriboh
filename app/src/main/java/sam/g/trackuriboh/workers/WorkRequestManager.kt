@@ -86,6 +86,7 @@ class WorkRequestManager @Inject constructor(
 
     fun enqueueReminderScheduler() {
         val reminderScheduleRequest = OneTimeWorkRequestBuilder<ReminderScheduleWorker>()
+            .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
             .build()
 
         workManager.enqueueUniqueWork(

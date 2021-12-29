@@ -4,6 +4,7 @@ import android.app.SearchManager
 import android.content.Context
 import android.content.DialogInterface
 import android.database.Cursor
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AutoCompleteTextView
@@ -17,7 +18,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
 import sam.g.trackuriboh.R
-import sam.g.trackuriboh.ui_database.adapters.SearchSuggestionsAdapter
+import sam.g.trackuriboh.ui.database.adapters.SearchSuggestionsAdapter
 
 fun ViewGroup.showOnly(vararg views: View) {
     children.forEach {
@@ -98,14 +99,14 @@ fun Context.createAlertDialog(
     }
 }
 
-fun getAppBarConfiguration() : AppBarConfiguration = AppBarConfiguration(setOf(R.id.databaseFragment, R.id.remindersFragment))
+fun getAppBarConfiguration() : AppBarConfiguration = AppBarConfiguration(setOf(R.id.databaseFragment, R.id.collectionsFragment, R.id.remindersFragment))
 
 fun MaterialToolbar.setupAsTopLevelDestinationToolbar() {
     setupWithNavController(findNavController(), getAppBarConfiguration())
 }
 
-fun MaterialToolbar.setMenuEnabled(enabled: Boolean) {
-    menu.children.forEach {
+fun Menu.setEnabled(enabled: Boolean) {
+    children.forEach {
         it.isEnabled = enabled
     }
 }

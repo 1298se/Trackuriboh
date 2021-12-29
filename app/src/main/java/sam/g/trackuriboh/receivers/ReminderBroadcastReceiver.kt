@@ -19,7 +19,7 @@ class ReminderBroadcastReceiver : BroadcastReceiver() {
     @Inject lateinit var workRequestManager: WorkRequestManager
 
     companion object {
-        const val ARG_REMINDER = "Reminder"
+        const val ARG_REMINDER = "ReminderBroadcastReceiver_argReminder"
         const val ACTION_SET_REMINDER = "sam.g.trackuriboh.SET_REMINDER"
 
         private const val REMINDER_NOTIFICATION_CHANNEL_ID = "TrackuribohReminder"

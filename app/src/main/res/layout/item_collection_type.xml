@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/list_item_one_line_height"
+    android:paddingStart="@dimen/list_item_padding_start"
+    android:paddingEnd="@dimen/list_item_padding_end"
+    android:background="@drawable/background_color_surface_selectable">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/item_collection_type_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:tint="?attr/colorOnSurface"
+        tools:src="@drawable/ic_outline_add_photo_alternate_24" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/item_collection_type_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:maxLines="1"
+        android:layout_marginStart="@dimen/list_item_icon_content_spacing"
+        app:layout_constraintStart_toEndOf="@id/item_collection_type_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"
+        tools:text="Create Collection" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,13 +11,21 @@
     <string name="lbl_date">Date</string>
     <string name="lbl_time">Time</string>
     <string name="lbl_download">Download</string>
+    <string name="lbl_name">Name</string>
+    <string name="lbl_create">Create</string>
     <string name="progress_percent">%1$d%%</string>
+    <string name="more_actions_action_title">More actions</string>
+
+    <string name="lbl_permission_required">Permission Required</string>
+    <string name="lbl_grant_permission">Grant Permissions</string>
 
     <!-- Bottom Nav -->
     <string name="lbl_database">Database</string>
     <string name="lbl_reminders">Reminders</string>
-    <string name="lbl_permission_required">Permission Required</string>
-    <string name="lbl_grant_permission">Grant Permissions</string>
+    <string name="lbl_collections">Collections</string>
+
+    <string name="lbl_add_to">Add to</string>
+    <string name="lbl_all_printings">All Printings</string>
 
     <!-- Database -->
     <string name="tab_card_title">Cards</string>
@@ -46,9 +54,11 @@
     <string name="database_update_check_prompt_message">A new update is available to download. Please update for the newest card info.</string>
 
     <string name="database_update_check_no_update_available">The database is up to date.</string>
+
     <!-- Card Item -->
     <string name="item_card_list_content_desc">Card image</string>
-    <string name="item_card_number_rarity_text">%1$s \u2022 %2$s</string>
+    <string name="item_card_number_rarity">%1$s \u2022 %2$s</string>
+
     <!-- Card Set Item -->
     <string name="lbl_no_date_available">No Date Available</string>
 
@@ -56,9 +66,12 @@
     <string name="lbl_prices">Prices</string>
     <string name="lbl_details">Details</string>
     <string name="lbl_view_on_tcgplayer">View on TCGPlayer</string>
+    <string name="lbl_buy_now">Buy now</string>
+    <string name="add_to_collection_action_title">Add to collection</string>
+    <string name="create_checklist_action_title">Create checklist</string>
+    <string name="add_to_collection_success_message">Added to %1$s</string>
 
     <!-- Card Detail Overview -->
-    <string name="lbl_name">Name</string>
     <string name="lbl_number">Number</string>
     <string name="lbl_rarity">Rarity</string>
     <string name="lbl_type">Type</string>
@@ -80,10 +93,6 @@
     <string name="error_title_generic">Error</string>
     <string name="error_message_generic">An error has occurred.</string>
 
-    <!-- Inventory -->
-    <string name="lbl_new_transaction">New Transaction</string>
-
-
     <!-- Notifications -->
     <string name="app_notification_channel_name">Trackuriboh Notifications</string>
 
@@ -91,6 +100,30 @@
     <string name="facebook_app_id">236802761727077</string>
     <string name="fb_login_protocol_scheme">fb236802761727077</string>
     <string name="facebook_client_token">5cbc3e0fd15bc7c41b702053ea1d1f62</string>
+
+    <!-- Collections -->
+    <string name="create_collection_prompt_title">Create Collection</string>
+    <string name="create_collection_option">Create a collection</string>
+    <string name="create_checklist_option">Create a checklist</string>
+    <string name="collection_remove_entries_action_title">Remove items</string>
+
+    <string name="collection_type_collection">Collection</string>
+    <string name="collection_type_checklist">Checklist</string>
+
+    <!-- Item Collection -->
+    <string name="item_collection_created_date">Created on %1$s</string>
+    <string name="item_collection_edition_condition">%1$s \u2022 %2$s</string>
+
+
+    <!-- Collection Detail -->
+    <plurals name="collection_detail_total_count">
+        <item quantity="one">Total: %1$d card</item>
+        <item quantity="other">Total: %1$d cards</item>
+    </plurals>
+
+    <string name="collection_detail_selected_count">%1$d selected</string>
+
+    <string name="collection_detail_add_new_card">Add a new card</string>
 
     <!-- Reminders -->
     <string name="lbl_create_reminder">Create Reminder</string>
@@ -121,4 +154,6 @@
         <item>America/Denver</item>
         <item>America/Winnipeg</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

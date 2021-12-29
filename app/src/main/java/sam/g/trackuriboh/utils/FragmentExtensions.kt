@@ -9,6 +9,7 @@ import android.view.WindowManager
 import androidx.activity.addCallback
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
@@ -134,5 +135,9 @@ fun BottomSheetDialogFragment.setFullScreen() {
 
 fun BottomSheetDialogFragment.getBottomSheet(): View? {
     return dialog?.findViewById(com.google.android.material.R.id.design_bottom_sheet)
+}
+
+fun FragmentManager.findViewPagerFragment(fragmentId: Long): Fragment? {
+    return findFragmentByTag("f$fragmentId")
 }
 

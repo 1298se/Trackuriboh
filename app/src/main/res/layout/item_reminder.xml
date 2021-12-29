@@ -16,7 +16,6 @@
 
         <!-- Background layout -->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/item_reminder_background"
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
 
@@ -64,14 +63,13 @@
             android:paddingTop="@dimen/list_item_two_line_padding_top"
             android:paddingEnd="@dimen/list_item_padding_end"
             android:paddingBottom="@dimen/list_item_two_line_padding_bottom"
-            android:background="@drawable/background_color_surface_selectable"
-            tools:visibility="gone">
+            android:background="@drawable/background_color_surface_selectable">
 
             <ImageView
                 android:id="@+id/item_reminder_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/list_item_text_drawable_spacing"
+                android:layout_marginEnd="@dimen/list_item_image_content_spacing"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/item_reminder_image_text_barrier"
                 app:layout_constraintStart_toStartOf="parent"
@@ -93,7 +91,6 @@
                 style="@style/TextAppearance.MaterialComponents.Subtitle1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/list_item_padding_end"
                 android:ellipsize="end"
                 android:singleLine="true"
                 app:layout_constraintBottom_toTopOf="@id/item_reminder_description_textview"
@@ -109,7 +106,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/text_spacing"
-                android:layout_marginEnd="@dimen/list_item_padding_end"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:singleLine="true"

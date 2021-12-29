@@ -19,6 +19,8 @@ import sam.g.trackuriboh.data.db.entities.*
         Printing::class,
         Condition::class,
         Reminder::class,
+        UserList::class,
+        UserListEntry::class,
     ],
     version = 1
 )
@@ -34,6 +36,9 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun conditionDao(): ConditionDao
 
     abstract fun reminderDao(): ReminderDao
+
+    abstract fun userListDao(): UserListDao
+    abstract fun userListEntryDao(): UserListEntryDao
 
     interface DatabaseEntity<out T> {
         fun toDatabaseEntity(): T

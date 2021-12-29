@@ -2,6 +2,7 @@ package sam.g.trackuriboh.workers
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -37,6 +38,8 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result = withContext(Dispatchers.Default){
         try {
+            Log.d("WORKER", "Update Check started")
+
             val cardRarityResponse = catalogRepository.fetchCardRarities().getResponseOrThrow()
             val printingResponse = catalogRepository.fetchProductPrintings().getResponseOrThrow()
             val conditionResponse = catalogRepository.fetchProductConditions().getResponseOrThrow()
@@ -89,6 +92,8 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
             val updateCardSetIds = diffCardSet.map { it.id }.toMutableSet().apply {
                 addAll(unreleasedCardSets.keys.map { it.id })
             }.toLongArray()
+
+            Log.d("WORKER", "Update check completed")
 
             Result.success(workDataOf(UPDATE_CARD_SET_IDS_RESULT to updateCardSetIds))
         } catch (throwable: Throwable) {

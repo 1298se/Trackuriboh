@@ -3,38 +3,48 @@
 
     <dimen name="text_spacing">4dp</dimen>
     <dimen name="text_spacing_large">8dp</dimen>
-    <dimen name="extended_fab_height">48dp</dimen>
 
     <!-- Overwrite default values -->
-    <dimen name="cardview_default_elevation">8dp</dimen>
+    <dimen name="cardview_default_elevation">2dp</dimen>
 
     <!-- Material -->
     <dimen name="material_border_padding_small">8dp</dimen>
     <dimen name="material_border_padding">16dp</dimen>
     <dimen name="material_border_padding_large">24dp</dimen>
 
+    <dimen name="divider_inset">16dp</dimen>
+
+    <!-- List containers -->
     <dimen name="list_padding_top">8dp</dimen>
     <dimen name="list_padding_bottom">8dp</dimen>
-    <dimen name="list_padding_start">16dp</dimen>
-    <dimen name="list_padding_end">16dp</dimen>
+    <dimen name="list_padding_start">8dp</dimen>
+    <dimen name="list_padding_end">8dp</dimen>
 
+    <!-- List Items -->
     <dimen name="list_item_padding_start">16dp</dimen>
     <dimen name="list_item_padding_end">16dp</dimen>
+
     <dimen name="list_item_one_line_height">48dp</dimen>
     <dimen name="list_item_one_line_padding_top">12dp</dimen>
     <dimen name="list_item_one_line_padding_bottom">12dp</dimen>
+
     <dimen name="list_item_two_line_height">64dp</dimen>
     <dimen name="list_item_two_line_padding_top">8dp</dimen>
     <dimen name="list_item_two_line_padding_bottom">8dp</dimen>
-    <dimen name="list_item_image_large_padding_top">16dp</dimen>
-    <dimen name="list_item_image_large_padding_bottom">16dp</dimen>
+
+    <dimen name="list_item_three_line_height">88dp</dimen>
+    <dimen name="list_item_three_line_image_padding_top">16dp</dimen>
+    <dimen name="list_item_three_line_image_padding_bottom">16dp</dimen>
+
+    <dimen name="list_item_row_spacing">6dp</dimen>
     <dimen name="list_item_large_row_spacing">12dp</dimen>
-    <dimen name="list_item_row_spacing">8dp</dimen>
-    <dimen name="list_item_text_drawable_spacing">16dp</dimen>
+
+    <dimen name="list_item_image_content_spacing">16dp</dimen>
+    <dimen name="list_item_icon_content_spacing">32dp</dimen>
 
     <!-- Item Card -->
-    <dimen name="item_card_image_width">92dp</dimen>
-    <dimen name="item_card_image_height">128dp</dimen>
+    <dimen name="item_card_image_width">80dp</dimen>
+    <dimen name="item_card_image_height">112dp</dimen>
 
     <!-- Card Detail -->
     <dimen name="card_image_swipe_padding">16dp</dimen>
@@ -45,6 +55,10 @@
     <!--don't change this value because it sets the image dot to be a circle -->
     <dimen name="image_slider_width">10dp</dimen>
 
+
+    <!-- Item Collection Entry -->
+    <dimen name="item_collection_entry_image_width">56dp</dimen>
+    <dimen name="item_collection_entry_image_height">80dp</dimen>
 
     <!-- Forms -->
     <dimen name="form_row_spacing">16dp</dimen>

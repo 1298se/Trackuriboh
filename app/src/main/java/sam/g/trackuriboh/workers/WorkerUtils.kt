@@ -5,6 +5,8 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import sam.g.trackuriboh.di.NetworkModule.MAX_PARALLEL_REQUESTS
 
+const val REMINDER_SCHEDULER_CHANNEL_ID = "Trackuriboh"
+
 const val DB_SYNC_NOTIFICATION_CHANNEL_ID = "TrackuribohDBSync"
 
 const val DB_SYNC_PROGRESS_NOTIFICATION_ID = 1

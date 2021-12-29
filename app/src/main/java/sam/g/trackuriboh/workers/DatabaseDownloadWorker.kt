@@ -2,6 +2,7 @@ package sam.g.trackuriboh.workers
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.work.HiltWorker
 import androidx.work.*
@@ -58,6 +59,7 @@ class DatabaseDownloadWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result  = withContext(Dispatchers.Default){
         try {
+            Log.d("WORKER", "DatabaseDownloadWorker started")
             updateProgress(0)
 
             appDatabase.clearCardDatabaseTables()
@@ -83,6 +85,7 @@ class DatabaseDownloadWorker @AssistedInject constructor(
                 stateNotificationBuilder.setContentText(applicationContext.getString(R.string.database_download_success))
                 notify(DB_SYNC_STATE_NOTIFICATION_ID, stateNotificationBuilder.build())
             }
+            Log.d("WORKER", "DatabaseDownloadWorker completed")
 
             Result.success()
         } catch (exception: Exception) {

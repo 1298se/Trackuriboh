@@ -1,6 +1,7 @@
 package sam.g.trackuriboh.workers
 
 import android.content.Context
+import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -29,10 +30,16 @@ class PriceSyncWorker @AssistedInject constructor(
     }
     override suspend fun doWork(): Result {
         return try {
+            Log.d("WORKER", "PriceSyncWorker started")
+
             var offset = 0
 
             while (true) {
                 val skuIds = skuRepository.getSkuIdsPaginated(offset, SKU_DEFAULT_QUERY_LIMIT)
+
+                if (skuIds.isEmpty()) {
+                    break
+                }
 
                 val resource = priceRepository.getPricesForSkus(skuIds)
 
@@ -40,14 +47,14 @@ class PriceSyncWorker @AssistedInject constructor(
                     throw IOException(resource.exception)
                 }
 
-                if (skuIds.size < SKU_DEFAULT_QUERY_LIMIT) {
-                    break
-                }
-
                 offset += SKU_DEFAULT_QUERY_LIMIT
+
+                Log.d("OFFSET", offset.toString())
 
                 delay(NETWORK_REQUEST_DELAY)
             }
+
+            Log.d("WORKER", "PriceSyncWorker completed")
 
             Result.success()
         } catch (e: Exception) {

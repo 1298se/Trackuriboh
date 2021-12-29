@@ -2,24 +2,24 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/reminders"
+    android:id="@+id/reminders_nav"
     app:startDestination="@id/remindersFragment">
 
     <fragment
         android:id="@+id/remindersFragment"
-        android:name="sam.g.trackuriboh.ui_reminder.RemindersFragment"
+        android:name="sam.g.trackuriboh.ui.reminder.RemindersFragment"
         android:label="@string/lbl_reminders"
         tools:layout="@layout/fragment_reminders" >
 
         <action
-            android:id="@+id/action_remindersFragment_to_remindersFormFragment"
-            app:destination="@id/remindersFormFragment" />
+            android:id="@+id/action_remindersFragment_to_addEditReminderDialogFragment"
+            app:destination="@id/addEditReminderDialogFragment" />
     </fragment>
 
     <dialog
-        android:id="@+id/remindersFormFragment"
-        android:name="sam.g.trackuriboh.ui_reminder.ReminderFormDialogFragment"
-        tools:layout="@layout/dialog_reminders_form" >
+        android:id="@+id/addEditReminderDialogFragment"
+        android:name="sam.g.trackuriboh.ui.reminder.AddEditReminderDialogFragment"
+        tools:layout="@layout/dialog_add_edit_reminders" >
         <argument
             android:name="reminder"
             app:argType="sam.g.trackuriboh.data.db.entities.Reminder"

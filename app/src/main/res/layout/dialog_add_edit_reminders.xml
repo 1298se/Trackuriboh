@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/compose_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <sam.g.trackuriboh.ui.common.DateTimePickerView
+        android:id="@+id/date_time_picker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:minHeight="@dimen/date_time_picker_min_height"
+        android:visibility="gone"
+        android:theme="@style/AppTheme.Secondary" />
+</LinearLayout>

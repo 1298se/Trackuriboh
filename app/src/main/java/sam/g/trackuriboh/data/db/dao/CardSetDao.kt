@@ -12,7 +12,7 @@ interface CardSetDao : BaseDao<CardSet> {
     suspend fun getCardSet(setId: Long): CardSet
 
     @MapInfo(valueColumn = "cardSetCount")
-    @Query("SELECT CardSet.id, CardSet.code, CardSet.name, CardSet.releaseDate, COUNT(Product.id) AS cardSetCount FROM CardSet LEFT JOIN Product ON CardSet.id = Product.setId GROUP BY CardSet.id")
+    @Query("SELECT *, COUNT(Product.id) AS cardSetCount FROM CardSet LEFT JOIN Product ON CardSet.id = Product.setId GROUP BY CardSet.id")
     suspend fun getCardSetsWithCount(): Map<CardSet, Int>
 
     @Query("SELECT * FROM CardSet ORDER BY name ASC")

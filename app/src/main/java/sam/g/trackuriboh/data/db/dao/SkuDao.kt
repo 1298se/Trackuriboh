@@ -16,7 +16,7 @@ interface SkuDao : BaseDao<Sku> {
         skuIds: List<Long>
     ): List<SkuWithConditionAndPrinting>
 
-    @Query("SELECT id FROM Sku ORDER BY productId, id LIMIT :limit OFFSET :offset")
+    @Query("SELECT id FROM Sku ORDER BY id LIMIT :limit OFFSET :offset")
     suspend fun getSkuIdsPaginated(offset: Int, limit: Int): List<Long>
 
     @Query("DELETE FROM Sku")

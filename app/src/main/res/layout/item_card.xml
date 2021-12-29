@@ -12,16 +12,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingStart="@dimen/list_item_padding_start"
-        android:paddingTop="@dimen/list_item_image_large_padding_top"
+        android:paddingTop="@dimen/list_item_three_line_image_padding_top"
         android:paddingEnd="@dimen/list_item_padding_end"
-        android:paddingBottom="@dimen/list_item_image_large_padding_bottom">
+        android:paddingBottom="@dimen/list_item_three_line_image_padding_bottom">
 
         <ImageView
             android:id="@+id/item_card_image"
             android:layout_width="@dimen/item_card_image_width"
             android:layout_height="@dimen/item_card_image_height"
             android:contentDescription="@string/item_card_list_content_desc"
-            android:layout_marginEnd="@dimen/list_item_text_drawable_spacing"
+            android:layout_marginEnd="@dimen/list_item_image_content_spacing"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

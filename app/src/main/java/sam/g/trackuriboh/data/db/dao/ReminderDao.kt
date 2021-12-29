@@ -18,5 +18,5 @@ interface ReminderDao : BaseDao<Reminder> {
     suspend fun getReminders(): List<Reminder>
 
     @Query("SELECT * FROM Reminder")
-    fun getRemindersFlow(): Flow<List<Reminder>>
+    fun getRemindersObservable(): Flow<List<Reminder>>
 }
