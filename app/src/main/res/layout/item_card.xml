@@ -20,7 +20,7 @@
             android:id="@+id/item_card_image"
             android:layout_width="@dimen/item_card_image_width"
             android:layout_height="@dimen/item_card_image_height"
-            android:contentDescription="@string/item_card_list_content_desc"
+            android:contentDescription="@string/lbl_card_image"
             android:layout_marginEnd="@dimen/list_item_image_content_spacing"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -110,6 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/material_border_padding"
+        android:contentDescription="@string/lbl_view_on_tcgplayer"
         android:src="@drawable/ic_outline_shopping_cart_24"
         app:layout_anchor="@id/card_detail_collapsing_toolbar_layout"
         app:layout_anchorGravity="bottom|end" />
