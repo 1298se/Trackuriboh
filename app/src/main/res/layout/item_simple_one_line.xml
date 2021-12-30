@@ -12,7 +12,7 @@
     android:background="@drawable/background_color_surface_selectable">
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/item_user_list_title_textview"
+        android:id="@+id/simple_one_line_text"
         style="@style/TextAppearance.MaterialComponents.Subtitle1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="My Collection" />
+        tools:text="Text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

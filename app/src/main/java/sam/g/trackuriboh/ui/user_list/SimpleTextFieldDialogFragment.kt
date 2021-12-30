@@ -10,18 +10,16 @@ import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import sam.g.trackuriboh.R
-import sam.g.trackuriboh.data.types.UserListType
-import sam.g.trackuriboh.databinding.DialogAddEditUserListBinding
+import sam.g.trackuriboh.databinding.DialogSimpleTextfieldBinding
 
-class AddEditUserListDialogFragment : DialogFragment() {
-    private lateinit var binding: DialogAddEditUserListBinding
+class SimpleTextFieldDialogFragment : DialogFragment() {
+    private lateinit var binding: DialogSimpleTextfieldBinding
 
-    private val args: AddEditUserListDialogFragmentArgs by navArgs()
-
+    private val args: SimpleTextFieldDialogFragmentArgs by navArgs()
 
     companion object {
-        const val FRAGMENT_RESULT_REQUEST_KEY = "AddEditListDialogFragment_fragmentResultRequestKey"
-        const val USER_LIST_NAME_DATA_KEY = "AddEditListDialogFragment_userList"
+        const val FRAGMENT_RESULT_REQUEST_KEY = "SimpleTextFieldDialogFragment_fragmentResultRequestKey"
+        const val TEXT_DATA_KEY = "SimpleTextFieldDialogFragment_userList"
     }
 
     /**
@@ -30,21 +28,16 @@ class AddEditUserListDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(requireContext())
 
-        binding = DialogAddEditUserListBinding.inflate(layoutInflater, null, false)
-
-        val title = when (args.userListType) {
-            UserListType.USER_LIST -> R.string.create_user_list_option
-            // CollectionType.CHECKLIST -> R.string.create_checklist_option
-        }
+        binding = DialogSimpleTextfieldBinding.inflate(layoutInflater, null, false)
 
         builder.setView(binding.root)
-            .setTitle(title)
+            .setTitle(args.title)
             .setPositiveButton(R.string.lbl_ok) { _, _ ->
 
-                val name = binding.addEditWatchlistNameText.text?.toString()?.trim()
+                val name = binding.simpleTextfieldEdittext.text?.toString()?.trim()
 
                 setFragmentResult(FRAGMENT_RESULT_REQUEST_KEY,
-                    bundleOf(USER_LIST_NAME_DATA_KEY to name)
+                    bundleOf(TEXT_DATA_KEY to name)
                 )
 
                 findNavController().popBackStack()
@@ -60,7 +53,7 @@ class AddEditUserListDialogFragment : DialogFragment() {
                 with (getButton(AlertDialog.BUTTON_POSITIVE)) {
                     isEnabled = false
 
-                    binding.addEditWatchlistNameText.addTextChangedListener {
+                    binding.simpleTextfieldEdittext.addTextChangedListener {
                         isEnabled = !it.isNullOrBlank()
                     }
                 }

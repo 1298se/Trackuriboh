@@ -19,8 +19,8 @@
             android:id="@+id/action_cardDetailFragment_to_cardPrintingsActivity"
             app:destination="@id/cardPrintingsActivity" />
         <action
-            android:id="@+id/action_cardDetailFragment_to_userListSelectionBottomSheetDialogFragment"
-            app:destination="@id/userListSelectionBottomSheetDialogFragment" />
+            android:id="@+id/action_cardDetailFragment_to_addToUserListBottomSheetFragment"
+            app:destination="@id/addToUserListBottomSheetFragment" />
 
     </fragment>
 
@@ -43,7 +43,29 @@
             app:argType="long" />
     </activity>
     <dialog
-        android:id="@+id/userListSelectionBottomSheetDialogFragment"
-        android:name="sam.g.trackuriboh.ui.user_list.UserListSelectionBottomSheetDialogFragment"
-        tools:layout="@layout/bottom_sheet_user_list_selection" />
+        android:id="@+id/addToUserListBottomSheetFragment"
+        android:name="sam.g.trackuriboh.ui.user_list.AddToUserListDialogFragment"
+        tools:layout="@layout/dialog_add_to_user_list">
+        <action
+            android:id="@+id/action_addToUserListBottomSheetFragment_to_userListSelectionBottomSheetFragment"
+            app:destination="@id/userListSelectionBottomSheetFragment" />
+        <action
+            android:id="@+id/action_addToUserListBottomSheetFragment_to_skuSelectionBottomSheetFragment"
+            app:destination="@id/skuSelectionBottomSheetFragment" />
+        <argument
+            android:name="cardId"
+            app:argType="long" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/userListSelectionBottomSheetFragment"
+        android:name="sam.g.trackuriboh.ui.user_list.UserListSelectionBottomSheetFragment" />
+
+    <dialog
+        android:id="@+id/skuSelectionBottomSheetFragment"
+        android:name="sam.g.trackuriboh.ui.card_detail.SkuSelectionBottomSheetFragment" >
+        <argument
+            android:name="cardId"
+            app:argType="long" />
+    </dialog>
 </navigation>

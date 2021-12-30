@@ -10,7 +10,6 @@ import com.google.android.material.divider.MaterialDividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.MainNavDirections
 import sam.g.trackuriboh.R
-import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.databinding.FragmentUserListDetailBinding
 import sam.g.trackuriboh.ui.user_list.UserListsFragment.Companion.ACTION_FINISH_ACTION_MODE
 import sam.g.trackuriboh.ui.user_list.adapters.UserListEntryAdapter
@@ -127,22 +126,22 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListe
         }
     }
 
-    override fun onListEntryClick(entry: UserListEntry) {
-        findNavController().safeNavigate(
-            MainNavDirections.actionGlobalCardDetailActivity(entry.skuId)
-        )
-    }
-
     override fun onAddCardClick() {
         TODO("Not yet implemented")
     }
 
-    override fun onListEntryLongClick(entry: UserListEntry) {
-        viewModel.setActionMode(true)
-        viewModel.setUserListEntryChecked(entry, true)
+    override fun onListEntryClick(productId: Long) {
+        findNavController().safeNavigate(
+            MainNavDirections.actionGlobalCardDetailActivity(productId)
+        )
     }
 
-    override fun onListEntryChecked(entry: UserListEntry, isChecked: Boolean) {
-        viewModel.setUserListEntryChecked(entry, isChecked)
+    override fun onListEntryLongClick(skuId: Long) {
+        viewModel.setActionMode(true)
+        viewModel.setUserListEntryChecked(skuId, true)
+    }
+
+    override fun onListEntryChecked(skuId: Long, isChecked: Boolean) {
+        viewModel.setUserListEntryChecked(skuId, isChecked)
     }
 }

@@ -6,9 +6,9 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
@@ -16,26 +16,22 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import sam.g.trackuriboh.*
-import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
 import sam.g.trackuriboh.databinding.FragmentCardDetailBinding
 import sam.g.trackuriboh.ui.card_detail.adapters.CardDetailStateAdapter
 import sam.g.trackuriboh.ui.card_detail.viewmodels.CardDetailViewModel
 import sam.g.trackuriboh.ui.common.CollapseToolbarStateChangeListener
 import sam.g.trackuriboh.ui.database.adapters.ImagePagerAdapter
-import sam.g.trackuriboh.ui.user_list.UserListSelectionBottomSheetDialogFragment
-import sam.g.trackuriboh.ui.user_list.viewmodels.UserListsViewModel
+import sam.g.trackuriboh.ui.user_list.AddToUserListDialogFragment
 import sam.g.trackuriboh.utils.*
 
+@ExperimentalMaterialApi
 @AndroidEntryPoint
 class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private val binding by viewBinding(FragmentCardDetailBinding::inflate)
 
     private val cardDetailViewModel: CardDetailViewModel by viewModels()
-
-    private val userListsViewModel: UserListsViewModel by viewModels()
 
     private val args: CardDetailFragmentArgs by navArgs()
 
@@ -51,6 +47,8 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         initToolbar()
         initFab()
 
+        initFragmentResultListeners()
+
         cardDetailViewModel.cardWithCardSetAndSkuIds.observe(viewLifecycleOwner) {
 
             populateLayout(it)
@@ -63,15 +61,16 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
              */
             initImageViewPager(listOf(it?.product?.imageUrl))
             initCardDetailViewPager(it)
-            initFragmentResultListeners(it?.skuIds?.get(0))
         }
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.action_add_to_watchlist -> {
+            R.id.action_add_to_user_list -> {
                 findNavController().safeNavigate(
-                    CardDetailFragmentDirections.actionCardDetailFragmentToUserListSelectionBottomSheetDialogFragment()
+                    CardDetailFragmentDirections.actionCardDetailFragmentToAddToUserListBottomSheetFragment(
+                        args.cardId
+                    )
                 )
             }
         }
@@ -156,7 +155,7 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         }
     }
 
-    private fun initFragmentResultListeners(skuId: Long?) {
+    private fun initFragmentResultListeners() {
         // This observers the [CardPricesBottomSheetDialog] in the ViewPager
         childFragmentManager.setFragmentResultListener(SNACKBAR_SHOW_REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
             val type = SnackbarType.valueOf(bundle.getString(SNACKBAR_TYPE) ?: SnackbarType.INFO.name)
@@ -165,23 +164,14 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             showSnackbar(message, type)
         }
 
-        parentFragmentManager.setFragmentResultListener(UserListSelectionBottomSheetDialogFragment.FRAGMENT_RESULT_REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
-            val selectedList = bundle.getParcelable<UserList>(UserListSelectionBottomSheetDialogFragment.SELECTED_USER_LIST_DATA_KEY)
+        // Observe [AddToUserListDialogFragment]
+        parentFragmentManager.setFragmentResultListener(
+            AddToUserListDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val userListName = bundle.getString(AddToUserListDialogFragment.ADDED_USER_LIST_NAME_DATA_KEY)
 
-            if (selectedList != null && skuId != null) {
-                lifecycleScope.launch {
-                    val job = userListsViewModel.insertToUserList(
-                        listId = selectedList.id,
-                        skuId = skuId
-                    )
-
-                    job.join()
-
-                    showSnackbar(getString(R.string.add_to_user_list_success_message, selectedList.name))
-                }
-
-            }
-
+            showSnackbar(getString(R.string.add_to_user_list_success_message, userListName))
         }
     }
 }

@@ -17,4 +17,6 @@ class SkuRepository @Inject constructor(
 
     suspend fun getSkuIdsPaginated(offset: Int, limit: Int = SKU_DEFAULT_QUERY_LIMIT) =
         skuLocalCache.getSkuIdsPaginated(offset, limit)
+
+    fun getSkuIdsForProduct(productId: Long) = skuLocalCache.getSkuIdsForProduct(productId)
 }

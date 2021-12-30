@@ -11,6 +11,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import sam.g.trackuriboh.MainNavDirections
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.data.types.UserListType
@@ -21,7 +22,7 @@ import sam.g.trackuriboh.utils.viewBinding
 import java.util.*
 
 
-class CreateUserListBottomSheetDialogFragment : BottomSheetDialogFragment() {
+class CreateUserListBottomSheetFragment : BottomSheetDialogFragment() {
 
     private val binding: BottomSheetCreateUserListBinding by viewBinding(BottomSheetCreateUserListBinding::inflate)
 
@@ -49,11 +50,11 @@ class CreateUserListBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     private fun initFragmentObservers() {
         parentFragmentManager.setFragmentResultListener(
-            AddEditUserListDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
+            SimpleTextFieldDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
             viewLifecycleOwner
         ) { _, bundle ->
             val type = selectedType
-            val name = bundle.getString(AddEditUserListDialogFragment.USER_LIST_NAME_DATA_KEY)
+            val name = bundle.getString(SimpleTextFieldDialogFragment.TEXT_DATA_KEY)
 
             if (type != null && name != null) {
                 setFragmentResult(
@@ -82,7 +83,7 @@ class CreateUserListBottomSheetDialogFragment : BottomSheetDialogFragment() {
                 val binding = ItemCreateUserListOptionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
                 with(binding) {
-                    val type = getItem(position)!!.also { selectedType = it }
+                    selectedType = getItem(position)
 
                     val icon = when (selectedType) {
                         UserListType.USER_LIST -> R.drawable.ic_baseline_playlist_add_24
@@ -100,10 +101,14 @@ class CreateUserListBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
                     itemCreateUserListOptionTextview.text = text?.let { getString(it) }
 
-                    root.setOnClickListener { _ ->
+                    root.setOnClickListener {
+                        val title = when (selectedType) {
+                            UserListType.USER_LIST -> getString(R.string.create_user_list_option)
+                            null -> getString(R.string.create_user_list_option)
+                        }
+
                         findNavController().safeNavigate(
-                            CreateUserListBottomSheetDialogFragmentDirections
-                                .actionCreateUserListBottomSheetDialogFragmentToAddEditUserListDialogFragment(type)
+                            MainNavDirections.actionGlobalSimpleTextFieldDialogFragment(title)
                         )
                     }
                 }

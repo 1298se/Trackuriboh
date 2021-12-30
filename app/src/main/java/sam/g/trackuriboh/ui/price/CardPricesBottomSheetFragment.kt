@@ -21,7 +21,7 @@ import sam.g.trackuriboh.utils.*
  * This fragment can be used as a bottom sheet by itself and an embedded fragment
  */
 @AndroidEntryPoint
-class CardPricesBottomSheetDialogFragment : BottomSheetDialogFragment() {
+class CardPricesBottomSheetFragment : BottomSheetDialogFragment() {
     private val mViewModel: CardPricesViewModel by viewModels()
 
     private val binding by viewBinding(BottomSheetCardPricesBinding::inflate)
@@ -36,10 +36,10 @@ class CardPricesBottomSheetDialogFragment : BottomSheetDialogFragment() {
          * (i.e. normally it's true, if it's inflated into a container view it's false), however ViewPager2
          * doesn't inflate, so we have to manually set it if we're embedding it into a ViewPager2
          */
-        const val EMBEDDED = "EMBEDDED"
+        const val EMBEDDED = "CardPricesBottomSheetFragment_EMBEDDED"
 
         fun newInstance(skus: List<Long>?, embedded: Boolean? = null) =
-            CardPricesBottomSheetDialogFragment().apply {
+            CardPricesBottomSheetFragment().apply {
                 arguments = Bundle().apply {
                     putLongArray(ARG_SKU_IDS, skus?.toLongArray())
 
@@ -68,7 +68,7 @@ class CardPricesBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
         // According to docs, don't use viewLifeCycleOwner for observe because of the dialog lifecycle being different
         mViewModel.run {
-            state.observe(if (showsDialog) this@CardPricesBottomSheetDialogFragment else viewLifecycleOwner) { uiState ->
+            state.observe(if (showsDialog) this@CardPricesBottomSheetFragment else viewLifecycleOwner) { uiState ->
                 when (uiState) {
                     is UiState.Loading -> binding.contentContainer.showOnly(binding.progressIndicator)
                     is UiState.Failure, is UiState.Success -> {

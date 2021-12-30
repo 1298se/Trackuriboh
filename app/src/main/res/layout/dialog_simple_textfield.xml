@@ -18,7 +18,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/add_edit_watchlist_name_text"
+            android:id="@+id/simple_textfield_edittext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

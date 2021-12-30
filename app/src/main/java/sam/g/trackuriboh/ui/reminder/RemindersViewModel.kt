@@ -8,11 +8,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import sam.g.trackuriboh.R
-import sam.g.trackuriboh.actions.RequestPermission
-import sam.g.trackuriboh.actions.UiAction
 import sam.g.trackuriboh.data.db.entities.Reminder
 import sam.g.trackuriboh.data.repository.ReminderRepository
 import sam.g.trackuriboh.managers.ReminderScheduler
+import sam.g.trackuriboh.ui.common.actions.RequestPermission
+import sam.g.trackuriboh.ui.common.actions.UiAction
 import sam.g.trackuriboh.utils.SingleEvent
 import java.util.*
 import javax.inject.Inject

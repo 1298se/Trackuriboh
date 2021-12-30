@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.bumptech.glide.Glide
 import sam.g.trackuriboh.R
-import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.databinding.ItemUserListEntryBinding
 import sam.g.trackuriboh.databinding.ListAddItemFooterBinding
 import sam.g.trackuriboh.databinding.ListHeaderBinding
@@ -38,10 +37,10 @@ class UserListEntryAdapter
     private var inActionMode = false
 
     interface OnItemClickListener {
-        fun onListEntryClick(entry: UserListEntry)
+        fun onListEntryClick(productId: Long)
         fun onAddCardClick()
-        fun onListEntryLongClick(entry: UserListEntry)
-        fun onListEntryChecked(entry: UserListEntry, isChecked: Boolean)
+        fun onListEntryLongClick(skuId: Long)
+        fun onListEntryChecked(skuId: Long, isChecked: Boolean)
     }
 
     inner class UserListEntryViewHolder(
@@ -50,23 +49,26 @@ class UserListEntryAdapter
 
         init {
             binding.root.setOnClickListener {
+                val userListEntryItem = getItem(bindingAdapterPosition) as UserListDetailViewModel.UiModel.UserListEntryItem
+
                 if (inActionMode) {
                     binding.itemUserListEntryCheckbox.toggle()
-
                     onItemClickListener?.onListEntryChecked(
-                        (getItem(bindingAdapterPosition) as UserListDetailViewModel.UiModel.UserListEntryItem).data.entry,
+                        userListEntryItem.data.entry.skuId,
                         binding.itemUserListEntryCheckbox.isChecked
                     )
                 } else {
                     onItemClickListener?.onListEntryClick(
-                        (getItem(bindingAdapterPosition) as UserListDetailViewModel.UiModel.UserListEntryItem).data.entry
+                        userListEntryItem.data.skuWithConditionAndPrintingAndProduct.productWithCardSet.product.id
                     )
                 }
             }
 
             binding.root.setOnLongClickListener {
+                val userListEntryItem = getItem(bindingAdapterPosition) as UserListDetailViewModel.UiModel.UserListEntryItem
+
                 onItemClickListener?.onListEntryLongClick(
-                    (getItem(bindingAdapterPosition) as UserListDetailViewModel.UiModel.UserListEntryItem).data.entry
+                    userListEntryItem.data.entry.skuId
                 )
 
                 true
@@ -85,13 +87,13 @@ class UserListEntryAdapter
 
             binding.itemUserListEntryTitleTextview.text = product.name
             binding.itemUserListRarityNumberTextview.text = itemView.resources.getString(
-                R.string.item_card_number_rarity,
+                R.string.number_rarity_oneline,
                 product.number,
                 product.rarity
             )
 
             binding.itemUserListEntryEditionConditionTextview.text = itemView.resources.getString(
-                R.string.item_user_list_edition_condition,
+                R.string.edition_condition_oneline,
                 skuWithConditionAndPrintingAndProduct.printing?.name,
                 skuWithConditionAndPrintingAndProduct.condition?.name,
             )

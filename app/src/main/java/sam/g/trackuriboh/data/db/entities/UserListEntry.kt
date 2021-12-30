@@ -21,4 +21,5 @@ data class UserListEntry(
     val listId: Long,
     // Don't want a foreign key here because then it will stop the DB download.
     val skuId: Long,
+    val quantity: Int,
 ) : Parcelable

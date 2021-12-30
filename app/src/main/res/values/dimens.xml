@@ -62,6 +62,7 @@
 
     <!-- Forms -->
     <dimen name="form_row_spacing">16dp</dimen>
+    <dimen name="text_field_height">48dp</dimen>
     <dimen name="text_field_dense_height">40dp</dimen>
     <dimen name="text_field_dense_paddingTop">8dp</dimen>
     <dimen name="text_field_dense_paddingStart">16dp</dimen>

@@ -12,25 +12,14 @@
         tools:layout="@layout/fragment_user_lists" >
 
         <action
-            android:id="@+id/action_userListsFragment_to_createUserListBottomSheetDialogFragment"
-            app:destination="@id/createUserListBottomSheetDialogFragment" />
+            android:id="@+id/action_userListsFragment_to_createUserListBottomSheetFragment"
+            app:destination="@id/createUserListBottomSheetFragment" />
     </fragment>
-    <dialog
-        android:id="@+id/addEditUserListDialogFragment"
-        android:name="sam.g.trackuriboh.ui.user_list.AddEditUserListDialogFragment"
-        tools:layout="@layout/dialog_add_edit_user_list" >
-        <argument
-            android:name="userListType"
-            app:argType="sam.g.trackuriboh.data.types.UserListType" />
-    </dialog>
 
     <dialog
-        android:id="@+id/createUserListBottomSheetDialogFragment"
-        android:name="sam.g.trackuriboh.ui.user_list.CreateUserListBottomSheetDialogFragment"
+        android:id="@+id/createUserListBottomSheetFragment"
+        android:name="sam.g.trackuriboh.ui.user_list.CreateUserListBottomSheetFragment"
         tools:layout="@layout/bottom_sheet_create_user_list" >
-        <action
-            android:id="@+id/action_createUserListBottomSheetDialogFragment_to_addEditUserListDialogFragment"
-            app:destination="@id/addEditUserListDialogFragment" />
     </dialog>
 
 </navigation>

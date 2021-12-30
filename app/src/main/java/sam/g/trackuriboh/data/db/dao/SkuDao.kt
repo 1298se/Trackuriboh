@@ -3,6 +3,7 @@ package sam.g.trackuriboh.data.db.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 import sam.g.trackuriboh.data.db.entities.Sku
 import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
 
@@ -21,4 +22,7 @@ interface SkuDao : BaseDao<Sku> {
 
     @Query("DELETE FROM Sku")
     suspend fun clearTable()
+
+    @Query("SELECT * FROM Sku WHERE productId = :productId")
+    fun getSkuIdsForProduct(productId: Long): Flow<List<SkuWithConditionAndPrinting>>
 }

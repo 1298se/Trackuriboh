@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -19,14 +20,18 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.android.material.composethemeadapter.MdcTheme
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.types.StringResourceEnum
 
 /**
- * TODO: Why is it so hard to just add a trailing icon...
+ * Why is it so hard to just add a trailing icon...
  */
 @Composable
 fun AppThemeDenseOutlinedTextField(
@@ -39,7 +44,7 @@ fun AppThemeDenseOutlinedTextField(
     trailingIcon: @Composable () -> Unit = { },
 ) {
     var curHintText by rememberSaveable { mutableStateOf(hintText) }
-TextAlign.Justify
+
     AppThemeOutlinedDenseRow(
         modifier = modifier,
         borderColor = borderColor
@@ -90,10 +95,9 @@ private fun AppThemeOutlinedDenseRow(
             .padding(
                 top = dimensionResource(id = R.dimen.text_field_dense_paddingTop),
                 bottom = dimensionResource(id = R.dimen.text_field_dense_paddingBottom),
-                start = dimensionResource (id = R.dimen.text_field_dense_paddingStart),
+                start = dimensionResource(id = R.dimen.text_field_dense_paddingStart),
                 end = dimensionResource(id = R.dimen.text_field_dense_paddingEnd)
             )
-            .fillMaxWidth(),
     ) {
         content()
     }
@@ -113,8 +117,8 @@ fun AppThemeOutlinedTextButton(
     AppThemeOutlinedDenseRow(
         modifier = modifier,
         borderColor = borderColor,
-        onClick = onButtonClick) {
-
+        onClick = onButtonClick
+    ) {
         Text(
             text = text,
             style = MaterialTheme.typography.subtitle1.copy(color = MaterialTheme.colors.onSurface),
@@ -128,6 +132,7 @@ fun AppThemeOutlinedTextButton(
 @Composable
 fun AppThemeDenseOutlinedAutoCompleteTextField(
     options: List<String>,
+    modifier: Modifier = Modifier,
     selectedOption: String? = null,
     onOptionSelected: (Int) -> Unit = { },
     hintText: String? = null
@@ -135,7 +140,7 @@ fun AppThemeDenseOutlinedAutoCompleteTextField(
     var expanded by rememberSaveable { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
-        modifier = Modifier.height(dimensionResource(id = R.dimen.text_field_dense_height)),
+        modifier = modifier.height(dimensionResource(id = R.dimen.text_field_dense_height)),
         expanded = expanded,
         onExpandedChange = {
             expanded = !expanded
@@ -176,14 +181,17 @@ fun AppThemeDenseOutlinedAutoCompleteTextField(
 @Composable
 fun AppThemeDenseOutlinedEnumAutoCompleteTextField(
     options: List<StringResourceEnum>,
+    modifier: Modifier = Modifier,
+    hintText: String? = null,
     selectedOption: StringResourceEnum? = null,
-    onOptionSelected: (Int) -> Unit = { }
+    onOptionSelected: (Int) -> Unit = { },
 ) {
     AppThemeDenseOutlinedAutoCompleteTextField(
+        modifier = modifier,
         options = options.map { stringResource(id = it.resourceId) },
         selectedOption = selectedOption?.resourceId?.let { stringResource(id = it) },
         onOptionSelected = onOptionSelected,
-        hintText = "Remind me of..."
+        hintText = hintText,
     )
 }
 
@@ -191,10 +199,10 @@ fun AppThemeDenseOutlinedEnumAutoCompleteTextField(
 fun ColumnScope.AppThemeDialogButtons(
     positiveButtonText: String,
     negativeButtonText: String,
+    onPositiveButtonClick: () -> Unit,
+    onNegativeButtonClick: () -> Unit,
     positiveButtonEnabled: Boolean = true,
     negativeButtonEnabled: Boolean = true,
-    onPositiveButtonClick: () -> Unit = { },
-    onNegativeButtonClick: () -> Unit = { },
 ) {
     Row(
         modifier = Modifier.align(Alignment.End)
@@ -219,3 +227,58 @@ fun ColumnScope.AppThemeDialogButtons(
         }
     }
 }
+
+@Composable
+fun QuantitySelector(
+    onQuantityChanged: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+    quantity: Int = 0,
+    borderColor: Color = Color.LightGray,
+) {
+    Row(
+        modifier = modifier
+            .height(dimensionResource(id = R.dimen.text_field_dense_height))
+            .clip(MaterialTheme.shapes.small)
+            .border(BorderStroke(2.dp, borderColor))
+            .padding(
+                top = dimensionResource(id = R.dimen.text_field_dense_paddingTop),
+                bottom = dimensionResource(id = R.dimen.text_field_dense_paddingBottom),
+            )
+    ) {
+        IconButton(onClick = { onQuantityChanged(quantity - 1) }) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_baseline_remove_24),
+                contentDescription = null
+            )
+        }
+        BasicTextField(
+            value = quantity.toString(),
+            modifier = Modifier.width(24.dp),
+            textStyle = MaterialTheme.typography.subtitle1.copy(
+                color = MaterialTheme.colors.onSurface,
+                textAlign = TextAlign.Center,
+            ),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            singleLine = true,
+            onValueChange = { onQuantityChanged(it.toIntOrNull() ?: 0) },
+        )
+        IconButton(onClick = { onQuantityChanged(quantity + 1) }) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_baseline_add_24dp),
+                contentDescription = null
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun QuantitySelectorPreview() {
+    MdcTheme {
+        QuantitySelector(
+            onQuantityChanged = { },
+            modifier = Modifier,
+        )
+    }
+}
+

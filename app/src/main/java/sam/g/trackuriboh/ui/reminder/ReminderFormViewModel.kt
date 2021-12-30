@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReminderFormViewModel @Inject constructor(
-    savedState: SavedStateHandle,
+    state: SavedStateHandle,
 ) : ViewModel() {
 
     data class ReminderFormState(
@@ -43,7 +43,7 @@ class ReminderFormViewModel @Inject constructor(
     }
 
     // TODO: Fix Magic Strings
-    private val reminder = savedState.get<Reminder?>("reminder")
+    private val reminder = state.get<Reminder?>("reminder")
 
     private val _formState = MutableLiveData(ReminderFormState(
         mode = if (reminder == null) Mode.CREATE else Mode.EDIT,

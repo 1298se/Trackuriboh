@@ -2,6 +2,7 @@ package sam.g.trackuriboh.ui.reminder.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
@@ -31,7 +32,7 @@ fun ReminderForm(
     onLinkChanged: (String) -> Unit,
     onSaveClick: () -> Unit,
     onCancelClick: () -> Unit,
-    showDateTimePicker: () -> Unit,
+    onDateTimeButtonClick: () -> Unit,
 ) {
 
     // Since the text buttons already have some margin at the top and bottom (???), we use paddingSmall at the bottom
@@ -50,23 +51,26 @@ fun ReminderForm(
             Text(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 text = stringResource(id = if (state?.mode == ReminderFormViewModel.Mode.EDIT) {
-                    R.string.lbl_edit_reminder
+                    R.string.edit_reminder_form_title
                 } else {
-                    R.string.lbl_create_reminder
+                    R.string.create_reminder_form_title
                 }),
                 style = MaterialTheme.typography.h6
             )
 
             AppThemeDenseOutlinedEnumAutoCompleteTextField(
+                modifier = Modifier.fillMaxWidth(),
                 options = state?.reminderTypeOptions ?: emptyList(),
+                hintText = stringResource(id = R.string.reminder_form_reminder_type_hint),
                 selectedOption = state?.formData?.reminderType,
                 onOptionSelected = onReminderTypeSelected
             )
 
             AppThemeDenseOutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
                 text = state?.formData?.host,
                 onValueChange = onHostChanged,
-                hintText = "Host",
+                hintText = stringResource(id = R.string.reminder_form_host_hint),
                 trailingIcon = {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_baseline_person_outline_24),
@@ -76,9 +80,10 @@ fun ReminderForm(
                 })
 
             AppThemeDenseOutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
                 text = state?.formData?.link,
                 onValueChange = onLinkChanged,
-                hintText = "Link",
+                hintText = stringResource(id = R.string.reminder_form_link_hint),
                 trailingIcon = {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_baseline_link_24),
@@ -88,10 +93,11 @@ fun ReminderForm(
                 })
 
             AppThemeOutlinedTextButton(
+                modifier = Modifier.fillMaxWidth(),
                 text = state?.formData?.date?.let {
                     DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault()).format(it)
-                } ?: "Date & Time",
-                onButtonClick = showDateTimePicker,
+                } ?: stringResource(id = R.string.reminder_form_date_time_hint),
+                onButtonClick = onDateTimeButtonClick,
                 trailingIcon = {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_baseline_event_note_24),

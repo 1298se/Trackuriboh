@@ -23,12 +23,20 @@
         <item name="linearProgressIndicatorStyle">@style/Widget.AppTheme.LinearProgressIndicator</item>
         <item name="tabStyle">@style/Widget.AppTheme.TabLayout</item>
         <item name="materialCardViewStyle">@style/Widget.AppTheme.CardView</item>
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.Apptheme.BottomSheetDialog</item>
 
         <!-- Contextual action bar -->
         <item name="windowActionModeOverlay">true</item>
-        <item name="actionModeStyle">@style/Widget.AppTheme.ActionMode</item>
         <item name="actionModeCloseDrawable">@drawable/ic_baseline_close_24dp</item>
         <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
+    </style>
+
+    <style name="ThemeOverlay.Apptheme.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Widget.AppTheme.BottomSheet.Modal</item>
+
+        <!-- Moves the bottom sheet dialog above the keyboard as per https://stackoverflow.com/questions/48002290/show-entire-bottom-sheet-with-edittext-above-keyboard-->
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
     <!-- We need this theme to customize the SearchView itself. To change the cursor color, just change the color accent here! -->

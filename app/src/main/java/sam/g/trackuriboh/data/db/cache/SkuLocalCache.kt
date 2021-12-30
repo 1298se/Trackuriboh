@@ -11,4 +11,6 @@ class SkuLocalCache @Inject constructor(
 
     suspend fun getSkuIdsPaginated(offset: Int, limit: Int) =
         appDatabase.skuDao().getSkuIdsPaginated(offset, limit)
+
+    fun getSkuIdsForProduct(productId: Long) = appDatabase.skuDao().getSkuIdsForProduct(productId)
 }

@@ -24,4 +24,15 @@
         android:id="@+id/action_global_cardDetailActivity"
         app:destination="@id/cardDetailActivity" />
 
+    <dialog
+        android:id="@+id/simpleTextFieldDialogFragment"
+        android:name="sam.g.trackuriboh.ui.user_list.SimpleTextFieldDialogFragment" >
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </dialog>
+
+    <action
+        android:id="@+id/action_global_simpleTextFieldDialogFragment"
+        app:destination="@id/simpleTextFieldDialogFragment" />
 </navigation>

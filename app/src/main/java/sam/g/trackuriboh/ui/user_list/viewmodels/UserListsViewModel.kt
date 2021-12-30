@@ -1,6 +1,5 @@
 package sam.g.trackuriboh.ui.user_list.viewmodels
 
-import android.app.Application
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -12,7 +11,6 @@ import javax.inject.Inject
 @HiltViewModel
 class UserListsViewModel @Inject constructor(
     private val userListRepository: UserListRepository,
-    private val application: Application,
 ) : ViewModel() {
 
     data class UiState(
@@ -47,7 +45,7 @@ class UserListsViewModel @Inject constructor(
 
     fun insertToUserList(listId: Long, skuId: Long) =
         viewModelScope.launch {
-            userListRepository.insertUserListEntry(UserListEntry(listId, skuId))
+            userListRepository.insertUserListEntry(UserListEntry(listId, skuId, 1))
         }
 
     fun setCurrentTabPosition(position: Int) {

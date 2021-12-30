@@ -8,7 +8,7 @@ import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
 import sam.g.trackuriboh.data.network.responses.Resource
 import sam.g.trackuriboh.data.repository.PriceRepository
 import sam.g.trackuriboh.ui.common.UiState
-import sam.g.trackuriboh.ui.price.CardPricesBottomSheetDialogFragment.Companion.ARG_SKU_IDS
+import sam.g.trackuriboh.ui.price.CardPricesBottomSheetFragment.Companion.ARG_SKU_IDS
 import javax.inject.Inject
 
 @HiltViewModel

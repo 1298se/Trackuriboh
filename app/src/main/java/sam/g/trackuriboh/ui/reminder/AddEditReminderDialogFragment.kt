@@ -18,6 +18,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
+import sam.g.trackuriboh.data.types.ReminderType
 import sam.g.trackuriboh.databinding.DialogAddEditRemindersBinding
 import sam.g.trackuriboh.ui.common.*
 import sam.g.trackuriboh.ui.reminder.components.ReminderForm
@@ -45,7 +46,7 @@ class AddEditReminderDialogFragment : DialogFragment(), DateTimePickerView.OnInt
     ): View {
         dialog?.setCanceledOnTouchOutside(false)
 
-        binding.composeContainer.apply {
+        binding.addEditRemindersComposeContainer.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MdcTheme {
@@ -56,7 +57,7 @@ class AddEditReminderDialogFragment : DialogFragment(), DateTimePickerView.OnInt
                         onHostChanged = viewModel::onHostChanged,
                         onLinkChanged = viewModel::onLinkValueChanged,
                         onReminderTypeSelected = viewModel::onReminderTypeChanged,
-                        showDateTimePicker = ::showDateTimePicker,
+                        onDateTimeButtonClick = ::showDateTimePicker,
                         onSaveClick = ::setReminder,
                         onCancelClick = findNavController()::popBackStack,
                     )
@@ -64,7 +65,7 @@ class AddEditReminderDialogFragment : DialogFragment(), DateTimePickerView.OnInt
             }
         }
 
-        binding.dateTimePicker.setOnInteractionListener(this@AddEditReminderDialogFragment)
+        binding.addEditRemindersDateTimePicker.setOnInteractionListener(this@AddEditReminderDialogFragment)
 
         return binding.root
     }
@@ -87,15 +88,26 @@ class AddEditReminderDialogFragment : DialogFragment(), DateTimePickerView.OnInt
     @Preview
     @Composable
     fun Preview() {
+        val formState = ReminderFormViewModel.ReminderFormState(
+            reminderTypeOptions = emptyList(),
+            canSave = true,
+            formData = ReminderFormViewModel.ReminderFormData(
+                ReminderType.AUCTION,
+                "Billy",
+                "https://facebook.com",
+                Date()
+            ),
+            ReminderFormViewModel.Mode.CREATE
+        )
         MdcTheme {
             ReminderForm(
-                state = null,
-                onHostChanged = viewModel::onHostChanged,
-                onLinkChanged = viewModel::onLinkValueChanged,
-                onReminderTypeSelected = viewModel::onReminderTypeChanged,
-                showDateTimePicker = ::showDateTimePicker,
-                onSaveClick = ::setReminder,
-                onCancelClick = findNavController()::popBackStack,
+                state = formState,
+                onHostChanged = { },
+                onLinkChanged = { },
+                onReminderTypeSelected = { },
+                onDateTimeButtonClick = { },
+                onSaveClick = { },
+                onCancelClick = { },
             )
         }
     }
@@ -109,12 +121,12 @@ class AddEditReminderDialogFragment : DialogFragment(), DateTimePickerView.OnInt
     }
 
     private fun showDateTimePicker() {
-        binding.composeContainer.visibility = View.GONE
-        binding.dateTimePicker.visibility = View.VISIBLE
+        binding.addEditRemindersComposeContainer.visibility = View.GONE
+        binding.addEditRemindersDateTimePicker.visibility = View.VISIBLE
     }
 
     private fun showRemindersForm() {
-        binding.composeContainer.visibility = View.VISIBLE
-        binding.dateTimePicker.visibility = View.GONE
+        binding.addEditRemindersComposeContainer.visibility = View.VISIBLE
+        binding.addEditRemindersDateTimePicker.visibility = View.GONE
     }
 }

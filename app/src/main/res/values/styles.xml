@@ -60,7 +60,8 @@
         <item name="backgroundTint">@color/icon_button_color_primary_alpha_selector</item>
     </style>
 
-    <style name="Widget.AppTheme.ActionMode" parent="Widget.AppCompat.ActionMode">
+    <style name="Widget.AppTheme.BottomSheet.Modal" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="behavior_peekHeight">324dp</item>
     </style>
 
     <style name="AppTheme.CardRecyclerView" parent="">

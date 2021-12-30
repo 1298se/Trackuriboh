@@ -28,10 +28,4 @@ class CardDetailViewModel @Inject constructor(
     val cardWithCardSetAndSkuIds: LiveData<ProductWithCardSetAndSkuIds?> = liveData {
         emit(productRepository.getProductWithSkusById(cardId))
     }
-
-    /*fun addToWatchlist(watchlistId: Long) {
-        viewModelScope.launch {
-            watchlistRepository.addToWatchlist(UserCollectionEntry(watchlistId = watchlistId, productId = cardId))
-        }
-    }*/
 }

@@ -66,7 +66,7 @@ class CardListAdapter : PagingDataAdapter<ProductWithCardSetAndSkuIds, CardListA
             binding.apply {
                 itemCardTitleTextview.text = item.product.name
                 itemCardNumberRarityTextview.text = itemView.resources.getString(
-                    R.string.item_card_number_rarity,
+                    R.string.number_rarity_oneline,
                     item.product.number,
                     item.product.rarity
                 )

@@ -56,8 +56,8 @@
     <string name="database_update_check_no_update_available">The database is up to date.</string>
 
     <!-- Card Item -->
-    <string name="item_card_list_content_desc">Card image</string>
-    <string name="item_card_number_rarity">%1$s \u2022 %2$s</string>
+    <string name="lbl_card_image">Card image</string>
+    <string name="number_rarity_oneline">%1$s \u2022 %2$s</string>
 
     <!-- Card Set Item -->
     <string name="lbl_no_date_available">No Date Available</string>
@@ -101,11 +101,12 @@
     <string name="facebook_client_token">5cbc3e0fd15bc7c41b702053ea1d1f62</string>
 
     <!-- User Lists -->
-    <string name="create_user_list_prompt_title">Create a list</string>
+    <string name="lbl_create_new_list">Create a new list</string>
     <string name="create_user_list_option">Create a list</string>
     <string name="user_list_remove_entries_action_title">Remove items</string>
 
     <string name="user_list_type_list">List</string>
+    <string name="create_user_list_action_title">Create</string>
 
     <!-- User List Detail -->
     <plurals name="user_list_detail_total_count">
@@ -113,16 +114,15 @@
         <item quantity="other">Total: %1$d cards</item>
     </plurals>
 
+    <!-- User List Selection -->
+    <string name="user_list_selection_title">Choose a list</string>
     <string name="user_list_detail_selected_count">%1$d selected</string>
-
     <string name="user_list_detail_add_new_card">Add a new card</string>
 
     <!-- Item User List Entry -->
-    <string name="item_user_list_edition_condition">%1$s \u2022 %2$s</string>
+    <string name="edition_condition_oneline">%1$s \u2022 %2$s</string>
 
     <!-- Reminders -->
-    <string name="lbl_create_reminder">Create Reminder</string>
-    <string name="lbl_edit_reminder">Edit Reminder</string>
     <string name="reminder_type_auction">Auction</string>
     <string name="reminder_type_claim_sale">Claim Sale</string>
     <string name="reminder_type_listing">Listing</string>
@@ -131,8 +131,21 @@
     <string name="reminder_permission_request_message">This reminder is currently saved, but Trackuriboh needs alarm permissions to activated it. Please</string>
     <string name="reminder_open_fail_message">There seems to be an issue with the attached link. Please verify it is valid.</string>
 
+    <!-- Reminder Form -->
+    <string name="create_reminder_form_title">Create Reminder</string>
+    <string name="edit_reminder_form_title">Edit Reminder</string>
+
+    <string name="reminder_form_reminder_type_hint">Reminder me of…</string>
+    <string name="reminder_form_date_time_hint"><![CDATA[Date & Time…]]></string>
+    <string name="reminder_form_host_hint">Host…</string>
+    <string name="reminder_form_link_hint">Link…</string>
+
     <!-- Reminder Item -->
     <string name="reminder_title" comment="E.g. Billy's Claim Sale">%1$s\'s %2$s</string>
+    
+    <!-- Add to user list form -->
+    <string name="add_to_user_list_select_sku_hint">Select SKU…</string>
+    <string name="add_to_user_list_select_list_hint">Select list…</string>
 
     <!-- Time Zones -->
     <!-- We have map each time zone to an actual ID in TimeZone.getAvailableIds() because using 3-letter
@@ -149,6 +162,4 @@
         <item>America/Denver</item>
         <item>America/Winnipeg</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

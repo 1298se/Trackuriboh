@@ -65,7 +65,7 @@ class UserListsFragment : Fragment() {
         with(binding.userListsFab) {
             setOnClickListener {
                 findNavController().safeNavigate(
-                    UserListsFragmentDirections.actionUserListsFragmentToCreateUserListBottomSheetDialogFragment()
+                    UserListsFragmentDirections.actionUserListsFragmentToCreateUserListBottomSheetFragment()
                 )
             }
         }
@@ -94,10 +94,10 @@ class UserListsFragment : Fragment() {
 
         with(parentFragmentManager) {
             setFragmentResultListener(
-                CreateUserListBottomSheetDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
+                CreateUserListBottomSheetFragment.FRAGMENT_RESULT_REQUEST_KEY,
                 viewLifecycleOwner
             ) { _, bundle ->
-                val userList = bundle.getParcelable<UserList>(CreateUserListBottomSheetDialogFragment.USER_LIST_DATA_KEY)!!
+                val userList = bundle.getParcelable<UserList>(CreateUserListBottomSheetFragment.USER_LIST_DATA_KEY)!!
                 viewModel.createUserList(userList)
             }
         }

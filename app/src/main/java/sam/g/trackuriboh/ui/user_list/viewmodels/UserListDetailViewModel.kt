@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import sam.g.trackuriboh.R
-import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.data.db.relations.UserListEntryWithSkuAndProduct
 import sam.g.trackuriboh.data.repository.UserListRepository
 import sam.g.trackuriboh.ui.user_list.UserListDetailFragment.Companion.ARG_WATCHLIST_ID
@@ -51,7 +50,7 @@ class UserListDetailViewModel @Inject constructor(
         value = UiState(emptyList(), false, null)
     }
 
-    private val checkedProductIdsLiveData = MutableLiveData<MutableSet<Long>>(mutableSetOf())
+    private val checkedSkuIdsLiveData = MutableLiveData<MutableSet<Long>>(mutableSetOf())
 
     init {
         _state.addSource(userListRepository.getEntriesInUserListObservable(userListId).map { list ->
@@ -72,7 +71,7 @@ class UserListDetailViewModel @Inject constructor(
             _state.value = _state.value?.copy(entries = it.toList())
         }
 
-        _state.addSource(checkedProductIdsLiveData) { checkedProductIds ->
+        _state.addSource(checkedSkuIdsLiveData) { checkedProductIds ->
             viewModelScope.launch(Dispatchers.Default) {
                 _state.value?.entries?.let {
                     _state.postValue(_state.value?.copy(
@@ -84,10 +83,10 @@ class UserListDetailViewModel @Inject constructor(
         }
     }
 
-    private fun updateCheckedStates(list: List<UiModel>, checkedProductIds: Set<Long>): List<UiModel> {
+    private fun updateCheckedStates(list: List<UiModel>, checkedSkuIds: Set<Long>): List<UiModel> {
         return list.map {
             if (it is UiModel.UserListEntryItem) {
-                if (checkedProductIds.contains(it.data.entry.skuId)) {
+                if (checkedSkuIds.contains(it.data.entry.skuId)) {
                     it.copy(isChecked = true)
                 } else {
                     it.copy(isChecked = false)
@@ -105,22 +104,22 @@ class UserListDetailViewModel @Inject constructor(
 
         _state.value = _state.value?.copy(actionModeActive = active)
 
-        checkedProductIdsLiveData.value = mutableSetOf()
+        checkedSkuIdsLiveData.value = mutableSetOf()
     }
 
-    fun setUserListEntryChecked(entry: UserListEntry, isChecked: Boolean) {
-        val checkedProductIds = if (isChecked) {
-            checkedProductIdsLiveData.value?.apply { add(entry.skuId) }
+    fun setUserListEntryChecked(skuId: Long, isChecked: Boolean) {
+        val checkedSkuIds = if (isChecked) {
+            checkedSkuIdsLiveData.value?.apply { add(skuId) }
         } else {
-            checkedProductIdsLiveData.value?.apply { remove(entry.skuId) }
+            checkedSkuIdsLiveData.value?.apply { remove(skuId) }
         }
 
-        checkedProductIdsLiveData.value = checkedProductIds ?: mutableSetOf()
+        checkedSkuIdsLiveData.value = checkedSkuIds ?: mutableSetOf()
     }
 
     fun deleteSelectedItems() {
         viewModelScope.launch {
-            userListRepository.deleteUserListEntries(userListId, checkedProductIdsLiveData.value?.toList())
+            userListRepository.deleteUserListEntries(userListId, checkedSkuIdsLiveData.value?.toList())
 
             setActionMode(false)
         }

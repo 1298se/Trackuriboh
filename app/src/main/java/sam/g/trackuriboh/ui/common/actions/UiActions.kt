@@ -1,4 +1,4 @@
-package sam.g.trackuriboh.actions
+package sam.g.trackuriboh.ui.common.actions
 
 sealed interface UiAction
 
