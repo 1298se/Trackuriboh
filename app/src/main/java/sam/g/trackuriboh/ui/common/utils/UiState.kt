@@ -1,4 +1,4 @@
-package sam.g.trackuriboh.ui.common
+package sam.g.trackuriboh.ui.common.utils
 
 /**
  * UI state for success/loading/failure

@@ -1,6 +1,6 @@
 package sam.g.trackuriboh.data.repository
 
-import sam.g.trackuriboh.data.db.cache.ProductLocalCache
+import sam.g.trackuriboh.data.db.cache.SkuLocalCache
 import sam.g.trackuriboh.data.db.entities.Sku
 import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
 import sam.g.trackuriboh.data.network.responses.Resource
@@ -12,14 +12,26 @@ import javax.inject.Singleton
 @Singleton
 class PriceRepository @Inject constructor(
     private val priceApiService: PriceApiService,
-    private val productLocalCache: ProductLocalCache,
+    private val skuLocalCache: SkuLocalCache,
     private val networkRequestHandler: NetworkRequestHandler
 ) {
 
     /**
      * Fetches price from API and updates database
      */
-    suspend fun getPricesForSkus(skuIds: List<Long>): Resource<List<SkuWithConditionAndPrinting>> {
+    suspend fun getPricesForProductSkus(productId: Long) =
+        getPricesForSkus(skuLocalCache.getSkusWithConditionAndPrinting(productId))
+
+
+    suspend fun getPricesForSkuIds(skuIds: List<Long>) =
+        getPricesForSkus(skuLocalCache.getSkusWithConditionAndPrinting(skuIds))
+
+    suspend fun getPricesForSkus(
+        skuWithConditionAndPrintings: List<SkuWithConditionAndPrinting>
+    ) : Resource<List<SkuWithConditionAndPrinting>> {
+
+        val skuIds = skuWithConditionAndPrintings.map { it.sku.id }
+
         val resource = networkRequestHandler.getTCGPlayerResource {
             priceApiService.getPricesForSkus(skuIds.joinToString(","))
         }
@@ -32,16 +44,17 @@ class PriceRepository @Inject constructor(
                     )
                 }
 
-                productLocalCache.updateSkuPrices(updates)
+                // Update and fetch updated prices
+                skuLocalCache.updateSkuPrices(updates)
 
-                Resource.Success(productLocalCache.getSkusWithConditionAndPrinting(skuIds))
+                Resource.Success(skuLocalCache.getSkusWithConditionAndPrinting(skuIds))
             }
             is Resource.Failure -> Resource.Failure(
                 resource.exception,
-                productLocalCache.getSkusWithConditionAndPrinting(skuIds)
+                skuWithConditionAndPrintings
             )
             else -> {
-                Resource.Success(productLocalCache.getSkusWithConditionAndPrinting(skuIds))
+                Resource.Success(skuWithConditionAndPrintings)
             }
         }
     }

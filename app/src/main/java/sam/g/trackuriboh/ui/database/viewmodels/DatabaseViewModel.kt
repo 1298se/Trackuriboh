@@ -1,16 +1,15 @@
 package sam.g.trackuriboh.ui.database.viewmodels
 
 import android.app.Application
-import android.database.Cursor
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import sam.g.trackuriboh.R
-import sam.g.trackuriboh.data.repository.CardSetRepository
-import sam.g.trackuriboh.data.repository.ProductRepository
-import sam.g.trackuriboh.ui.common.UiState
+import sam.g.trackuriboh.ui.common.utils.UiState
 import sam.g.trackuriboh.utils.SingleEvent
 import sam.g.trackuriboh.workers.DatabaseDownloadWorker
 import sam.g.trackuriboh.workers.DatabaseUpdateCheckWorker
@@ -22,8 +21,6 @@ import javax.inject.Inject
 class DatabaseViewModel @Inject constructor(
     private val workRequestManager: WorkRequestManager,
     private val workManager: WorkManager,
-    private val productRepository: ProductRepository,
-    private val cardSetRepository: CardSetRepository,
     private val application: Application,
 ) : ViewModel() {
 
@@ -31,11 +28,6 @@ class DatabaseViewModel @Inject constructor(
         CARDS(0),
         CARD_SETS(1),
     }
-
-    val searchSuggestionsCursor: LiveData<Cursor>
-        get() = _searchSuggestionsCursor
-
-    private val _searchSuggestionsCursor = MediatorLiveData<Cursor>()
 
     val databaseDownloadState: LiveData<SingleEvent<UiState<WorkInfo>>>
         get() = _databaseDownloadState
@@ -50,20 +42,12 @@ class DatabaseViewModel @Inject constructor(
     private val _databaseUpdateCheckState = MediatorLiveData<SingleEvent<UiState<WorkInfo>>>()
     private val _databaseUpdateState = MediatorLiveData<SingleEvent<UiState<WorkInfo>>>()
 
-    private val currentPage = MutableLiveData<Page>()
+    val currentPage: LiveData<Page>
+        get() = _currentPage
 
-    private var suggestionsQuery = MutableLiveData<String?>(null)
+    private val _currentPage = MutableLiveData<Page>()
 
     init {
-        _searchSuggestionsCursor.addSource(suggestionsQuery) {
-            getSearchSuggestions(it)
-        }
-
-        _searchSuggestionsCursor.addSource(currentPage) {
-            getSearchSuggestions(suggestionsQuery.value)
-        }
-
-
         // Observating database downloads
         _databaseDownloadState.addSource(
             workManager.getWorkInfosForUniqueWorkLiveData(DatabaseDownloadWorker::class.java.name)
@@ -206,12 +190,8 @@ class DatabaseViewModel @Inject constructor(
         workRequestManager.enqueueDatabaseUpdateCheck(true)
     }
 
-    fun setSearchSuggestion(query: String?) {
-        suggestionsQuery.value = query
-    }
-
     fun setCurrentPage(page: Page) {
-        currentPage.value = page
+        _currentPage.value = page
     }
 
     private fun onWorkInfoChanged(
@@ -246,17 +226,6 @@ class DatabaseViewModel @Inject constructor(
                 }
 
                 workManager.pruneWork()
-            }
-        }
-    }
-
-    private fun getSearchSuggestions(query: String?) {
-        viewModelScope.launch {
-
-            _searchSuggestionsCursor.value = when (currentPage.value) {
-                Page.CARDS -> productRepository.getSuggestionsCursor(query)
-                Page.CARD_SETS -> cardSetRepository.getSuggestionsCursor(query)
-                else -> return@launch
             }
         }
     }

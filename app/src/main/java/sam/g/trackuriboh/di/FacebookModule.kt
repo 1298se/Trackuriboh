@@ -1,4 +1,4 @@
-package sam.g.trackuriboh.di
+/*package sam.g.trackuriboh.di
 
 import com.facebook.CallbackManager
 import com.facebook.login.LoginManager
@@ -18,4 +18,4 @@ object FacebookModule {
 
     @Provides
     fun provideCallbackManager() = CallbackManager.Factory.create()
-}
+}*/

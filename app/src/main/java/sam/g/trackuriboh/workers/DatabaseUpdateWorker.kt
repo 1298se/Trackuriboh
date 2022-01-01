@@ -10,6 +10,7 @@ import kotlinx.coroutines.*
 import sam.g.trackuriboh.data.network.responses.CardResponse
 import sam.g.trackuriboh.data.repository.CardSetRepository
 import sam.g.trackuriboh.data.repository.ProductRepository
+import sam.g.trackuriboh.data.repository.SkuRepository
 import sam.g.trackuriboh.di.NetworkModule.DEFAULT_QUERY_LIMIT
 import java.util.*
 
@@ -19,6 +20,7 @@ class DatabaseUpdateWorker @AssistedInject constructor(
     @Assisted workerParams: WorkerParameters,
     private val cardSetRepository: CardSetRepository,
     private val productRepository: ProductRepository,
+    private val skuRepository: SkuRepository,
     private val sharedPreferences: SharedPreferences,
 ) : CoroutineWorker(appContext, workerParams) {
     companion object {
@@ -65,7 +67,7 @@ class DatabaseUpdateWorker @AssistedInject constructor(
 
                 productRepository.insertProducts(list.map { it.toDatabaseEntity() })
                 list.forEach { cardItem -> cardItem.skus?.let {
-                    productRepository.insertSkus(cardItem.skus.map { it.toDatabaseEntity() })
+                    skuRepository.insertSkus(cardItem.skus.map { it.toDatabaseEntity() })
                 } }
             }
 

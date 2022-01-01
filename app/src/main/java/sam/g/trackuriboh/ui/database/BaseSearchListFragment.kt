@@ -40,7 +40,7 @@ abstract class BaseSearchListFragment<T : Any> : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        getViewModel().getSearchResult().observe(viewLifecycleOwner) { pagingData ->
+        getViewModel().searchResult.observe(viewLifecycleOwner) { pagingData ->
             getAdapter().submitData(lifecycle, pagingData)
 
             getListView().invalidateItemDecorations()

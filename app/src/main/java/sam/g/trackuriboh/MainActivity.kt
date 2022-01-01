@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
 
     companion object {
-        const val FRAGMENT_RESULT_REQUEST_KEY = "MainActivity_fragmentResultRequestKey"
         const val ACTION_SET_BOTTOM_NAV_ENABLED = "MainActivity_setBottomNavEnabled"
     }
 
@@ -42,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFragmentResultListeners() {
-        navController.getBackStackEntry(R.id.main_nav).savedStateHandle.getLiveData<Boolean>(ACTION_SET_BOTTOM_NAV_ENABLED).observe(
+        navController.getBackStackEntry(R.id.mainGraph).savedStateHandle.getLiveData<Boolean>(ACTION_SET_BOTTOM_NAV_ENABLED).observe(
             this
         ) {
             binding.bottomNavView.menu.setEnabled(it)

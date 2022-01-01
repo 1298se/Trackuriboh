@@ -10,7 +10,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
-import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import androidx.work.WorkInfo
@@ -19,13 +19,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.*
 import sam.g.trackuriboh.MainActivity.Companion.ACTION_SET_BOTTOM_NAV_ENABLED
 import sam.g.trackuriboh.databinding.FragmentDatabaseBinding
-import sam.g.trackuriboh.ui.common.UiState
-import sam.g.trackuriboh.ui.database.CardListFragment.Companion.CARD_ID_DATA_KEY
-import sam.g.trackuriboh.ui.database.CardListFragment.Companion.FRAGMENT_RESULT_REQUEST_KEY
-import sam.g.trackuriboh.ui.database.CardSetListFragment.Companion.SET_ITEM_CLICK_REQUEST_KEY
-import sam.g.trackuriboh.ui.database.CardSetListFragment.Companion.SET_ITEM_ID
+import sam.g.trackuriboh.ui.common.utils.UiState
 import sam.g.trackuriboh.ui.database.adapters.DatabaseStateAdapter
 import sam.g.trackuriboh.ui.database.viewmodels.DatabaseViewModel
+import sam.g.trackuriboh.ui.search_suggestions.CardSearchSuggestionsViewModel
+import sam.g.trackuriboh.ui.search_suggestions.CardSetSearchSuggestionsViewModel
 import sam.g.trackuriboh.utils.*
 import sam.g.trackuriboh.workers.DatabaseUpdateCheckWorker
 import sam.g.trackuriboh.workers.WORKER_PROGRESS_KEY
@@ -38,17 +36,19 @@ import sam.g.trackuriboh.workers.WORKER_PROGRESS_KEY
  * we'll use activities to contain destinations that come from here.
  */
 @AndroidEntryPoint
-class DatabaseFragment :
-    Fragment(),
-    Toolbar.OnMenuItemClickListener {
+class DatabaseFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
     private val binding by viewBinding(FragmentDatabaseBinding::inflate)
 
     private lateinit var searchView: SearchView
 
-    private val viewModel: DatabaseViewModel by hiltNavGraphViewModels(R.id.database_nav)
-    private lateinit var stateAdapter: DatabaseStateAdapter
+    private val viewModel: DatabaseViewModel by viewModels()
 
+    private val cardSearchSuggestionsViewModel: CardSearchSuggestionsViewModel by viewModels()
+
+    private val cardSetSearchSuggestionsViewModel: CardSetSearchSuggestionsViewModel by viewModels()
+
+    private lateinit var stateAdapter: DatabaseStateAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
@@ -61,6 +61,7 @@ class DatabaseFragment :
 
         initToolbar()
         initTabLayoutWithViewPager()
+        initObservers()
         initDatabaseSyncObservers()
         initSearchSuggestions()
         initFragmentResultListeners()
@@ -206,7 +207,7 @@ class DatabaseFragment :
             return
         }
 
-        val savedStateHandle = findNavController().getBackStackEntry(R.id.main_nav).savedStateHandle
+        val savedStateHandle = findNavController().getBackStackEntry(R.id.mainGraph).savedStateHandle
 
         when (val uiState = workEvent.getContent()) {
             is UiState.Loading -> {
@@ -237,10 +238,13 @@ class DatabaseFragment :
     }
 
     private fun initSearchSuggestions() {
-
         searchView.initSearchSuggestions()
 
-        viewModel.searchSuggestionsCursor.observe(viewLifecycleOwner) {
+        cardSearchSuggestionsViewModel.suggestionsCursor.observe(viewLifecycleOwner) {
+            searchView.setSuggestionsCursor(it)
+        }
+
+        cardSetSearchSuggestionsViewModel.suggestionsCursor.observe(viewLifecycleOwner) {
             searchView.setSuggestionsCursor(it)
         }
     }
@@ -309,7 +313,11 @@ class DatabaseFragment :
                     }
 
                     override fun handleQueryTextChanged(newText: String?) {
-                        viewModel.setSearchSuggestion(newText)
+                        when(viewModel.currentPage.value) {
+                            DatabaseViewModel.Page.CARDS -> cardSearchSuggestionsViewModel.getSuggestions(newText)
+                            DatabaseViewModel.Page.CARD_SETS -> cardSetSearchSuggestionsViewModel.getSuggestions(newText)
+                            null -> return
+                        }
                     }
 
                     override fun handleSearchViewExpanded() {
@@ -321,7 +329,6 @@ class DatabaseFragment :
                     }
 
                     override fun handleSearchViewCollapse() {
-
                         // Show other menu items when searchview collapses
                         menu.children.forEach {
                             it.isVisible = true
@@ -356,6 +363,12 @@ class DatabaseFragment :
             }
         }
     }
+    private fun initObservers() {
+        viewModel.currentPage.observe(viewLifecycleOwner) {
+            // If they page change while we're showing suggestions, remove the current cursor
+            searchView.setSuggestionsCursor(null)
+        }
+    }
 
     /*
      * Fragment Result API. See https://developer.android.com/guide/fragments/communicate#fragment-result.
@@ -365,15 +378,19 @@ class DatabaseFragment :
      */
     private fun initFragmentResultListeners() {
         childFragmentManager.apply {
-            setFragmentResultListener(FRAGMENT_RESULT_REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
+            setFragmentResultListener(CardListFragment.FRAGMENT_RESULT_REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
+                val cardId = bundle.getLong(CardListFragment.CARD_ID_DATA_KEY)
+
                 findNavController().safeNavigate(
-                    MainNavDirections.actionGlobalCardDetailActivity(bundle.getLong(CARD_ID_DATA_KEY))
+                    MainGraphDirections.actionGlobalCardDetailActivity(cardId = cardId)
                 )
             }
 
-            setFragmentResultListener(SET_ITEM_CLICK_REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
+            setFragmentResultListener(CardSetListFragment.FRAGMENT_RESULT_REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
+                val setId = bundle.getLong(CardSetListFragment.SET_ID_DATA_KEY)
+
                 findNavController().safeNavigate(
-                    DatabaseFragmentDirections.actionDatabaseFragmentToCardSetDetailActivity(bundle.getLong(SET_ITEM_ID))
+                    MainGraphDirections.actionGlobalCardDetailActivity(setId = setId)
                 )
             }
         }

@@ -3,7 +3,7 @@ package sam.g.trackuriboh.ui.user_list
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
@@ -25,12 +25,13 @@ import sam.g.trackuriboh.utils.viewBinding
 class UserListsFragment : Fragment() {
     private val binding: FragmentUserListsBinding by viewBinding(FragmentUserListsBinding::inflate)
 
-    private val viewModel: UserListsViewModel by hiltNavGraphViewModels(R.id.user_lists_nav)
+    private val viewModel: UserListsViewModel by viewModels()
 
     private lateinit var userListsStateAdapter: UserListsStateAdapter
 
-    private val navigationDestinationChangedListener = NavController.OnDestinationChangedListener { navController, destination, _ ->
-        if (destination.parent?.id != R.id.user_lists_nav) {
+    // We use this to finish action mode when destination changes
+    private val navigationDestinationChangedListener = NavController.OnDestinationChangedListener { _, destination, _ ->
+        if (destination.parent?.id != R.id.userListsGraph) {
             // When we change tabs we want to remove actionmode
             finishActionMode()
         }
@@ -115,6 +116,14 @@ class UserListsFragment : Fragment() {
         }
 
         viewModel.userLists.observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                binding.userListsViewPager.visibility = View.GONE
+                binding.userListsTabLayout.visibility = View.GONE
+            } else {
+                binding.userListsViewPager.visibility = View.VISIBLE
+                binding.userListsTabLayout.visibility = View.VISIBLE
+            }
+
             if (binding.userListsViewPager.adapter == null) {
                 initViewPager(it)
             } else {
@@ -130,7 +139,7 @@ class UserListsFragment : Fragment() {
     private fun finishActionMode() {
         // Scope to main nav because if we use the current back stack entry, it will be removed when onDestinationChanged
         // gets called
-        findNavController().getBackStackEntry(R.id.main_nav).savedStateHandle.set(ACTION_FINISH_ACTION_MODE, true)
+        findNavController().getBackStackEntry(R.id.userListsGraph).savedStateHandle.set(ACTION_FINISH_ACTION_MODE, true)
     }
 
     override fun onStop() {

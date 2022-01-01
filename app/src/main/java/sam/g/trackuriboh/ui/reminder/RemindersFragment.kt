@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.fragment.app.Fragment
-import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +31,7 @@ class RemindersFragment : Fragment(), RemindersAdapter.OnItemClickListener {
         fun newInstance() = RemindersFragment()
     }
 
-    private val viewModel: RemindersViewModel by hiltNavGraphViewModels(R.id.reminders_nav)
+    private val viewModel: RemindersViewModel by viewModels()
 
     private lateinit var remindersAdapter: RemindersAdapter
 

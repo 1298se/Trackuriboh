@@ -8,9 +8,10 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import sam.g.trackuriboh.R
+import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.data.db.relations.UserListEntryWithSkuAndProduct
 import sam.g.trackuriboh.data.repository.UserListRepository
-import sam.g.trackuriboh.ui.user_list.UserListDetailFragment.Companion.ARG_WATCHLIST_ID
+import sam.g.trackuriboh.ui.user_list.UserListDetailFragment.Companion.ARG_USER_LIST
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,7 +21,7 @@ class UserListDetailViewModel @Inject constructor(
     state: SavedStateHandle,
 ) : ViewModel() {
 
-    private val userListId = state.get<Long>(ARG_WATCHLIST_ID)!!
+    val userList = state.get<UserList>(ARG_USER_LIST)!!
 
     sealed class UiModel {
         data class UserListEntryItem(
@@ -53,7 +54,7 @@ class UserListDetailViewModel @Inject constructor(
     private val checkedSkuIdsLiveData = MutableLiveData<MutableSet<Long>>(mutableSetOf())
 
     init {
-        _state.addSource(userListRepository.getEntriesInUserListObservable(userListId).map { list ->
+        _state.addSource(userListRepository.getEntriesInUserListObservable(userList.id).map { list ->
             // Map it to UiModels
             val transformList: MutableList<UiModel> = list.map {
                 UiModel.UserListEntryItem(it, false)
@@ -119,7 +120,7 @@ class UserListDetailViewModel @Inject constructor(
 
     fun deleteSelectedItems() {
         viewModelScope.launch {
-            userListRepository.deleteUserListEntries(userListId, checkedSkuIdsLiveData.value?.toList())
+            userListRepository.deleteUserListEntries(userList.id, checkedSkuIdsLiveData.value?.toList())
 
             setActionMode(false)
         }

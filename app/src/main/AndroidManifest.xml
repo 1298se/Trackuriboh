@@ -26,22 +26,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".ui.card_printings.CardPrintingsActivity"
-            android:exported="false" />
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
         <meta-data
             android:name="com.facebook.sdk.ClientToken"
             android:value="@string/facebook_client_token" />
-
         <activity
             android:name=".ui.card_detail.CardDetailActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ui.card_set_detail.CardSetDetailActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"
@@ -55,10 +47,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.facebook.FacebookActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
 
         <provider
             android:name="androidx.startup.InitializationProvider"

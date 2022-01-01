@@ -11,7 +11,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import sam.g.trackuriboh.MainNavDirections
+import sam.g.trackuriboh.MainGraphDirections
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.data.types.UserListType
@@ -108,7 +108,7 @@ class CreateUserListBottomSheetFragment : BottomSheetDialogFragment() {
                         }
 
                         findNavController().safeNavigate(
-                            MainNavDirections.actionGlobalSimpleTextFieldDialogFragment(title)
+                            MainGraphDirections.actionGlobalSimpleTextFieldDialogFragment(title)
                         )
                     }
                 }

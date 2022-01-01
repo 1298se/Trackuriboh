@@ -44,6 +44,6 @@ class CardSetRepository @Inject constructor(
 
     suspend fun getCardSetsWithCount() = cardSetLocalCache.getCardSetsWithCount()
 
-    suspend fun getSuggestionsCursor(query: String?) = cardSetLocalCache.getSearchSuggestions(query)
+    fun getSuggestionsCursor(query: String?) = cardSetLocalCache.getSearchSuggestions(query)
 
 }

@@ -2,25 +2,12 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/database_nav"
+    android:id="@+id/databaseGraph"
     app:startDestination="@id/databaseFragment">
 
-    <activity
-        android:id="@+id/cardSetDetailActivity"
-        android:name="sam.g.trackuriboh.ui.card_set_detail.CardSetDetailActivity"
-        tools:layout="@layout/fragment_card_set_detail">
-        <argument
-            android:name="setId"
-            app:argType="long" />
-    </activity>
     <fragment
         android:id="@+id/databaseFragment"
         android:name="sam.g.trackuriboh.ui.database.DatabaseFragment"
         android:label="@string/lbl_database"
-        tools:layout="@layout/fragment_database">
-        <action
-            android:id="@+id/action_databaseFragment_to_cardSetDetailActivity"
-            app:destination="@id/cardSetDetailActivity" />
-    </fragment>
-
+        tools:layout="@layout/fragment_database" />
 </navigation>

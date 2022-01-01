@@ -27,8 +27,8 @@ class CardSetListFragment : BaseSearchListFragment<CardSet>(), CardSetListAdapte
     private lateinit var mAdapter: CardSetListAdapter
 
     companion object {
-        const val SET_ITEM_CLICK_REQUEST_KEY = "CardSetListFragment_onItemClick"
-        const val SET_ITEM_ID = "CardSetListFragment_setId"
+        const val FRAGMENT_RESULT_REQUEST_KEY = "CardSetListFragment_requestResultKey"
+        const val SET_ID_DATA_KEY = "CardSetListFragment_setId"
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -54,7 +54,7 @@ class CardSetListFragment : BaseSearchListFragment<CardSet>(), CardSetListAdapte
     }
 
     override fun onItemClick(setId: Long) {
-        setFragmentResult(SET_ITEM_CLICK_REQUEST_KEY, bundleOf(SET_ITEM_ID to setId))
+        setFragmentResult(FRAGMENT_RESULT_REQUEST_KEY, bundleOf(SET_ID_DATA_KEY to setId))
     }
 
     private fun initRecyclerView() {

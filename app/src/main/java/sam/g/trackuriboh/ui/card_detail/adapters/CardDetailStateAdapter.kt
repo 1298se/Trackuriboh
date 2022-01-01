@@ -9,20 +9,20 @@ import sam.g.trackuriboh.ui.price.CardPricesBottomSheetFragment
 
 class CardDetailStateAdapter(
     fragment: Fragment,
-    private val productWithCardSetAndSkuIds: ProductWithCardSetAndSkuIds?,
+    private val productWithCardSetAndSkuIds: ProductWithCardSetAndSkuIds,
 ) : FragmentStateAdapter(fragment) {
 
     override fun getItemCount(): Int {
         var total = 0
 
-        productWithCardSetAndSkuIds?.let { total++ }
-        productWithCardSetAndSkuIds?.skuIds?.let { total++ }
+        productWithCardSetAndSkuIds.let { total++ }
+        productWithCardSetAndSkuIds.skuIds.let { total++ }
         return total
     }
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            CardDetailViewModel.Page.PRICES.position -> CardPricesBottomSheetFragment.newInstance(productWithCardSetAndSkuIds?.skuIds, true)
+            CardDetailViewModel.Page.PRICES.position -> CardPricesBottomSheetFragment.newInstance(productWithCardSetAndSkuIds.product.id, true)
             CardDetailViewModel.Page.OVERVIEW.position -> CardDetailOverviewFragment.newInstance(productWithCardSetAndSkuIds)
             else -> throw Exception("view pager out of bounds")
         }

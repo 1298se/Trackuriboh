@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/card_detail_nav"
+    android:id="@+id/cardDetailGraph"
     app:startDestination="@id/cardDetailFragment">
 
     <fragment
@@ -13,59 +13,29 @@
             android:name="cardId"
             app:argType="long" />
         <action
-            android:id="@+id/action_cardDetailFragment_to_cardSetDetailActivity"
-            app:destination="@id/cardSetDetailActivity" />
+            android:id="@+id/action_cardDetailFragment_to_cardSetDetailFragment"
+            app:destination="@id/cardSetDetailFragment" />
         <action
-            android:id="@+id/action_cardDetailFragment_to_cardPrintingsActivity"
-            app:destination="@id/cardPrintingsActivity" />
-        <action
-            android:id="@+id/action_cardDetailFragment_to_addToUserListBottomSheetFragment"
-            app:destination="@id/addToUserListBottomSheetFragment" />
-
+            android:id="@+id/action_cardDetailFragment_to_addToUserListGraph"
+            app:destination="@id/addToUserListGraph">
+            <argument
+                android:name="cardId"
+                app:argType="long" />
+        </action>
     </fragment>
 
-    <activity
-        android:id="@+id/cardPrintingsActivity"
-        android:name="sam.g.trackuriboh.ui.card_printings.CardPrintingsActivity"
-        tools:layout="@layout/fragment_card_list">
-        <argument
-            android:name="cardName"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="null" />
-    </activity>
-    <activity
-        android:id="@+id/cardSetDetailActivity"
-        android:name="sam.g.trackuriboh.ui.card_set_detail.CardSetDetailActivity"
+    <fragment
+        android:id="@+id/cardSetDetailFragment"
+        android:name="sam.g.trackuriboh.ui.card_set_detail.CardSetDetailFragment"
         tools:layout="@layout/fragment_card_set_detail">
         <argument
             android:name="setId"
             app:argType="long" />
-    </activity>
-    <dialog
-        android:id="@+id/addToUserListBottomSheetFragment"
-        android:name="sam.g.trackuriboh.ui.user_list.AddToUserListDialogFragment"
-        tools:layout="@layout/dialog_add_to_user_list">
         <action
-            android:id="@+id/action_addToUserListBottomSheetFragment_to_userListSelectionBottomSheetFragment"
-            app:destination="@id/userListSelectionBottomSheetFragment" />
-        <action
-            android:id="@+id/action_addToUserListBottomSheetFragment_to_skuSelectionBottomSheetFragment"
-            app:destination="@id/skuSelectionBottomSheetFragment" />
-        <argument
-            android:name="cardId"
-            app:argType="long" />
-    </dialog>
+            android:id="@+id/action_cardSetDetailFragment_to_cardDetailFragment"
+            app:destination="@id/cardDetailFragment" />
+    </fragment>
 
-    <dialog
-        android:id="@+id/userListSelectionBottomSheetFragment"
-        android:name="sam.g.trackuriboh.ui.user_list.UserListSelectionBottomSheetFragment" />
+    <include app:graph="@navigation/add_to_user_list" />
 
-    <dialog
-        android:id="@+id/skuSelectionBottomSheetFragment"
-        android:name="sam.g.trackuriboh.ui.card_detail.SkuSelectionBottomSheetFragment" >
-        <argument
-            android:name="cardId"
-            app:argType="long" />
-    </dialog>
 </navigation>

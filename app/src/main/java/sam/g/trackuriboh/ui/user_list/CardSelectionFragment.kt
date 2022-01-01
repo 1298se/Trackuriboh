@@ -1,4 +1,4 @@
-package sam.g.trackuriboh.ui.card_set_detail
+package sam.g.trackuriboh.ui.user_list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,22 +14,20 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.R
-import sam.g.trackuriboh.databinding.FragmentCardSetDetailBinding
-import sam.g.trackuriboh.ui.card_set_detail.viewmodels.CardSetDetailViewModel
+import sam.g.trackuriboh.databinding.FragmentCardSelectionBinding
 import sam.g.trackuriboh.ui.database.CardListFragment
 import sam.g.trackuriboh.ui.search_suggestions.CardSearchSuggestionsViewModel
 import sam.g.trackuriboh.utils.*
 
 @ExperimentalMaterialApi
 @AndroidEntryPoint
-class CardSetDetailFragment : Fragment() {
-    private val binding by viewBinding(FragmentCardSetDetailBinding::inflate)
+class CardSelectionFragment : Fragment() {
 
-    private val viewModel: CardSetDetailViewModel by viewModels()
+    private val binding: FragmentCardSelectionBinding by viewBinding(FragmentCardSelectionBinding::inflate)
 
     private val searchSuggestionsViewModel: CardSearchSuggestionsViewModel by viewModels()
 
-    private val args: CardSetDetailFragmentArgs by navArgs()
+    private val args: CardSelectionFragmentArgs by navArgs()
 
     private lateinit var searchView: SearchView
 
@@ -42,25 +40,51 @@ class CardSetDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        cardListFragment = CardListFragment.newInstance(setId = args.setId)
+        cardListFragment = CardListFragment.newInstance()
 
         childFragmentManager.beginTransaction().replace(
-            binding.cardSetDetailFragmentContainer.id,
+            binding.newCardSelectionFragmentContainer.id,
             cardListFragment
         ).commit()
 
         initToolbar()
         initSearchSuggestions()
-        initObservers()
+        initFragmentResultListeners()
+    }
+
+    private fun initFragmentResultListeners() {
+        childFragmentManager.setFragmentResultListener(
+            CardListFragment.FRAGMENT_RESULT_REQUEST_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val cardId = bundle.getLong(CardListFragment.CARD_ID_DATA_KEY)
+
+            findNavController().safeNavigate(
+                CardSelectionFragmentDirections.actionCardSelectionFragmentToAddToUserListGraph(
+                    cardId = cardId,
+                    userList = args.userList
+                )
+            )
+        }
+        
+        parentFragmentManager.setFragmentResultListener(
+            AddToUserListDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
+            viewLifecycleOwner
+        ) { _, _ ->
+            findNavController().navigateUp()
+        }
     }
 
     private fun initToolbar() {
-        binding.cardSetDetailToolbar.setupWithNavController(
+        binding.cardSelectionToolbar.setupWithNavController(
             findNavController(),
-            AppBarConfiguration.Builder().setFallbackOnNavigateUpListener {
-                activity?.finish()
-                true
-            }.build()
+            AppBarConfiguration(
+                topLevelDestinationIds = setOf(),
+                fallbackOnNavigateUpListener = {
+                    activity?.finish()
+                    true
+                }
+            )
         )
 
         createOptionsMenu()
@@ -71,21 +95,14 @@ class CardSetDetailFragment : Fragment() {
 
         searchView.initSearchSuggestions()
 
-        searchSuggestionsViewModel.searchInSet(args.setId)
-
         searchSuggestionsViewModel.suggestionsCursor.observe(viewLifecycleOwner) {
             searchView.setSuggestionsCursor(it)
         }
     }
 
-    private fun initObservers() {
-        viewModel.cardSet.observe(viewLifecycleOwner) {
-            binding.cardSetDetailToolbar.title = it.name
-        }
-    }
 
     private fun createOptionsMenu() {
-        binding.cardSetDetailToolbar.apply {
+        binding.cardSelectionToolbar.apply {
             inflateMenu(R.menu.card_set_detail_toolbar)
 
             menu.findItem(R.id.action_search).apply {

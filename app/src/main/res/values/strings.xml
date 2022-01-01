@@ -55,6 +55,9 @@
 
     <string name="database_update_check_no_update_available">The database is up to date.</string>
 
+    <!-- Card List -->
+    <string name="lbl_card_list">Card list</string>
+
     <!-- Card Item -->
     <string name="lbl_card_image">Card image</string>
     <string name="number_rarity_oneline">%1$s \u2022 %2$s</string>
@@ -121,6 +124,9 @@
 
     <!-- Item User List Entry -->
     <string name="edition_condition_oneline">%1$s \u2022 %2$s</string>
+
+    <!-- Card Selection -->
+    <string name="lbl_select_card">Select card</string>
 
     <!-- Reminders -->
     <string name="reminder_type_auction">Auction</string>

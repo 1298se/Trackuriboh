@@ -129,7 +129,7 @@ fun SearchView.initSearchSuggestions() {
     })
 }
 
-fun SearchView.setSuggestionsCursor(cursor: Cursor) {
+fun SearchView.setSuggestionsCursor(cursor: Cursor?) {
     var newCursor: Cursor? = null
 
     // We only want to set the cursor if the threshold is reached, otherwise

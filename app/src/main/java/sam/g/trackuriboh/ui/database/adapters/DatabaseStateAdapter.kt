@@ -13,7 +13,7 @@ class DatabaseStateAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) 
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            DatabaseViewModel.Page.CARDS.position -> CardListFragment()
+            DatabaseViewModel.Page.CARDS.position -> CardListFragment.newInstance()
             DatabaseViewModel.Page.CARD_SETS.position -> CardSetListFragment()
             else -> throw Exception("view pager out of bounds")
         }

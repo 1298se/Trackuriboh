@@ -13,7 +13,7 @@ import sam.g.trackuriboh.*
 import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
 import sam.g.trackuriboh.databinding.BottomSheetCardPricesBinding
 import sam.g.trackuriboh.ui.common.OneLineAttributeCardView
-import sam.g.trackuriboh.ui.common.UiState
+import sam.g.trackuriboh.ui.common.utils.UiState
 import sam.g.trackuriboh.ui.price.viewmodels.CardPricesViewModel
 import sam.g.trackuriboh.utils.*
 
@@ -28,7 +28,7 @@ class CardPricesBottomSheetFragment : BottomSheetDialogFragment() {
 
     companion object {
         // This is the same value as the navArg name so that the SavedStateHandle can acess from either
-        const val ARG_SKU_IDS = "skuIds"
+        const val ARG_PRODUCT_ID = "skuIds"
 
         /*
          * Arg for if the fragment is embedded in a parent fragment. The result of setting this is changing the value for
@@ -36,14 +36,14 @@ class CardPricesBottomSheetFragment : BottomSheetDialogFragment() {
          * (i.e. normally it's true, if it's inflated into a container view it's false), however ViewPager2
          * doesn't inflate, so we have to manually set it if we're embedding it into a ViewPager2
          */
-        const val EMBEDDED = "CardPricesBottomSheetFragment_EMBEDDED"
+        const val ARG_EMBEDDED = "CardPricesBottomSheetFragment_argEmbedded"
 
-        fun newInstance(skus: List<Long>?, embedded: Boolean? = null) =
+        fun newInstance(productId: Long, embedded: Boolean? = null) =
             CardPricesBottomSheetFragment().apply {
                 arguments = Bundle().apply {
-                    putLongArray(ARG_SKU_IDS, skus?.toLongArray())
+                    putLong(ARG_PRODUCT_ID, productId)
 
-                    embedded?.let { putBoolean(EMBEDDED, embedded) }
+                    embedded?.let { putBoolean(ARG_EMBEDDED, embedded) }
                 }
             }
     }
@@ -52,7 +52,7 @@ class CardPricesBottomSheetFragment : BottomSheetDialogFragment() {
         super.onCreate(savedInstanceState)
 
         // If it's embedded, we don't want to show the dialog because it will dim the background
-        arguments?.getBoolean(EMBEDDED, showsDialog)?.let {
+        arguments?.getBoolean(ARG_EMBEDDED, showsDialog)?.let {
             showsDialog = !it
         }
     }
@@ -98,7 +98,7 @@ class CardPricesBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun buildSkuPriceViews(data: Map<String?, List<SkuWithConditionAndPrinting>>) {
         data.toList().forEachIndexed { index, entry ->
-            binding.contentContainer.addView(OneLineAttributeCardView(context).apply {
+            binding.contentContainer.addView(OneLineAttributeCardView(requireContext()).apply {
                 layoutParams = ViewGroup.MarginLayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT,

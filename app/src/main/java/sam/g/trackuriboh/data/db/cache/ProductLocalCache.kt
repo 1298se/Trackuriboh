@@ -1,9 +1,13 @@
 package sam.g.trackuriboh.data.db.cache
 
 import androidx.paging.PagingSource
+import kotlinx.coroutines.flow.map
 import sam.g.trackuriboh.data.db.AppDatabase
 import sam.g.trackuriboh.data.db.dao.toSearchSuggestionsCursor
-import sam.g.trackuriboh.data.db.entities.*
+import sam.g.trackuriboh.data.db.entities.CardRarity
+import sam.g.trackuriboh.data.db.entities.Condition
+import sam.g.trackuriboh.data.db.entities.Printing
+import sam.g.trackuriboh.data.db.entities.Product
 import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
 import sam.g.trackuriboh.data.types.ProductType
 import javax.inject.Inject
@@ -34,19 +38,10 @@ class ProductLocalCache @Inject constructor(
     suspend fun insertPrintings(printings: List<Printing>) =
         appDatabase.printingDao().insert(printings)
 
-    suspend fun insertSkus(skus: List<Sku>) =
-        appDatabase.skuDao().insert(skus)
+    fun getSuggestionsCursorObservable(query: String?, setId: Long? = null) =
+        appDatabase.productDao().getSearchSuggestionsObservable(listOf(ProductType.CARD), setId, query ?: "").map {
+            it.toSearchSuggestionsCursor()
+        }
 
-    suspend fun updateSkuPrices(skuPriceUpdates: List<Sku.SkuPriceUpdate>) =
-        appDatabase.skuDao().updateSkuPrices(skuPriceUpdates)
-
-    suspend fun getSkusWithConditionAndPrinting(skuIds: List<Long>) =
-        appDatabase.skuDao().getSkusWithConditionAndPrinting(skuIds)
-
-    suspend fun getSearchSuggestions(query: String?) =
-        getSearchSuggestionsInSet(null, query)
-
-    suspend fun getSearchSuggestionsInSet(setId: Long?, query: String?) =
-        appDatabase.productDao().getSearchSuggestions(listOf(ProductType.CARD), setId, query ?: "")
-            .toSearchSuggestionsCursor()
+    fun getProductPrintings(name: String) = appDatabase.productDao().getProductPrintings(name)
 }

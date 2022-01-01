@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/user_lists_nav"
+    android:id="@+id/userListsGraph"
     app:startDestination="@id/userListsFragment">
 
     <fragment
@@ -14,12 +14,34 @@
         <action
             android:id="@+id/action_userListsFragment_to_createUserListBottomSheetFragment"
             app:destination="@id/createUserListBottomSheetFragment" />
+        <action
+            android:id="@+id/action_userListsFragment_to_newCardSelectionFragment"
+            app:destination="@id/cardSelectionFragment" />
     </fragment>
 
     <dialog
         android:id="@+id/createUserListBottomSheetFragment"
         android:name="sam.g.trackuriboh.ui.user_list.CreateUserListBottomSheetFragment"
-        tools:layout="@layout/bottom_sheet_create_user_list" >
-    </dialog>
+        tools:layout="@layout/bottom_sheet_create_user_list" />
+
+    <include app:graph="@navigation/add_to_user_list" />
+    <fragment
+        android:id="@+id/cardSelectionFragment"
+        android:label="@string/lbl_select_card"
+        android:name="sam.g.trackuriboh.ui.user_list.CardSelectionFragment" >
+        <argument
+            android:name="userList"
+            app:argType="sam.g.trackuriboh.data.db.entities.UserList" />
+        <action
+            android:id="@+id/action_cardSelectionFragment_to_addToUserListGraph"
+            app:destination="@id/addToUserListGraph">
+            <argument
+                android:name="cardId"
+                app:argType="long" />
+            <argument
+                android:name="userList"
+                app:argType="sam.g.trackuriboh.data.db.entities.UserList" />
+        </action>
+    </fragment>
 
 </navigation>

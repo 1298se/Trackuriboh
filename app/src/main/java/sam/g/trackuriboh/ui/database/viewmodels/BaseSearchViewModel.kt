@@ -1,17 +1,16 @@
 package sam.g.trackuriboh.ui.database.viewmodels
 
-import androidx.annotation.MainThread
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import kotlinx.coroutines.flow.Flow
 import sam.g.trackuriboh.utils.SingleEvent
 
-abstract class BaseSearchViewModel<T : Any>(initialQuery: String? = null) : ViewModel() {
+abstract class BaseSearchViewModel<T : Any> : ViewModel() {
 
-    private var query = MutableLiveData<String?>(initialQuery)
+    private val searchQuery = MutableLiveData<String?>(null)
 
-    private var searchResult: LiveData<PagingData<T>> = Transformations.switchMap(query) {
+    val searchResult: LiveData<PagingData<T>> = Transformations.switchMap(searchQuery) {
         searchSource(it).cachedIn(viewModelScope).asLiveData()
     }
 
@@ -20,22 +19,19 @@ abstract class BaseSearchViewModel<T : Any>(initialQuery: String? = null) : View
 
     private val _shouldScrollToTop = MutableLiveData(SingleEvent(false))
 
-
     /**
      * Search a repository based on a query string.
      * We want to check against the previous query, because if it's the same, we don't want to reload the data
+     * and scroll back to the top of the list
      */
-    @MainThread
     fun search(query: String?) {
-        if (query != this.query.value) {
-            this.query.value = query
+        if (query != searchQuery.value) {
+            searchQuery.value = query
             _shouldScrollToTop.value = _shouldScrollToTop.value?.copy(true)
         }
     }
 
-    fun currentQueryValue(): String? = query.value
-
-    fun getSearchResult(): LiveData<PagingData<T>> = searchResult
+    fun currentQueryValue() = searchQuery.value
 
     protected abstract fun searchSource(query: String?): Flow<PagingData<T>>
 }

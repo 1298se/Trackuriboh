@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,21 +12,20 @@
         android:background="@android:color/transparent"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        app:layout_constraintTop_toTopOf="@id/card_set_detail_toolbar" />
+        app:layout_constraintTop_toTopOf="@id/card_selection_toolbar" />
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/card_set_detail_toolbar"
+        android:id="@+id/card_selection_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         style="@style/Widget.MaterialComponents.Toolbar.Primary" />
 
-
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/card_set_detail_fragment_container"
+        android:id="@+id/new_card_selection_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/card_set_detail_toolbar"
+        app:layout_constraintTop_toBottomOf="@id/card_selection_toolbar"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

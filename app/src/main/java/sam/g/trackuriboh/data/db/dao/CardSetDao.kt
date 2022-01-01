@@ -4,6 +4,8 @@ import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.MapInfo
 import androidx.room.Query
+import androidx.room.Transaction
+import kotlinx.coroutines.flow.Flow
 import sam.g.trackuriboh.data.db.entities.CardSet
 
 @Dao
@@ -12,6 +14,7 @@ interface CardSetDao : BaseDao<CardSet> {
     suspend fun getCardSet(setId: Long): CardSet
 
     @MapInfo(valueColumn = "cardSetCount")
+    @Transaction
     @Query("SELECT *, COUNT(Product.id) AS cardSetCount FROM CardSet LEFT JOIN Product ON CardSet.id = Product.setId GROUP BY CardSet.id")
     suspend fun getCardSetsWithCount(): Map<CardSet, Int>
 
@@ -38,11 +41,11 @@ interface CardSetDao : BaseDao<CardSet> {
             "WHEN name LIKE '%' || :query THEN 4 " +
             "ELSE 5 " +
             "END, INSTR(LOWER(name), :query), name LIMIT :limit")
-    suspend fun getSearchSuggestions(
+    fun getSearchSuggestions(
         query: String,
         fuzzyQuery: String = getFuzzySearchQuery(query),
         limit: Int = SEARCH_SUGGESTIONS_RESULT_SIZE
-    ): List<String>
+    ): Flow<List<String>>
 
     @Query("DELETE FROM CardSet")
     suspend fun clearTable()

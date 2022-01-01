@@ -1,6 +1,7 @@
 package sam.g.trackuriboh.data.repository
 
 import sam.g.trackuriboh.data.db.cache.SkuLocalCache
+import sam.g.trackuriboh.data.db.entities.Sku
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,5 +19,9 @@ class SkuRepository @Inject constructor(
     suspend fun getSkuIdsPaginated(offset: Int, limit: Int = SKU_DEFAULT_QUERY_LIMIT) =
         skuLocalCache.getSkuIdsPaginated(offset, limit)
 
-    fun getSkuIdsForProduct(productId: Long) = skuLocalCache.getSkuIdsForProduct(productId)
+
+    suspend fun getSkusWithConditionAndPrinting(productId: Long) =
+        skuLocalCache.getSkusWithConditionAndPrinting(productId)
+
+    suspend fun insertSkus(skus: List<Sku>) = skuLocalCache.insertSkus(skus)
 }

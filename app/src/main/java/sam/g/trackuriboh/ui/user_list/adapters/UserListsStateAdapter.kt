@@ -13,7 +13,7 @@ class UserListsStateAdapter(
 
     override fun getItemCount(): Int = lists.size
 
-    override fun createFragment(position: Int): Fragment = UserListDetailFragment.newInstance(lists[position].id)
+    override fun createFragment(position: Int): Fragment = UserListDetailFragment.newInstance(lists[position])
 
     fun setUserLists(data: List<UserList>) {
         lists = data

@@ -2,8 +2,8 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_nav"
-    app:startDestination="@id/database_nav">
+    android:id="@+id/mainGraph"
+    app:startDestination="@id/databaseGraph">
 
     <include app:graph="@navigation/database" />
 
@@ -17,7 +17,12 @@
         tools:layout="@layout/fragment_card_detail">
         <argument
             android:name="cardId"
-            app:argType="long" />
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <argument
+            android:name="setId"
+            app:argType="long"
+            android:defaultValue="-1L" />
     </activity>
 
     <action

@@ -10,7 +10,7 @@ import sam.g.trackuriboh.databinding.OneLineAttributeCardViewBinding
 import sam.g.trackuriboh.databinding.OneLineAttributeRowBinding
 
 class OneLineAttributeCardView @JvmOverloads constructor(
-    context: Context?,
+    context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = R.style.AppTheme
 ) : MaterialCardView(context, attrs, defStyle) {

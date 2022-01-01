@@ -41,7 +41,7 @@ class PriceSyncWorker @AssistedInject constructor(
                     break
                 }
 
-                val resource = priceRepository.getPricesForSkus(skuIds)
+                val resource = priceRepository.getPricesForSkuIds(skuIds)
 
                 if (resource is Resource.Failure) {
                     throw IOException(resource.exception)

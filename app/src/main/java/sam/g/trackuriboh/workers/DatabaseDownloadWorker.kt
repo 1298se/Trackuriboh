@@ -17,6 +17,7 @@ import sam.g.trackuriboh.data.db.AppDatabase
 import sam.g.trackuriboh.data.repository.CardSetRepository
 import sam.g.trackuriboh.data.repository.CatalogRepository
 import sam.g.trackuriboh.data.repository.ProductRepository
+import sam.g.trackuriboh.data.repository.SkuRepository
 import sam.g.trackuriboh.di.NetworkModule.DEFAULT_QUERY_LIMIT
 import sam.g.trackuriboh.utils.MAX_PROGRESS
 import sam.g.trackuriboh.utils.createNotificationBuilder
@@ -32,6 +33,7 @@ class DatabaseDownloadWorker @AssistedInject constructor(
     private val cardSetRepository: CardSetRepository,
     private val productRepository: ProductRepository,
     private val catalogRepository: CatalogRepository,
+    private val skuRepository: SkuRepository,
     private val appDatabase: AppDatabase,
     private val sharedPreferences: SharedPreferences,
     private val workManager: WorkManager,
@@ -165,7 +167,7 @@ class DatabaseDownloadWorker @AssistedInject constructor(
 
             productRepository.insertProducts(products.map { it.toDatabaseEntity() })
             products.forEach { cardItem -> cardItem.skus?.let {
-                productRepository.insertSkus(cardItem.skus.map { it.toDatabaseEntity() })
+                skuRepository.insertSkus(cardItem.skus.map { it.toDatabaseEntity() })
             } }
         }
     }

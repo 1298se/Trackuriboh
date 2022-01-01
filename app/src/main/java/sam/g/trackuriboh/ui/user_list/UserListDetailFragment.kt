@@ -8,8 +8,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
-import sam.g.trackuriboh.MainNavDirections
+import sam.g.trackuriboh.MainGraphDirections
 import sam.g.trackuriboh.R
+import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.databinding.FragmentUserListDetailBinding
 import sam.g.trackuriboh.ui.user_list.UserListsFragment.Companion.ACTION_FINISH_ACTION_MODE
 import sam.g.trackuriboh.ui.user_list.adapters.UserListEntryAdapter
@@ -21,13 +22,12 @@ import sam.g.trackuriboh.utils.viewBinding
 class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListener {
 
     companion object {
-        // This is the same value as the navArg name so that the SavedStateHandle can acess from either
-        const val ARG_WATCHLIST_ID = "watchlistId"
+        const val ARG_USER_LIST = "UserListDetailFragment_argUserList"
 
-        fun newInstance(watchlistId: Long) =
+        fun newInstance(userList: UserList) =
             UserListDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putLong(ARG_WATCHLIST_ID, watchlistId)
+                    putParcelable(ARG_USER_LIST, userList)
                 }
             }
     }
@@ -98,7 +98,7 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListe
 
         // We use the navigation back stack entry to get the callback to finish the action mode. We do this
         // Instead of using Fragment Result API since Fragment Result API can only have one listener at a time
-        val savedStateHandle = findNavController().getBackStackEntry(R.id.main_nav).savedStateHandle
+        val savedStateHandle = findNavController().getBackStackEntry(R.id.userListsGraph).savedStateHandle
 
         savedStateHandle.getLiveData<Boolean>(ACTION_FINISH_ACTION_MODE).observe(
             viewLifecycleOwner
@@ -127,12 +127,16 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListe
     }
 
     override fun onAddCardClick() {
-        TODO("Not yet implemented")
+        findNavController().safeNavigate(
+            UserListsFragmentDirections.actionUserListsFragmentToNewCardSelectionFragment(
+                userList = viewModel.userList
+            )
+        )
     }
 
     override fun onListEntryClick(productId: Long) {
         findNavController().safeNavigate(
-            MainNavDirections.actionGlobalCardDetailActivity(productId)
+            MainGraphDirections.actionGlobalCardDetailActivity(productId)
         )
     }
 

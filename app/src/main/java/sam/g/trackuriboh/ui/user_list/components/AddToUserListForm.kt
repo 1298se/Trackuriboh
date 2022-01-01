@@ -41,8 +41,15 @@ fun AddToUserListForm(
 
             Text(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                text = stringResource(id = R.string.add_to_user_list_select_sku_hint),
+                text = stringResource(id = R.string.add_to_user_list_action_title),
                 style = MaterialTheme.typography.h6
+            )
+
+            val userList = state?.formData?.userList
+
+            AppThemeOutlinedTextButton(
+                text = userList?.name ?: stringResource(id = R.string.add_to_user_list_select_list_hint),
+                onButtonClick = onSelectListButtonClick,
             )
 
             val condition = state?.formData?.skuWithConditionAndPrinting?.condition
@@ -59,13 +66,6 @@ fun AddToUserListForm(
                     stringResource(id = R.string.add_to_user_list_select_sku_hint)
                 },
                 onButtonClick = onSelectSkuButtonClick,
-            )
-
-            val userList = state?.formData?.userList
-
-            AppThemeOutlinedTextButton(
-                text = userList?.name ?: stringResource(id = R.string.add_to_user_list_select_list_hint),
-                onButtonClick = onSelectListButtonClick,
             )
 
             Row(

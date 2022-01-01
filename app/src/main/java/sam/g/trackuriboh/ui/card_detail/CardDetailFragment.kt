@@ -59,7 +59,7 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
              * here.
              * See ViewPager2.setAdapter
              */
-            initImageViewPager(listOf(it?.product?.imageUrl))
+            initImageViewPager(listOf(it.product.imageUrl))
             initCardDetailViewPager(it)
         }
     }
@@ -68,9 +68,7 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         when (item?.itemId) {
             R.id.action_add_to_user_list -> {
                 findNavController().safeNavigate(
-                    CardDetailFragmentDirections.actionCardDetailFragmentToAddToUserListBottomSheetFragment(
-                        args.cardId
-                    )
+                    CardDetailFragmentDirections.actionCardDetailFragmentToAddToUserListGraph(args.cardId)
                 )
             }
         }
@@ -110,7 +108,7 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         TabLayoutMediator(binding.cardImageTabLayout, binding.cardImageViewPager) { _, _ -> }.attach()
     }
 
-    private fun initCardDetailViewPager(productWithCardSetAndSkuIds: ProductWithCardSetAndSkuIds?) {
+    private fun initCardDetailViewPager(productWithCardSetAndSkuIds: ProductWithCardSetAndSkuIds) {
         binding.cardDetailViewPager.adapter = CardDetailStateAdapter(
             this@CardDetailFragment,
             productWithCardSetAndSkuIds
@@ -128,13 +126,6 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private fun populateLayout(productWithCardSetAndSkuIds: ProductWithCardSetAndSkuIds?) {
         binding.cardDetailNameTextview.apply {
             text = productWithCardSetAndSkuIds?.product?.name
-            setOnClickListener {
-                productWithCardSetAndSkuIds?.product?.name?.let {
-                    findNavController().safeNavigate(
-                        CardDetailFragmentDirections.actionCardDetailFragmentToCardPrintingsActivity(it)
-                    )
-                }
-            }
         }
 
         binding.cardDetailSetNameTextview.apply {
@@ -142,7 +133,7 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             setOnClickListener { _ ->
                 productWithCardSetAndSkuIds?.cardSet?.id?.let { it ->
                     findNavController().safeNavigate(
-                        CardDetailFragmentDirections.actionCardDetailFragmentToCardSetDetailActivity(it)
+                        CardDetailFragmentDirections.actionCardDetailFragmentToCardSetDetailFragment(it)
                     )
                 }
             }

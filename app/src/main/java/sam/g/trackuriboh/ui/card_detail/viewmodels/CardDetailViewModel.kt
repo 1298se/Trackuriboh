@@ -25,7 +25,7 @@ class CardDetailViewModel @Inject constructor(
     // TODO: Fix magic strings
     private val cardId = state.get<Long>("cardId")!!
 
-    val cardWithCardSetAndSkuIds: LiveData<ProductWithCardSetAndSkuIds?> = liveData {
+    val cardWithCardSetAndSkuIds: LiveData<ProductWithCardSetAndSkuIds> = liveData {
         emit(productRepository.getProductWithSkusById(cardId))
     }
 }

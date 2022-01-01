@@ -1,9 +1,6 @@
 package sam.g.trackuriboh.ui.user_list.viewmodels
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import sam.g.trackuriboh.data.db.entities.UserList
@@ -15,6 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddToUserListFormViewModel @Inject constructor(
     private val userListRepository: UserListRepository,
+    state: SavedStateHandle
 ) : ViewModel() {
 
     data class AddToUserListFormState(
@@ -29,8 +27,11 @@ class AddToUserListFormViewModel @Inject constructor(
         val quantity: Int = 1,
     )
 
+    // TODO: Fix magic strings
+    private val userList = state.get<UserList?>("userList")
+
     private val _formState = MutableLiveData(AddToUserListFormState(
-        formData = AddToUserListFormData()
+        formData = AddToUserListFormData(userList = userList)
     ))
 
     val formState = Transformations.map(_formState) {

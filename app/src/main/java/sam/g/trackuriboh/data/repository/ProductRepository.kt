@@ -5,7 +5,10 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import sam.g.trackuriboh.data.db.cache.ProductLocalCache
-import sam.g.trackuriboh.data.db.entities.*
+import sam.g.trackuriboh.data.db.entities.CardRarity
+import sam.g.trackuriboh.data.db.entities.Condition
+import sam.g.trackuriboh.data.db.entities.Printing
+import sam.g.trackuriboh.data.db.entities.Product
 import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
 import sam.g.trackuriboh.data.network.services.ProductApiService
 import sam.g.trackuriboh.di.NetworkModule.DEFAULT_QUERY_LIMIT
@@ -63,10 +66,7 @@ class ProductRepository @Inject constructor(
     suspend fun insertPrintings(printings: List<Printing>) =
         productLocalCache.insertPrintings(printings)
 
-    suspend fun insertSkus(skus: List<Sku>) =
-        productLocalCache.insertSkus(skus)
+    fun getSuggestionsCursorObservable(query: String?, setId: Long? = null) = productLocalCache.getSuggestionsCursorObservable(query, setId)
 
-    suspend fun getSuggestionsCursor(query: String?) = productLocalCache.getSearchSuggestions(query)
-
-    suspend fun getSuggestionsCursorInSet(setId: Long, query: String?) = productLocalCache.getSearchSuggestionsInSet(setId, query)
+    // fun getProductPrintings(name: String): Flow<PagingData<ProductWithCardSetAndSkuIds>> = productLocalCache.getProductPrintings(name)
 }
