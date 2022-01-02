@@ -63,14 +63,14 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
             }
 
 
-            // Get the diff between the two lists and insert the diffs to the database
             val currentCardSetsWithCounts = cardSetRepository.getCardSetsWithCount()
             val currentCardSetIds = currentCardSetsWithCounts.map { it.key.id }.toSet()
 
+            // Get the diff between the two lists
             val diffCardSet = fetchedCardSets.filter { it.id !in currentCardSetIds }
 
             // We need to fetch the products from both the diff sets and unreleased sets as they may
-            // have been updated.
+            // have been updated
             val lastUpdatedDate = Date(sharedPreferences.getLong(DATABASE_LAST_UPDATED_DATE, DATABASE_ASSET_CREATION_DATE))
             val unreleasedCardSets = currentCardSetsWithCounts.filter { entry ->
                 val cardSet = entry.key
