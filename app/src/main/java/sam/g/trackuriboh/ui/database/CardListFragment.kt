@@ -23,6 +23,7 @@ import sam.g.trackuriboh.ui.database.viewmodels.CardListViewModel
 import sam.g.trackuriboh.utils.*
 
 /**
+ * !IMPORTANT
  * A fragment displaying a list of cards. Navigation destinations should use this as an embedded fragment
  * and get results via [FRAGMENT_RESULT_REQUEST_KEY]. We do it this way because if this was a destination by itself,
  * there are two main issues we run into:

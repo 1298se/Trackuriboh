@@ -9,6 +9,7 @@ import sam.g.trackuriboh.R
 import sam.g.trackuriboh.databinding.ActivityCardDetailBinding
 
 /**
+ * !IMPORTANT
  * We use an activity here to host the CardDetailFragment flow because it comes from DatabaseFragment,
  * and the SearchView has a bug when returning back
  * from the CardDetailFragment where the keyboard flickers. This activity dynamically sets the start destination

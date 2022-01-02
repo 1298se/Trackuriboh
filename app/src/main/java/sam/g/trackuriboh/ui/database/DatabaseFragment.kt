@@ -29,6 +29,7 @@ import sam.g.trackuriboh.workers.DatabaseUpdateCheckWorker
 import sam.g.trackuriboh.workers.WORKER_PROGRESS_KEY
 
 /**
+ * !IMPORTANT
  * The SearchView is very buggy and the behaviour is sometimes hard to manage. When updating Hilt,
  * the keyboard starting flickering when returning back from another fragment (this is because
  * Navigation uses replace instead of add for fragment transactions, so the fragment is recreated
