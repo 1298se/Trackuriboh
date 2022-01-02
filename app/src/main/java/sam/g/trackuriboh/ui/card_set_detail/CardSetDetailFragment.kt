@@ -51,6 +51,7 @@ class CardSetDetailFragment : Fragment() {
 
         initToolbar()
         initSearchSuggestions()
+        initFragmentResultListeners()
         initObservers()
     }
 
@@ -75,6 +76,19 @@ class CardSetDetailFragment : Fragment() {
 
         searchSuggestionsViewModel.suggestionsCursor.observe(viewLifecycleOwner) {
             searchView.setSuggestionsCursor(it)
+        }
+    }
+
+    private fun initFragmentResultListeners() {
+        childFragmentManager.setFragmentResultListener(
+            CardListFragment.FRAGMENT_RESULT_REQUEST_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val cardId = bundle.getLong(CardListFragment.CARD_ID_DATA_KEY)
+
+            findNavController().safeNavigate(
+                CardSetDetailFragmentDirections.actionCardSetDetailFragmentToCardDetailFragment(cardId)
+            )
         }
     }
 
