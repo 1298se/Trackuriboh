@@ -77,7 +77,7 @@ class UserListEntryAdapter
                 true
             }
 
-            binding.itemUserListEntryQuantityTextview.setOnClickListener {
+            binding.itemUserListEntryQuantityButton.setOnClickListener {
                 val userListEntryItem = getItem(bindingAdapterPosition) as UserListDetailViewModel.UiModel.UserListEntryItem
 
                 onItemClickListener?.onQuantityTextClick(userListEntryItem.data.entry)
@@ -109,16 +109,24 @@ class UserListEntryAdapter
 
             binding.itemUserListEntryCheckbox.show(inActionMode)
 
-            binding.itemUserListEntryQuantityTextInputLayout.visibility = if (!inActionMode) {
+            binding.itemUserListEntryQuantityButton.visibility = if (!inActionMode) {
                 View.VISIBLE
             } else {
                 View.INVISIBLE
             }
 
-            binding.itemUserListEntryQuantityTextview.setText(entryItem.data.entry.quantity.toString())
+            binding.itemUserListEntryQuantityButton.text = entryItem.data.entry.quantity.toString()
 
             binding.itemUserListEntryCheckbox.isChecked = entryItem.isChecked
 
+            binding.itemUserListEntryPriceTextview.text = skuWithConditionAndPrintingAndProduct.sku.lowestListingPrice?.let {
+                itemView.context.getString(
+                    R.string.price_with_dollar_sign,
+                    String.format(
+                        String.format("%.2f", it)
+                    )
+                )
+            } ?: itemView.context.getString(R.string.lbl_not_available)
         }
 
     }

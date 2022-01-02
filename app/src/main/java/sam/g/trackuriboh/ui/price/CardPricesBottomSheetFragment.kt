@@ -110,7 +110,9 @@ class CardPricesBottomSheetFragment : BottomSheetDialogFragment() {
                 setHeader(entry.first, getString(R.string.lbl_price_lowest_listing_usd))
                 setRowItems(entry.second.associate { skuWithConditionAndPrinting ->
                     (skuWithConditionAndPrinting.condition?.name ?: getString(R.string.lbl_not_available)) to
-                            (skuWithConditionAndPrinting.sku.lowestListingPrice?.let { String.format("%.2f", it) } ?: getString(R.string.lbl_not_available))
+                            (skuWithConditionAndPrinting.sku.lowestListingPrice?.let {
+                                getString(R.string.price_with_dollar_sign, String.format("%.2f", it) )
+                            } ?: getString(R.string.lbl_not_available))
                 })
             })
         }

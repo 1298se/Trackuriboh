@@ -72,6 +72,7 @@
     <string name="lbl_buy_now">Buy now</string>
     <string name="add_to_user_list_action_title">Add to list</string>
     <string name="add_to_user_list_success_message">Added to %1$s</string>
+    <string name="price_with_dollar_sign">\$%1$s</string>
 
     <!-- Card Detail Overview -->
     <string name="lbl_number">Number</string>

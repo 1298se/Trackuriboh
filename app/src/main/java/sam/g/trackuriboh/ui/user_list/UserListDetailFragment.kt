@@ -167,7 +167,6 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListe
     override fun onQuantityTextClick(entry: UserListEntry) {
         viewModel.setCurrentEditEntry(entry)
 
-
         QuantitySelectorDialogFragment.newInstance(entry.quantity).show(childFragmentManager, null)
     }
 }

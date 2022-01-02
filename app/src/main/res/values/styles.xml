@@ -60,6 +60,11 @@
         <item name="backgroundTint">@color/icon_button_color_primary_alpha_selector</item>
     </style>
 
+    <style name="Widget.AppTheme.Button.IconOnly.Surface" parent="Widget.AppTheme.Button.IconOnly">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="backgroundTint">?attr/colorSurface</item>
+    </style>
+
     <style name="Widget.AppTheme.BottomSheet.Modal" parent="Widget.MaterialComponents.BottomSheet.Modal">
         <item name="behavior_peekHeight">324dp</item>
     </style>
