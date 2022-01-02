@@ -26,9 +26,14 @@ class PriceRepository @Inject constructor(
     suspend fun getPricesForSkuIds(skuIds: List<Long>) =
         getPricesForSkus(skuLocalCache.getSkusWithConditionAndPrinting(skuIds))
 
-    suspend fun getPricesForSkus(
+    private suspend fun getPricesForSkus(
         skuWithConditionAndPrintings: List<SkuWithConditionAndPrinting>
     ) : Resource<List<SkuWithConditionAndPrinting>> {
+
+        // If the list is empty, we should not call the API because it will result in 404.
+        if (skuWithConditionAndPrintings.isEmpty()) {
+            return Resource.Success(emptyList())
+        }
 
         val skuIds = skuWithConditionAndPrintings.map { it.sku.id }
 

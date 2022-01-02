@@ -9,13 +9,16 @@ import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.data.db.relations.UserListEntryWithSkuAndProduct
+import sam.g.trackuriboh.data.repository.PriceRepository
 import sam.g.trackuriboh.data.repository.UserListRepository
 import sam.g.trackuriboh.ui.user_list.UserListDetailFragment
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
 class UserListDetailViewModel @Inject constructor(
     private val userListRepository: UserListRepository,
+    private val priceRepository: PriceRepository,
     application: Application,
     state: SavedStateHandle,
 ) : ViewModel() {
@@ -41,7 +44,8 @@ class UserListDetailViewModel @Inject constructor(
      * We'll try to design things like this going forward
      * https://developer.android.com/jetpack/guide/ui-layer/events#decision-tree
      *
-     * This should just expose state. **We can also pass lambdas**
+     * This should just expose state. **We can also pass lambdas, but I don't think it's very necessary as
+     * using interfaces is pretty clean as well**
      */
     val state: LiveData<UiState>
         get() = _state
@@ -54,8 +58,13 @@ class UserListDetailViewModel @Inject constructor(
 
     private var currentEditEntry: UserListEntry? = null
 
+    private var lastPriceUpdateTime: Long? = null
+
     init {
         _state.addSource(userListRepository.getEntriesInUserListObservable(userList.id).asLiveData()) { list ->
+
+            refreshPricesIfNecessary(list)
+
             viewModelScope.launch(Dispatchers.Default) {
                 var totalCount = 0
                 // Map it to UiModels
@@ -156,6 +165,19 @@ class UserListDetailViewModel @Inject constructor(
                 }
 
                 currentEditEntry = null
+            }
+        }
+    }
+
+    private fun refreshPricesIfNecessary(list: List<UserListEntryWithSkuAndProduct>) {
+        viewModelScope.launch {
+            lastPriceUpdateTime.let {  lastUpdateTime ->
+                val curTime = System.currentTimeMillis()
+                if (lastUpdateTime == null || (curTime - lastUpdateTime) > TimeUnit.HOURS.toMillis(1) ) {
+                    priceRepository.getPricesForSkuIds(list.map { it.skuWithConditionAndPrintingAndProduct.sku.id })
+
+                    lastPriceUpdateTime = curTime
+                }
             }
         }
     }
