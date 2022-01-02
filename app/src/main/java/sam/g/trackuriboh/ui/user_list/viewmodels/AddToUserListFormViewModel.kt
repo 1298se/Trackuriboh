@@ -1,6 +1,7 @@
 package sam.g.trackuriboh.ui.user_list.viewmodels
 
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.core.os.bundleOf
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import sam.g.trackuriboh.data.db.entities.UserList
@@ -88,7 +89,10 @@ class AddToUserListFormViewModel @Inject constructor(
                 )
             )
 
-            emit(userList.name)
+            emit(bundleOf(
+                AddToUserListDialogFragment.ADDED_USER_LIST_NAME_DATA_KEY to userList.name,
+                AddToUserListDialogFragment.ADDED_SKU_ID_DATA_KEY to sku.id,
+            ))
         }
     }
 }

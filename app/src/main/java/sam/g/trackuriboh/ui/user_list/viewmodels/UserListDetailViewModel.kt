@@ -63,9 +63,10 @@ class UserListDetailViewModel @Inject constructor(
     init {
         _state.addSource(userListRepository.getEntriesInUserListObservable(userList.id).asLiveData()) { list ->
 
-            refreshPricesIfNecessary(list)
-
             viewModelScope.launch(Dispatchers.Default) {
+                // Periodically refresh prices
+                refreshPricesIfNecessary(list)
+
                 var totalCount = 0
                 // Map it to UiModels
                 val transformList: MutableList<UiModel> = list.map { entry ->
@@ -169,15 +170,17 @@ class UserListDetailViewModel @Inject constructor(
         }
     }
 
-    private fun refreshPricesIfNecessary(list: List<UserListEntryWithSkuAndProduct>) {
-        viewModelScope.launch {
-            lastPriceUpdateTime.let {  lastUpdateTime ->
-                val curTime = System.currentTimeMillis()
-                if (lastUpdateTime == null || (curTime - lastUpdateTime) > TimeUnit.HOURS.toMillis(1) ) {
-                    priceRepository.getPricesForSkuIds(list.map { it.skuWithConditionAndPrintingAndProduct.sku.id })
+    private suspend fun refreshPricesIfNecessary(
+        list: List<UserListEntryWithSkuAndProduct>
+    ) {
+        lastPriceUpdateTime.let { lastUpdateTime ->
+            val curTime = System.currentTimeMillis()
 
-                    lastPriceUpdateTime = curTime
-                }
+            // If the time has passed, update the entire list
+            if (lastUpdateTime == null || (curTime - lastUpdateTime) > TimeUnit.HOURS.toMillis(1)) {
+                priceRepository.getPricesForSkuIds(list.map { it.skuWithConditionAndPrintingAndProduct.sku.id })
+
+                lastPriceUpdateTime = curTime
             }
         }
     }

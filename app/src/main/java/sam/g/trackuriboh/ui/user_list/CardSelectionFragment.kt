@@ -33,6 +33,10 @@ class CardSelectionFragment : Fragment() {
 
     private lateinit var cardListFragment: CardListFragment
 
+    companion object {
+        const val FRAGMENT_RESULT_REQUEST_KEY = "CardSelectionFragment_fragmentResultRequestKey"
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
     }
@@ -65,8 +69,13 @@ class CardSelectionFragment : Fragment() {
         childFragmentManager.setFragmentResultListener(
             AddToUserListDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
             viewLifecycleOwner
-        ) { _, _ ->
-            findNavController().navigateUp()
+        ) { _, bundle ->
+            with(findNavController()) {
+                previousBackStackEntry?.savedStateHandle?.set(FRAGMENT_RESULT_REQUEST_KEY, bundle)
+
+                popBackStack()
+            }
+
         }
     }
 

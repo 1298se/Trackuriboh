@@ -3,6 +3,7 @@ package sam.g.trackuriboh.ui.user_list
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
@@ -22,6 +23,7 @@ import sam.g.trackuriboh.utils.viewBinding
 /**
  * Fragment accessed from clicking "Watchlist" in bottom nav
  */
+@ExperimentalMaterialApi
 @AndroidEntryPoint
 class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private val binding: FragmentUserListsBinding by viewBinding(FragmentUserListsBinding::inflate)
@@ -119,6 +121,7 @@ class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
     private fun initFragmentResultListeners() {
         with(childFragmentManager) {
+            // Observes creating new list
             setFragmentResultListener(
                 CreateUserListBottomSheetFragment.FRAGMENT_RESULT_REQUEST_KEY,
                 viewLifecycleOwner
@@ -128,6 +131,7 @@ class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             }
 
 
+            // Observes renaming list
             setFragmentResultListener(
                 SimpleTextFieldDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
                 viewLifecycleOwner
@@ -172,6 +176,15 @@ class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private fun initNavigationObservers() {
         with(findNavController()) {
             addOnDestinationChangedListener(navigationDestinationChangedListener)
+
+            // Observes when a new sku is added to a list to update the price
+            currentBackStackEntry?.savedStateHandle?.getLiveData<Bundle>(
+                CardSelectionFragment.FRAGMENT_RESULT_REQUEST_KEY
+            )?.observe(viewLifecycleOwner) {
+                val skuId = it.getLong(AddToUserListDialogFragment.ADDED_SKU_ID_DATA_KEY)
+
+                viewModel.updateSkuPrice(skuId)
+            }
         }
     }
 

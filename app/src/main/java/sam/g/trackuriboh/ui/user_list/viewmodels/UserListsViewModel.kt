@@ -4,12 +4,14 @@ import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import sam.g.trackuriboh.data.db.entities.UserList
+import sam.g.trackuriboh.data.repository.PriceRepository
 import sam.g.trackuriboh.data.repository.UserListRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class UserListsViewModel @Inject constructor(
     private val userListRepository: UserListRepository,
+    private val priceRepository: PriceRepository,
 ) : ViewModel() {
 
     data class UiState(
@@ -73,4 +75,10 @@ class UserListsViewModel @Inject constructor(
         // We need getOrNull here in case there is no lists and the user tries to rename/delete a list because
         // ViewPager currentItem will return 0 if the list is empty or null
         _state.value?.currentSelectedTabPosition?.let { userLists.value?.getOrNull(it) }
+
+    fun updateSkuPrice(skuId: Long) {
+        viewModelScope.launch {
+            priceRepository.getPricesForSkuIds(listOf(skuId))
+        }
+    }
 }
