@@ -70,7 +70,7 @@
     <dimen name="text_field_dense_paddingEnd">12dp</dimen>
 
     <!-- DateTimePicker -->
-    <dimen name="date_time_picker_min_height">584dp</dimen>
+    <dimen name="date_time_picker_min_height">592dp</dimen>
 
     <!-- Item Reminder -->
     <dimen name="item_reminder_reveal_width">128dp</dimen>

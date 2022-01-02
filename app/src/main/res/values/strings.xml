@@ -161,16 +161,10 @@
     <!-- Time Zones -->
     <!-- We have map each time zone to an actual ID in TimeZone.getAvailableIds() because using 3-letter
     time zone IDs is deprecated because of ambiguity -->
-    <string-array name="time_zone_keys">
-        <item>EST/EDT (Eastern Time)</item>
-        <item>PST/PDT (Pacific Time)</item>
-        <item>MST/MDT (Mountain Time)</item>
-        <item>CST/CDT (Central Time)</item>
-    </string-array>
-    <string-array name="time_zone_values">
-        <item>America/New_York</item>
-        <item>America/Los_Angeles</item>
-        <item>America/Denver</item>
-        <item>America/Winnipeg</item>
-    </string-array>
+    <string name="timezone_eastern_time">EST/EDT (Eastern Time)</string>
+    <string name="timezone_pacific_time">PST/PDT (Pacific Time)</string>
+    <string name="timezone_mountain_time">MST/MDT (Mountain Time)</string>
+    <string name="timezone_central_time">CST/CDT (Central Time)</string>
+
+    <string name="timezone_daylight_savings_active">Daylight savings is active in this time zone.</string>
 </resources>

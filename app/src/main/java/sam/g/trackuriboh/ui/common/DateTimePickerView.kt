@@ -11,21 +11,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.composethemeadapter.MdcTheme
 import com.google.android.material.tabs.TabLayout
+import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.databinding.DateTimePickerBinding
+import sam.g.trackuriboh.managers.TimeZoneManager
 import java.util.*
+import javax.inject.Inject
 
 @ExperimentalMaterialApi
+@AndroidEntryPoint
 class DateTimePickerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = R.style.AppTheme
 ) : ConstraintLayout(context, attrs, defStyle) {
+
+    @Inject
+    lateinit var timeZoneManager: TimeZoneManager
 
     interface OnInteractionListener {
         fun onCancelClick()
@@ -76,24 +82,30 @@ class DateTimePickerView @JvmOverloads constructor(
 
     private fun initComposeContainer() {
         binding.datePickerTimezoneComposeContainer.setContent {
-            val timeZoneKeys = stringArrayResource(id = R.array.time_zone_keys)
-            val timeZoneValues = stringArrayResource(id = R.array.time_zone_values)
+            val timeZoneResourceIds = timeZoneManager.getTimeZoneResourceValues()
+
+            val timeZoneStrings = timeZoneResourceIds.map { stringResource(id = it) }
 
             var selectedTimeZoneIndex by rememberSaveable { mutableStateOf(0) }
 
             MdcTheme {
                 Column {
+                    val selectedTimeZone = timeZoneManager.getTimeZoneFromResourceValue(timeZoneResourceIds[selectedTimeZoneIndex])
+
                     AppThemeDenseOutlinedAutoCompleteTextField(
-                        options = timeZoneKeys.toList(),
-                        selectedOption = timeZoneKeys[selectedTimeZoneIndex],
+                        options = timeZoneStrings,
+                        selectedOption = timeZoneStrings[selectedTimeZoneIndex],
                         onOptionSelected = { position -> selectedTimeZoneIndex = position}
                     )
 
-                    val daylightSavingsActive = TimeZone.getDefault().inDaylightTime(Date())
+                    val daylightSavingsActive = selectedTimeZone.inDaylightTime(Date())
 
-
-                   Text(text = "Daylight Savings is currently active", style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onSurface))
-
+                    if (daylightSavingsActive) {
+                        Text(
+                            text = stringResource(id = R.string.timezone_daylight_savings_active),
+                            style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onSurface)
+                        )
+                    }
 
                     AppThemeDialogButtons(
                         positiveButtonEnabled = true,
@@ -110,7 +122,7 @@ class DateTimePickerView @JvmOverloads constructor(
                                         binding.timePicker.hour,
                                         binding.timePicker.minute
                                     )
-                                    timeZone = TimeZone.getTimeZone(timeZoneValues[selectedTimeZoneIndex])
+                                    timeZone = selectedTimeZone
                                 }
                             )
                         },

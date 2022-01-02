@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -72,11 +74,11 @@ class QuantitySelectorDialogFragment : DialogFragment() {
             setContent {
 
                 MdcTheme {
-                    val quantity = rememberSaveable { mutableStateOf(initialQuantity) }
+                    var quantity by rememberSaveable { mutableStateOf(initialQuantity) }
 
                     Content(
-                        quantity = quantity.value,
-                        onQuantityChanged = { quantity.value = it.coerceIn(0, 99) }
+                        quantity = quantity,
+                        onQuantityChanged = { quantity = it.coerceIn(0, 99) }
                     )
                 }
             }
