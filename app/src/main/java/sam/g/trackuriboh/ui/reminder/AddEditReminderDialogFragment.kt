@@ -6,19 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
-import sam.g.trackuriboh.data.types.ReminderType
+import sam.g.trackuriboh.data.db.entities.Reminder
 import sam.g.trackuriboh.databinding.DialogAddEditRemindersBinding
 import sam.g.trackuriboh.ui.common.*
 import sam.g.trackuriboh.ui.reminder.components.ReminderForm
@@ -38,6 +35,12 @@ class AddEditReminderDialogFragment : DialogFragment(), DateTimePickerView.OnInt
     companion object {
         const val FRAGMENT_RESULT_REQUEST_KEY = "AddEditReminderDialogFragment_fragmentResultRequestKey"
         const val REMINDER_FORM_DATA_KEY = "AddEditReminderDialogFragment_reminderFormData"
+        const val ARG_REMINDER = "AddEditReminderDialogFragment_argReminder"
+
+        fun newInstance(reminder: Reminder? = null) =
+            AddEditReminderDialogFragment().apply {
+                arguments = bundleOf(ARG_REMINDER to reminder)
+            }
     }
 
     override fun onCreateView(
@@ -48,6 +51,7 @@ class AddEditReminderDialogFragment : DialogFragment(), DateTimePickerView.OnInt
 
         binding.addEditRemindersComposeContainer.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+
             setContent {
                 MdcTheme {
                     val formState by viewModel.formState.observeAsState()
@@ -59,7 +63,7 @@ class AddEditReminderDialogFragment : DialogFragment(), DateTimePickerView.OnInt
                         onReminderTypeSelected = viewModel::onReminderTypeChanged,
                         onDateTimeButtonClick = ::showDateTimePicker,
                         onSaveClick = ::setReminder,
-                        onCancelClick = findNavController()::popBackStack,
+                        onCancelClick = ::dismiss,
                     )
                 }
             }
@@ -85,39 +89,13 @@ class AddEditReminderDialogFragment : DialogFragment(), DateTimePickerView.OnInt
         showRemindersForm()
     }
 
-    @Preview
-    @Composable
-    fun Preview() {
-        val formState = ReminderFormViewModel.ReminderFormState(
-            reminderTypeOptions = emptyList(),
-            canSave = true,
-            formData = ReminderFormViewModel.ReminderFormData(
-                ReminderType.AUCTION,
-                "Billy",
-                "https://facebook.com",
-                Date()
-            ),
-            ReminderFormViewModel.Mode.CREATE
-        )
-        MdcTheme {
-            ReminderForm(
-                state = formState,
-                onHostChanged = { },
-                onLinkChanged = { },
-                onReminderTypeSelected = { },
-                onDateTimeButtonClick = { },
-                onSaveClick = { },
-                onCancelClick = { },
-            )
-        }
-    }
 
     private fun setReminder() {
         setFragmentResult(
             FRAGMENT_RESULT_REQUEST_KEY, bundleOf(
                 REMINDER_FORM_DATA_KEY to viewModel.formState.value?.formData?.toDatabaseEntity())
         )
-        findNavController().popBackStack()
+        dismiss()
     }
 
     private fun showDateTimePicker() {

@@ -11,7 +11,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.MainGraphDirections
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.entities.UserList
+import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.databinding.FragmentUserListDetailBinding
+import sam.g.trackuriboh.ui.common.QuantitySelectorDialogFragment
 import sam.g.trackuriboh.ui.user_list.UserListsFragment.Companion.ACTION_FINISH_ACTION_MODE
 import sam.g.trackuriboh.ui.user_list.adapters.UserListEntryAdapter
 import sam.g.trackuriboh.ui.user_list.viewmodels.UserListDetailViewModel
@@ -79,6 +81,7 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListe
         initRecyclerView()
         initNavigationObservers()
         initObservers()
+        initFragmentResultListeners()
     }
 
     private fun initRecyclerView() {
@@ -98,7 +101,7 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListe
 
         // We use the navigation back stack entry to get the callback to finish the action mode. We do this
         // Instead of using Fragment Result API since Fragment Result API can only have one listener at a time
-        val savedStateHandle = findNavController().getBackStackEntry(R.id.userListsGraph).savedStateHandle
+        val savedStateHandle = findNavController().getBackStackEntry(R.id.mainGraph).savedStateHandle
 
         savedStateHandle.getLiveData<Boolean>(ACTION_FINISH_ACTION_MODE).observe(
             viewLifecycleOwner
@@ -126,6 +129,18 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListe
         }
     }
 
+    private fun initFragmentResultListeners() {
+       childFragmentManager.setFragmentResultListener(
+            QuantitySelectorDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val quantity = bundle.getInt(QuantitySelectorDialogFragment.QUANTITY_DATA_KEY)
+
+            viewModel.updateCurrentEditEntryQuantity(quantity)
+        }
+    }
+
+
     override fun onAddCardClick() {
         findNavController().safeNavigate(
             UserListsFragmentDirections.actionUserListsFragmentToNewCardSelectionFragment(
@@ -147,5 +162,12 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListe
 
     override fun onListEntryChecked(skuId: Long, isChecked: Boolean) {
         viewModel.setUserListEntryChecked(skuId, isChecked)
+    }
+
+    override fun onQuantityTextClick(entry: UserListEntry) {
+        viewModel.setCurrentEditEntry(entry)
+
+
+        QuantitySelectorDialogFragment.newInstance(entry.quantity).show(childFragmentManager, null)
     }
 }

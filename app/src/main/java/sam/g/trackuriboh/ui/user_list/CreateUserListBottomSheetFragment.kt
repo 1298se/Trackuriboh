@@ -9,15 +9,13 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import sam.g.trackuriboh.MainGraphDirections
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.data.types.UserListType
 import sam.g.trackuriboh.databinding.BottomSheetCreateUserListBinding
 import sam.g.trackuriboh.databinding.ItemCreateUserListOptionBinding
-import sam.g.trackuriboh.utils.safeNavigate
+import sam.g.trackuriboh.ui.common.SimpleTextFieldDialogFragment
 import sam.g.trackuriboh.utils.viewBinding
 import java.util.*
 
@@ -44,12 +42,12 @@ class CreateUserListBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initOptions()
+        initListView()
         initFragmentObservers()
     }
 
     private fun initFragmentObservers() {
-        parentFragmentManager.setFragmentResultListener(
+        childFragmentManager.setFragmentResultListener(
             SimpleTextFieldDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
             viewLifecycleOwner
         ) { _, bundle ->
@@ -62,12 +60,12 @@ class CreateUserListBottomSheetFragment : BottomSheetDialogFragment() {
                     bundleOf(USER_LIST_DATA_KEY to UserList(name = name, creationDate = Date(), type = type))
                 )
 
-                findNavController().popBackStack()
+                dismiss()
             }
         }
     }
 
-    private fun initOptions() {
+    private fun initListView() {
         with(binding.createUserListOptionsList) {
             adapter = CreateUserListOptionsAdapter(requireContext())
         }
@@ -83,9 +81,9 @@ class CreateUserListBottomSheetFragment : BottomSheetDialogFragment() {
                 val binding = ItemCreateUserListOptionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
                 with(binding) {
-                    selectedType = getItem(position)
+                    val type = getItem(position)
 
-                    val icon = when (selectedType) {
+                    val icon = when (type) {
                         UserListType.USER_LIST -> R.drawable.ic_baseline_playlist_add_24
                         // CollectionType.CHECKLIST -> R.drawable.ic_baseline_playlist_add_24
                         else -> null
@@ -93,7 +91,7 @@ class CreateUserListBottomSheetFragment : BottomSheetDialogFragment() {
 
                     icon?.let { itemCreateUserListOptionImage.setImageDrawable(AppCompatResources.getDrawable(context, it)) }
 
-                    val text = when (selectedType) {
+                    val text = when (type) {
                         UserListType.USER_LIST -> R.string.create_user_list_option
                         // CollectionType.CHECKLIST -> R.string.create_checklist_option
                         else -> null
@@ -102,14 +100,14 @@ class CreateUserListBottomSheetFragment : BottomSheetDialogFragment() {
                     itemCreateUserListOptionTextview.text = text?.let { getString(it) }
 
                     root.setOnClickListener {
+                        selectedType = type
+
                         val title = when (selectedType) {
                             UserListType.USER_LIST -> getString(R.string.create_user_list_option)
-                            null -> getString(R.string.create_user_list_option)
+                            else -> getString(R.string.create_user_list_option)
                         }
 
-                        findNavController().safeNavigate(
-                            MainGraphDirections.actionGlobalSimpleTextFieldDialogFragment(title)
-                        )
+                        SimpleTextFieldDialogFragment.newInstance(title).show(childFragmentManager, null)
                     }
                 }
 

@@ -4,7 +4,6 @@ import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import sam.g.trackuriboh.data.db.entities.UserList
-import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.data.repository.UserListRepository
 import javax.inject.Inject
 
@@ -26,13 +25,13 @@ class UserListsViewModel @Inject constructor(
         value = (UiState(0))
     }
 
-    private var newCreatedList: Long? = null
+    private var newCreatedListId: Long? = null
 
     init {
         _state.addSource(userLists) { lists ->
-            if (newCreatedList != null) {
-                _state.value = _state.value?.copy(currentSelectedTabPosition = lists.indexOfFirst { it.id == newCreatedList })
-                newCreatedList = null
+            if (newCreatedListId != null) {
+                _state.value = _state.value?.copy(currentSelectedTabPosition = lists.indexOfFirst { it.id == newCreatedListId })
+                newCreatedListId = null
             }
         }
     }
@@ -40,15 +39,36 @@ class UserListsViewModel @Inject constructor(
 
     fun createUserList(list: UserList) =
         viewModelScope.launch {
-            newCreatedList = userListRepository.insertUserList(list)
-        }
-
-    fun insertToUserList(listId: Long, skuId: Long) =
-        viewModelScope.launch {
-            userListRepository.insertUserListEntry(UserListEntry(listId, skuId, 1))
+            newCreatedListId = userListRepository.insertUserList(list)
         }
 
     fun setCurrentTabPosition(position: Int) {
         _state.value = _state.value?.copy(currentSelectedTabPosition = position)
     }
+
+    fun renameCurrentList(name: String) {
+        viewModelScope.launch {
+            val currentList = getCurrentList()
+
+            if (currentList != null) {
+                val updatedList = currentList.copy(name = name)
+
+                userListRepository.updateUserList(updatedList)
+            }
+        }
+    }
+
+    fun deleteCurrentList() {
+        viewModelScope.launch {
+            val currentList = getCurrentList()
+
+            if (currentList != null) {
+                userListRepository.deleteUserList(currentList)
+            }
+        }
+
+    }
+
+    private fun getCurrentList(): UserList? =
+        _state.value?.currentSelectedTabPosition?.let { userLists.value?.getOrNull(it) }
 }

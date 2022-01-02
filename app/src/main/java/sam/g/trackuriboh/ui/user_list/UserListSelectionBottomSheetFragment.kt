@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.R
@@ -89,7 +88,8 @@ class UserListSelectionBottomSheetFragment : BottomSheetDialogFragment() {
 
                     root.setOnClickListener {
                         setFragmentResult(FRAGMENT_RESULT_REQUEST_KEY, bundleOf(SELECTED_USER_LIST_DATA_KEY to userList))
-                        findNavController().popBackStack()
+
+                        dismiss()
                     }
                 }
 

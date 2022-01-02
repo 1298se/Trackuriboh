@@ -2,19 +2,20 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/material_border_padding_small"
+    android:paddingStart="@dimen/material_border_padding"
+    android:paddingEnd="@dimen/material_border_padding"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/lbl_name"
-        android:layout_marginTop="@dimen/material_border_padding_small"
-        android:paddingStart="@dimen/material_border_padding"
-        android:paddingEnd="@dimen/material_border_padding"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
 
         <com.google.android.material.textfield.TextInputEditText

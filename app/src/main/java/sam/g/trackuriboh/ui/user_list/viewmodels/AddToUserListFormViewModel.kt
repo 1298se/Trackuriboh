@@ -1,14 +1,17 @@
 package sam.g.trackuriboh.ui.user_list.viewmodels
 
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
 import sam.g.trackuriboh.data.repository.UserListRepository
+import sam.g.trackuriboh.ui.user_list.AddToUserListDialogFragment
+import java.util.*
 import javax.inject.Inject
 
+@ExperimentalMaterialApi
 @HiltViewModel
 class AddToUserListFormViewModel @Inject constructor(
     private val userListRepository: UserListRepository,
@@ -18,7 +21,6 @@ class AddToUserListFormViewModel @Inject constructor(
     data class AddToUserListFormState(
         val canSave: Boolean = false,
         val formData: AddToUserListFormData,
-        val entryAddCompleted: Boolean = false,
     )
 
     data class AddToUserListFormData(
@@ -27,8 +29,7 @@ class AddToUserListFormViewModel @Inject constructor(
         val quantity: Int = 1,
     )
 
-    // TODO: Fix magic strings
-    private val userList = state.get<UserList?>("userList")
+    private val userList = state.get<UserList?>(AddToUserListDialogFragment.ARG_USER_LIST)
 
     private val _formState = MutableLiveData(AddToUserListFormState(
         formData = AddToUserListFormData(userList = userList)
@@ -69,17 +70,25 @@ class AddToUserListFormViewModel @Inject constructor(
         }
     }
 
-    fun addEntryToUserList() {
+    /**
+     * For one shot operations, we can do it like this using LiveData instead of having to add a flag to state.
+     */
+    fun addEntryToUserList()  = liveData {
         val sku = formState.value?.formData?.skuWithConditionAndPrinting?.sku
         val userList = formState.value?.formData?.userList
         val quantity = formState.value?.formData?.quantity
 
         if (sku != null && userList != null && quantity != null) {
-            viewModelScope.launch {
-                userListRepository.insertUserListEntry(UserListEntry(listId = userList.id, skuId = sku.id, quantity = quantity))
+            userListRepository.insertUserListEntry(
+                UserListEntry(
+                    listId = userList.id,
+                    skuId = sku.id,
+                    quantity = quantity,
+                    dateAdded = Date()
+                )
+            )
 
-                _formState.value = _formState.value?.copy(entryAddCompleted = true)
-            }
+            emit(userList.name)
         }
     }
 }

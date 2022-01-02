@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingStart="@dimen/list_item_padding_start"
+    android:paddingEnd="@dimen/list_item_padding_end"
     android:paddingTop="@dimen/list_item_two_line_padding_top"
     android:paddingBottom="@dimen/list_item_two_line_padding_bottom"
     android:background="@drawable/background_color_surface_selectable"
@@ -43,7 +44,7 @@
         android:layout_marginTop="@dimen/list_item_three_line_image_padding_top"
         app:layout_constraintBottom_toTopOf="@id/item_user_list_rarity_number_textview"
         app:layout_constraintStart_toEndOf="@id/item_user_list_entry_image_text_barrier"
-        app:layout_constraintEnd_toStartOf="@id/item_user_list_entry_checkbox"
+        app:layout_constraintEnd_toStartOf="@id/item_user_list_entry_quantity_text_input_layout"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="Blue-Eyes White Dragon Blue-Eyes White Dragon Blue-Eyes White Dragon" />
@@ -60,7 +61,7 @@
         app:layout_constraintBottom_toTopOf="@id/item_user_list_entry_edition_condition_textview"
         app:layout_constraintStart_toEndOf="@id/item_user_list_entry_image_text_barrier"
         app:layout_constraintTop_toBottomOf="@id/item_user_list_entry_title_textview"
-        app:layout_constraintEnd_toStartOf="@id/item_user_list_entry_checkbox"
+        app:layout_constraintEnd_toStartOf="@id/item_user_list_entry_quantity_text_input_layout"
         tools:text="Ultra Rare \u2022 LOB-001" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -76,7 +77,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/item_user_list_entry_image_text_barrier"
         app:layout_constraintTop_toBottomOf="@id/item_user_list_rarity_number_textview"
-        app:layout_constraintEnd_toStartOf="@id/item_user_list_entry_checkbox"
+        app:layout_constraintEnd_toStartOf="@id/item_user_list_entry_quantity_text_input_layout"
         tools:text="1st Edition \u2022 Near Mint" />
 
     <com.google.android.material.checkbox.MaterialCheckBox
@@ -90,6 +91,27 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:visibility="gone"
         tools:visibility="visible" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/item_user_list_entry_quantity_text_input_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:endIconMode="custom"
+        app:endIconDrawable="@drawable/ic_baseline_arrow_drop_down_24"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/item_user_list_entry_quantity_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:clickable="true"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

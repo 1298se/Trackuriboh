@@ -67,9 +67,7 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_add_to_user_list -> {
-                findNavController().safeNavigate(
-                    CardDetailFragmentDirections.actionCardDetailFragmentToAddToUserListGraph(args.cardId)
-                )
+                AddToUserListDialogFragment.newInstance(args.cardId).show(childFragmentManager, null)
             }
         }
         return false
@@ -156,7 +154,7 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         }
 
         // Observe [AddToUserListDialogFragment]
-        parentFragmentManager.setFragmentResultListener(
+        childFragmentManager.setFragmentResultListener(
             AddToUserListDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
             viewLifecycleOwner
         ) { _, bundle ->

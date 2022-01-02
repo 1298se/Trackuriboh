@@ -21,4 +21,14 @@ class UserListLocalCache @Inject constructor(
     suspend fun deleteUserListEntries(listId: Long, skuIds: List<Long>) =
         appDatabase.userListEntryDao().deleteUserListEntries(listId, skuIds)
 
+    suspend fun updateUserListEntry(entry: UserListEntry) =
+        appDatabase.userListEntryDao().update(entry)
+
+    suspend fun deleteUserListEntry(entry: UserListEntry) =
+        appDatabase.userListEntryDao().delete(entry)
+
+    suspend fun updateUserList(userList: UserList) = appDatabase.userListDao().update(userList)
+
+    suspend fun deleteUserList(userList: UserList) = appDatabase.userListDao().delete(userList)
+
 }

@@ -9,7 +9,7 @@ import java.util.*
 
 @Parcelize
 @Entity
-class UserList(
+data class UserList(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val name: String,

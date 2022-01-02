@@ -25,4 +25,12 @@ class UserListRepository @Inject constructor(
         }
         userListLocalCache.deleteUserListEntries(listId, skuIds)
     }
+
+    suspend fun updateUserListEntry(entry: UserListEntry) = userListLocalCache.updateUserListEntry(entry)
+
+    suspend fun deleteUserListEntry(entry: UserListEntry) = userListLocalCache.deleteUserListEntry(entry)
+
+    suspend fun updateUserList(userList: UserList) = userListLocalCache.updateUserList(userList)
+
+    suspend fun deleteUserList(userList: UserList) = userListLocalCache.deleteUserList(userList)
 }

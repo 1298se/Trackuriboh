@@ -4,14 +4,13 @@ import android.app.Application
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.entities.UserList
+import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.data.db.relations.UserListEntryWithSkuAndProduct
 import sam.g.trackuriboh.data.repository.UserListRepository
-import sam.g.trackuriboh.ui.user_list.UserListDetailFragment.Companion.ARG_USER_LIST
+import sam.g.trackuriboh.ui.user_list.UserListDetailFragment
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,7 +20,7 @@ class UserListDetailViewModel @Inject constructor(
     state: SavedStateHandle,
 ) : ViewModel() {
 
-    val userList = state.get<UserList>(ARG_USER_LIST)!!
+    val userList = state.get<UserList>(UserListDetailFragment.ARG_USER_LIST)!!
 
     sealed class UiModel {
         data class UserListEntryItem(
@@ -48,37 +47,52 @@ class UserListDetailViewModel @Inject constructor(
         get() = _state
 
     private val _state = MediatorLiveData<UiState>().apply {
-        value = UiState(emptyList(), false, null)
+        value = UiState(emptyList(),  false, null)
     }
 
     private val checkedSkuIdsLiveData = MutableLiveData<MutableSet<Long>>(mutableSetOf())
 
-    init {
-        _state.addSource(userListRepository.getEntriesInUserListObservable(userList.id).map { list ->
-            // Map it to UiModels
-            val transformList: MutableList<UiModel> = list.map {
-                UiModel.UserListEntryItem(it, false)
-            }.toMutableList()
+    private var currentEditEntry: UserListEntry? = null
 
-            // Add the header and the footer
-            transformList.apply {
-                add(
-                    0,
-                    UiModel.Header(application.resources.getQuantityString(R.plurals.user_list_detail_total_count, list.size, list.size))
-                )
-                add(UiModel.Footer)
+    init {
+        _state.addSource(userListRepository.getEntriesInUserListObservable(userList.id).asLiveData()) { list ->
+            viewModelScope.launch(Dispatchers.Default) {
+                var totalCount = 0
+                // Map it to UiModels
+                val transformList: MutableList<UiModel> = list.map { entry ->
+                    UiModel.UserListEntryItem(entry, false).also {
+                        totalCount += it.data.entry.quantity
+                    }
+                }.toMutableList()
+
+                // Add the header and the footer
+                transformList.apply {
+                    add(
+                        0,
+                        UiModel.Header(
+                            application.resources.getQuantityString(
+                                R.plurals.user_list_detail_total_count,
+                                totalCount,
+                                totalCount
+                            )
+                        )
+                    )
+                    add(UiModel.Footer)
+                }
+
+                _state.postValue(_state.value?.copy(entries = transformList.toList()))
             }
-        }.flowOn(Dispatchers.Default).asLiveData()) {
-            _state.value = _state.value?.copy(entries = it.toList())
         }
 
         _state.addSource(checkedSkuIdsLiveData) { checkedProductIds ->
             viewModelScope.launch(Dispatchers.Default) {
                 _state.value?.entries?.let {
-                    _state.postValue(_state.value?.copy(
-                        entries = updateCheckedStates(it, checkedProductIds),
-                        actionModeTitle = application.getString(R.string.user_list_detail_selected_count, checkedProductIds.size)
-                    ))
+                    _state.postValue(
+                        _state.value?.copy(
+                            entries = updateCheckedStates(it, checkedProductIds),
+                            actionModeTitle = application.getString(R.string.user_list_detail_selected_count, checkedProductIds.size)
+                        )
+                    )
                 }
             }
         }
@@ -118,11 +132,31 @@ class UserListDetailViewModel @Inject constructor(
         checkedSkuIdsLiveData.value = checkedSkuIds ?: mutableSetOf()
     }
 
+    fun setCurrentEditEntry(entry: UserListEntry) {
+        currentEditEntry = entry
+    }
+
     fun deleteSelectedItems() {
         viewModelScope.launch {
             userListRepository.deleteUserListEntries(userList.id, checkedSkuIdsLiveData.value?.toList())
 
             setActionMode(false)
+        }
+    }
+
+    fun updateCurrentEditEntryQuantity(quantity: Int) {
+        viewModelScope.launch {
+            val updatedEntry = currentEditEntry?.copy(quantity = quantity)
+
+            if (updatedEntry != null) {
+                if (quantity > 0) {
+                    userListRepository.updateUserListEntry(updatedEntry)
+                } else {
+                    userListRepository.deleteUserListEntry(updatedEntry)
+                }
+
+                currentEditEntry = null
+            }
         }
     }
 }

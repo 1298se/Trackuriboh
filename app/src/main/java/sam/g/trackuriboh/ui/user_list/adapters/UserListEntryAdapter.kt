@@ -1,11 +1,13 @@
 package sam.g.trackuriboh.ui.user_list.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.bumptech.glide.Glide
 import sam.g.trackuriboh.R
+import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.databinding.ItemUserListEntryBinding
 import sam.g.trackuriboh.databinding.ListAddItemFooterBinding
 import sam.g.trackuriboh.databinding.ListHeaderBinding
@@ -39,6 +41,7 @@ class UserListEntryAdapter
     interface OnItemClickListener {
         fun onListEntryClick(productId: Long)
         fun onAddCardClick()
+        fun onQuantityTextClick(entry: UserListEntry)
         fun onListEntryLongClick(skuId: Long)
         fun onListEntryChecked(skuId: Long, isChecked: Boolean)
     }
@@ -73,6 +76,12 @@ class UserListEntryAdapter
 
                 true
             }
+
+            binding.itemUserListEntryQuantityTextview.setOnClickListener {
+                val userListEntryItem = getItem(bindingAdapterPosition) as UserListDetailViewModel.UiModel.UserListEntryItem
+
+                onItemClickListener?.onQuantityTextClick(userListEntryItem.data.entry)
+            }
         }
 
         override fun bind(item: UserListDetailViewModel.UiModel) {
@@ -100,7 +109,16 @@ class UserListEntryAdapter
 
             binding.itemUserListEntryCheckbox.show(inActionMode)
 
+            binding.itemUserListEntryQuantityTextInputLayout.visibility = if (!inActionMode) {
+                View.VISIBLE
+            } else {
+                View.INVISIBLE
+            }
+
+            binding.itemUserListEntryQuantityTextview.setText(entryItem.data.entry.quantity.toString())
+
             binding.itemUserListEntryCheckbox.isChecked = entryItem.isChecked
+
         }
 
     }

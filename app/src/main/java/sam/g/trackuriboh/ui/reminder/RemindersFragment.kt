@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.R
@@ -61,7 +60,7 @@ class RemindersFragment : Fragment(), RemindersAdapter.OnItemClickListener {
     }
 
     override fun onItemEditClick(reminder: Reminder) {
-        findNavController().safeNavigate(RemindersFragmentDirections.actionRemindersFragmentToAddEditReminderDialogFragment(reminder))
+        AddEditReminderDialogFragment.newInstance(reminder).show(childFragmentManager, null)
     }
 
     override fun onItemDeleteClick(reminder: Reminder) {
@@ -75,15 +74,13 @@ class RemindersFragment : Fragment(), RemindersAdapter.OnItemClickListener {
     private fun initFab() {
         with(binding.remindersFab) {
             setOnClickListener {
-                findNavController().safeNavigate(
-                    RemindersFragmentDirections.actionRemindersFragmentToAddEditReminderDialogFragment()
-                )
+                AddEditReminderDialogFragment.newInstance().show(childFragmentManager, null)
             }
         }
     }
 
     private fun initFragmentResultListeners() {
-        parentFragmentManager.setFragmentResultListener(
+        childFragmentManager.setFragmentResultListener(
             AddEditReminderDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
             viewLifecycleOwner
         ) { _, bundle ->

@@ -15,13 +15,6 @@
         <action
             android:id="@+id/action_cardDetailFragment_to_cardSetDetailFragment"
             app:destination="@id/cardSetDetailFragment" />
-        <action
-            android:id="@+id/action_cardDetailFragment_to_addToUserListGraph"
-            app:destination="@id/addToUserListGraph">
-            <argument
-                android:name="cardId"
-                app:argType="long" />
-        </action>
     </fragment>
 
     <fragment
@@ -35,7 +28,5 @@
             android:id="@+id/action_cardSetDetailFragment_to_cardDetailFragment"
             app:destination="@id/cardDetailFragment" />
     </fragment>
-
-    <include app:graph="@navigation/add_to_user_list" />
 
 </navigation>

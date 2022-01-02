@@ -30,6 +30,52 @@ import com.google.android.material.composethemeadapter.MdcTheme
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.types.StringResourceEnum
 
+@Composable
+fun SimpleDialogForm(
+    title: String? = null,
+    onPositiveButtonClick: () -> Unit,
+    onNegativeButtonClick: () -> Unit,
+    positiveButtonEnabled: Boolean = true,
+    negativeButtonEnabled: Boolean = true,
+    positiveButtonText: String = stringResource(R.string.lbl_ok).uppercase(),
+    negativeButtonText: String = stringResource(id = R.string.lbl_cancel).uppercase(),
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    Column(
+        modifier = Modifier.padding(
+            start = dimensionResource(id = R.dimen.material_border_padding),
+            end = dimensionResource(id = R.dimen.material_border_padding),
+            top = dimensionResource(id = R.dimen.material_border_padding),
+            bottom = dimensionResource(id = R.dimen.material_border_padding_small)
+        ),
+    ) {
+
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.form_row_spacing))
+        ) {
+            if (title != null) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.h6
+                )
+            }
+
+            content()
+        }
+
+        AppThemeDialogButtons(
+            positiveButtonEnabled = positiveButtonEnabled,
+            negativeButtonEnabled = negativeButtonEnabled,
+            onPositiveButtonClick = onPositiveButtonClick,
+            onNegativeButtonClick = onNegativeButtonClick,
+            positiveButtonText = positiveButtonText,
+            negativeButtonText = negativeButtonText,
+        )
+    }
+}
+
+
 /**
  * Why is it so hard to just add a trailing icon...
  */

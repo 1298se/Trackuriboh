@@ -2,6 +2,7 @@ package sam.g.trackuriboh.ui.user_list
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
@@ -12,9 +13,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.databinding.FragmentUserListsBinding
+import sam.g.trackuriboh.ui.common.SimpleTextFieldDialogFragment
 import sam.g.trackuriboh.ui.user_list.adapters.UserListsStateAdapter
 import sam.g.trackuriboh.ui.user_list.viewmodels.UserListsViewModel
-import sam.g.trackuriboh.utils.safeNavigate
+import sam.g.trackuriboh.utils.setEnabled
 import sam.g.trackuriboh.utils.setupAsTopLevelDestinationToolbar
 import sam.g.trackuriboh.utils.viewBinding
 
@@ -22,7 +24,7 @@ import sam.g.trackuriboh.utils.viewBinding
  * Fragment accessed from clicking "Watchlist" in bottom nav
  */
 @AndroidEntryPoint
-class UserListsFragment : Fragment() {
+class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private val binding: FragmentUserListsBinding by viewBinding(FragmentUserListsBinding::inflate)
 
     private val viewModel: UserListsViewModel by viewModels()
@@ -58,16 +60,41 @@ class UserListsFragment : Fragment() {
         initNavigationObservers()
     }
 
+    override fun onStop() {
+        super.onStop()
+
+        findNavController().removeOnDestinationChangedListener(navigationDestinationChangedListener)
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        return when(item?.itemId) {
+            R.id.action_rename_user_list -> {
+                SimpleTextFieldDialogFragment.newInstance(
+                    getString(R.string.rename_user_list_action_title)
+                ).show(childFragmentManager, null)
+
+                true
+            }
+            R.id.action_delete_user_list -> {
+                viewModel.deleteCurrentList()
+                true
+            }
+            else -> false
+        }
+    }
+
     private fun initToolbar() {
         binding.userListsToolbar.setupAsTopLevelDestinationToolbar()
+
+        binding.userListsToolbar.inflateMenu(R.menu.user_list_toolbar)
+
+        binding.userListsToolbar.setOnMenuItemClickListener(this)
     }
 
     private fun initFab() {
         with(binding.userListsFab) {
             setOnClickListener {
-                findNavController().safeNavigate(
-                    UserListsFragmentDirections.actionUserListsFragmentToCreateUserListBottomSheetFragment()
-                )
+                CreateUserListBottomSheetFragment().show(childFragmentManager, null)
             }
         }
     }
@@ -92,14 +119,25 @@ class UserListsFragment : Fragment() {
     }
 
     private fun initFragmentResultListeners() {
-
-        with(parentFragmentManager) {
+        with(childFragmentManager) {
             setFragmentResultListener(
                 CreateUserListBottomSheetFragment.FRAGMENT_RESULT_REQUEST_KEY,
                 viewLifecycleOwner
             ) { _, bundle ->
                 val userList = bundle.getParcelable<UserList>(CreateUserListBottomSheetFragment.USER_LIST_DATA_KEY)!!
                 viewModel.createUserList(userList)
+            }
+
+
+            setFragmentResultListener(
+                SimpleTextFieldDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
+                viewLifecycleOwner
+            ) { _, bundle ->
+                val name = bundle.getString(SimpleTextFieldDialogFragment.TEXT_DATA_KEY)
+
+                if (name != null) {
+                    viewModel.renameCurrentList(name)
+                }
             }
         }
     }
@@ -119,6 +157,8 @@ class UserListsFragment : Fragment() {
             if (it.isEmpty()) {
                 binding.userListsViewPager.visibility = View.GONE
                 binding.userListsTabLayout.visibility = View.GONE
+
+                binding.userListsToolbar.menu.setEnabled(false)
             } else {
                 binding.userListsViewPager.visibility = View.VISIBLE
                 binding.userListsTabLayout.visibility = View.VISIBLE
@@ -133,18 +173,14 @@ class UserListsFragment : Fragment() {
     }
 
     private fun initNavigationObservers() {
-        findNavController().addOnDestinationChangedListener(navigationDestinationChangedListener)
+        with(findNavController()) {
+            addOnDestinationChangedListener(navigationDestinationChangedListener)
+        }
     }
 
     private fun finishActionMode() {
         // Scope to main nav because if we use the current back stack entry, it will be removed when onDestinationChanged
         // gets called
-        findNavController().getBackStackEntry(R.id.userListsGraph).savedStateHandle.set(ACTION_FINISH_ACTION_MODE, true)
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        findNavController().removeOnDestinationChangedListener(navigationDestinationChangedListener)
+        findNavController().getBackStackEntry(R.id.mainGraph).savedStateHandle.set(ACTION_FINISH_ACTION_MODE, true)
     }
 }

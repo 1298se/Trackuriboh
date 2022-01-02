@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import kotlinx.parcelize.Parcelize
+import java.util.*
 
 @Parcelize
 @Entity(
@@ -22,4 +23,5 @@ data class UserListEntry(
     // Don't want a foreign key here because then it will stop the DB download.
     val skuId: Long,
     val quantity: Int,
+    val dateAdded: Date,
 ) : Parcelable

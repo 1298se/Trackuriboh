@@ -59,15 +59,10 @@ class CardSelectionFragment : Fragment() {
         ) { _, bundle ->
             val cardId = bundle.getLong(CardListFragment.CARD_ID_DATA_KEY)
 
-            findNavController().safeNavigate(
-                CardSelectionFragmentDirections.actionCardSelectionFragmentToAddToUserListGraph(
-                    cardId = cardId,
-                    userList = args.userList
-                )
-            )
+            AddToUserListDialogFragment.newInstance(cardId, args.userList).show(childFragmentManager, null)
         }
         
-        parentFragmentManager.setFragmentResultListener(
+        childFragmentManager.setFragmentResultListener(
             AddToUserListDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
             viewLifecycleOwner
         ) { _, _ ->

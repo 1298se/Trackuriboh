@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.R
@@ -28,6 +27,13 @@ class SkuSelectionBottomSheetFragment : BottomSheetDialogFragment() {
     companion object {
         const val FRAGMENT_RESULT_REQUEST_KEY = "SkuSelectionBottomSheetFragment_fragmentResultRequestKey"
         const val SELECTED_SKU_WITH_CONDITION_AND_PRICING_DATA_KEY = "SkuSelectionBottomSheetFragment_selectedSkuWithConditionAndPricing"
+
+        const val ARG_CARD_ID = "SkuSelectionBottomSheetFragment_argCardId"
+
+        fun newInstance(cardId: Long) =
+            SkuSelectionBottomSheetFragment().apply {
+                arguments = bundleOf(ARG_CARD_ID to cardId)
+            }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -66,7 +72,7 @@ class SkuSelectionBottomSheetFragment : BottomSheetDialogFragment() {
                     root.setOnClickListener {
                         setFragmentResult(FRAGMENT_RESULT_REQUEST_KEY, bundleOf(SELECTED_SKU_WITH_CONDITION_AND_PRICING_DATA_KEY to skuWithConditionAndPrinting))
 
-                        findNavController().popBackStack()
+                        dismiss()
                     }
                 }
 

@@ -1,6 +1,7 @@
 package sam.g.trackuriboh.ui.reminder
 
 import android.os.Parcelable
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.Transformations
@@ -13,6 +14,7 @@ import sam.g.trackuriboh.data.types.ReminderType
 import java.util.*
 import javax.inject.Inject
 
+@ExperimentalMaterialApi
 @HiltViewModel
 class ReminderFormViewModel @Inject constructor(
     state: SavedStateHandle,
@@ -42,8 +44,7 @@ class ReminderFormViewModel @Inject constructor(
             Reminder(type = reminderType!!,  date = date!!, link = link!!.trim(), host = host?.trim())
     }
 
-    // TODO: Fix Magic Strings
-    private val reminder = state.get<Reminder?>("reminder")
+    private val reminder = state.get<Reminder?>(AddEditReminderDialogFragment.ARG_REMINDER)
 
     private val _formState = MutableLiveData(ReminderFormState(
         mode = if (reminder == null) Mode.CREATE else Mode.EDIT,

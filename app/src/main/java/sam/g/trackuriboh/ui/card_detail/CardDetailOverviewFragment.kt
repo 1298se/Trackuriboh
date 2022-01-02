@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
@@ -11,26 +12,25 @@ import sam.g.trackuriboh.databinding.FragmentCardDetailOverviewBinding
 import sam.g.trackuriboh.ui.common.TwoLineAttributeCardView
 import sam.g.trackuriboh.utils.viewBinding
 
-private const val ARG_CARD = "ARG_CARD"
 
 class CardDetailOverviewFragment : Fragment() {
     private val binding by viewBinding(FragmentCardDetailOverviewBinding::inflate)
 
-    private var mProduct: ProductWithCardSetAndSkuIds? = null
+    private lateinit var mProduct: ProductWithCardSetAndSkuIds
 
     companion object {
-        fun newInstance(product: ProductWithCardSetAndSkuIds?) =
+        private const val ARG_CARD = "CardDetailOverviewFragment_argCard"
+
+        fun newInstance(product: ProductWithCardSetAndSkuIds) =
             CardDetailOverviewFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(ARG_CARD, product)
-                }
+                arguments = bundleOf(ARG_CARD to product)
             }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            mProduct = it.getParcelable(ARG_CARD)
+            mProduct = it.getParcelable(ARG_CARD)!!
         }
     }
 

@@ -11,20 +11,6 @@
         android:label="@string/lbl_reminders"
         tools:layout="@layout/fragment_reminders" >
 
-        <action
-            android:id="@+id/action_remindersFragment_to_addEditReminderDialogFragment"
-            app:destination="@id/addEditReminderDialogFragment" />
     </fragment>
-
-    <dialog
-        android:id="@+id/addEditReminderDialogFragment"
-        android:name="sam.g.trackuriboh.ui.reminder.AddEditReminderDialogFragment"
-        tools:layout="@layout/dialog_add_edit_reminders" >
-        <argument
-            android:name="reminder"
-            app:argType="sam.g.trackuriboh.data.db.entities.Reminder"
-            app:nullable="true"
-            android:defaultValue="@null" />
-    </dialog>
 
 </navigation>
