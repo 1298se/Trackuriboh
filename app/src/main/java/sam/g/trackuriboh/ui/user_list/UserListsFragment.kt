@@ -16,7 +16,6 @@ import sam.g.trackuriboh.databinding.FragmentUserListsBinding
 import sam.g.trackuriboh.ui.common.SimpleTextFieldDialogFragment
 import sam.g.trackuriboh.ui.user_list.adapters.UserListsStateAdapter
 import sam.g.trackuriboh.ui.user_list.viewmodels.UserListsViewModel
-import sam.g.trackuriboh.utils.setEnabled
 import sam.g.trackuriboh.utils.setupAsTopLevelDestinationToolbar
 import sam.g.trackuriboh.utils.viewBinding
 
@@ -157,8 +156,6 @@ class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             if (it.isEmpty()) {
                 binding.userListsViewPager.visibility = View.GONE
                 binding.userListsTabLayout.visibility = View.GONE
-
-                binding.userListsToolbar.menu.setEnabled(false)
             } else {
                 binding.userListsViewPager.visibility = View.VISIBLE
                 binding.userListsTabLayout.visibility = View.VISIBLE
