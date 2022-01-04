@@ -1,8 +1,11 @@
 package sam.g.trackuriboh.ui.user_list.viewmodels
 
+import androidx.core.os.bundleOf
 import androidx.lifecycle.*
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.data.repository.PriceRepository
 import sam.g.trackuriboh.data.repository.UserListRepository
@@ -12,6 +15,7 @@ import javax.inject.Inject
 class UserListsViewModel @Inject constructor(
     private val userListRepository: UserListRepository,
     private val priceRepository: PriceRepository,
+    private val firebaseAnalytics: FirebaseAnalytics,
 ) : ViewModel() {
 
     data class UiState(
@@ -39,16 +43,22 @@ class UserListsViewModel @Inject constructor(
     }
 
 
-    fun createUserList(list: UserList) =
+    fun createUserList(list: UserList) {
+        firebaseAnalytics.logEvent(Events.CREATE_USER_LIST, bundleOf("name" to list.name))
+
         viewModelScope.launch {
             newCreatedListId = userListRepository.insertUserList(list)
         }
+    }
+
 
     fun setCurrentTabPosition(position: Int) {
         _state.value = _state.value?.copy(currentSelectedTabPosition = position)
     }
 
     fun renameCurrentList(name: String) {
+        firebaseAnalytics.logEvent(Events.RENAME_USER_LIST, bundleOf("name" to name))
+
         viewModelScope.launch {
             val currentList = getCurrentList()
 
@@ -61,8 +71,11 @@ class UserListsViewModel @Inject constructor(
     }
 
     fun deleteCurrentList() {
+
         viewModelScope.launch {
             val currentList = getCurrentList()
+
+            firebaseAnalytics.logEvent(Events.DELETE_USER_LIST, bundleOf("name" to currentList?.name))
 
             if (currentList != null) {
                 userListRepository.deleteUserList(currentList)

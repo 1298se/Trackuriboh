@@ -2,12 +2,15 @@ package sam.g.trackuriboh.workers
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.os.bundleOf
 import androidx.hilt.work.HiltWorker
 import androidx.work.*
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.*
+import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.network.responses.CardResponse
 import sam.g.trackuriboh.data.repository.CardSetRepository
 import sam.g.trackuriboh.data.repository.ProductRepository
@@ -24,6 +27,7 @@ class DatabaseUpdateWorker @AssistedInject constructor(
     private val skuRepository: SkuRepository,
     private val sharedPreferences: SharedPreferences,
     private val firebaseCrashlytics: FirebaseCrashlytics,
+    private val firebaseAnalytics: FirebaseAnalytics,
 ) : CoroutineWorker(appContext, workerParams) {
     companion object {
 
@@ -34,6 +38,7 @@ class DatabaseUpdateWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result  = withContext(Dispatchers.Default) {
         try {
+            firebaseAnalytics.logEvent(Events.UPDATE_WORKER_START, null)
 
             val updateCardSetIds = inputData.getLongArray(CARD_SET_IDS_INPUT_KEY) ?: return@withContext Result.success()
 
@@ -78,6 +83,10 @@ class DatabaseUpdateWorker @AssistedInject constructor(
                 putLong(DATABASE_LAST_UPDATED_DATE, Date().time)
                 commit()
             }
+
+            firebaseAnalytics.logEvent(Events.UPDATE_WORKER_SUCCESS, bundleOf(
+                "updateCardSetIds" to updateCardSetIds,
+            ))
 
             Result.success()
         } catch (e: Exception) {

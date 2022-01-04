@@ -7,9 +7,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.MainGraphDirections
 import sam.g.trackuriboh.R
+import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.databinding.FragmentUserListDetailBinding
@@ -19,6 +21,7 @@ import sam.g.trackuriboh.ui.user_list.adapters.UserListEntryAdapter
 import sam.g.trackuriboh.ui.user_list.viewmodels.UserListDetailViewModel
 import sam.g.trackuriboh.utils.safeNavigate
 import sam.g.trackuriboh.utils.viewBinding
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListener {
@@ -34,6 +37,8 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListe
             }
     }
 
+    @Inject lateinit var firebaseAnalytics: FirebaseAnalytics
+
     private val binding: FragmentUserListDetailBinding by viewBinding(FragmentUserListDetailBinding::inflate)
 
     private val viewModel: UserListDetailViewModel by viewModels()
@@ -44,6 +49,8 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListe
 
     private val actionModeCallback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
+            firebaseAnalytics.logEvent(Events.ACTION_MODE_ON, null)
+
             mode.menuInflater?.inflate(R.menu.user_list_detail_contextual_action, menu)
             return true
         }
@@ -63,6 +70,8 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListe
         }
 
         override fun onDestroyActionMode(mode: ActionMode) {
+            firebaseAnalytics.logEvent(Events.ACTION_MODE_OFF, null)
+
             viewModel.setActionMode(false)
         }
     }

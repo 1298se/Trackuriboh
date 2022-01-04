@@ -2,15 +2,18 @@ package sam.g.trackuriboh.workers
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.os.bundleOf
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.network.responses.CardSetResponse
 import sam.g.trackuriboh.data.repository.CardSetRepository
 import sam.g.trackuriboh.data.repository.CatalogRepository
@@ -29,6 +32,7 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
     private val catalogRepository: CatalogRepository,
     private val sharedPreferences: SharedPreferences,
     private val firebaseCrashlytics: FirebaseCrashlytics,
+    private val firebaseAnalytics: FirebaseAnalytics,
 ) : CoroutineWorker(appContext, workerParams) {
     companion object {
         const val USER_TRIGGERED_WORKER_NAME = "DatabaseUpdateCheckWorker_UserTriggered"
@@ -39,6 +43,7 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result = withContext(Dispatchers.Default){
         try {
+            firebaseAnalytics.logEvent(Events.UPDATE_CHECK_WORKER_START, null)
 
             val cardRarityResponse = catalogRepository.fetchCardRarities().getResponseOrThrow()
             val printingResponse = catalogRepository.fetchProductPrintings().getResponseOrThrow()
@@ -92,6 +97,10 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
             val updateCardSetIds = diffCardSet.map { it.id }.toMutableSet().apply {
                 addAll(unreleasedCardSets.keys.map { it.id })
             }.toLongArray()
+
+            firebaseAnalytics.logEvent(Events.UPDATE_CHECK_WORKER_SUCCESS, bundleOf(
+                "updateCardSetIds" to updateCardSetIds
+            ))
 
             Result.success(workDataOf(UPDATE_CARD_SET_IDS_RESULT to updateCardSetIds))
         } catch (e: Exception) {

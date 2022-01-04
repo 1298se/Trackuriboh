@@ -1,11 +1,14 @@
 package sam.g.trackuriboh.ui.user_list.viewmodels
 
 import android.app.Application
+import androidx.core.os.bundleOf
 import androidx.lifecycle.*
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import sam.g.trackuriboh.R
+import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.data.db.relations.UserListEntryWithSkuAndProduct
@@ -19,6 +22,7 @@ import javax.inject.Inject
 class UserListDetailViewModel @Inject constructor(
     private val userListRepository: UserListRepository,
     private val priceRepository: PriceRepository,
+    private val firebaseAnalytics: FirebaseAnalytics,
     application: Application,
     state: SavedStateHandle,
 ) : ViewModel() {
@@ -148,13 +152,19 @@ class UserListDetailViewModel @Inject constructor(
 
     fun deleteSelectedItems() {
         viewModelScope.launch {
-            userListRepository.deleteUserListEntries(userList.id, checkedSkuIdsLiveData.value?.toList())
+            val deleteSkuIds = checkedSkuIdsLiveData.value?.toList()
+
+            firebaseAnalytics.logEvent(Events.DELETE_FROM_USER_LIST, bundleOf("skuIds" to deleteSkuIds))
+
+            userListRepository.deleteUserListEntries(userList.id, deleteSkuIds)
 
             setActionMode(false)
         }
     }
 
     fun updateCurrentEditEntryQuantity(quantity: Int) {
+        firebaseAnalytics.logEvent(Events.CHANGE_QUANTITY_USER_LIST, bundleOf("quantity" to quantity))
+
         viewModelScope.launch {
             val updatedEntry = currentEditEntry?.copy(quantity = quantity)
 

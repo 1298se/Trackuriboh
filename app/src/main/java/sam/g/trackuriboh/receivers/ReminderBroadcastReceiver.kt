@@ -5,8 +5,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.os.bundleOf
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.R
+import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.db.entities.Reminder
 import sam.g.trackuriboh.data.repository.ReminderRepository
 import sam.g.trackuriboh.managers.ReminderScheduler
@@ -22,6 +25,7 @@ class ReminderBroadcastReceiver : BroadcastReceiver() {
     @Inject lateinit var workRequestManager: WorkRequestManager
     @Inject lateinit var reminderScheduler: ReminderScheduler
     @Inject lateinit var reminderRepository: ReminderRepository
+    @Inject lateinit var firebaseAnalytics: FirebaseAnalytics
 
     companion object {
         const val ARG_REMINDER = "ReminderBroadcastReceiver_argReminder"
@@ -31,6 +35,8 @@ class ReminderBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
             Intent.ACTION_BOOT_COMPLETED, AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED -> {
+                firebaseAnalytics.logEvent(Events.REMINDER_SCHEDULED, bundleOf("action" to intent.action))
+
                 goAsync {
                     reminderScheduler.schedulePendingReminders()
                 }
@@ -66,6 +72,8 @@ class ReminderBroadcastReceiver : BroadcastReceiver() {
                         with(NotificationManagerCompat.from(context)) {
                             notify(System.currentTimeMillis().toInt(), builder.build())
                         }
+
+                        firebaseAnalytics.logEvent(Events.REMINDER_NOTIFICATION_DISPLAYED, bundleOf("reminder" to reminder))
                     }
                 }
             }

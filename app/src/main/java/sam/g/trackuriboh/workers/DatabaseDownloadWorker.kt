@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.work.HiltWorker
 import androidx.work.*
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -13,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 import sam.g.trackuriboh.R
+import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.db.AppDatabase
 import sam.g.trackuriboh.data.repository.CardSetRepository
 import sam.g.trackuriboh.data.repository.CatalogRepository
@@ -40,6 +42,7 @@ class DatabaseDownloadWorker @AssistedInject constructor(
     private val sharedPreferences: SharedPreferences,
     private val workManager: WorkManager,
     private val firebaseCrashlytics: FirebaseCrashlytics,
+    private val firebaseAnalytics: FirebaseAnalytics,
 ) : CoroutineWorker(appContext, workerParams) {
 
     private val progressNotificationBuilder by lazy {
@@ -68,6 +71,9 @@ class DatabaseDownloadWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result  = withContext(Dispatchers.Default){
         try {
+
+            firebaseAnalytics.logEvent(Events.DATABASE_DOWNLOAD_WORKER_START, null)
+
             updateProgress(0)
 
             appDatabase.clearCardDatabaseTables()
@@ -93,6 +99,8 @@ class DatabaseDownloadWorker @AssistedInject constructor(
                 stateNotificationBuilder.setContentText(applicationContext.getString(R.string.database_download_success))
                 notify(DB_SYNC_STATE_NOTIFICATION_ID, stateNotificationBuilder.build())
             }
+
+            firebaseAnalytics.logEvent(Events.DATABASE_DOWNLOAD_SUCCESS, null)
 
             Result.success()
         } catch (e: Exception) {

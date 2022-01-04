@@ -3,7 +3,9 @@ package sam.g.trackuriboh.ui.user_list.viewmodels
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.core.os.bundleOf
 import androidx.lifecycle.*
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.lifecycle.HiltViewModel
+import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
@@ -16,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddToUserListFormViewModel @Inject constructor(
     private val userListRepository: UserListRepository,
+    private val firebaseAnalytics: FirebaseAnalytics,
     state: SavedStateHandle
 ) : ViewModel() {
 
@@ -78,6 +81,12 @@ class AddToUserListFormViewModel @Inject constructor(
         val sku = formState.value?.formData?.skuWithConditionAndPrinting?.sku
         val userList = formState.value?.formData?.userList
         val quantity = formState.value?.formData?.quantity
+
+        firebaseAnalytics.logEvent(Events.ADD_TO_USER_LIST, bundleOf(
+            "skuId" to sku?.id,
+            "userList" to userList?.name,
+            "quantity" to quantity,
+        ))
 
         if (sku != null && userList != null && quantity != null) {
             userListRepository.insertUserListEntry(

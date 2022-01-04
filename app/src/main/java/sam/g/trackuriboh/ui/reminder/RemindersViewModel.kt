@@ -4,11 +4,14 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.provider.Settings
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.core.os.bundleOf
 import androidx.lifecycle.*
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import sam.g.trackuriboh.R
+import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.db.entities.Reminder
 import sam.g.trackuriboh.data.repository.ReminderRepository
 import sam.g.trackuriboh.managers.ReminderScheduler
@@ -25,6 +28,7 @@ class RemindersViewModel @Inject constructor(
     private val reminderRepository: ReminderRepository,
     private val reminderScheduler: ReminderScheduler,
     private val application: Application,
+    private val firebaseAnalytics: FirebaseAnalytics,
 ) : ViewModel() {
 
     sealed class UiModel {
@@ -47,10 +51,15 @@ class RemindersViewModel @Inject constructor(
             when (mode) {
                 ReminderFormViewModel.Mode.EDIT -> {
                     reminderRepository.updateReminder(reminder)
+
+                    firebaseAnalytics.logEvent(Events.EDIT_REMINDER, bundleOf("reminder" to reminder))
+
                 }
                 ReminderFormViewModel.Mode.CREATE -> {
                     // Since it's a new reminder, it's id is 0, we need to insert it to get the actual id.
                     scheduleReminder = reminderRepository.insertAndReturnReminder(reminder)
+
+                    firebaseAnalytics.logEvent(Events.CREATE_REMINDER, bundleOf("reminder" to reminder))
                 }
             }
 
@@ -64,6 +73,8 @@ class RemindersViewModel @Inject constructor(
     }
 
     fun deleteReminder(reminder: Reminder) {
+        firebaseAnalytics.logEvent(Events.DELETE_REMINDER, bundleOf("reminder" to reminder))
+
         viewModelScope.launch {
             reminderRepository.deleteReminder(reminder)
         }

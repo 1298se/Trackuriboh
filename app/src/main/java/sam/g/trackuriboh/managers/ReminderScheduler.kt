@@ -5,9 +5,12 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import androidx.core.os.bundleOf
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.db.entities.Reminder
 import sam.g.trackuriboh.data.repository.ReminderRepository
 import sam.g.trackuriboh.receivers.ReminderBroadcastReceiver
@@ -21,6 +24,7 @@ import javax.inject.Singleton
 class ReminderScheduler @Inject constructor(
     private val alarmManager: AlarmManager,
     private val reminderRepository: ReminderRepository,
+    private val firebaseAnalytics: FirebaseAnalytics,
     @ApplicationContext private val applicationContext: Context
 ) {
     fun canScheduleReminders(): Boolean {
@@ -41,6 +45,9 @@ class ReminderScheduler @Inject constructor(
             AlarmManager.AlarmClockInfo(reminder.date.time, getMainLauncherIntent(applicationContext)),
             getReminderOperation(reminder)
         )
+
+        firebaseAnalytics.logEvent(Events.REMINDER_SCHEDULED, bundleOf("reminder" to reminder))
+
     }
 
     suspend fun schedulePendingReminders() {
@@ -50,12 +57,15 @@ class ReminderScheduler @Inject constructor(
             }
 
             val reminders = reminderRepository.getReminders()
-
+            var count = 0
             reminders.forEach {
                 if (!it.notificationDisplayed) {
                     scheduleReminder(it)
+                    count++
                 }
             }
+
+            firebaseAnalytics.logEvent(Events.REMINDER_RESCHEDULE, bundleOf("count" to count))
         }
     }
 

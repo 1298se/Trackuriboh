@@ -12,18 +12,23 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.R
+import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.db.entities.Reminder
 import sam.g.trackuriboh.databinding.FragmentRemindersBinding
 import sam.g.trackuriboh.ui.common.VerticalSpaceItemDecoration
 import sam.g.trackuriboh.ui.common.actions.RequestPermission
 import sam.g.trackuriboh.ui.reminder.adapters.RemindersAdapter
 import sam.g.trackuriboh.utils.*
+import javax.inject.Inject
 
 @ExperimentalMaterialApi
 @AndroidEntryPoint
 class RemindersFragment : Fragment(), RemindersAdapter.OnItemClickListener {
+
+    @Inject lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private val binding: FragmentRemindersBinding by viewBinding(FragmentRemindersBinding::inflate)
 
@@ -97,6 +102,9 @@ class RemindersFragment : Fragment(), RemindersAdapter.OnItemClickListener {
 
             when (it.handleEvent()) {
                 is RequestPermission -> {
+
+                    firebaseAnalytics.logEvent(Events.ALARM_PERMISSION_REQUESTED, null)
+
                     context?.createAlertDialog(
                         title = getString(R.string.lbl_permission_required),
                         message = getString(R.string.reminder_permission_request_message),
