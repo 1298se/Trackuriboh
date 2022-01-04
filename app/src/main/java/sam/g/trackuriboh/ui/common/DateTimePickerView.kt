@@ -129,6 +129,9 @@ class DateTimePickerView @JvmOverloads constructor(
                             )
                         },
                         onNegativeButtonClick = {
+                            with (binding.dateTimeTabLayout) {
+                                selectTab(getTabAt(0))
+                            }
                             listener?.onCancelClick()
                         }
                     )
