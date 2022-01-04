@@ -84,7 +84,7 @@ class UserListsViewModel @Inject constructor(
 
     }
 
-    private fun getCurrentList(): UserList? =
+    fun getCurrentList(): UserList? =
         // We need getOrNull here in case there is no lists and the user tries to rename/delete a list because
         // ViewPager currentItem will return 0 if the list is empty or null
         _state.value?.currentSelectedTabPosition?.let { userLists.value?.getOrNull(it) }

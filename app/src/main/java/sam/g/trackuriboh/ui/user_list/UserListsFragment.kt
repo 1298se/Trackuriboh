@@ -17,7 +17,9 @@ import sam.g.trackuriboh.databinding.FragmentUserListsBinding
 import sam.g.trackuriboh.ui.common.SimpleTextFieldDialogFragment
 import sam.g.trackuriboh.ui.user_list.adapters.UserListsStateAdapter
 import sam.g.trackuriboh.ui.user_list.viewmodels.UserListsViewModel
+import sam.g.trackuriboh.utils.safeNavigate
 import sam.g.trackuriboh.utils.setupAsTopLevelDestinationToolbar
+import sam.g.trackuriboh.utils.showSnackbar
 import sam.g.trackuriboh.utils.viewBinding
 
 /**
@@ -69,6 +71,11 @@ class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         return when(item?.itemId) {
+            R.id.action_create_user_list -> {
+                CreateUserListBottomSheetFragment().show(childFragmentManager, null)
+
+                true
+            }
             R.id.action_rename_user_list -> {
                 SimpleTextFieldDialogFragment.newInstance(
                     getString(R.string.rename_user_list_action_title)
@@ -93,9 +100,19 @@ class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     }
 
     private fun initFab() {
-        with(binding.userListsFab) {
+        with(binding.addToUserListFab) {
             setOnClickListener {
-                CreateUserListBottomSheetFragment().show(childFragmentManager, null)
+                val currentList = viewModel.getCurrentList()
+
+                if (currentList != null) {
+                    findNavController().safeNavigate(
+                        UserListsFragmentDirections.actionUserListsFragmentToNewCardSelectionFragment(
+                            userList = currentList
+                        )
+                    )
+                } else {
+                    showSnackbar(getString(R.string.create_user_list_prompt))
+                }
             }
         }
     }

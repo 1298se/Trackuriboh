@@ -301,6 +301,7 @@ fun QuantitySelector(
                 contentDescription = null
             )
         }
+
         BasicTextField(
             value = quantity.toString(),
             modifier = Modifier.width(24.dp),
@@ -310,7 +311,8 @@ fun QuantitySelector(
             ),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             singleLine = true,
-            onValueChange = { onQuantityChanged(it.toIntOrNull() ?: 0) },
+            readOnly = true,
+            onValueChange = { },
         )
         IconButton(onClick = { onQuantityChanged(quantity + 1) }) {
             Icon(

@@ -24,7 +24,6 @@
     <string name="lbl_reminders">Reminders</string>
     <string name="lbl_user_lists">Lists</string>
 
-    <string name="lbl_add_to">Add to</string>
     <string name="lbl_all_printings">All Printings</string>
 
     <!-- Database -->
@@ -104,15 +103,18 @@
 
     <!-- User Lists -->
     <string name="other_actions_action_title">More options</string>
-    <string name="lbl_create_new_list">Create a new list</string>
+    <string name="create_new_list_action_title">Create a new list</string>
     <string name="create_user_list_option">Create a list</string>
     <string name="user_list_remove_entries_action_title">Remove items</string>
     <string name="rename_user_list_action_title">Rename list</string>
     <string name="delete_user_list_action_title">Delete list</string>
+    <string name="lbl_add_to_list">Add to list</string>
 
     <string name="user_list_type_list">List</string>
     <string name="create_user_list_action_title">Create</string>
     <string name="lbl_rename">Rename</string>
+
+    <string name="create_user_list_prompt">You currently don\'t have any lists. Please create one to continue.</string>
 
     <!-- User List Detail -->
     <plurals name="user_list_detail_total_count">

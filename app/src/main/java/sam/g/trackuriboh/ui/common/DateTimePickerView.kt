@@ -112,7 +112,7 @@ class DateTimePickerView @JvmOverloads constructor(
                     AppThemeDialogButtons(
                         positiveButtonEnabled = true,
                         negativeButtonEnabled = true,
-                        positiveButtonText = stringResource(id = R.string.lbl_save).uppercase(),
+                        positiveButtonText = stringResource(id = R.string.lbl_ok).uppercase(),
                         negativeButtonText = stringResource(id = R.string.lbl_cancel).uppercase(),
                         onPositiveButtonClick = {
                             listener?.onSaveClick(

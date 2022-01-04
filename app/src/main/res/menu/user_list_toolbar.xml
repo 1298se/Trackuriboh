@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_create_user_list"
+        android:title="@string/create_new_list_action_title"
+        android:icon="@drawable/ic_baseline_playlist_add_24"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/action_add_to_user_list"
         android:title="@string/other_actions_action_title"
         android:icon="@drawable/ic_baseline_more_vert_24"

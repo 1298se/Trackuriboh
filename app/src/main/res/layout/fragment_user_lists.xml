@@ -14,11 +14,11 @@
         style="@style/Widget.MaterialComponents.Toolbar.Primary" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/user_lists_fab"
+        android:id="@+id/add_to_user_list_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/material_border_padding"
-        android:contentDescription="@string/lbl_create_new_list"
+        android:contentDescription="@string/lbl_add_to_list"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_baseline_add_24dp" />

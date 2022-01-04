@@ -35,7 +35,7 @@ class UserListDetailViewModel @Inject constructor(
             val isChecked: Boolean,
         ) : UiModel()
         data class Header(val title: String) : UiModel()
-        object Footer : UiModel()
+        //object Footer : UiModel()
     }
 
     data class UiState(
@@ -91,7 +91,7 @@ class UserListDetailViewModel @Inject constructor(
                             )
                         )
                     )
-                    add(UiModel.Footer)
+                    //add(UiModel.Footer)
                 }
 
                 _state.postValue(_state.value?.copy(entries = transformList.toList()))

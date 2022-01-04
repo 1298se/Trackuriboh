@@ -9,7 +9,6 @@ import com.bumptech.glide.Glide
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.databinding.ItemUserListEntryBinding
-import sam.g.trackuriboh.databinding.ListAddItemFooterBinding
 import sam.g.trackuriboh.databinding.ListHeaderBinding
 import sam.g.trackuriboh.ui.common.BaseViewHolder
 import sam.g.trackuriboh.ui.user_list.viewmodels.UserListDetailViewModel
@@ -24,8 +23,8 @@ class UserListEntryAdapter
                     oldItem.data.entry.skuId == newItem.data.entry.skuId) ||
                     (oldItem is UserListDetailViewModel.UiModel.Header &&
                     newItem is UserListDetailViewModel.UiModel.Header &&
-                    oldItem.title == newItem.title) ||
-                    (oldItem is UserListDetailViewModel.UiModel.Footer && newItem is UserListDetailViewModel.UiModel.Footer)
+                    oldItem.title == newItem.title) //||
+                    //(oldItem is UserListDetailViewModel.UiModel.Footer && newItem is UserListDetailViewModel.UiModel.Footer)
                     )
         }
 
@@ -142,7 +141,7 @@ class UserListEntryAdapter
         }
     }
 
-    inner class FooterViewHolder(
+    /*inner class FooterViewHolder(
         val binding: ListAddItemFooterBinding
     ) : BaseViewHolder<UserListDetailViewModel.UiModel>(binding.root) {
 
@@ -153,12 +152,12 @@ class UserListEntryAdapter
         override fun bind(item: UserListDetailViewModel.UiModel) {
             binding.listAddItemFooterText.text = itemView.context.getString(R.string.user_list_detail_add_new_card)
         }
-    }
+    }*/
 
     companion object {
         private const val VIEW_TYPE_USER_LIST_ENTRY = 1
         private const val VIEW_TYPE_HEADER = 2
-        private const val VIEW_TYPE_FOOTER = 3
+        // private const val VIEW_TYPE_FOOTER = 3
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<UserListDetailViewModel.UiModel> {
@@ -169,9 +168,9 @@ class UserListEntryAdapter
             VIEW_TYPE_HEADER -> HeaderViewHolder(
                 ListHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             )
-            VIEW_TYPE_FOOTER -> FooterViewHolder(
+            /*VIEW_TYPE_FOOTER -> FooterViewHolder(
                 ListAddItemFooterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            )
+            )*/
             else -> throw IllegalStateException("invalid viewtype $viewType")
         }
     }
@@ -183,7 +182,7 @@ class UserListEntryAdapter
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
             is UserListDetailViewModel.UiModel.UserListEntryItem -> VIEW_TYPE_USER_LIST_ENTRY
-            UserListDetailViewModel.UiModel.Footer -> VIEW_TYPE_FOOTER
+            // UserListDetailViewModel.UiModel.Footer -> VIEW_TYPE_FOOTER
             is UserListDetailViewModel.UiModel.Header -> VIEW_TYPE_HEADER
         }
     }
