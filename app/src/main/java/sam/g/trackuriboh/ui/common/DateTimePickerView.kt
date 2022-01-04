@@ -100,12 +100,14 @@ class DateTimePickerView @JvmOverloads constructor(
 
                     val daylightSavingsActive = selectedTimeZone.inDaylightTime(Date())
 
-                    if (daylightSavingsActive) {
-                        Text(
-                            text = stringResource(id = R.string.timezone_daylight_savings_active),
-                            style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onSurface)
-                        )
-                    }
+                    Text(
+                        text = stringResource(id = if (daylightSavingsActive) {
+                            R.string.timezone_daylight_savings_active
+                        } else {
+                            R.string.timezone_standard_time_active
+                        }),
+                        style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onSurface)
+                    )
 
                     AppThemeDialogButtons(
                         positiveButtonEnabled = true,

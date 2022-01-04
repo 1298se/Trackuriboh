@@ -4,6 +4,7 @@ import sam.g.trackuriboh.data.db.cache.SkuLocalCache
 import sam.g.trackuriboh.data.db.entities.Sku
 import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
 import sam.g.trackuriboh.data.network.responses.Resource
+import sam.g.trackuriboh.data.network.responses.SkuPriceResponse
 import sam.g.trackuriboh.data.network.services.PriceApiService
 import sam.g.trackuriboh.managers.NetworkRequestHandler
 import javax.inject.Inject
@@ -16,15 +17,32 @@ class PriceRepository @Inject constructor(
     private val networkRequestHandler: NetworkRequestHandler
 ) {
 
-    /**
-     * Fetches price from API and updates database
-     */
-    suspend fun getPricesForProductSkus(productId: Long) =
-        getPricesForSkus(skuLocalCache.getSkusWithConditionAndPrinting(productId))
+    suspend fun getPricesForProductSkusOrdered(productId: Long) =
+        getPricesForSkus(skuLocalCache.getSkusWithConditionAndPrintingOrdered(productId))
 
 
     suspend fun getPricesForSkuIds(skuIds: List<Long>) =
         getPricesForSkus(skuLocalCache.getSkusWithConditionAndPrinting(skuIds))
+
+    suspend fun updatePricesForSkus(skuIds: List<Long>): Resource<SkuPriceResponse> {
+        val resource = networkRequestHandler.getTCGPlayerResource {
+            priceApiService.getPricesForSkus(skuIds.joinToString(","))
+        }
+
+        if (resource is Resource.Success) {
+            val updates = resource.data.results.map {
+                Sku.SkuPriceUpdate(
+                    it.id, it.lowestListingPrice, it.lowestShippingPrice, it.marketPrice
+                )
+            }
+
+            // Insert update prices into database
+            skuLocalCache.updateSkuPrices(updates)
+        }
+
+        return resource
+    }
+
 
     private suspend fun getPricesForSkus(
         skuWithConditionAndPrintings: List<SkuWithConditionAndPrinting>
@@ -37,23 +55,13 @@ class PriceRepository @Inject constructor(
 
         val skuIds = skuWithConditionAndPrintings.map { it.sku.id }
 
-        val resource = networkRequestHandler.getTCGPlayerResource {
-            priceApiService.getPricesForSkus(skuIds.joinToString(","))
-        }
-
-        return when (resource) {
+        // Fetch updated prices and insert them into DB
+        return when (val resource = updatePricesForSkus(skuIds)) {
             is Resource.Success -> {
-                val updates = resource.data.results.map {
-                    Sku.SkuPriceUpdate(
-                        it.id, it.lowestListingPrice, it.lowestShippingPrice, it.marketPrice
-                    )
-                }
-
-                // Update and fetch updated prices
-                skuLocalCache.updateSkuPrices(updates)
-
-                Resource.Success(skuLocalCache.getSkusWithConditionAndPrinting(skuIds))
+                // If the update was successful, return updated values
+                Resource.Success(skuLocalCache.getSkusWithConditionAndPrintingOrdered(skuIds))
             }
+            // Otherwise, return what we already have,
             is Resource.Failure -> Resource.Failure(
                 resource.exception,
                 skuWithConditionAndPrintings

@@ -20,13 +20,13 @@ interface SkuDao : BaseDao<Sku> {
     @Query("SELECT * FROM Sku WHERE productId = :productId")
     suspend fun _getSkusWithConditionAndPrinting(productId: Long): List<SkuWithConditionAndPrinting>
 
-    suspend fun getSkusWithConditionAndPrinting(skuIds: List<Long>): List<SkuWithConditionAndPrinting> {
+    suspend fun getSkusWithConditionAndPrintingOrdered(skuIds: List<Long>): List<SkuWithConditionAndPrinting> {
         val skusWithConditionAndPrinting = _getSkusWithConditionAndPrinting(skuIds)
 
         return orderByPrintingAndCondition(skusWithConditionAndPrinting)
     }
 
-    suspend fun getSkusWithConditionAndPrinting(productId: Long): List<SkuWithConditionAndPrinting> {
+    suspend fun getSkusWithConditionAndPrintingOrdered(productId: Long): List<SkuWithConditionAndPrinting> {
         val skusWithConditionAndPrinting = _getSkusWithConditionAndPrinting(productId)
 
         return orderByPrintingAndCondition(skusWithConditionAndPrinting)

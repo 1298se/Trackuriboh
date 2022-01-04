@@ -24,6 +24,7 @@ import sam.g.trackuriboh.utils.*
 @ExperimentalMaterialApi
 @AndroidEntryPoint
 class RemindersFragment : Fragment(), RemindersAdapter.OnItemClickListener {
+
     private val binding: FragmentRemindersBinding by viewBinding(FragmentRemindersBinding::inflate)
 
     companion object {
@@ -84,10 +85,10 @@ class RemindersFragment : Fragment(), RemindersAdapter.OnItemClickListener {
             AddEditReminderDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
             viewLifecycleOwner
         ) { _, bundle ->
+            val reminder = bundle.getParcelable<Reminder>(AddEditReminderDialogFragment.REMINDER_DATA_KEY)!!
+            val mode = bundle.getParcelable<ReminderFormViewModel.Mode>(AddEditReminderDialogFragment.MODE_DATA_KEY)!!
 
-            bundle.getParcelable<Reminder>(AddEditReminderDialogFragment.REMINDER_FORM_DATA_KEY)?.let {
-                viewModel.save(it)
-            }
+            viewModel.save(reminder, mode)
         }
     }
 

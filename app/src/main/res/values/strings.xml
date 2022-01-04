@@ -37,10 +37,11 @@
     <string name="database_download_prompt_message">This will reset the database and may take several minutes to complete. This task requires a Wi-Fi connection.
         If no Wi-Fi connection is available this process will start once connected.</string>
     <string name="database_download_info">This process may take a up to a few minutes. Please feel free to background the app. We\'ll notify you when it\'s done.</string>
-    <string name="database_download_worker_notification_title">Downloading database</string>
-    <string name="database_download_failed">Database download failed</string>
-    <string name="database_download_cancelled">Database download cancelled</string>
-    <string name="database_download_success">Database download successful</string>
+    <string name="database_download_worker_notification_title">Database Status</string>
+    <string name="database_download_worker_notification_message">Database download in progress…</string>
+    <string name="database_download_failed">Database download failed.</string>
+    <string name="database_download_cancelled">Database download cancelled.</string>
+    <string name="database_download_success">Database download successful.</string>
 
     <string name="database_update_info">Updating…</string>
     <string name="database_update_failed">Database update failed</string>
@@ -96,9 +97,6 @@
     <string name="error_title_generic">Error</string>
     <string name="error_message_generic">An error has occurred.</string>
 
-    <!-- Notifications -->
-    <string name="app_notification_channel_name">Trackuriboh Notifications</string>
-
     <!-- Facebook -->
     <string name="facebook_app_id">236802761727077</string>
     <string name="fb_login_protocol_scheme">fb236802761727077</string>
@@ -138,7 +136,8 @@
     <string name="reminder_type_claim_sale">Claim Sale</string>
     <string name="reminder_type_listing">Listing</string>
     <string name="reminder_type_other_event">Other</string>
-    <string name="reminder_notification_title">Reminder: %1$s is starting soon.</string>
+    <string name="reminder_notification_title">Trackuriboh Reminder</string>
+    <string name="reminder_notification_message">%1$s is starting soon!</string>
     <string name="reminder_permission_request_message">This reminder is currently saved, but Trackuriboh needs alarm permissions to activated it. Please</string>
     <string name="reminder_open_fail_message">There seems to be an issue with the attached link. Please verify it is valid.</string>
 
@@ -166,5 +165,14 @@
     <string name="timezone_mountain_time">MST/MDT (Mountain Time)</string>
     <string name="timezone_central_time">CST/CDT (Central Time)</string>
 
-    <string name="timezone_daylight_savings_active">Daylight savings is active in this time zone.</string>
+    <string name="timezone_daylight_savings_active">This time zone is observing daylight savings.</string>
+    <string name="timezone_standard_time_active">This time zone is observing standard time.</string>
+
+    <!-- Notifications -->
+    <string name="database_sync_notification_channel_id">database_sync_channel</string>
+    <string name="database_sync_notification_channel_name">Database Sync Status</string>
+
+    <string name="reminder_notification_channel_id">reminder_channel</string>
+    <string name="reminder_notification_channel_name">Reminders</string>
 </resources>
+

@@ -22,6 +22,7 @@ class BaseApplication : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
+
         Stetho.initializeWithDefaults(this)
 
         with(workRequestManager) {

@@ -11,5 +11,5 @@ data class Printing(
     @PrimaryKey(autoGenerate = false)
     val id: Long,
     val name: String?,
-    val order: Long?,
+    val order: Int?,
 ) : Parcelable

@@ -32,6 +32,7 @@
         <meta-data
             android:name="com.facebook.sdk.ClientToken"
             android:value="@string/facebook_client_token" />
+
         <activity
             android:name=".ui.card_detail.CardDetailActivity"
             android:exported="true" />
@@ -61,7 +62,14 @@
                 tools:node="remove" />
         </provider>
 
-        <receiver android:name=".receivers.ReminderBroadcastReceiver" />
+        <receiver
+            android:name=".receivers.ReminderBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

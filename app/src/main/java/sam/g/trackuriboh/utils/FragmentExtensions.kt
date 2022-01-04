@@ -17,6 +17,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.di.NetworkModule
 
@@ -115,6 +116,7 @@ fun Fragment.openTCGPlayer(productId: Long) {
     try {
         startActivity(browserIntent)
     } catch (e: ActivityNotFoundException) {
+        FirebaseCrashlytics.getInstance().recordException(e)
         showSnackbar("Please install a browser to continue")
     }
 }

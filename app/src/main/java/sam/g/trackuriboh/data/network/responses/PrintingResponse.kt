@@ -19,7 +19,7 @@ data class PrintingResponse(
         @SerializedName("name")
         val name: String,
         @SerializedName("displayOrder")
-        val order: Long?
+        val order: Int?
     ) : AppDatabase.DatabaseEntity<Printing> {
 
         override fun toDatabaseEntity(): Printing =

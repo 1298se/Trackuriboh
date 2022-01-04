@@ -9,6 +9,7 @@ import androidx.work.WorkManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import sam.g.trackuriboh.R
 import javax.inject.Singleton
@@ -26,19 +27,19 @@ object AppModule {
     @Singleton
     @Provides
     fun provideWorkManager(
-        application: Application
+        @ApplicationContext applicationContext: Context
     ): WorkManager =
-        WorkManager.getInstance(application)
+        WorkManager.getInstance(applicationContext)
 
     @Singleton
     @Provides
     fun provideAlarmManager(
-        application: Application
-    ): AlarmManager = application.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        @ApplicationContext applicationContext: Context
+    ): AlarmManager = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
     @Singleton
     @Provides
     fun provideConnectivityManager(
-        application: Application
-    ): ConnectivityManager = application.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        @ApplicationContext applicationContext: Context
+    ): ConnectivityManager = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 }

@@ -2,11 +2,11 @@ package sam.g.trackuriboh.workers
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +28,7 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
     private val productRepository: ProductRepository,
     private val catalogRepository: CatalogRepository,
     private val sharedPreferences: SharedPreferences,
+    private val firebaseCrashlytics: FirebaseCrashlytics,
 ) : CoroutineWorker(appContext, workerParams) {
     companion object {
         const val USER_TRIGGERED_WORKER_NAME = "DatabaseUpdateCheckWorker_UserTriggered"
@@ -38,7 +39,6 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result = withContext(Dispatchers.Default){
         try {
-            Log.d("WORKER", "Update Check started")
 
             val cardRarityResponse = catalogRepository.fetchCardRarities().getResponseOrThrow()
             val printingResponse = catalogRepository.fetchProductPrintings().getResponseOrThrow()
@@ -93,10 +93,9 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
                 addAll(unreleasedCardSets.keys.map { it.id })
             }.toLongArray()
 
-            Log.d("WORKER", "Update check completed")
-
             Result.success(workDataOf(UPDATE_CARD_SET_IDS_RESULT to updateCardSetIds))
-        } catch (throwable: Throwable) {
+        } catch (e: Exception) {
+            firebaseCrashlytics.recordException(e)
             Result.failure()
         }
     }

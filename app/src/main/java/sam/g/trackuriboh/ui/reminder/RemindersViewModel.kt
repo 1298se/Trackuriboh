@@ -3,6 +3,7 @@ package sam.g.trackuriboh.ui.reminder
 import android.annotation.SuppressLint
 import android.app.Application
 import android.provider.Settings
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
@@ -18,11 +19,12 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
+@ExperimentalMaterialApi
 @HiltViewModel
 class RemindersViewModel @Inject constructor(
     private val reminderRepository: ReminderRepository,
     private val reminderScheduler: ReminderScheduler,
-    private val application: Application
+    private val application: Application,
 ) : ViewModel() {
 
     sealed class UiModel {
@@ -38,12 +40,22 @@ class RemindersViewModel @Inject constructor(
     val reminders = reminderRepository.getRemindersObservable().map { createRemindersList(it) }.asLiveData()
 
     @SuppressLint("InlinedApi")
-    fun save(reminder: Reminder) {
+    fun save(reminder: Reminder, mode: ReminderFormViewModel.Mode) {
+
+        var scheduleReminder = reminder
         viewModelScope.launch {
-            val reminderId = reminderRepository.insertReminder(reminder)
+            when (mode) {
+                ReminderFormViewModel.Mode.EDIT -> {
+                    reminderRepository.updateReminder(reminder)
+                }
+                ReminderFormViewModel.Mode.CREATE -> {
+                    // Since it's a new reminder, it's id is 0, we need to insert it to get the actual id.
+                    scheduleReminder = reminderRepository.insertAndReturnReminder(reminder)
+                }
+            }
 
             if (reminderScheduler.canScheduleReminders()) {
-                reminderScheduler.setReminder(reminderRepository.getReminder(reminderId))
+                reminderScheduler.scheduleReminder(scheduleReminder)
             } else {
                 // Ignore lint because canScheduleReminders checks for API version compatibility
                 _action.value = SingleEvent(RequestPermission(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM))

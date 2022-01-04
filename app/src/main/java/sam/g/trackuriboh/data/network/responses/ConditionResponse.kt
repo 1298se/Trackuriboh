@@ -10,10 +10,10 @@ data class ConditionResponse(
     @SerializedName(ERROR_FIELD_NAME)
     override val errors: List<String>,
     @SerializedName(RESULTS_FIELD_NAME)
-    override val results: List<CardPrintingItem>,
-) : BaseTCGPlayerResponse<ConditionResponse.CardPrintingItem> {
+    override val results: List<CardConditionItem>,
+) : BaseTCGPlayerResponse<ConditionResponse.CardConditionItem> {
 
-    data class CardPrintingItem(
+    data class CardConditionItem(
         @SerializedName("conditionId")
         val id: Long,
         @SerializedName("name")
@@ -21,7 +21,7 @@ data class ConditionResponse(
         @SerializedName("abbreviation")
         val abbreviation: String,
         @SerializedName("displayOrder")
-        val order: Long?
+        val order: Int?
     ) : AppDatabase.DatabaseEntity<Condition> {
 
         override fun toDatabaseEntity(): Condition =

@@ -1,6 +1,7 @@
 package sam.g.trackuriboh.ui.reminder.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -8,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.android.material.composethemeadapter.MdcTheme
 import sam.g.trackuriboh.R
@@ -17,7 +20,7 @@ import sam.g.trackuriboh.ui.common.AppThemeDenseOutlinedTextField
 import sam.g.trackuriboh.ui.common.AppThemeOutlinedTextButton
 import sam.g.trackuriboh.ui.common.SimpleDialogForm
 import sam.g.trackuriboh.ui.reminder.ReminderFormViewModel
-import java.text.DateFormat
+import sam.g.trackuriboh.utils.formatReminderDateTime
 import java.util.*
 
 @ExperimentalMaterialApi
@@ -63,6 +66,7 @@ fun ReminderForm(
             text = state?.formData?.host,
             onValueChange = onHostChanged,
             hintText = stringResource(id = R.string.reminder_form_host_hint),
+            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Next),
             trailingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_baseline_person_outline_24),
@@ -87,7 +91,7 @@ fun ReminderForm(
         AppThemeOutlinedTextButton(
             modifier = Modifier.fillMaxWidth(),
             text = state?.formData?.date?.let {
-                DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault()).format(it)
+                formatReminderDateTime(it)
             } ?: stringResource(id = R.string.reminder_form_date_time_hint),
             onButtonClick = onDateTimeButtonClick,
             trailingIcon = {

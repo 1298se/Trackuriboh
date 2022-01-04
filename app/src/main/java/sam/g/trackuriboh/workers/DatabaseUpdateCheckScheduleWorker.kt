@@ -16,10 +16,11 @@ import dagger.assisted.AssistedInject
 class DatabaseUpdateCheckScheduleWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
-    private val workRequestManager: WorkRequestManager
+    private val workRequestManager: WorkRequestManager,
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {
+
         workRequestManager.enqueueDatabaseUpdateCheck(false)
 
         return Result.success()

@@ -1,10 +1,10 @@
 package sam.g.trackuriboh.workers
 
 import android.content.Context
-import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.delay
@@ -24,13 +24,13 @@ class PriceSyncWorker @AssistedInject constructor(
     @Assisted workerParams: WorkerParameters,
     private val skuRepository: SkuRepository,
     private val priceRepository: PriceRepository,
+    private val firebaseCrashlytics: FirebaseCrashlytics,
 ) : CoroutineWorker(appContext, workerParams) {
     companion object {
         const val NETWORK_REQUEST_DELAY = 250L
     }
     override suspend fun doWork(): Result {
         return try {
-            Log.d("WORKER", "PriceSyncWorker started")
 
             var offset = 0
 
@@ -41,7 +41,7 @@ class PriceSyncWorker @AssistedInject constructor(
                     break
                 }
 
-                val resource = priceRepository.getPricesForSkuIds(skuIds)
+                val resource = priceRepository.updatePricesForSkus(skuIds)
 
                 if (resource is Resource.Failure) {
                     throw IOException(resource.exception)
@@ -49,15 +49,12 @@ class PriceSyncWorker @AssistedInject constructor(
 
                 offset += SKU_DEFAULT_QUERY_LIMIT
 
-                Log.d("OFFSET", offset.toString())
-
                 delay(NETWORK_REQUEST_DELAY)
             }
 
-            Log.d("WORKER", "PriceSyncWorker completed")
-
             Result.success()
         } catch (e: Exception) {
+            firebaseCrashlytics.recordException(e)
             Result.failure()
         }
     }

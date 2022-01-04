@@ -87,6 +87,8 @@ fun AppThemeDenseOutlinedTextField(
     onValueChange: (String) -> Unit,
     borderColor: Color = Color.LightGray,
     hintText: String? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    singleLine: Boolean = true,
     trailingIcon: @Composable () -> Unit = { },
 ) {
     var curHintText by rememberSaveable { mutableStateOf(hintText) }
@@ -109,6 +111,8 @@ fun AppThemeDenseOutlinedTextField(
                 },
             onValueChange = onValueChange,
             readOnly = readOnly,
+            keyboardOptions = keyboardOptions,
+            singleLine = singleLine,
         )
         trailingIcon()
     }

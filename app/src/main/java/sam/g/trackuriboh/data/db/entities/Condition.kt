@@ -13,5 +13,5 @@ data class Condition(
     val name: String?,
     val abbreviation: String?,
     // The order number that this Condition should be relative to other Conditions
-    val order: Long?,
+    val order: Int?,
 ) : Parcelable

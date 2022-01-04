@@ -16,4 +16,5 @@ data class Reminder(
     val link: String,
     val date: Date,
     val host: String?,
+    val notificationDisplayed: Boolean = false
 ) : Parcelable

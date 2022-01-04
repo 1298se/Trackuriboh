@@ -34,7 +34,9 @@ class AddEditReminderDialogFragment : DialogFragment(), DateTimePickerView.OnInt
 
     companion object {
         const val FRAGMENT_RESULT_REQUEST_KEY = "AddEditReminderDialogFragment_fragmentResultRequestKey"
-        const val REMINDER_FORM_DATA_KEY = "AddEditReminderDialogFragment_reminderFormData"
+        const val REMINDER_DATA_KEY = "AddEditReminderDialogFragment_reminderData"
+        const val MODE_DATA_KEY = "AddEditReminderDialogFragment_mode"
+
         const val ARG_REMINDER = "AddEditReminderDialogFragment_argReminder"
 
         fun newInstance(reminder: Reminder? = null) =
@@ -91,10 +93,10 @@ class AddEditReminderDialogFragment : DialogFragment(), DateTimePickerView.OnInt
 
 
     private fun setReminder() {
-        setFragmentResult(
-            FRAGMENT_RESULT_REQUEST_KEY, bundleOf(
-                REMINDER_FORM_DATA_KEY to viewModel.formState.value?.formData?.toDatabaseEntity())
-        )
+        viewModel.createDataBundle().observe(viewLifecycleOwner) {
+            setFragmentResult(FRAGMENT_RESULT_REQUEST_KEY, it)
+        }
+
         dismiss()
     }
 

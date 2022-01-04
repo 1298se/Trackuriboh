@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.hilt.work.HiltWorker
 import androidx.work.*
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.*
@@ -22,6 +23,7 @@ class DatabaseUpdateWorker @AssistedInject constructor(
     private val productRepository: ProductRepository,
     private val skuRepository: SkuRepository,
     private val sharedPreferences: SharedPreferences,
+    private val firebaseCrashlytics: FirebaseCrashlytics,
 ) : CoroutineWorker(appContext, workerParams) {
     companion object {
 
@@ -32,6 +34,7 @@ class DatabaseUpdateWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result  = withContext(Dispatchers.Default) {
         try {
+
             val updateCardSetIds = inputData.getLongArray(CARD_SET_IDS_INPUT_KEY) ?: return@withContext Result.success()
 
             val updateCardSets = cardSetRepository.fetchCardSetDetails(updateCardSetIds.toList()).getResponseOrThrow().results
@@ -77,7 +80,8 @@ class DatabaseUpdateWorker @AssistedInject constructor(
             }
 
             Result.success()
-        } catch (throwable: Throwable) {
+        } catch (e: Exception) {
+            firebaseCrashlytics.recordException(e)
             Result.failure()
         }
     }

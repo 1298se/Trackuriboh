@@ -9,14 +9,14 @@ import javax.inject.Singleton
 class ReminderLocalCache @Inject constructor(
     private val appDatabase: AppDatabase
 ) {
-    suspend fun insertReminder(reminder: Reminder) = appDatabase.reminderDao().insert(reminder)
-
-    suspend fun getReminder(reminderId: Long) = appDatabase.reminderDao().getReminder(reminderId)
+    suspend fun insertAndReturnReminder(reminder: Reminder) = appDatabase.reminderDao().insertAndReturn(reminder)
 
     suspend fun getReminders() = appDatabase.reminderDao().getReminders()
 
     suspend fun deleteReminder(reminder: Reminder) = appDatabase.reminderDao().delete(reminder)
 
     fun getRemindersObservable() = appDatabase.reminderDao().getRemindersObservable()
+
+    suspend fun updateReminder(reminder: Reminder) = appDatabase.reminderDao().update(reminder)
 
 }

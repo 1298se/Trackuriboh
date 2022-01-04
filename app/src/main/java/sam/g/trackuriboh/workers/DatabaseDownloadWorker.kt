@@ -2,10 +2,10 @@ package sam.g.trackuriboh.workers
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.work.HiltWorker
 import androidx.work.*
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CancellationException
@@ -19,6 +19,8 @@ import sam.g.trackuriboh.data.repository.CatalogRepository
 import sam.g.trackuriboh.data.repository.ProductRepository
 import sam.g.trackuriboh.data.repository.SkuRepository
 import sam.g.trackuriboh.di.NetworkModule.DEFAULT_QUERY_LIMIT
+import sam.g.trackuriboh.utils.DB_SYNC_PROGRESS_NOTIFICATION_ID
+import sam.g.trackuriboh.utils.DB_SYNC_STATE_NOTIFICATION_ID
 import sam.g.trackuriboh.utils.MAX_PROGRESS
 import sam.g.trackuriboh.utils.createNotificationBuilder
 import java.util.*
@@ -37,13 +39,16 @@ class DatabaseDownloadWorker @AssistedInject constructor(
     private val appDatabase: AppDatabase,
     private val sharedPreferences: SharedPreferences,
     private val workManager: WorkManager,
+    private val firebaseCrashlytics: FirebaseCrashlytics,
 ) : CoroutineWorker(appContext, workerParams) {
 
     private val progressNotificationBuilder by lazy {
         createNotificationBuilder(
             context = applicationContext,
-            channelId = DB_SYNC_NOTIFICATION_CHANNEL_ID,
-            notificationTitle = appContext.getString(R.string.database_download_worker_notification_title),
+            notificationTitle = applicationContext.getString(R.string.database_download_worker_notification_title),
+            message = applicationContext.getString(R.string.database_download_worker_notification_message),
+            channelId = applicationContext.getString(R.string.database_sync_notification_channel_id),
+            channelName = applicationContext.getString(R.string.database_sync_notification_channel_name),
             cancelIntent = workManager.createCancelPendingIntent(id),
             showProgress = true,
             ongoing = true,
@@ -54,14 +59,15 @@ class DatabaseDownloadWorker @AssistedInject constructor(
     private val stateNotificationBuilder by lazy {
         createNotificationBuilder(
             context = applicationContext,
-            channelId = DB_SYNC_NOTIFICATION_CHANNEL_ID,
-            notificationTitle = appContext.getString(R.string.database_download_worker_notification_title),
+            notificationTitle = applicationContext.getString(R.string.database_download_worker_notification_title),
+            message = null,
+            channelId = applicationContext.getString(R.string.database_sync_notification_channel_id),
+            channelName = applicationContext.getString(R.string.database_sync_notification_channel_name),
         )
     }
 
     override suspend fun doWork(): Result  = withContext(Dispatchers.Default){
         try {
-            Log.d("WORKER", "DatabaseDownloadWorker started")
             updateProgress(0)
 
             appDatabase.clearCardDatabaseTables()
@@ -87,10 +93,10 @@ class DatabaseDownloadWorker @AssistedInject constructor(
                 stateNotificationBuilder.setContentText(applicationContext.getString(R.string.database_download_success))
                 notify(DB_SYNC_STATE_NOTIFICATION_ID, stateNotificationBuilder.build())
             }
-            Log.d("WORKER", "DatabaseDownloadWorker completed")
 
             Result.success()
-        } catch (exception: Exception) {
+        } catch (e: Exception) {
+            firebaseCrashlytics.recordException(e)
 
             // Once a coroutine is cancelled, it cannot suspend anymore, hence we must use
             // a NonCancellable CoroutineContext to perform the database cleanup.
@@ -103,7 +109,7 @@ class DatabaseDownloadWorker @AssistedInject constructor(
 
             with(NotificationManagerCompat.from(applicationContext)) {
                 val contentString = applicationContext.getString(
-                    if (exception.cause is CancellationException)
+                    if (e.cause is CancellationException)
                         R.string.database_download_cancelled else R.string.database_download_failed
                 )
 

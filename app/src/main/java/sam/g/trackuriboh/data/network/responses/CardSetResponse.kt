@@ -1,5 +1,6 @@
 package sam.g.trackuriboh.data.network.responses
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.annotations.SerializedName
 import sam.g.trackuriboh.data.db.AppDatabase
 import sam.g.trackuriboh.data.db.entities.CardSet
@@ -27,13 +28,11 @@ data class CardSetResponse(
         val releaseDate: String?
     ) : AppDatabase.DatabaseEntity<CardSet> {
 
-        val parsedReleaseDate: Date?
-            get() = releaseDate?.let { SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(releaseDate) }
-
         override fun toDatabaseEntity(): CardSet {
             val releaseDate = try {
-                parsedReleaseDate
+                releaseDate?.let { SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(releaseDate) }
             } catch (e: ParseException) {
+                FirebaseCrashlytics.getInstance().recordException(e)
                 null
             }
 

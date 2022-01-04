@@ -2,6 +2,7 @@ package sam.g.trackuriboh.managers
 
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import retrofit2.Response
 import sam.g.trackuriboh.data.network.responses.BaseTCGPlayerResponse
 import sam.g.trackuriboh.data.network.responses.Resource
@@ -11,6 +12,7 @@ import javax.inject.Inject
 class NetworkRequestHandler @Inject constructor(
     private val connectivityManager: ConnectivityManager,
     private val sessionManager: SessionManager,
+    private val firebaseCrashlytics: FirebaseCrashlytics
 
 ) {
 
@@ -27,6 +29,7 @@ class NetworkRequestHandler @Inject constructor(
 
             // If the errors array is not empty, the request failed
             if (body != null && body.errors.isNotEmpty()) {
+                firebaseCrashlytics.recordException(IOException(body.toString()))
                 return Resource.Failure(IOException(body.errors.first()))
             }
 
@@ -36,6 +39,7 @@ class NetworkRequestHandler @Inject constructor(
 
             return Resource.Failure(IOException(response.code().toString()))
         } catch (e: Exception) {
+            firebaseCrashlytics.recordException(e)
             return Resource.Failure(e)
         }
     }

@@ -21,7 +21,7 @@ class CardPricesViewModel @Inject constructor(
 
     val state = liveData {
             emit(UiState.Loading())
-            when (val resource = priceRepository.getPricesForProductSkus(productId)) {
+            when (val resource = priceRepository.getPricesForProductSkusOrdered(productId)) {
                 is Resource.Success -> emit(UiState.Success(buildPrintingToSkuMap(resource.data)))
                 is Resource.Failure -> emit(
                     UiState.Failure(

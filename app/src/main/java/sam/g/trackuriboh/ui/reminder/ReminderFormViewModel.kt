@@ -2,13 +2,10 @@ package sam.g.trackuriboh.ui.reminder
 
 import android.os.Parcelable
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.core.os.bundleOf
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.parcelize.Parcelize
-import sam.g.trackuriboh.data.db.AppDatabase
 import sam.g.trackuriboh.data.db.entities.Reminder
 import sam.g.trackuriboh.data.types.ReminderType
 import java.util.*
@@ -33,18 +30,14 @@ class ReminderFormViewModel @Inject constructor(
         CREATE
     }
 
+    private val reminder = state.get<Reminder?>(AddEditReminderDialogFragment.ARG_REMINDER)
+
     data class ReminderFormData(
         val reminderType: ReminderType? = null,
         val host: String? = null,
         val link: String? = null,
         val date: Date? = null,
-    ) : AppDatabase.DatabaseEntity<Reminder> {
-
-        override fun toDatabaseEntity(): Reminder =
-            Reminder(type = reminderType!!,  date = date!!, link = link!!.trim(), host = host?.trim())
-    }
-
-    private val reminder = state.get<Reminder?>(AddEditReminderDialogFragment.ARG_REMINDER)
+    )
 
     private val _formState = MutableLiveData(ReminderFormState(
         mode = if (reminder == null) Mode.CREATE else Mode.EDIT,
@@ -58,6 +51,15 @@ class ReminderFormViewModel @Inject constructor(
         } else {
             it.copy(canSave = false)
         }
+    }
+
+    fun createDataBundle() = liveData {
+        emit(
+            bundleOf(
+                AddEditReminderDialogFragment.REMINDER_DATA_KEY to _formState.value?.formData?.toReminder(),
+                AddEditReminderDialogFragment.MODE_DATA_KEY to _formState.value?.mode
+            )
+        )
     }
 
 
@@ -104,4 +106,13 @@ class ReminderFormViewModel @Inject constructor(
             )
         } ?: ReminderFormData()
     }
+
+    private fun ReminderFormData.toReminder() =
+        Reminder(
+            id = reminder?.id ?: 0,
+            type = reminderType!!,
+            date = date!!,
+            link = link!!.trim(),
+            host = host?.trim()
+        )
 }

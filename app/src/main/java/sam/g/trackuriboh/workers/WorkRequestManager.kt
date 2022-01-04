@@ -69,7 +69,8 @@ class WorkRequestManager @Inject constructor(
     }
 
     fun enqueuePeriodicPriceSync() {
-        val priceSyncRequest = PeriodicWorkRequestBuilder<PriceSyncWorker>(24, TimeUnit.HOURS)
+        val priceSyncRequest = PeriodicWorkRequestBuilder<PriceSyncWorker>(3, TimeUnit.DAYS)
+            .setInitialDelay(30, TimeUnit.MINUTES)
             .setConstraints(
                 Constraints.Builder()
                     .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -81,18 +82,6 @@ class WorkRequestManager @Inject constructor(
             PriceSyncWorker::class.java.name,
             ExistingPeriodicWorkPolicy.KEEP,
             priceSyncRequest
-        )
-    }
-
-    fun enqueueReminderScheduler() {
-        val reminderScheduleRequest = OneTimeWorkRequestBuilder<ReminderScheduleWorker>()
-            .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
-            .build()
-
-        workManager.enqueueUniqueWork(
-            ReminderScheduleWorker::class.java.name,
-            ExistingWorkPolicy.REPLACE,
-            reminderScheduleRequest
         )
     }
 }

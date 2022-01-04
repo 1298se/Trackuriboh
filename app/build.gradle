@@ -6,6 +6,8 @@ plugins {
     id 'androidx.navigation.safeargs.kotlin'
     id 'dagger.hilt.android.plugin'
     id 'com.google.secrets_gradle_plugin' version '0.4'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -15,6 +17,12 @@ android {
             storePassword 'android'
             keyAlias 'androiddebugkey'
             keyPassword 'android'
+        }
+        release {
+            storeFile file('C:\\Users\\olive\\keystores\\upload-keystore.jks')
+            storePassword 'T32song@'
+            keyAlias 'upload'
+            keyPassword 'trackuriboh1'
         }
     }
     compileSdkVersion 31
@@ -134,4 +142,10 @@ dependencies {
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0'
     implementation "com.google.android.material:compose-theme-adapter:1.1.0"
+
+    // Firebase
+    implementation platform('com.google.firebase:firebase-bom:29.0.3')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-crashlytics'
+
 }

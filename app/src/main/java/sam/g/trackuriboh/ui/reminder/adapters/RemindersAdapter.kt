@@ -3,6 +3,7 @@ package sam.g.trackuriboh.ui.reminder.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.chauthai.swipereveallayout.ViewBinderHelper
@@ -13,9 +14,9 @@ import sam.g.trackuriboh.databinding.ItemReminderBinding
 import sam.g.trackuriboh.databinding.ListHeaderBinding
 import sam.g.trackuriboh.ui.common.BaseViewHolder
 import sam.g.trackuriboh.ui.reminder.RemindersViewModel
-import java.text.DateFormat
-import java.util.*
+import sam.g.trackuriboh.utils.formatReminderDateTime
 
+@ExperimentalMaterialApi
 class RemindersAdapter : ListAdapter<RemindersViewModel.UiModel, BaseViewHolder<RemindersViewModel.UiModel>>(
     object : DiffUtil.ItemCallback<RemindersViewModel.UiModel>() {
         override fun areItemsTheSame(oldItem: RemindersViewModel.UiModel, newItem: RemindersViewModel.UiModel): Boolean {
@@ -82,7 +83,7 @@ class RemindersAdapter : ListAdapter<RemindersViewModel.UiModel, BaseViewHolder<
 
             binding.itemReminderImage.setImageDrawable(reminderIcon)
 
-            binding.itemReminderDescriptionTextview.text = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, Locale.getDefault()).format(reminder.date)
+            binding.itemReminderDescriptionTextview.text = formatReminderDateTime(reminder.date)
         }
     }
 
