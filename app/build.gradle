@@ -43,7 +43,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            manifestPlaceholders.enableCrashlytics = false
+            manifestPlaceholders.enableCrashlytics = true
         }
         debug {
             signingConfig signingConfigs.debug
