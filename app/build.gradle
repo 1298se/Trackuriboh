@@ -18,11 +18,11 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
-        upload {
-            storeFile file('C:\\Users\\olive\\keystores\\upload-keystore.jks')
-            storePassword 'T32song@'
-            keyAlias 'upload'
-            keyPassword 'T32song@'
+        release {
+            storeFile file('C:\\Users\\olive\\keystores\\release-keystore.jks')
+            storePassword 'android'
+            keyAlias 'androidreleasekey'
+            keyPassword 'android'
         }
     }
     compileSdkVersion 31
@@ -42,7 +42,7 @@ android {
     buildTypes {
         release {
             ndk.debugSymbolLevel 'FULL'
-            signingConfig signingConfigs.upload
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             manifestPlaceholders.enableAnalytics = false
