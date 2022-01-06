@@ -12,6 +12,8 @@
     <dimen name="material_border_padding">16dp</dimen>
     <dimen name="material_border_padding_large">24dp</dimen>
 
+    <dimen name="regular_fab_height">56dp</dimen>
+
     <dimen name="divider_inset">16dp</dimen>
 
     <!-- List containers -->

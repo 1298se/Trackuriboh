@@ -40,7 +40,7 @@ fun createNotificationBuilder(
         }
 
         setTicker(notificationTitle)
-        setSmallIcon(R.drawable.ic_launcher_foreground)
+        setSmallIcon(R.drawable.ic_android)
         setContentIntent(contentIntent)
         setOngoing(ongoing)
         setOnlyAlertOnce(true)
@@ -51,7 +51,7 @@ fun createNotificationBuilder(
         }
 
         if (cancelIntent != null) {
-            addAction(R.drawable.ic_baseline_close_24dp, context.getString(R.string.lbl_cancel), cancelIntent)
+            addAction(R.drawable.ic_outline_cancel_24, context.getString(R.string.lbl_cancel), cancelIntent)
         }
     }
 

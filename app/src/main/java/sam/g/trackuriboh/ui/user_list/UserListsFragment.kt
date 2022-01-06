@@ -111,7 +111,7 @@ class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener {
                         )
                     )
                 } else {
-                    showSnackbar(getString(R.string.create_user_list_prompt))
+                    showSnackbar(getString(R.string.create_user_list_prompt), anchorView = this)
                 }
             }
         }

@@ -18,11 +18,11 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
-        release {
+        upload {
             storeFile file('C:\\Users\\olive\\keystores\\upload-keystore.jks')
             storePassword 'T32song@'
             keyAlias 'upload'
-            keyPassword 'trackuriboh1'
+            keyPassword 'T32song@'
         }
     }
     compileSdkVersion 31
@@ -35,12 +35,14 @@ android {
         applicationId 'sam.g.trackuriboh'
         minSdkVersion 23
         targetSdkVersion 31
-        versionCode 5
-        versionName "1.0.4"
+        versionCode 8
+        versionName "1.0.7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
+            ndk.debugSymbolLevel 'FULL'
+            signingConfig signingConfigs.upload
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             manifestPlaceholders.enableAnalytics = false
