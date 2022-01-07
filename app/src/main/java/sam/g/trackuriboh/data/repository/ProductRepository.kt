@@ -5,9 +5,6 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import sam.g.trackuriboh.data.db.cache.ProductLocalCache
-import sam.g.trackuriboh.data.db.entities.CardRarity
-import sam.g.trackuriboh.data.db.entities.Condition
-import sam.g.trackuriboh.data.db.entities.Printing
 import sam.g.trackuriboh.data.db.entities.Product
 import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
 import sam.g.trackuriboh.data.network.services.ProductApiService
@@ -56,15 +53,6 @@ class ProductRepository @Inject constructor(
 
     suspend fun insertProducts(products: List<Product>) =
         productLocalCache.insertProducts(products)
-
-    suspend fun insertCardRarities(rarities: List<CardRarity>) =
-        productLocalCache.insertCardRarities(rarities)
-
-    suspend fun insertConditions(conditions: List<Condition>) =
-        productLocalCache.insertConditions(conditions)
-
-    suspend fun insertPrintings(printings: List<Printing>) =
-        productLocalCache.insertPrintings(printings)
 
     fun getSuggestionsCursorObservable(query: String?, setId: Long? = null) = productLocalCache.getSuggestionsCursorObservable(query, setId)
 

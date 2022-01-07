@@ -4,7 +4,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.work.HiltWorker
-import androidx.work.*
+import androidx.work.CoroutineWorker
+import androidx.work.ForegroundInfo
+import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.assisted.Assisted
@@ -16,10 +19,7 @@ import kotlinx.coroutines.withContext
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.db.AppDatabase
-import sam.g.trackuriboh.data.repository.CardSetRepository
-import sam.g.trackuriboh.data.repository.CatalogRepository
-import sam.g.trackuriboh.data.repository.ProductRepository
-import sam.g.trackuriboh.data.repository.SkuRepository
+import sam.g.trackuriboh.data.repository.*
 import sam.g.trackuriboh.di.NetworkModule.DEFAULT_QUERY_LIMIT
 import sam.g.trackuriboh.utils.DB_SYNC_PROGRESS_NOTIFICATION_ID
 import sam.g.trackuriboh.utils.DB_SYNC_STATE_NOTIFICATION_ID
@@ -38,9 +38,9 @@ class DatabaseDownloadWorker @AssistedInject constructor(
     private val productRepository: ProductRepository,
     private val catalogRepository: CatalogRepository,
     private val skuRepository: SkuRepository,
+    private val userListRepository: UserListRepository,
     private val appDatabase: AppDatabase,
     private val sharedPreferences: SharedPreferences,
-    private val workManager: WorkManager,
     private val firebaseCrashlytics: FirebaseCrashlytics,
     private val firebaseAnalytics: FirebaseAnalytics,
 ) : CoroutineWorker(appContext, workerParams) {
@@ -52,7 +52,6 @@ class DatabaseDownloadWorker @AssistedInject constructor(
             message = applicationContext.getString(R.string.database_download_worker_notification_message),
             channelId = applicationContext.getString(R.string.database_sync_notification_channel_id),
             channelName = applicationContext.getString(R.string.database_sync_notification_channel_name),
-            cancelIntent = workManager.createCancelPendingIntent(id),
             showProgress = true,
             ongoing = true,
             autoCancel = false
@@ -76,13 +75,19 @@ class DatabaseDownloadWorker @AssistedInject constructor(
 
             updateProgress(0)
 
+            // Save the user's current lists
+            val userListEntries = userListRepository.getAllUserListEntries()
+            val userLists = userListRepository.getAllUserLists()
+
             appDatabase.clearCardDatabaseTables()
 
-            val cardRarityResponse = catalogRepository.fetchCardRarities().getResponseOrThrow()
-            val printingResponse = catalogRepository.fetchProductPrintings().getResponseOrThrow()
-            val conditionResponse = catalogRepository.fetchProductConditions().getResponseOrThrow()
 
-            with(productRepository) {
+
+            with(catalogRepository) {
+                val cardRarityResponse = fetchCardRarities().getResponseOrThrow()
+                val printingResponse = fetchProductPrintings().getResponseOrThrow()
+                val conditionResponse = fetchProductConditions().getResponseOrThrow()
+
                 insertCardRarities(cardRarityResponse.results.map { it.toDatabaseEntity() })
                 insertPrintings(printingResponse.results.map { it.toDatabaseEntity() })
                 insertConditions(conditionResponse.results.map { it.toDatabaseEntity() })
@@ -99,6 +104,10 @@ class DatabaseDownloadWorker @AssistedInject constructor(
                 stateNotificationBuilder.setContentText(applicationContext.getString(R.string.database_download_success))
                 notify(DB_SYNC_STATE_NOTIFICATION_ID, stateNotificationBuilder.build())
             }
+
+            // insert the user lists back
+            userListRepository.insertUserLists(userLists)
+            userListRepository.insertUserListEntries(userListEntries)
 
             firebaseAnalytics.logEvent(Events.DATABASE_DOWNLOAD_SUCCESS, null)
 

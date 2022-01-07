@@ -10,14 +10,21 @@ import javax.inject.Singleton
 class UserListRepository @Inject constructor(
     private val userListLocalCache: UserListLocalCache
 ) {
-
     fun getUserListsObervable() = userListLocalCache.getUserListsObservable()
 
     fun getEntriesInUserListObservable(listId: Long) = userListLocalCache.getEntriesInUserListObservable(listId)
 
+    suspend fun getAllUserLists() = userListLocalCache.getAllUserLists()
+
+    suspend fun getAllUserListEntries() = userListLocalCache.getAllUserListEntries()
+
     suspend fun insertUserList(userList: UserList) = userListLocalCache.insertUserList(userList)
 
+    suspend fun insertUserLists(userLists: List<UserList>) = userListLocalCache.insertUserLists(userLists)
+
     suspend fun insertUserListEntry(userListEntry: UserListEntry) = userListLocalCache.insertUserListEntry(userListEntry)
+
+    suspend fun insertUserListEntries(entries: List<UserListEntry>) = userListLocalCache.insertUserListEntries(entries)
 
     suspend fun deleteUserListEntries(listId: Long, skuIds: List<Long>?) {
         if (skuIds == null) {

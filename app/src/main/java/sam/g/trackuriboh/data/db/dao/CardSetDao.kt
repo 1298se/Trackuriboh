@@ -16,7 +16,7 @@ interface CardSetDao : BaseDao<CardSet> {
     @MapInfo(valueColumn = "cardSetCount")
     @Transaction
     @Query("SELECT CardSet.*, COUNT(Product.id) AS cardSetCount FROM CardSet LEFT JOIN Product ON CardSet.id = Product.setId GROUP BY CardSet.id")
-    suspend fun getCardSetsWithCount(): Map<CardSet, Int>
+    suspend fun getAllCardSetsWithCount(): Map<CardSet, Int>
 
     @Query("SELECT * FROM CardSet ORDER BY name ASC")
     fun getCardSetList(): PagingSource<Int, CardSet>

@@ -45,11 +45,11 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
         try {
             firebaseAnalytics.logEvent(Events.UPDATE_CHECK_WORKER_START, null)
 
-            val cardRarityResponse = catalogRepository.fetchCardRarities().getResponseOrThrow()
-            val printingResponse = catalogRepository.fetchProductPrintings().getResponseOrThrow()
-            val conditionResponse = catalogRepository.fetchProductConditions().getResponseOrThrow()
+            with(catalogRepository) {
+                val cardRarityResponse = fetchCardRarities().getResponseOrThrow()
+                val printingResponse = fetchProductPrintings().getResponseOrThrow()
+                val conditionResponse = fetchProductConditions().getResponseOrThrow()
 
-            with(productRepository) {
                 insertCardRarities(cardRarityResponse.results.map { it.toDatabaseEntity() })
                 insertPrintings(printingResponse.results.map { it.toDatabaseEntity() })
                 insertConditions(conditionResponse.results.map { it.toDatabaseEntity() })

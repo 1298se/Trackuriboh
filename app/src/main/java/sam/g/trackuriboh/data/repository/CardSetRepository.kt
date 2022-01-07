@@ -42,7 +42,7 @@ class CardSetRepository @Inject constructor(
 
     suspend fun insertCardSets(cardSets: List<CardSet>) = cardSetLocalCache.insertCardSets(cardSets)
 
-    suspend fun getCardSetsWithCount() = cardSetLocalCache.getCardSetsWithCount()
+    suspend fun getCardSetsWithCount() = cardSetLocalCache.getAllCardSetsWithCount()
 
     fun getSuggestionsCursor(query: String?) = cardSetLocalCache.getSearchSuggestions(query)
 

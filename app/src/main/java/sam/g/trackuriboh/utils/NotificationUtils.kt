@@ -24,7 +24,6 @@ fun createNotificationBuilder(
     channelId: String,
     channelName: String,
     contentIntent: PendingIntent = getMainLauncherIntent(context.applicationContext),
-    cancelIntent: PendingIntent? = null,
     showProgress: Boolean = false,
     ongoing: Boolean = false,
     autoCancel: Boolean = true,
@@ -48,10 +47,6 @@ fun createNotificationBuilder(
 
         if (showProgress) {
             setProgress(MAX_PROGRESS, 0, false)
-        }
-
-        if (cancelIntent != null) {
-            addAction(R.drawable.ic_outline_cancel_24, context.getString(R.string.lbl_cancel), cancelIntent)
         }
     }
 

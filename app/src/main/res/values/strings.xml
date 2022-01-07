@@ -33,8 +33,8 @@
     <string name="database_download_action_title">Force download</string>
     <string name="database_update_check_action_title">Check for updates</string>
     <string name="database_download_prompt_title">Force download database?</string>
-    <string name="database_download_prompt_message">This will reset the database and may take several minutes to complete. This task requires a Wi-Fi connection.
-        If no Wi-Fi connection is available this process will start once connected.</string>
+    <string name="database_download_prompt_message">IMPORTANT: This will reset the database and may take several minutes to complete. This task cannot be cancelled once started, and your data may be lost if it finishes unsuccessfully. This task requires a stable Wi-Fi connection, and
+        if no Wi-Fi connection is available this process will be queued to start once connected.</string>
     <string name="database_download_info">This process may take a up to a few minutes. Please feel free to background the app. We\'ll notify you when it\'s done.</string>
     <string name="database_download_worker_notification_title">Database Status</string>
     <string name="database_download_worker_notification_message">Database download in progress…</string>

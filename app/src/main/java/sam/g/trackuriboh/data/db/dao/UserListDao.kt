@@ -10,4 +10,10 @@ interface UserListDao : BaseDao<UserList> {
 
     @Query("SELECT * FROM UserList ORDER BY creationDate")
     fun getUserListsObservable(): Flow<List<UserList>>
+
+    @Query("SELECT * FROM UserList")
+    suspend fun getAllUserLists(): List<UserList>
+
+    @Query("DELETE FROM UserList")
+    suspend fun clearTable()
 }

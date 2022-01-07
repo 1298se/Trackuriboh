@@ -14,4 +14,10 @@ interface UserListEntryDao : BaseDao<UserListEntry> {
 
     @Query("DELETE FROM UserListEntry WHERE listId = :listId AND skuId in (:skuIds)")
     suspend fun deleteUserListEntries(listId: Long, skuIds: List<Long>)
+
+    @Query("SELECT * FROM UserListEntry")
+    suspend fun getAllUserListEntries(): List<UserListEntry>
+
+    @Query("DELETE FROM UserListEntry")
+    suspend fun clearTable()
 }

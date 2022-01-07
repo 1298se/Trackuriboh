@@ -48,6 +48,9 @@ abstract class AppDatabase : RoomDatabase() {
      * We do this because [clearAllTables] doesn't work with coroutines - we can't monitor when it ends
       */
     suspend fun clearCardDatabaseTables() {
+        userListEntryDao().clearTable()
+        userListDao().clearTable()
+
         skuDao().clearTable()
         productDao().clearTable()
         cardSetDao().clearTable()

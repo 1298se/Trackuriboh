@@ -20,8 +20,8 @@ class CardSetLocalCache @Inject constructor(
     suspend fun insertCardSets(cardSets: List<CardSet>) =
         appDatabase.cardSetDao().insert(cardSets)
 
-    suspend fun getCardSetsWithCount() =
-        appDatabase.cardSetDao().getCardSetsWithCount()
+    suspend fun getAllCardSetsWithCount() =
+        appDatabase.cardSetDao().getAllCardSetsWithCount()
 
     fun getSearchSuggestions(query: String?) =
         appDatabase.cardSetDao().getSearchSuggestions(query ?: "").map {
