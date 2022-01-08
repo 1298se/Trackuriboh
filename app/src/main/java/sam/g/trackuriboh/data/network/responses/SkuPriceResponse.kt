@@ -14,7 +14,10 @@ data class SkuPriceResponse(
     data class SkuPriceResponseItem(
         @SerializedName("skuId")
         val id: Long,
+        // This value should be lowestBasePrice + lowestShippingPrice
         val lowestListingPrice: Double?,
+        @SerializedName("lowPrice")
+        val lowestBasePrice: Double?,
         @SerializedName("lowestShipping")
         val lowestShippingPrice: Double?,
         val marketPrice: Double?,

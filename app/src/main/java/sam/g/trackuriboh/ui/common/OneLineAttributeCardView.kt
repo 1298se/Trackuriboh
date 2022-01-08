@@ -27,7 +27,7 @@ class OneLineAttributeCardView @JvmOverloads constructor(
         }
     }
 
-    fun setRowItems(attributeMap: Map<String?, String?>) {
+    fun setRowItems(attributeMap: Map<CharSequence?, CharSequence?>) {
         for ((title, content) in attributeMap) {
 
             val rowBinding = OneLineAttributeRowBinding.inflate(

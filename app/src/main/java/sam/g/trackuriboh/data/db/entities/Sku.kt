@@ -35,6 +35,7 @@ data class Sku(
     val printingId: Long?,
     val conditionId: Long?,
     val lowestListingPrice: Double? = null,
+    val lowestBasePrice: Double? = null,
     val lowestShippingPrice: Double? = null,
     val marketPrice: Double? = null,
 ) : Parcelable {
@@ -42,6 +43,7 @@ data class Sku(
     data class SkuPriceUpdate(
         val id: Long,
         val lowestListingPrice: Double?,
+        val lowestBasePrice: Double?,
         val lowestShippingPrice: Double?,
         val marketPrice: Double?
     )

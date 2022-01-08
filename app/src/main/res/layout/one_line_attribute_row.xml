@@ -15,9 +15,12 @@
        android:layout_height="wrap_content"
        app:layout_constraintStart_toStartOf="parent"
        app:layout_constraintTop_toTopOf="parent"
-       style="@style/TextAppearance.MaterialComponents.Subtitle2"
+       app:layout_constraintEnd_toStartOf="@id/one_line_attribute_value_textview"
+       app:layout_constraintHorizontal_chainStyle="spread_inside"
+       app:layout_constrainedWidth="true"
+       style="@style/TextAppearance.MaterialComponents.Body2"
        android:textColor="@color/black"
-       tools:text="Near Mint" />
+       tools:text="Near Minttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt" />
 
    <com.google.android.material.textview.MaterialTextView
        android:id="@+id/one_line_attribute_value_textview"
@@ -26,9 +29,9 @@
        app:layout_constraintStart_toEndOf="@id/one_line_attribute_title_textview"
        app:layout_constraintEnd_toEndOf="parent"
        app:layout_constraintTop_toTopOf="parent"
-       app:layout_constraintHorizontal_bias="1"
+       app:layout_constrainedWidth="true"
        android:textColor="@color/black"
-       style="@style/TextAppearance.MaterialComponents.Subtitle2"
+       style="@style/TextAppearance.MaterialComponents.Body2"
        tools:text="69.69" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

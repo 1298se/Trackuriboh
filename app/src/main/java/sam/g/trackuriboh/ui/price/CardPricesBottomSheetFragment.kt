@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.text.HtmlCompat
+import androidx.core.text.toSpanned
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -108,12 +110,26 @@ class CardPricesBottomSheetFragment : BottomSheetDialogFragment() {
                     }
                 }
                 setHeader(entry.first, getString(R.string.lbl_price_lowest_listing_usd))
-                setRowItems(entry.second.associate { skuWithConditionAndPrinting ->
-                    (skuWithConditionAndPrinting.condition?.name ?: getString(R.string.lbl_not_available)) to
-                            (skuWithConditionAndPrinting.sku.lowestListingPrice?.let {
-                                getString(R.string.price_with_dollar_sign, String.format("%.2f", it) )
-                            } ?: getString(R.string.lbl_not_available))
-                })
+
+                with (entry.second) {
+
+                    val conditionPriceMap: Map<CharSequence?, CharSequence?> = associate {
+                        val conditionText = it.condition?.name ?: getString(R.string.lbl_not_available)
+                        val priceText = if (it.sku.lowestBasePrice != null) {
+                            val basePrice = it.sku.lowestBasePrice
+                            val shippingPrice = (it.sku.lowestShippingPrice ?: 0.0)
+
+                            getString(R.string.base_price_with_shipping, basePrice, shippingPrice)
+                        } else {
+                            getString(R.string.lbl_not_available)
+                        }
+
+                        conditionText to HtmlCompat.fromHtml(priceText, HtmlCompat.FROM_HTML_MODE_LEGACY).toSpanned()
+                    }
+
+                    setRowItems(conditionPriceMap)
+
+                }
             })
         }
     }

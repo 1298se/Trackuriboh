@@ -32,7 +32,11 @@ class PriceRepository @Inject constructor(
         if (resource is Resource.Success) {
             val updates = resource.data.results.map {
                 Sku.SkuPriceUpdate(
-                    it.id, it.lowestListingPrice, it.lowestShippingPrice, it.marketPrice
+                    id = it.id,
+                    lowestBasePrice = it.lowestBasePrice,
+                    lowestListingPrice = it.lowestListingPrice,
+                    lowestShippingPrice = it.lowestShippingPrice,
+                    marketPrice = it.marketPrice
                 )
             }
 

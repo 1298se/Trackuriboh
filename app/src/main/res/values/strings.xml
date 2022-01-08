@@ -13,6 +13,7 @@
     <string name="lbl_download">Download</string>
     <string name="lbl_name">Name</string>
     <string name="lbl_create">Create</string>
+    <string name="lbl_price_with_dollar_sign">\$%1$.2f</string>
     <string name="progress_percent">%1$d%%</string>
     <string name="more_actions_action_title">More actions</string>
 
@@ -72,7 +73,8 @@
     <string name="lbl_buy_now">Buy now</string>
     <string name="add_to_user_list_action_title">Add to list</string>
     <string name="add_to_user_list_success_message">Added to %1$s</string>
-    <string name="price_with_dollar_sign">\$%1$s</string>
+    <string name="base_price_with_shipping">\$%1$.2f + &lt;i>%2$.2f&lt;i></string>
+    <string name="base_price_with_free_shipping">\$%1$d + Free</string>
 
     <!-- Card Detail Overview -->
     <string name="lbl_number">Number</string>
@@ -87,7 +89,7 @@
 
     <!-- Prices -->
     <string name="lbl_not_available">Not Available</string>
-    <string name="lbl_price_lowest_listing_usd">Lowest Listing (USD)</string>
+    <string name="lbl_price_lowest_listing_usd">Lowest Listing + Shipping</string>
 
     <!-- Search -->
     <string name="search_action_title">Search</string>

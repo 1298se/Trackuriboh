@@ -3,14 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="@dimen/material_border_padding_small">
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/header_text_textview"
-        android:layout_width="fill_parent"
+        android:id="@+id/header_start_text_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        style="@style/TextAppearance.MaterialComponents.Subtitle2"
+        tools:text="Title" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/header_end_text_textview"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/TextAppearance.MaterialComponents.Subtitle2"
-        tools:text="Title"/>
-
+        tools:text="Value" />
 </LinearLayout>

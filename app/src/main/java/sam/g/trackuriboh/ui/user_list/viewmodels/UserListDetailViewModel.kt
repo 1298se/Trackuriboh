@@ -34,8 +34,7 @@ class UserListDetailViewModel @Inject constructor(
             val data: UserListEntryWithSkuAndProduct,
             val isChecked: Boolean,
         ) : UiModel()
-        data class Header(val title: String) : UiModel()
-        //object Footer : UiModel()
+        data class Header(val totalCount: Int, val totalValue: Double) : UiModel()
     }
 
     data class UiState(
@@ -72,26 +71,24 @@ class UserListDetailViewModel @Inject constructor(
                 refreshPricesIfNecessary(list)
 
                 var totalCount = 0
+                var totalValue = 0.0
                 // Map it to UiModels
                 val transformList: MutableList<UiModel> = list.map { entry ->
                     UiModel.UserListEntryItem(entry, false).also {
                         totalCount += it.data.entry.quantity
+                        totalValue += (it.data.skuWithConditionAndPrintingAndProduct.sku.lowestBasePrice ?: 0.0) * (it.data.entry.quantity)
                     }
                 }.toMutableList()
 
-                // Add the header and the footer
+                // Add the header
                 transformList.apply {
                     add(
                         0,
                         UiModel.Header(
-                            application.resources.getQuantityString(
-                                R.plurals.user_list_detail_total_count,
-                                totalCount,
-                                totalCount
-                            )
+                            totalCount,
+                            totalValue,
                         )
                     )
-                    //add(UiModel.Footer)
                 }
 
                 _state.postValue(_state.value?.copy(entries = transformList.toList()))

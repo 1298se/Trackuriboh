@@ -43,6 +43,7 @@ class DatabaseDownloadWorker @AssistedInject constructor(
     private val sharedPreferences: SharedPreferences,
     private val firebaseCrashlytics: FirebaseCrashlytics,
     private val firebaseAnalytics: FirebaseAnalytics,
+    private val workRequestManager: WorkRequestManager,
 ) : CoroutineWorker(appContext, workerParams) {
 
     private val progressNotificationBuilder by lazy {
@@ -108,6 +109,9 @@ class DatabaseDownloadWorker @AssistedInject constructor(
             // insert the user lists back
             userListRepository.insertUserLists(userLists)
             userListRepository.insertUserListEntries(userListEntries)
+
+            // Enqueue price sync
+            workRequestManager.enqueuePeriodicPriceSync()
 
             firebaseAnalytics.logEvent(Events.DATABASE_DOWNLOAD_SUCCESS, null)
 
