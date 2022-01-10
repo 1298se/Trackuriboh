@@ -111,7 +111,7 @@ class DatabaseDownloadWorker @AssistedInject constructor(
             userListRepository.insertUserListEntries(userListEntries)
 
             // Enqueue price sync
-            workRequestManager.enqueuePeriodicPriceSync()
+            workRequestManager.enqueueOneTimePriceSync()
 
             firebaseAnalytics.logEvent(Events.DATABASE_DOWNLOAD_SUCCESS, null)
 

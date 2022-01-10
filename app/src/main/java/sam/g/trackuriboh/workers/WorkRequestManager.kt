@@ -80,7 +80,23 @@ class WorkRequestManager @Inject constructor(
 
         workManager.enqueueUniquePeriodicWork(
             PriceSyncWorker::class.java.name,
-            ExistingPeriodicWorkPolicy.REPLACE,
+            ExistingPeriodicWorkPolicy.KEEP,
+            priceSyncRequest
+        )
+    }
+
+    fun enqueueOneTimePriceSync() {
+        val priceSyncRequest = OneTimeWorkRequestBuilder<PriceSyncWorker>()
+            .setConstraints(
+                Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build()
+            )
+            .build()
+
+        workManager.enqueueUniqueWork(
+            PriceSyncWorker::class.java.name + "OneTime",
+            ExistingWorkPolicy.REPLACE,
             priceSyncRequest
         )
     }
