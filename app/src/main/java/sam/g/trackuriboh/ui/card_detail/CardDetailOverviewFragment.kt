@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
@@ -45,7 +46,7 @@ class CardDetailOverviewFragment : Fragment() {
 
     private fun generateDescriptionView(productWithCardSetAndSkuIds: ProductWithCardSetAndSkuIds?) {
         productWithCardSetAndSkuIds?.let {
-            val attributeMap = mapOf<String?, String?>(
+            val attributeMap = mapOf<CharSequence?, CharSequence?>(
                 getString(R.string.lbl_name) to it.product.name,
                 getString(R.string.lbl_number) to it.product.number,
                 getString(R.string.lbl_set) to it.cardSet.name,
@@ -53,7 +54,11 @@ class CardDetailOverviewFragment : Fragment() {
                 getString(R.string.lbl_attribute) to it.product.attribute,
                 getString(R.string.lbl_type) to it.product.cardType,
                 getString(R.string.lbl_atkdef) to getString(R.string.card_detail_atk_def, it.product.attack ?: 0, it.product.defense ?: 0),
-                getString(R.string.lbl_description) to it.product.description
+                getString(R.string.lbl_description) to it.product.description?.let { description ->
+                    HtmlCompat.fromHtml(
+                        description, HtmlCompat.FROM_HTML_MODE_LEGACY
+                    )
+                }
             )
 
             binding.cardDetailContainer.addView(TwoLineAttributeCardView(context).apply {

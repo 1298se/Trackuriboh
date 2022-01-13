@@ -38,7 +38,7 @@ class RemindersAdapter : ListAdapter<RemindersViewModel.UiModel, BaseViewHolder<
 
     inner class HeaderViewHolder(val binding: ListHeaderBinding) : BaseViewHolder<RemindersViewModel.UiModel>(binding.root) {
         override fun bind(item: RemindersViewModel.UiModel) {
-            binding.headerTextTextview.text = (item as RemindersViewModel.UiModel.Header).title
+            binding.headerStartTextTextview.text = (item as RemindersViewModel.UiModel.Header).title
         }
     }
 

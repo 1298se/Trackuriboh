@@ -17,14 +17,17 @@ import sam.g.trackuriboh.utils.show
 class UserListEntryAdapter
     : ListAdapter<UserListDetailViewModel.UiModel, BaseViewHolder<UserListDetailViewModel.UiModel>>(
     object : DiffUtil.ItemCallback<UserListDetailViewModel.UiModel>() {
-        override fun areItemsTheSame(oldItem: UserListDetailViewModel.UiModel, newItem: UserListDetailViewModel.UiModel): Boolean {
+        override fun areItemsTheSame(
+            oldItem: UserListDetailViewModel.UiModel,
+            newItem: UserListDetailViewModel.UiModel
+        ): Boolean {
             return ((oldItem is UserListDetailViewModel.UiModel.UserListEntryItem &&
-                    newItem is UserListDetailViewModel.UiModel.UserListEntryItem &&
-                    oldItem.data.entry.skuId == newItem.data.entry.skuId) ||
+                        newItem is UserListDetailViewModel.UiModel.UserListEntryItem &&
+                        oldItem.data.entry.skuId == newItem.data.entry.skuId) ||
                     (oldItem is UserListDetailViewModel.UiModel.Header &&
-                    newItem is UserListDetailViewModel.UiModel.Header &&
-                    oldItem.title == newItem.title) //||
-                    //(oldItem is UserListDetailViewModel.UiModel.Footer && newItem is UserListDetailViewModel.UiModel.Footer)
+                            newItem is UserListDetailViewModel.UiModel.Header &&
+                            oldItem.totalCount == newItem.totalCount &&
+                            oldItem.totalValue == newItem.totalValue)
                     )
         }
 
@@ -118,12 +121,10 @@ class UserListEntryAdapter
 
             binding.itemUserListEntryCheckbox.isChecked = entryItem.isChecked
 
-            binding.itemUserListEntryPriceTextview.text = skuWithConditionAndPrintingAndProduct.sku.lowestListingPrice?.let {
+            binding.itemUserListEntryPriceTextview.text = skuWithConditionAndPrintingAndProduct.sku.lowestBasePrice?.let {
                 itemView.context.getString(
-                    R.string.price_with_dollar_sign,
-                    String.format(
-                        String.format("%.2f", it)
-                    )
+                    R.string.lbl_price_with_dollar_sign,
+                    it
                 )
             } ?: itemView.context.getString(R.string.lbl_not_available)
         }
@@ -135,29 +136,23 @@ class UserListEntryAdapter
     ) : BaseViewHolder<UserListDetailViewModel.UiModel>(binding.root) {
 
         override fun bind(item: UserListDetailViewModel.UiModel) {
-            val title = (item as UserListDetailViewModel.UiModel.Header).title
+            with (item as UserListDetailViewModel.UiModel.Header) {
+                val totalCount = totalCount
+                val totalValue = totalValue
 
-            binding.headerTextTextview.text = title
+                binding.headerStartTextTextview.text = itemView.resources.getQuantityString(
+                    R.plurals.user_list_detail_total_count, totalCount, totalCount
+                )
+
+                binding.headerEndTextTextview.text = itemView.resources.getString(R.string.lbl_price_with_dollar_sign, totalValue)
+            }
+
         }
     }
-
-    /*inner class FooterViewHolder(
-        val binding: ListAddItemFooterBinding
-    ) : BaseViewHolder<UserListDetailViewModel.UiModel>(binding.root) {
-
-        init {
-            binding.root.setOnClickListener { onItemClickListener?.onAddCardClick() }
-        }
-
-        override fun bind(item: UserListDetailViewModel.UiModel) {
-            binding.listAddItemFooterText.text = itemView.context.getString(R.string.user_list_detail_add_new_card)
-        }
-    }*/
 
     companion object {
         private const val VIEW_TYPE_USER_LIST_ENTRY = 1
         private const val VIEW_TYPE_HEADER = 2
-        // private const val VIEW_TYPE_FOOTER = 3
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<UserListDetailViewModel.UiModel> {
@@ -168,9 +163,6 @@ class UserListEntryAdapter
             VIEW_TYPE_HEADER -> HeaderViewHolder(
                 ListHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             )
-            /*VIEW_TYPE_FOOTER -> FooterViewHolder(
-                ListAddItemFooterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            )*/
             else -> throw IllegalStateException("invalid viewtype $viewType")
         }
     }
@@ -182,7 +174,6 @@ class UserListEntryAdapter
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
             is UserListDetailViewModel.UiModel.UserListEntryItem -> VIEW_TYPE_USER_LIST_ENTRY
-            // UserListDetailViewModel.UiModel.Footer -> VIEW_TYPE_FOOTER
             is UserListDetailViewModel.UiModel.Header -> VIEW_TYPE_HEADER
         }
     }
@@ -192,6 +183,10 @@ class UserListEntryAdapter
     }
 
     fun setInActionMode(active: Boolean) {
+        if (active == inActionMode) {
+            return
+        }
+
         inActionMode = active
 
         notifyItemRangeChanged(0, itemCount)

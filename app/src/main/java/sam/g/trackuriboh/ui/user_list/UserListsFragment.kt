@@ -193,15 +193,6 @@ class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private fun initNavigationObservers() {
         with(findNavController()) {
             addOnDestinationChangedListener(navigationDestinationChangedListener)
-
-            // Observes when a new sku is added to a list to update the price
-            currentBackStackEntry?.savedStateHandle?.getLiveData<Bundle>(
-                CardSelectionFragment.FRAGMENT_RESULT_REQUEST_KEY
-            )?.observe(viewLifecycleOwner) {
-                val skuId = it.getLong(AddToUserListDialogFragment.ADDED_SKU_ID_DATA_KEY)
-
-                viewModel.updateSkuPrice(skuId)
-            }
         }
     }
 
