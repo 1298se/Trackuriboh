@@ -70,12 +70,9 @@ class CardSelectionFragment : Fragment() {
             AddToUserListDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
             viewLifecycleOwner
         ) { _, bundle ->
-            with(findNavController()) {
-                previousBackStackEntry?.savedStateHandle?.set(FRAGMENT_RESULT_REQUEST_KEY, bundle)
+            val userListName = bundle.getString(AddToUserListDialogFragment.ADDED_USER_LIST_NAME_DATA_KEY)
 
-                popBackStack()
-            }
-
+            showSnackbar(getString(R.string.add_to_user_list_success_message, userListName))
         }
     }
 

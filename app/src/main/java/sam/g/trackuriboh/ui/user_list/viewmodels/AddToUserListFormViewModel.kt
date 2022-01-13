@@ -9,6 +9,7 @@ import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
+import sam.g.trackuriboh.data.repository.PriceRepository
 import sam.g.trackuriboh.data.repository.UserListRepository
 import sam.g.trackuriboh.ui.user_list.AddToUserListDialogFragment
 import java.util.*
@@ -18,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddToUserListFormViewModel @Inject constructor(
     private val userListRepository: UserListRepository,
+    private val priceRepository: PriceRepository,
     private val firebaseAnalytics: FirebaseAnalytics,
     state: SavedStateHandle
 ) : ViewModel() {
@@ -98,9 +100,10 @@ class AddToUserListFormViewModel @Inject constructor(
                 )
             )
 
+            priceRepository.updatePricesForSkus(listOf(sku.id))
+
             emit(bundleOf(
                 AddToUserListDialogFragment.ADDED_USER_LIST_NAME_DATA_KEY to userList.name,
-                AddToUserListDialogFragment.ADDED_SKU_ID_DATA_KEY to sku.id,
             ))
         }
     }

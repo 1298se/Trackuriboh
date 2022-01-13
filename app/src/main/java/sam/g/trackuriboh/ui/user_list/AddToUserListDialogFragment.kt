@@ -37,7 +37,6 @@ class AddToUserListDialogFragment : DialogFragment() {
     companion object {
         const val FRAGMENT_RESULT_REQUEST_KEY = "AddToUserListDialogFragment_fragmentResultRequestKey"
         const val ADDED_USER_LIST_NAME_DATA_KEY = "AddToUserListDialogFragment_addedUserListName"
-        const val ADDED_SKU_ID_DATA_KEY = "AddToUserListDialogFragment_addedSkuId"
 
         const val ARG_USER_LIST = "AddToUserListDialogFragment_argUserList"
         private const val ARG_CARD_ID = "AddToUserListDialogFragment_argCardId"
