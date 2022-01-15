@@ -5,6 +5,9 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -12,11 +15,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.MainGraphDirections
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.analytics.Events
-import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.databinding.FragmentUserListDetailBinding
 import sam.g.trackuriboh.ui.common.QuantitySelectorDialogFragment
-import sam.g.trackuriboh.ui.user_list.UserListsFragment.Companion.ACTION_FINISH_ACTION_MODE
 import sam.g.trackuriboh.ui.user_list.adapters.UserListEntryAdapter
 import sam.g.trackuriboh.ui.user_list.viewmodels.UserListDetailViewModel
 import sam.g.trackuriboh.utils.safeNavigate
@@ -26,18 +27,9 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListener {
 
-    companion object {
-        const val ARG_USER_LIST = "UserListDetailFragment_argUserList"
-
-        fun newInstance(userList: UserList) =
-            UserListDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(ARG_USER_LIST, userList)
-                }
-            }
-    }
-
     @Inject lateinit var firebaseAnalytics: FirebaseAnalytics
+
+    private val args: UserListDetailFragmentArgs by navArgs()
 
     private val binding: FragmentUserListDetailBinding by viewBinding(FragmentUserListDetailBinding::inflate)
 
@@ -87,10 +79,62 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initToolbar()
+        initFab()
         initRecyclerView()
-        initNavigationObservers()
         initObservers()
         initFragmentResultListeners()
+    }
+
+    override fun onListEntryClick(productId: Long) {
+        findNavController().safeNavigate(
+            MainGraphDirections.actionGlobalCardDetailActivity(productId)
+        )
+    }
+
+    override fun onDestroyView() {
+        actionMode?.finish()
+
+        super.onDestroyView()
+    }
+
+    override fun onListEntryLongClick(skuId: Long) {
+        viewModel.setActionMode(true)
+        viewModel.setUserListEntryChecked(skuId, true)
+    }
+
+    override fun onListEntryChecked(skuId: Long, isChecked: Boolean) {
+        viewModel.setUserListEntryChecked(skuId, isChecked)
+    }
+
+    override fun onQuantityTextClick(entry: UserListEntry) {
+        viewModel.setCurrentEditEntry(entry)
+
+        QuantitySelectorDialogFragment.newInstance(entry.quantity).show(childFragmentManager, null)
+    }
+
+    private fun initToolbar() {
+        binding.userListDetailToolbar.setupWithNavController(
+            findNavController(),
+            AppBarConfiguration.Builder().setFallbackOnNavigateUpListener {
+                activity?.finish()
+                true
+            }.build()
+        )
+
+        binding.userListDetailToolbar.title = args.userList.name
+    }
+
+    private fun initFab() {
+        with(binding.userListDetailAddCardFab) {
+            setOnClickListener {
+                findNavController().safeNavigate(
+                    UserListDetailFragmentDirections.actionUserListDetailFragmentToCardSelectionFragment(
+                        userList = args.userList
+                    )
+                )
+            }
+        }
     }
 
     private fun initRecyclerView() {
@@ -103,19 +147,6 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListe
             }
 
             addItemDecoration(MaterialDividerItemDecoration(context, (layoutManager as LinearLayoutManager).orientation))
-        }
-    }
-
-    private fun initNavigationObservers() {
-
-        // We use the navigation back stack entry to get the callback to finish the action mode. We do this
-        // Instead of using Fragment Result API since Fragment Result API can only have one listener at a time
-        val savedStateHandle = findNavController().getBackStackEntry(R.id.mainGraph).savedStateHandle
-
-        savedStateHandle.getLiveData<Boolean>(ACTION_FINISH_ACTION_MODE).observe(
-            viewLifecycleOwner
-        ) {
-            actionMode?.finish()
         }
     }
 
@@ -147,35 +178,5 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListe
 
             viewModel.updateCurrentEditEntryQuantity(quantity)
         }
-    }
-
-
-    override fun onAddCardClick() {
-        findNavController().safeNavigate(
-            UserListsFragmentDirections.actionUserListsFragmentToNewCardSelectionFragment(
-                userList = viewModel.userList
-            )
-        )
-    }
-
-    override fun onListEntryClick(productId: Long) {
-        findNavController().safeNavigate(
-            MainGraphDirections.actionGlobalCardDetailActivity(productId)
-        )
-    }
-
-    override fun onListEntryLongClick(skuId: Long) {
-        viewModel.setActionMode(true)
-        viewModel.setUserListEntryChecked(skuId, true)
-    }
-
-    override fun onListEntryChecked(skuId: Long, isChecked: Boolean) {
-        viewModel.setUserListEntryChecked(skuId, isChecked)
-    }
-
-    override fun onQuantityTextClick(entry: UserListEntry) {
-        viewModel.setCurrentEditEntry(entry)
-
-        QuantitySelectorDialogFragment.newInstance(entry.quantity).show(childFragmentManager, null)
     }
 }

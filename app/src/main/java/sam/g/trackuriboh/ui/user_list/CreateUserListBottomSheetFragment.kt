@@ -8,27 +8,28 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.data.types.UserListType
 import sam.g.trackuriboh.databinding.BottomSheetCreateUserListBinding
 import sam.g.trackuriboh.databinding.ItemCreateUserListOptionBinding
 import sam.g.trackuriboh.ui.common.SimpleTextFieldDialogFragment
+import sam.g.trackuriboh.ui.user_list.viewmodels.UserListsViewModel
 import sam.g.trackuriboh.utils.viewBinding
 import java.util.*
 
-
+@AndroidEntryPoint
 class CreateUserListBottomSheetFragment : BottomSheetDialogFragment() {
 
     private val binding: BottomSheetCreateUserListBinding by viewBinding(BottomSheetCreateUserListBinding::inflate)
 
-    private var selectedType: UserListType? = null
+    private val viewModel: UserListsViewModel by viewModels()
 
     companion object {
-        const val FRAGMENT_RESULT_REQUEST_KEY = "CreateUserListBottomSheetDialogFragment_fragmentResultRequestKey"
-        const val USER_LIST_DATA_KEY = "CreateUserListBottomSheetDialogFragment_userList"
+        const val EXTRA_SELECTED_TYPE = "CreateUserListBottomSheetDialogFragment_extraSelectedType"
     }
 
     override fun onCreateView(
@@ -36,7 +37,6 @@ class CreateUserListBottomSheetFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,14 +51,13 @@ class CreateUserListBottomSheetFragment : BottomSheetDialogFragment() {
             SimpleTextFieldDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
             viewLifecycleOwner
         ) { _, bundle ->
-            val type = selectedType
+            val type = bundle.getBundle(SimpleTextFieldDialogFragment.EXTRAS_DATA_KEY)?.getParcelable<UserListType>(
+                EXTRA_SELECTED_TYPE
+            )
             val name = bundle.getString(SimpleTextFieldDialogFragment.TEXT_DATA_KEY)
 
             if (type != null && name != null) {
-                setFragmentResult(
-                    FRAGMENT_RESULT_REQUEST_KEY,
-                    bundleOf(USER_LIST_DATA_KEY to UserList(name = name, creationDate = Date(), type = type))
-                )
+                viewModel.createUserList(UserList(name = name, creationDate = Date(), type = type))
 
                 dismiss()
             }
@@ -100,14 +99,15 @@ class CreateUserListBottomSheetFragment : BottomSheetDialogFragment() {
                     itemCreateUserListOptionTextview.text = text?.let { getString(it) }
 
                     root.setOnClickListener {
-                        selectedType = type
 
-                        val title = when (selectedType) {
+                        val title = when (type) {
                             UserListType.USER_LIST -> getString(R.string.create_user_list_option)
                             else -> getString(R.string.create_user_list_option)
                         }
 
-                        SimpleTextFieldDialogFragment.newInstance(title).show(childFragmentManager, null)
+                        SimpleTextFieldDialogFragment.newInstance(title, bundleOf(
+                            EXTRA_SELECTED_TYPE to type
+                        )).show(childFragmentManager, null)
                     }
                 }
 

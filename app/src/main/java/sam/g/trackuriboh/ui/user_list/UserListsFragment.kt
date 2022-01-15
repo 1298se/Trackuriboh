@@ -3,47 +3,36 @@ package sam.g.trackuriboh.ui.user_list
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.Toolbar
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayoutMediator
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.databinding.FragmentUserListsBinding
 import sam.g.trackuriboh.ui.common.SimpleTextFieldDialogFragment
-import sam.g.trackuriboh.ui.user_list.adapters.UserListsStateAdapter
+import sam.g.trackuriboh.ui.common.VerticalSpaceItemDecoration
+import sam.g.trackuriboh.ui.user_list.adapters.UserListAdapter
 import sam.g.trackuriboh.ui.user_list.viewmodels.UserListsViewModel
 import sam.g.trackuriboh.utils.safeNavigate
 import sam.g.trackuriboh.utils.setupAsTopLevelDestinationToolbar
-import sam.g.trackuriboh.utils.showSnackbar
 import sam.g.trackuriboh.utils.viewBinding
 
 /**
  * Fragment accessed from clicking "Watchlist" in bottom nav
  */
-@ExperimentalMaterialApi
 @AndroidEntryPoint
-class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener {
+class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener, UserListAdapter.OnItemClickListener {
     private val binding: FragmentUserListsBinding by viewBinding(FragmentUserListsBinding::inflate)
 
     private val viewModel: UserListsViewModel by viewModels()
 
-    private lateinit var userListsStateAdapter: UserListsStateAdapter
-
-    // We use this to finish action mode when destination changes
-    private val navigationDestinationChangedListener = NavController.OnDestinationChangedListener { _, destination, _ ->
-        if (destination.parent?.id != R.id.userListsGraph) {
-            // When we change tabs we want to remove actionmode
-            finishActionMode()
-        }
-    }
+    private lateinit var userListAdapter: UserListAdapter
 
     companion object {
-        const val ACTION_FINISH_ACTION_MODE = "UserListsFragment_actionFinishActionMode"
+        const val EXTRA_RENAME_USER_LIST = "UserListsFragment_extraRenameUserList"
     }
 
     override fun onCreateView(
@@ -57,16 +46,9 @@ class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         initToolbar()
-        initFab()
-        initViewModelObservers()
+        initRecyclerView()
+        initObservers()
         initFragmentResultListeners()
-        initNavigationObservers()
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        findNavController().removeOnDestinationChangedListener(navigationDestinationChangedListener)
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
@@ -76,129 +58,78 @@ class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
                 true
             }
-            R.id.action_rename_user_list -> {
-                SimpleTextFieldDialogFragment.newInstance(
-                    getString(R.string.rename_user_list_action_title)
-                ).show(childFragmentManager, null)
-
-                true
-            }
-            R.id.action_delete_user_list -> {
-                viewModel.deleteCurrentList()
-                true
-            }
             else -> false
         }
     }
 
+    override fun onItemClick(userList: UserList) {
+        findNavController().safeNavigate(
+            UserListsFragmentDirections.actionUserListsFragmentToUserListDetailFragment(userList)
+        )
+    }
+
+    override fun onRenameClick(userList: UserList) {
+        SimpleTextFieldDialogFragment.newInstance(
+            getString(R.string.rename_user_list_action_title),
+            bundleOf(EXTRA_RENAME_USER_LIST to userList)
+        ).show(childFragmentManager, null)
+
+        true
+    }
+
+    override fun onDeleteClick(userList: UserList) {
+        viewModel.deleteUserList(userList)
+    }
+
     private fun initToolbar() {
-        binding.userListsToolbar.setupAsTopLevelDestinationToolbar()
+        with(binding.userListsToolbar) {
+            setupAsTopLevelDestinationToolbar()
 
-        binding.userListsToolbar.inflateMenu(R.menu.user_list_toolbar)
+            inflateMenu(R.menu.user_list_toolbar)
 
-        binding.userListsToolbar.setOnMenuItemClickListener(this)
+            setOnMenuItemClickListener(this@UserListsFragment)
+        }
+
     }
 
-    private fun initFab() {
-        with(binding.addToUserListFab) {
-            setOnClickListener {
-                val currentList = viewModel.getCurrentList()
+    private fun initRecyclerView() {
+        userListAdapter = UserListAdapter().apply {
+            setOnItemClickListener(this@UserListsFragment)
+        }
 
-                if (currentList != null) {
-                    findNavController().safeNavigate(
-                        UserListsFragmentDirections.actionUserListsFragmentToNewCardSelectionFragment(
-                            userList = currentList
-                        )
-                    )
-                } else {
-                    showSnackbar(getString(R.string.create_user_list_prompt), anchorView = this)
-                }
-            }
+        binding.userListsList.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = userListAdapter
+            addItemDecoration(VerticalSpaceItemDecoration(resources.getDimension(R.dimen.list_item_large_row_spacing)))
         }
     }
 
-    private fun initViewPager(lists: List<UserList>) {
-        with(binding.userListsViewPager) {
-            adapter = UserListsStateAdapter(this@UserListsFragment).also {
-                it.setUserLists(lists)
-                userListsStateAdapter = it
-            }
-
-            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    viewModel.setCurrentTabPosition(position)
+    private fun initObservers() {
+        viewModel.userLists.observe(viewLifecycleOwner) {
+            userListAdapter.submitList(it) {
+                with(binding.userListsList) {
+                    post { invalidateItemDecorations() }
                 }
-            })
+            }
         }
-
-        TabLayoutMediator(binding.userListsTabLayout, binding.userListsViewPager) { tab, position ->
-            tab.text = viewModel.userLists.value?.get(position)?.name
-        }.attach()
     }
 
     private fun initFragmentResultListeners() {
         with(childFragmentManager) {
-            // Observes creating new list
-            setFragmentResultListener(
-                CreateUserListBottomSheetFragment.FRAGMENT_RESULT_REQUEST_KEY,
-                viewLifecycleOwner
-            ) { _, bundle ->
-                val userList = bundle.getParcelable<UserList>(CreateUserListBottomSheetFragment.USER_LIST_DATA_KEY)!!
-                viewModel.createUserList(userList)
-            }
-
-
             // Observes renaming list
             setFragmentResultListener(
                 SimpleTextFieldDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
                 viewLifecycleOwner
             ) { _, bundle ->
                 val name = bundle.getString(SimpleTextFieldDialogFragment.TEXT_DATA_KEY)
+                val userList = bundle.getBundle(SimpleTextFieldDialogFragment.EXTRAS_DATA_KEY)?.getParcelable<UserList>(
+                    EXTRA_RENAME_USER_LIST
+                )
 
-                if (name != null) {
-                    viewModel.renameCurrentList(name)
+                if (userList != null && name != null) {
+                    viewModel.renameCurrentList(userList, name)
                 }
             }
         }
-    }
-
-    private fun initViewModelObservers() {
-        viewModel.state.observe(viewLifecycleOwner) {
-            finishActionMode()
-
-            with(binding.userListsViewPager) {
-                if (currentItem != it.currentSelectedTabPosition) {
-                    setCurrentItem(it.currentSelectedTabPosition, true)
-                }
-            }
-        }
-
-        viewModel.userLists.observe(viewLifecycleOwner) {
-            if (it.isEmpty()) {
-                binding.userListsViewPager.visibility = View.GONE
-                binding.userListsTabLayout.visibility = View.GONE
-            } else {
-                binding.userListsViewPager.visibility = View.VISIBLE
-                binding.userListsTabLayout.visibility = View.VISIBLE
-            }
-
-            if (binding.userListsViewPager.adapter == null) {
-                initViewPager(it)
-            } else {
-                userListsStateAdapter.setUserLists(it)
-            }
-        }
-    }
-
-    private fun initNavigationObservers() {
-        with(findNavController()) {
-            addOnDestinationChangedListener(navigationDestinationChangedListener)
-        }
-    }
-
-    private fun finishActionMode() {
-        // Scope to main nav because if we use the current back stack entry, it will be removed when onDestinationChanged
-        // gets called
-        findNavController().getBackStackEntry(R.id.mainGraph).savedStateHandle.set(ACTION_FINISH_ACTION_MODE, true)
     }
 }

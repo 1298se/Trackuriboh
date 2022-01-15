@@ -42,7 +42,6 @@ class UserListEntryAdapter
 
     interface OnItemClickListener {
         fun onListEntryClick(productId: Long)
-        fun onAddCardClick()
         fun onQuantityTextClick(entry: UserListEntry)
         fun onListEntryLongClick(skuId: Long)
         fun onListEntryChecked(skuId: Long, isChecked: Boolean)

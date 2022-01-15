@@ -17,7 +17,7 @@ class OneLineAttributeCardView @JvmOverloads constructor(
 
     private val binding = OneLineAttributeCardViewBinding.inflate(LayoutInflater.from(context), this, true)
 
-    fun setHeader(title: String?, value: String?) {
+    fun setHeader(title: String?, value: CharSequence?) {
         if (title != null) {
             binding.oneLineAttributeHeaderRow.visibility = View.VISIBLE
             binding.oneLineAttributeHeaderTitleTextview.text = title

@@ -69,7 +69,7 @@
         <item name="behavior_peekHeight">324dp</item>
     </style>
 
-    <style name="AppTheme.CardRecyclerView" parent="">
+    <style name="AppTheme.CardViewRecyclerView" parent="">
         <item name="android:paddingTop">@dimen/list_padding_top</item>
         <item name="android:paddingBottom">@dimen/list_padding_bottom</item>
         <item name="android:clipToPadding">false</item>

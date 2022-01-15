@@ -73,8 +73,8 @@
     <string name="lbl_buy_now">Buy now</string>
     <string name="add_to_user_list_action_title">Add to list</string>
     <string name="add_to_user_list_success_message">Added to %1$s</string>
-    <string name="base_price_with_shipping">\$%1$.2f + &lt;i>%2$.2f&lt;i></string>
-    <string name="base_price_with_free_shipping">\$%1$d + Free</string>
+    <string name="base_price_with_shipping">\$%1$.2f + &lt;i>%2$.2f&lt;/i></string>
+    <string name="base_price_with_free_shipping">\$%1$.2f + &lt;i>Free&lt;/i></string>
 
     <!-- Card Detail Overview -->
     <string name="lbl_number">Number</string>
@@ -89,7 +89,7 @@
 
     <!-- Prices -->
     <string name="lbl_not_available">Not Available</string>
-    <string name="lbl_price_lowest_listing_usd">Lowest Listing + Shipping</string>
+    <string name="lbl_price_lowest_listing_usd">Lowest Listing + &lt;i>Shipping&lt;/i></string>
 
     <!-- Search -->
     <string name="search_action_title">Search</string>
@@ -104,21 +104,21 @@
     <string name="facebook_client_token">5cbc3e0fd15bc7c41b702053ea1d1f62</string>
 
     <!-- User Lists -->
-    <string name="other_actions_action_title">More options</string>
     <string name="create_new_list_action_title">Create a new list</string>
     <string name="create_user_list_option">Create a list</string>
-    <string name="user_list_remove_entries_action_title">Remove items</string>
-    <string name="rename_user_list_action_title">Rename list</string>
-    <string name="delete_user_list_action_title">Delete list</string>
-    <string name="lbl_add_to_list">Add to list</string>
-
     <string name="user_list_type_list">List</string>
-    <string name="create_user_list_action_title">Create</string>
-    <string name="lbl_rename">Rename</string>
 
+    <string name="rename_user_list_action_title">Rename list</string>
     <string name="create_user_list_prompt">You currently don\'t have any lists. Please create one to continue.</string>
 
+    <!-- User List Item -->
+    <string name="item_user_list_title">&lt;b>%1$s&lt;/b> (%2$d)</string>
+    <string name="item_user_list_total_value">Total value: \$%1$.2f</string>
+
     <!-- User List Detail -->
+    <string name="user_list_remove_entries_action_title">Remove items</string>
+    <string name="lbl_add_to_list">Add to list</string>
+
     <plurals name="user_list_detail_total_count">
         <item quantity="one">Total: %1$d card</item>
         <item quantity="other">Total: %1$d cards</item>
@@ -156,7 +156,7 @@
 
     <!-- Reminder Item -->
     <string name="reminder_title" comment="E.g. Billy's Claim Sale">%1$s\'s %2$s</string>
-    
+
     <!-- Add to user list form -->
     <string name="add_to_user_list_select_sku_hint">Select SKU…</string>
     <string name="add_to_user_list_select_list_hint">Select list…</string>

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
-import androidx.core.text.toSpanned
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -109,7 +108,7 @@ class CardPricesBottomSheetFragment : BottomSheetDialogFragment() {
                         bottomMargin = context.resources.getDimension(R.dimen.list_item_large_row_spacing).toInt()
                     }
                 }
-                setHeader(entry.first, getString(R.string.lbl_price_lowest_listing_usd))
+                setHeader(entry.first, HtmlCompat.fromHtml(getString(R.string.lbl_price_lowest_listing_usd), HtmlCompat.FROM_HTML_MODE_LEGACY))
 
                 with (entry.second) {
 
@@ -119,12 +118,16 @@ class CardPricesBottomSheetFragment : BottomSheetDialogFragment() {
                             val basePrice = it.sku.lowestBasePrice
                             val shippingPrice = (it.sku.lowestShippingPrice ?: 0.0)
 
-                            getString(R.string.base_price_with_shipping, basePrice, shippingPrice)
+                            if (shippingPrice > 0.0) {
+                                getString(R.string.base_price_with_shipping, basePrice, shippingPrice)
+                            } else {
+                                getString(R.string.base_price_with_free_shipping, basePrice)
+                            }
                         } else {
                             getString(R.string.lbl_not_available)
                         }
 
-                        conditionText to HtmlCompat.fromHtml(priceText, HtmlCompat.FROM_HTML_MODE_LEGACY).toSpanned()
+                        conditionText to HtmlCompat.fromHtml(priceText, HtmlCompat.FROM_HTML_MODE_LEGACY)
                     }
 
                     setRowItems(conditionPriceMap)

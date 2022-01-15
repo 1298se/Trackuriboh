@@ -15,17 +15,23 @@ class SimpleTextFieldDialogFragment : DialogFragment() {
     private lateinit var binding: DialogSimpleTextfieldBinding
 
     private var title: String? = null
+    private var extras: Bundle? = null
 
     companion object {
         const val FRAGMENT_RESULT_REQUEST_KEY = "SimpleTextFieldDialogFragment_fragmentResultRequestKey"
-        const val TEXT_DATA_KEY = "SimpleTextFieldDialogFragment_userList"
+        const val TEXT_DATA_KEY = "SimpleTextFieldDialogFragment_text"
+        const val EXTRAS_DATA_KEY = "SimpleTextFieldDialogFragment_extras"
 
         private const val ARG_TITLE = "SimpleTextFieldDialogFragment_argTitle"
 
-        fun newInstance(title: String? = null) =
+        // An argument to return a bundle to the caller
+        private const val ARG_EXTRAS = "SimpleTextFieldDialogFragment_extras"
+
+        fun newInstance(title: String? = null, extras: Bundle? = null) =
             SimpleTextFieldDialogFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_TITLE, title)
+                    putBundle(ARG_EXTRAS, extras)
                 }
             }
     }
@@ -35,6 +41,7 @@ class SimpleTextFieldDialogFragment : DialogFragment() {
 
         arguments?.let {
             title = it.getString(ARG_TITLE)
+            extras = it.getBundle(ARG_EXTRAS)
         }
     }
 
@@ -53,7 +60,10 @@ class SimpleTextFieldDialogFragment : DialogFragment() {
                 val name = binding.simpleTextfieldEdittext.text?.toString()?.trim()
 
                 setFragmentResult(FRAGMENT_RESULT_REQUEST_KEY,
-                    bundleOf(TEXT_DATA_KEY to name)
+                    bundleOf(
+                        TEXT_DATA_KEY to name,
+                        EXTRAS_DATA_KEY to extras
+                    )
                 )
 
                 dismiss()
