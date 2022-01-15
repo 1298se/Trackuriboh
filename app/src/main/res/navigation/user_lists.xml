@@ -18,7 +18,6 @@
     <fragment
         android:id="@+id/userListDetailFragment"
         android:name="sam.g.trackuriboh.ui.user_list.UserListDetailFragment"
-        android:label="fragment_user_list_detail"
         tools:layout="@layout/fragment_user_list_detail">
         <argument
             android:name="userList"
