@@ -17,7 +17,9 @@ interface UserListDao : BaseDao<UserList> {
             "LEFT JOIN UserListEntry ON UserList.id = UserListEntry.listId " +
             "LEFT JOIN Sku ON UserListEntry.skuId = Sku.id " +
             "LEFT JOIN Product ON Product.id = Sku.productId " +
-            "GROUP BY UserList.id")
+            "GROUP BY UserList.id " +
+            "HAVING MIN(UserListEntry.dateAdded)"
+    )
     fun getUserListsObservable(): Flow<List<UserListWithCountAndTotal>>
 
     @Query("SELECT * FROM UserList")
