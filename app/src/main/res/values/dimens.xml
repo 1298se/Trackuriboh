@@ -44,6 +44,9 @@
     <dimen name="list_item_image_content_spacing">16dp</dimen>
     <dimen name="list_item_icon_content_spacing">32dp</dimen>
 
+    <!-- https://material.io/components/cards#specs -->
+    <dimen name="list_item_cardview_image_height">72dp</dimen>
+    <dimen name="list_item_cardview_image_width">72dp</dimen>
     <!-- Item Card -->
     <dimen name="item_card_image_width">80dp</dimen>
     <dimen name="item_card_image_height">112dp</dimen>

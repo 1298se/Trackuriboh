@@ -14,7 +14,6 @@ import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.data.db.relations.UserListEntryWithSkuAndProduct
 import sam.g.trackuriboh.data.repository.PriceRepository
 import sam.g.trackuriboh.data.repository.UserListRepository
-import sam.g.trackuriboh.ui.user_list.UserListDetailFragment
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -27,7 +26,8 @@ class UserListDetailViewModel @Inject constructor(
     state: SavedStateHandle,
 ) : ViewModel() {
 
-    val userList = state.get<UserList>(UserListDetailFragment.ARG_USER_LIST)!!
+    // TODO: Fix magic strings
+    val userList = state.get<UserList>("userList")!!
 
     sealed class UiModel {
         data class UserListEntryItem(

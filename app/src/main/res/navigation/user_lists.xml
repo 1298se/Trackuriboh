@@ -9,10 +9,22 @@
         android:id="@+id/userListsFragment"
         android:name="sam.g.trackuriboh.ui.user_list.UserListsFragment"
         android:label="@string/lbl_user_lists"
-        tools:layout="@layout/fragment_user_lists" >
-
+        tools:layout="@layout/fragment_user_lists">
         <action
-            android:id="@+id/action_userListsFragment_to_newCardSelectionFragment"
+            android:id="@+id/action_userListsFragment_to_userListDetailFragment"
+            app:destination="@id/userListDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/userListDetailFragment"
+        android:name="sam.g.trackuriboh.ui.user_list.UserListDetailFragment"
+        android:label="fragment_user_list_detail"
+        tools:layout="@layout/fragment_user_list_detail">
+        <argument
+            android:name="userList"
+            app:argType="sam.g.trackuriboh.data.db.entities.UserList" />
+        <action
+            android:id="@+id/action_userListDetailFragment_to_cardSelectionFragment"
             app:destination="@id/cardSelectionFragment" />
     </fragment>
 
@@ -25,5 +37,4 @@
             android:name="userList"
             app:argType="sam.g.trackuriboh.data.db.entities.UserList" />
     </fragment>
-
 </navigation>

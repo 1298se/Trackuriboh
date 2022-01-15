@@ -8,19 +8,4 @@
         android:icon="@drawable/ic_baseline_playlist_add_24"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/action_add_to_user_list"
-        android:title="@string/other_actions_action_title"
-        android:icon="@drawable/ic_baseline_more_vert_24"
-        app:showAsAction="always">
-        <menu>
-            <item
-                android:id="@+id/action_rename_user_list"
-                android:title="@string/rename_user_list_action_title" />
-            <item
-                android:id="@+id/action_delete_user_list"
-                android:title="@string/delete_user_list_action_title" />
-        </menu>
-    </item>
-
 </menu>

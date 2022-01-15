@@ -28,7 +28,7 @@ class UserListSelectionBottomSheetFragment : BottomSheetDialogFragment() {
 
     private val viewModel: UserListsViewModel by viewModels()
 
-    private lateinit var userListsAdapter: UserListsAdapter
+    private lateinit var userListAdapter: UserListAdapter
 
     companion object {
         const val FRAGMENT_RESULT_REQUEST_KEY = "UserListSelectionFragment_fragmentResultRequestKey"
@@ -47,11 +47,13 @@ class UserListSelectionBottomSheetFragment : BottomSheetDialogFragment() {
 
         initToolbar()
         // We can use viewLifecycleOwner here because we use onCreateView
-        viewModel.userLists.observe(viewLifecycleOwner) {
+        viewModel.userLists.observe(viewLifecycleOwner) { list ->
+            val userLists = list.map { it.userList }
+
             if (binding.userListSelectionList.adapter == null) {
-                initListView(it)
+                initListView(userLists)
             } else {
-                userListsAdapter.setUserLists(it)
+                userListAdapter.setUserLists(userLists)
             }
         }
     }
@@ -64,14 +66,14 @@ class UserListSelectionBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun initListView(userLists: List<UserList>) {
-        binding.userListSelectionList.adapter = UserListsAdapter(requireContext()).apply {
+        binding.userListSelectionList.adapter = UserListAdapter(requireContext()).apply {
             setUserLists(userLists)
 
-            userListsAdapter = this
+            userListAdapter = this
         }
     }
 
-    inner class UserListsAdapter(
+    inner class UserListAdapter(
         context: Context,
     ) : ArrayAdapter<UserList>(context, 0) {
         private var userLists: List<UserList> = mutableListOf()

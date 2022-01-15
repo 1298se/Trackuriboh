@@ -13,29 +13,13 @@
         app:layout_constraintTop_toTopOf="parent"
         style="@style/Widget.MaterialComponents.Toolbar.Primary" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_to_user_list_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/material_border_padding"
-        android:contentDescription="@string/lbl_add_to_list"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_baseline_add_24dp" />
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/user_lists_tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabMode="scrollable"
-        app:tabGravity="start"
-        app:layout_constraintTop_toBottomOf="@id/user_lists_toolbar" />
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/user_lists_view_pager"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/user_lists_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/user_lists_tab_layout"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/user_lists_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        style="@style/AppTheme.CardViewRecyclerView"
+        tools:listitem="@layout/item_user_list" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
