@@ -18,7 +18,7 @@ interface UserListDao : BaseDao<UserList> {
             "LEFT JOIN Sku ON UserListEntry.skuId = Sku.id " +
             "LEFT JOIN Product ON Product.id = Sku.productId " +
             "GROUP BY UserList.id " +
-            "HAVING MIN(UserListEntry.dateAdded)"
+            "HAVING (COUNT(UserListEntry.skuId) = 0 OR UserListEntry.dateAdded = MIN(UserListEntry.dateAdded))"
     )
     fun getUserListsObservable(): Flow<List<UserListWithCountAndTotal>>
 

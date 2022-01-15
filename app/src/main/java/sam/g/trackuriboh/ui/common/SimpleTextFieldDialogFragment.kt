@@ -23,6 +23,8 @@ class SimpleTextFieldDialogFragment : DialogFragment() {
         const val EXTRAS_DATA_KEY = "SimpleTextFieldDialogFragment_extras"
 
         private const val ARG_TITLE = "SimpleTextFieldDialogFragment_argTitle"
+
+        // An argument to return a bundle to the caller
         private const val ARG_EXTRAS = "SimpleTextFieldDialogFragment_extras"
 
         fun newInstance(title: String? = null, extras: Bundle? = null) =

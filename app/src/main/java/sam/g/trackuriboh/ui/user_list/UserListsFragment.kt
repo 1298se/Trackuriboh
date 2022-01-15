@@ -116,16 +116,6 @@ class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener, UserListA
 
     private fun initFragmentResultListeners() {
         with(childFragmentManager) {
-            // Observes creating new list
-            setFragmentResultListener(
-                CreateUserListBottomSheetFragment.FRAGMENT_RESULT_REQUEST_KEY,
-                viewLifecycleOwner
-            ) { _, bundle ->
-                val userList = bundle.getParcelable<UserList>(CreateUserListBottomSheetFragment.USER_LIST_DATA_KEY)!!
-                viewModel.createUserList(userList)
-            }
-
-
             // Observes renaming list
             setFragmentResultListener(
                 SimpleTextFieldDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,

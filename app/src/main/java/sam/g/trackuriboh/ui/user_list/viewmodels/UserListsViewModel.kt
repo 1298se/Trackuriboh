@@ -28,7 +28,6 @@ class UserListsViewModel @Inject constructor(
         }
     }
 
-
     fun renameCurrentList(userList: UserList, name: String) {
         firebaseAnalytics.logEvent(Events.RENAME_USER_LIST, bundleOf("name" to name))
 
