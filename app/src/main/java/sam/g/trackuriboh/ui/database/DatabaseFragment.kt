@@ -357,13 +357,14 @@ class DatabaseFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
     private fun resetLists() {
         repeat(stateAdapter.itemCount) {
-            val currentFragment = childFragmentManager.findViewPagerFragment(binding.databaseViewPager.currentItem.toLong())
+            val currentFragment = childFragmentManager.findViewPagerFragment(stateAdapter.getItemId(it))
 
             if (currentFragment is BaseSearchListFragment<*> && currentFragment.lastQueryValue() != null) {
                 currentFragment.search(null)
             }
         }
     }
+
     private fun initObservers() {
         viewModel.currentPage.observe(viewLifecycleOwner) {
             // If they page change while we're showing suggestions, remove the current cursor
