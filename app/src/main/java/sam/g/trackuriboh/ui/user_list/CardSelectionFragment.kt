@@ -46,10 +46,12 @@ class CardSelectionFragment : Fragment() {
 
         cardListFragment = CardListFragment.newInstance()
 
-        childFragmentManager.beginTransaction().replace(
-            binding.newCardSelectionFragmentContainer.id,
-            cardListFragment
-        ).commit()
+        if (childFragmentManager.findFragmentByTag(CardListFragment::class.java.name) == null) {
+            childFragmentManager.beginTransaction().replace(
+                binding.newCardSelectionFragmentContainer.id,
+                cardListFragment
+            ).commit()
+        }
 
         initToolbar()
         initSearchSuggestions()

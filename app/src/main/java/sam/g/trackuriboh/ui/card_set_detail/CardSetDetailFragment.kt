@@ -44,10 +44,13 @@ class CardSetDetailFragment : Fragment() {
 
         cardListFragment = CardListFragment.newInstance(setId = args.setId)
 
-        childFragmentManager.beginTransaction().replace(
-            binding.cardSetDetailFragmentContainer.id,
-            cardListFragment
-        ).commit()
+        if (childFragmentManager.findFragmentByTag(CardListFragment::class.java.name) == null) {
+            childFragmentManager.beginTransaction().replace(
+                binding.cardSetDetailFragmentContainer.id,
+                cardListFragment,
+                CardListFragment::class.java.name
+            ).commit()
+        }
 
         initToolbar()
         initSearchSuggestions()
