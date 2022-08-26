@@ -32,4 +32,6 @@ class ProductLocalCache @Inject constructor(
         }
 
     fun getProductPrintings(name: String) = appDatabase.productDao().getProductPrintings(name)
+
+    suspend fun getTotalCardCount() = appDatabase.productDao().getTotalCount()
 }

@@ -3,6 +3,7 @@
 
     <dimen name="text_spacing">4dp</dimen>
     <dimen name="text_spacing_large">8dp</dimen>
+    <dimen name="heading_text_spacing">16dp</dimen>
 
     <!-- Overwrite default values -->
     <dimen name="cardview_default_elevation">2dp</dimen>
@@ -17,6 +18,7 @@
     <dimen name="divider_inset">16dp</dimen>
 
     <!-- List containers -->
+    <dimen name="list_padding">8dp</dimen>
     <dimen name="list_padding_top">8dp</dimen>
     <dimen name="list_padding_bottom">8dp</dimen>
     <dimen name="list_padding_start">8dp</dimen>
@@ -50,6 +52,15 @@
     <!-- Item Card -->
     <dimen name="item_card_image_width">80dp</dimen>
     <dimen name="item_card_image_height">112dp</dimen>
+
+    <!-- Item Card Set Explore Card -->
+    <dimen name="item_card_set_explore_card_width">172dp</dimen>
+    <dimen name="item_card_set_explore_card_height">172dp</dimen>
+    <dimen name="item_card_set_explore_name_padding">12dp</dimen>
+
+    <!-- Database Status View -->
+    <dimen name="database_status_view_padding">12dp</dimen>
+
 
     <!-- Card Detail -->
     <dimen name="card_image_swipe_padding">16dp</dimen>

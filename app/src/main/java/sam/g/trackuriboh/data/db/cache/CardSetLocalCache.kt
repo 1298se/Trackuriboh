@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.map
 import sam.g.trackuriboh.data.db.AppDatabase
 import sam.g.trackuriboh.data.db.dao.toSearchSuggestionsCursor
 import sam.g.trackuriboh.data.db.entities.CardSet
+import sam.g.trackuriboh.data.db.entities.Product
 import javax.inject.Inject
 
 class CardSetLocalCache @Inject constructor(
@@ -27,4 +28,20 @@ class CardSetLocalCache @Inject constructor(
         appDatabase.cardSetDao().getSearchSuggestions(query ?: "").map {
             it.toSearchSuggestionsCursor()
         }
+
+    suspend fun getRecentSetsWithCardsSortedByPrice(numSets: Int, numCards: Int): Map<CardSet, Map<Product, Double?>> {
+        val resultMap = mutableMapOf<CardSet, Map<Product, Double?>>()
+        val recentCardSets = appDatabase.cardSetDao().getRecentCardSets(numSets)
+
+        for (cardSet in recentCardSets) {
+            val productWithLowestListing = appDatabase.productDao().getMostExpensiveProductsInSet(cardSet.id, numCards)
+
+            resultMap[cardSet] = productWithLowestListing
+        }
+
+        return resultMap
+    }
+
+    suspend fun getTotalCardSetCount() =
+        appDatabase.cardSetDao().getTotalCount()
 }

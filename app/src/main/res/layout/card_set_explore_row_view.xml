@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/card_set_name_textview"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/card_explore_list"
+        android:paddingTop="@dimen/item_card_set_explore_name_padding"
+        android:paddingBottom="@dimen/item_card_set_explore_name_padding"
+        style="@style/TextAppearance.MaterialComponents.Subtitle2"
+        tools:text="Legend of Blue-Eyes White Dragon"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/card_explore_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:orientation="horizontal"
+        tools:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/item_card_set_explore_card"/>
+</merge>

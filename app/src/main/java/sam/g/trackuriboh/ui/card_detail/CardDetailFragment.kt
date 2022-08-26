@@ -16,7 +16,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import sam.g.trackuriboh.*
+import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
 import sam.g.trackuriboh.databinding.FragmentCardDetailBinding
 import sam.g.trackuriboh.ui.card_detail.adapters.CardDetailStateAdapter
@@ -53,7 +53,7 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
             populateLayout(it)
             /*
-             * FOR PROPER VIEWSTATE RESTORATION TO OCCUR, THE ADAPTERS MUST BE REATTACHED
+             * !IMPORTANT: FOR PROPER VIEWSTATE RESTORATION TO OCCUR, THE ADAPTERS MUST BE REATTACHED
              * ONCHANGE INSTEAD OF EXPOSIING A setItems METHOD AND CALLING NOTIFYCHANGE.
              * In this case, since the data is a one-shot operation, we just initialize the adapters
              * here.

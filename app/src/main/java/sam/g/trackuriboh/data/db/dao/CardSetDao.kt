@@ -13,10 +13,22 @@ interface CardSetDao : BaseDao<CardSet> {
     @Query("SELECT * FROM CardSet WHERE id = :setId")
     suspend fun getCardSet(setId: Long): CardSet
 
+    @Query("SELECT COUNT(*) FROM CardSet")
+    suspend fun getTotalCount(): Int
+
     @MapInfo(valueColumn = "cardSetCount")
     @Transaction
-    @Query("SELECT CardSet.*, COUNT(Product.id) AS cardSetCount FROM CardSet LEFT JOIN Product ON CardSet.id = Product.setId GROUP BY CardSet.id")
+    @Query("SELECT CardSet.*, COUNT(Product.id) AS cardSetCount FROM CardSet LEFT JOIN Product ON Product.setId = CardSet.id GROUP BY CardSet.id")
     suspend fun getAllCardSetsWithCount(): Map<CardSet, Int>
+
+    @Transaction
+    @Query(
+        "SELECT CardSet.* FROM CardSet " +
+                "LEFT JOIN Product ON Product.setId = CardSet.id " +
+                "GROUP BY CardSet.id HAVING COUNT(Product.id) > 0 " +
+                "ORDER BY CardSet.releaseDate DESC LIMIT :limit"
+    )
+    suspend fun getRecentCardSets(limit: Int): List<CardSet>
 
     @Query("SELECT * FROM CardSet ORDER BY name ASC")
     fun getCardSetList(): PagingSource<Int, CardSet>

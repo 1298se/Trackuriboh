@@ -8,17 +8,21 @@
     </style>
 
     <style name="Widget.AppTheme.SearchView" parent="Widget.AppCompat.SearchView.ActionBar">
-        <item name="searchIcon">@null</item>
-        <item name="queryBackground">@android:color/transparent</item>
+        <item name="searchIcon">@drawable/ic_primary_dark_search_24</item>
+        <item name="closeIcon">@drawable/ic_primary_dark_close_24</item>
+        <item name="queryBackground">@drawable/bg_white_rounded</item>
+        <item name="submitBackground">@drawable/bg_white_rounded</item>
+        <item name="android:background">@drawable/bg_white_rounded</item>
     </style>
 
     <style name="Widget.AppTheme.SearchView.AutoCompleteTextView" parent="Widget.AppCompat.AutoCompleteTextView">
-        <item name="android:textColor">?attr/colorOnPrimary</item>
-        <item name="android:textColorHint">?attr/colorOnPrimary</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textColorHint">?attr/colorPrimary</item>
     </style>
 
     <style name="Widget.AppTheme.LinearProgressIndicator" parent="Widget.MaterialComponents.LinearProgressIndicator">
-        <item name="materialThemeOverlay">@style/ThemeOverlay.AppTheme.LinearProgressIndicator</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.AppTheme.LinearProgressIndicator
+        </item>
     </style>
 
 
@@ -43,6 +47,7 @@
 
     <style name="Widget.AppTheme.CardView" parent="Widget.MaterialComponents.CardView">
         <item name="cardElevation">@dimen/cardview_default_elevation</item>
+        <item name="cornerRadius">4dp</item>
     </style>
 
     <style name="Widget.AppTheme.Button.IconOnly" parent="Widget.MaterialComponents.Button.OutlinedButton">
@@ -70,10 +75,7 @@
     </style>
 
     <style name="AppTheme.CardViewRecyclerView" parent="">
-        <item name="android:paddingTop">@dimen/list_padding_top</item>
-        <item name="android:paddingBottom">@dimen/list_padding_bottom</item>
+        <item name="android:padding">8dp</item>
         <item name="android:clipToPadding">false</item>
-        <item name="android:paddingStart">@dimen/list_padding_start</item>
-        <item name="android:paddingEnd">@dimen/list_padding_end</item>
     </style>
 </resources>

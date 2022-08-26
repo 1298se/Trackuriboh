@@ -56,5 +56,8 @@ class ProductRepository @Inject constructor(
 
     fun getSuggestionsCursorObservable(query: String?, setId: Long? = null) = productLocalCache.getSuggestionsCursorObservable(query, setId)
 
+    suspend fun getTotalCardCount() =
+        productLocalCache.getTotalCardCount()
+
     // fun getProductPrintings(name: String): Flow<PagingData<ProductWithCardSetAndSkuIds>> = productLocalCache.getProductPrintings(name)
 }

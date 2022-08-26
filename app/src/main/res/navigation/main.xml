@@ -3,9 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainGraph"
-    app:startDestination="@id/databaseGraph">
+    app:startDestination="@id/searchGraph">
 
     <include app:graph="@navigation/database" />
+
+    <include app:graph="@navigation/search" />
 
     <include app:graph="@navigation/user_lists" />
 

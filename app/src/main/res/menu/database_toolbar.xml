@@ -5,15 +5,14 @@
     <item
         android:id="@+id/action_search"
         android:title="@string/search_action_title"
-        android:icon="@drawable/ic_baseline_search_24dp"
-        app:showAsAction="always|collapseActionView"
-        app:actionLayout="@layout/search_view" />
+        android:icon="@drawable/ic_baseline_search_24"
+        app:actionLayout="@layout/search_view"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_database_sync"
         android:title="@string/database_sync_action_title"
-        android:icon="@drawable/ic_baseline_update_24"
-        app:showAsAction="always">
+        android:icon="@drawable/ic_baseline_update_24">
         <menu>
             <item
                 android:id="@+id/action_database_update_check"

@@ -2,6 +2,7 @@ package sam.g.trackuriboh.data.db.dao
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
+import androidx.room.MapInfo
 import androidx.room.Query
 import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
@@ -11,9 +12,24 @@ import sam.g.trackuriboh.data.types.ProductType
 
 @Dao
 interface ProductDao : BaseDao<Product> {
+
+    @Query("SELECT COUNT(*) FROM Product WHERE type = :productType")
+    suspend fun getTotalCount(productType: ProductType = ProductType.CARD): Int
+
     @Transaction
     @Query("SELECT * FROM Product WHERE Product.id = :productId")
     suspend fun getProductWithSkusById(productId: Long): ProductWithCardSetAndSkuIds
+
+    @Transaction
+    @MapInfo(valueColumn = "lowestListingPrice")
+    @Query("SELECT Product.*, MIN(Sku.lowestListingPrice) AS lowestListingPrice FROM Product " +
+            "LEFT JOIN Sku ON Sku.productId = Product.id " +
+            "WHERE Product.setId = :setId " +
+            "GROUP BY Product.id " +
+            "ORDER BY lowestListingPrice DESC " +
+            "LIMIT :limit"
+    )
+    suspend fun getMostExpensiveProductsInSet(setId: Long, limit: Int): Map<Product, Double?>
 
     @Transaction
     @Query("SELECT * FROM Product " +

@@ -58,8 +58,6 @@ class RemindersAdapter : ListAdapter<RemindersViewModel.UiModel, BaseViewHolder<
                     onItemClickListener?.onItemDeleteClick((getItem(bindingAdapterPosition) as RemindersViewModel.UiModel.ReminderItem).reminder)
                 }
             }
-
-
         }
 
         override fun bind(item: RemindersViewModel.UiModel) {
