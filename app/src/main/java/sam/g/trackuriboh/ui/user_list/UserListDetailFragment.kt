@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.AndroidEntryPoint
-import sam.g.trackuriboh.MainGraphDirections
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.db.entities.UserListEntry
@@ -87,9 +86,9 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListe
     }
 
     override fun onListEntryClick(productId: Long) {
-        findNavController().safeNavigate(
+        /*findNavController().safeNavigate(
             MainGraphDirections.actionGlobalCardDetailActivity(productId)
-        )
+        )*/
     }
 
     override fun onDestroyView() {
