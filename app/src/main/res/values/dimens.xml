@@ -58,6 +58,9 @@
     <dimen name="item_card_set_explore_card_height">172dp</dimen>
     <dimen name="item_card_set_explore_name_padding">12dp</dimen>
 
+    <!-- Search Bar -->
+    <dimen name="search_view_margin_start">8dp</dimen>
+
     <!-- Database Status View -->
     <dimen name="database_status_view_padding">12dp</dimen>
 

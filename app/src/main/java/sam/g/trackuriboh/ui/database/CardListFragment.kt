@@ -20,7 +20,7 @@ import sam.g.trackuriboh.ui.database.CardListFragment.Companion.newInstance
 import sam.g.trackuriboh.ui.database.adapters.CardListAdapter
 import sam.g.trackuriboh.ui.database.viewmodels.BaseSearchViewModel
 import sam.g.trackuriboh.ui.database.viewmodels.CardListViewModel
-import sam.g.trackuriboh.utils.*
+import sam.g.trackuriboh.utils.viewBinding
 
 /**
  * !IMPORTANT
@@ -51,16 +51,16 @@ class CardListFragment : BaseSearchListFragment<ProductWithCardSetAndSkuIds>(), 
         const val FRAGMENT_RESULT_REQUEST_KEY = "CardListFragment_fragmentResultRequestKey"
         const val CARD_ID_DATA_KEY = "CardListFragment_cardId"
 
-        // This is the same value as the navArg name so that the SavedStateHandle can acess from either
-        /**
-         * Set this value to true for this fragment to display its own search toolbar.
-         */
+        // This is the same value as the navArg name so that the SavedStateHandle can access from either
         const val ARG_SET_ID = "CardListFragment_argSetId"
+        const val ARG_QUERY = "CardListFragment_argQuery"
 
-        fun newInstance(setId: Long? = null) =
+        fun newInstance(query: String? = null, setId: Long? = null) =
             CardListFragment().apply {
-                if (setId != null) {
-                    arguments = Bundle().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_QUERY, query)
+
+                    if (setId != null) {
                         putLong(ARG_SET_ID, setId)
                     }
                 }
@@ -97,5 +97,7 @@ class CardListFragment : BaseSearchListFragment<ProductWithCardSetAndSkuIds>(), 
             adapter = cardListAdapter
             addItemDecoration(VerticalSpaceItemDecoration(resources.getDimension(R.dimen.list_item_large_row_spacing)))
         }
+
+        search(arguments?.getString(ARG_QUERY))
     }
 }

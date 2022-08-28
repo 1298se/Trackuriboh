@@ -20,10 +20,11 @@ class CardSetExploreRowView @JvmOverloads constructor(
     private val binding = CardSetExploreRowViewBinding.inflate(LayoutInflater.from(context), this)
 
     fun setupWith(
-        cardSet: CardSet, productsWithPrice: Map<Product, Double?>
+        cardSet: CardSet, productsWithPrice: Map<Product, Double?>,
+        onItemClickListener: CardSetExploreCardsAdapter.OnItemClickListener,
     ) {
         binding.cardExploreList.apply {
-            adapter = CardSetExploreCardsAdapter(productsWithPrice)
+            adapter = CardSetExploreCardsAdapter(productsWithPrice, onItemClickListener)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             addItemDecoration(
                 HorizontalSpaceItemDecoration(context.resources.getDimension(

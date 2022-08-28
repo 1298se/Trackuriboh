@@ -3,31 +3,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainGraph"
-    app:startDestination="@id/searchGraph">
+    app:startDestination="@id/databaseGraph">
 
     <include app:graph="@navigation/database" />
-
-    <include app:graph="@navigation/search" />
 
     <include app:graph="@navigation/user_lists" />
 
     <include app:graph="@navigation/reminders" />
 
-    <activity
-        android:id="@+id/cardDetailActivity"
-        android:name="sam.g.trackuriboh.ui.card_detail.CardDetailActivity"
-        tools:layout="@layout/fragment_card_detail">
+    <fragment
+        android:id="@+id/cardDetailFragment"
+        android:name="sam.g.trackuriboh.ui.card_detail.CardDetailFragment"
+        android:label="@string/lbl_database"
+        tools:layout="@layout/fragment_database">
         <argument
             android:name="cardId"
             app:argType="long"
             android:defaultValue="-1L" />
+    </fragment>
+
+    <action
+        android:id="@+id/action_global_cardDetailFragment"
+        app:destination="@id/cardDetailFragment" />
+
+    <fragment
+        android:id="@+id/cardSetDetailFragment"
+        android:name="sam.g.trackuriboh.ui.card_set_detail.CardSetDetailFragment"
+        android:label="@string/lbl_database"
+        tools:layout="@layout/fragment_database">
         <argument
             android:name="setId"
             app:argType="long"
             android:defaultValue="-1L" />
-    </activity>
+    </fragment>
 
     <action
-        android:id="@+id/action_global_cardDetailActivity"
-        app:destination="@id/cardDetailActivity" />
+        android:id="@+id/action_global_cardSetDetailFragment"
+        app:destination="@+id/cardSetDetailFragment" />
 </navigation>

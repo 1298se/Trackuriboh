@@ -89,9 +89,9 @@ class CardSetDetailFragment : Fragment() {
         ) { _, bundle ->
             val cardId = bundle.getLong(CardListFragment.CARD_ID_DATA_KEY)
 
-            findNavController().safeNavigate(
+            /*findNavController().safeNavigate(
                 CardSetDetailFragmentDirections.actionCardSetDetailFragmentToCardDetailFragment(cardId)
-            )
+            )*/
         }
     }
 

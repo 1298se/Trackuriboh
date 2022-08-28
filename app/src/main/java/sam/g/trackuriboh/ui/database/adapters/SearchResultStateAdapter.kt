@@ -4,17 +4,16 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import sam.g.trackuriboh.ui.database.CardListFragment
 import sam.g.trackuriboh.ui.database.CardSetListFragment
-import sam.g.trackuriboh.ui.database.viewmodels.DatabaseViewModel
 
-class DatabaseStateAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+class SearchResultStateAdapter(fragment: Fragment, private val query: String?) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int {
         return 2
     }
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            DatabaseViewModel.Page.CARDS.position -> CardListFragment.newInstance()
-            DatabaseViewModel.Page.CARD_SETS.position -> CardSetListFragment()
+            0 -> CardListFragment.newInstance(query)
+            1 -> CardSetListFragment.newInstance(query)
             else -> throw Exception("view pager out of bounds")
         }
     }

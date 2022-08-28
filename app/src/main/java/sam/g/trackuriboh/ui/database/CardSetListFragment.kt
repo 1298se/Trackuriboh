@@ -29,6 +29,16 @@ class CardSetListFragment : BaseSearchListFragment<CardSet>(), CardSetListAdapte
     companion object {
         const val FRAGMENT_RESULT_REQUEST_KEY = "CardSetListFragment_requestResultKey"
         const val SET_ID_DATA_KEY = "CardSetListFragment_setId"
+
+        // This is the same value as the navArg name so that the SavedStateHandle can access from either
+        const val ARG_QUERY = "CardSetListFragment_argQuery"
+
+        fun newInstance(query: String? = null) =
+            CardSetListFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_QUERY, query)
+                }
+            }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -39,6 +49,8 @@ class CardSetListFragment : BaseSearchListFragment<CardSet>(), CardSetListAdapte
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView()
+
+        search(arguments?.getString(ARG_QUERY))
     }
 
     override fun getViewModel(): BaseSearchViewModel<CardSet> {

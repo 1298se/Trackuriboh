@@ -130,9 +130,9 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             text = productWithCardSetAndSkuIds?.cardSet?.name
             setOnClickListener { _ ->
                 productWithCardSetAndSkuIds?.cardSet?.id?.let { it ->
-                    findNavController().safeNavigate(
+                    /*findNavController().safeNavigate(
                         CardDetailFragmentDirections.actionCardDetailFragmentToCardSetDetailFragment(it)
-                    )
+                    )*/
                 }
             }
         }

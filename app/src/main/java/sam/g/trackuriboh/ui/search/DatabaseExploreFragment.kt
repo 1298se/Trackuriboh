@@ -6,18 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import sam.g.trackuriboh.MainGraphDirections
 import sam.g.trackuriboh.data.db.entities.CardSet
 import sam.g.trackuriboh.data.db.entities.Product
-import sam.g.trackuriboh.databinding.FragmentSearchBinding
+import sam.g.trackuriboh.databinding.FragmentDatabaseExploreBinding
+import sam.g.trackuriboh.ui.search.adapters.CardSetExploreCardsAdapter
+import sam.g.trackuriboh.utils.safeNavigate
 import sam.g.trackuriboh.utils.viewBinding
 
 
 @AndroidEntryPoint
-class SearchFragment : Fragment() {
+class DatabaseExploreFragment : Fragment(), CardSetExploreCardsAdapter.OnItemClickListener {
 
-    private val binding by viewBinding(FragmentSearchBinding::inflate)
-    private val viewModel: SearchViewModel by viewModels()
+    private val binding by viewBinding(FragmentDatabaseExploreBinding::inflate)
+    private val viewModel: DatabaseExploreViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,11 +47,16 @@ class SearchFragment : Fragment() {
         for (entry in data.entries) {
             context?.let {
                 val view = CardSetExploreRowView(it).apply {
-                    setupWith(entry.key, entry.value)
+                    setupWith(entry.key, entry.value, this@DatabaseExploreFragment)
                 }
                 binding.cardSetExploreContainer.addView(view)
             }
         }
     }
 
+    override fun onItemClick(cardId: Long) {
+        findNavController().safeNavigate(
+            MainGraphDirections.actionGlobalCardDetailFragment(cardId)
+        )
+    }
 }

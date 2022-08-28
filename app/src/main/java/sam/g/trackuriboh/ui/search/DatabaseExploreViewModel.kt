@@ -12,7 +12,7 @@ import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor(
+class DatabaseExploreViewModel @Inject constructor(
     private val sharedPreferences: SharedPreferences,
     private val cardSetRepository: CardSetRepository,
     private val productRepository: ProductRepository,
