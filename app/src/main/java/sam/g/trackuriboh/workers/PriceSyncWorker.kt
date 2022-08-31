@@ -13,7 +13,6 @@ import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.network.responses.Resource
 import sam.g.trackuriboh.data.repository.PriceRepository
 import sam.g.trackuriboh.data.repository.SkuRepository
-import sam.g.trackuriboh.data.repository.SkuRepository.Companion.SKU_DEFAULT_QUERY_LIMIT
 import java.io.IOException
 
 /**
@@ -39,7 +38,7 @@ class PriceSyncWorker @AssistedInject constructor(
             var offset = 0
 
             while (true) {
-                val skuIds = skuRepository.getSkuIdsPaginated(offset, SKU_DEFAULT_QUERY_LIMIT)
+                val skuIds = skuRepository.getSkuIdsPaginated(offset, GET_REQUEST_ID_QUERY_LIMIT)
 
                 if (skuIds.isEmpty()) {
                     break
@@ -51,7 +50,7 @@ class PriceSyncWorker @AssistedInject constructor(
                     throw IOException(resource.exception)
                 }
 
-                offset += SKU_DEFAULT_QUERY_LIMIT
+                offset += GET_REQUEST_ID_QUERY_LIMIT
 
                 delay(NETWORK_REQUEST_DELAY)
             }

@@ -97,7 +97,7 @@ class DatabaseDownloadWorker @AssistedInject constructor(
             downloadDatabase()
 
             with(sharedPreferences.edit()) {
-                putLong(DatabaseUpdateWorker.DATABASE_LAST_UPDATED_DATE, Date().time)
+                putLong(DatabaseUpdateWorker.DATABASE_LAST_UPDATED_DATE_SHAREDPREF_KEY, Date().time)
                 commit()
             }
 

@@ -48,7 +48,7 @@ class WorkRequestManager @Inject constructor(
             .build()
 
         workManager.enqueueUniqueWork(
-            if (isUserTriggered) DatabaseUpdateCheckWorker.USER_TRIGGERED_WORKER_NAME else DatabaseUpdateCheckWorker.BACKGROUND_WORKER_NAME,
+            DatabaseUpdateCheckWorker.workerName,
             ExistingWorkPolicy.REPLACE,
             databaseUpdateRequest
         )
@@ -62,7 +62,7 @@ class WorkRequestManager @Inject constructor(
             .build()
 
         workManager.enqueueUniquePeriodicWork(
-            DatabaseUpdateCheckScheduleWorker::class.java.name,
+            DatabaseUpdateCheckScheduleWorker.workerName,
             ExistingPeriodicWorkPolicy.KEEP,
             databaseUpdateScheduleRequest
         )

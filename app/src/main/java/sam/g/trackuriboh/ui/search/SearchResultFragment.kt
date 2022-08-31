@@ -56,9 +56,9 @@ class SearchResultFragment : Fragment() {
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     when(position) {
-                        DatabaseViewModel.Page.CARDS.position -> {
+                        0 -> {
                         }
-                        DatabaseViewModel.Page.CARD_SETS.position -> {
+                        1 -> {
                         }
                     }
                 }
@@ -67,8 +67,8 @@ class SearchResultFragment : Fragment() {
 
         TabLayoutMediator(binding.searchResultTabLayout, binding.searchResultViewPager) { tab, position ->
             tab.text = when (position) {
-                DatabaseViewModel.Page.CARDS.position -> getString(R.string.tab_card_title)
-                DatabaseViewModel.Page.CARD_SETS.position -> getString(R.string.tab_set_title)
+                0 -> getString(R.string.tab_card_title)
+                1 -> getString(R.string.tab_set_title)
                 else -> null
             }
         }.attach()

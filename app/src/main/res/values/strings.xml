@@ -5,6 +5,7 @@
     <string name="lbl_ok">OK</string>
     <string name="lbl_cancel">Cancel</string>
     <string name="lbl_update">Update</string>
+    <string name="lbl_up_to_date">Up to date</string>
     <string name="lbl_save">Save</string>
     <string name="lbl_upcoming">Upcoming</string>
     <string name="lbl_earlier">Earlier</string>

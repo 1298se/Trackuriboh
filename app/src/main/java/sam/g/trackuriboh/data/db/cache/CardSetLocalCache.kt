@@ -12,7 +12,7 @@ class CardSetLocalCache @Inject constructor(
     private val appDatabase: AppDatabase
 ) {
 
-    private val recentCardSetsWithCards: MutableMap<CardSet, Map<Product, Double?>> = mutableMapOf()
+    private var recentCardSetsWithCards: Map<CardSet, Map<Product, Double?>> = emptyMap()
 
     fun searchCardSetByName(name: String?): PagingSource<Int, CardSet> =
         appDatabase.cardSetDao().searchCardSetByName(name ?: "")
@@ -31,17 +31,19 @@ class CardSetLocalCache @Inject constructor(
             it.toSearchSuggestionsCursor()
         }
 
-    suspend fun getRecentSetsWithCardsSortedByPrice(numSets: Int, numCards: Int): Map<CardSet, Map<Product, Double?>> {
-        if (recentCardSetsWithCards.isEmpty()) {
+    suspend fun getRecentSetsWithCardsSortedByPrice(numSets: Int, numCards: Int, shouldRefresh: Boolean): Map<CardSet, Map<Product, Double?>> {
+        if (recentCardSetsWithCards.isEmpty() || shouldRefresh) {
+            val map = mutableMapOf<CardSet, Map<Product, Double?>>()
+
             val recentCardSets = appDatabase.cardSetDao().getRecentCardSets(numSets)
 
             for (cardSet in recentCardSets) {
                 val productWithLowestListing = appDatabase.productDao().getMostExpensiveProductsInSet(cardSet.id, numCards)
 
-                recentCardSetsWithCards[cardSet] = productWithLowestListing
+                map[cardSet] = productWithLowestListing
             }
 
-            return recentCardSetsWithCards
+            return map.also { recentCardSetsWithCards = it }
         }
 
         return recentCardSetsWithCards

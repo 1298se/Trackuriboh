@@ -20,7 +20,7 @@ import sam.g.trackuriboh.data.repository.CatalogRepository
 import sam.g.trackuriboh.data.repository.ProductRepository
 import sam.g.trackuriboh.di.NetworkModule
 import sam.g.trackuriboh.utils.DATABASE_ASSET_CREATION_DATE
-import sam.g.trackuriboh.workers.DatabaseUpdateWorker.Companion.DATABASE_LAST_UPDATED_DATE
+import sam.g.trackuriboh.workers.DatabaseUpdateWorker.Companion.DATABASE_LAST_UPDATED_DATE_SHAREDPREF_KEY
 import java.util.*
 
 @HiltWorker
@@ -35,10 +35,12 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
     private val firebaseAnalytics: FirebaseAnalytics,
 ) : CoroutineWorker(appContext, workerParams) {
     companion object {
-        const val USER_TRIGGERED_WORKER_NAME = "DatabaseUpdateCheckWorker_UserTriggered"
-        const val BACKGROUND_WORKER_NAME = "DatabaseUpdateCheckWorker_Background"
+        const val DATABASE_LAST_UPDATED_CHECK_DATE_SHAREDPREF_KEY = "DatabaseUpdateCheckWorker_LastCheckDate"
 
+        const val UPDATE_AVAILABLE_RESULT = "DatabaseUpdateCheckWorker_UpdateAvailableResult"
         const val UPDATE_CARD_SET_IDS_RESULT = "DatabaseUpdateCheckWorker_CardSetIdsResult"
+
+        val workerName: String = DatabaseUpdateCheckWorker::class.java.name
     }
 
     override suspend fun doWork(): Result = withContext(Dispatchers.Default){
@@ -76,7 +78,7 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
 
             // We need to fetch the products from both the diff sets and unreleased sets as they may
             // have been updated
-            val lastUpdatedDate = Date(sharedPreferences.getLong(DATABASE_LAST_UPDATED_DATE, DATABASE_ASSET_CREATION_DATE))
+            val lastUpdatedDate = Date(sharedPreferences.getLong(DATABASE_LAST_UPDATED_DATE_SHAREDPREF_KEY, DATABASE_ASSET_CREATION_DATE))
             val unreleasedCardSets = currentCardSetsWithCounts.filter { entry ->
                 val cardSet = entry.key
                 val count = entry.value
@@ -102,7 +104,15 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
                 "updateCardSetIds" to updateCardSetIds
             ))
 
-            Result.success(workDataOf(UPDATE_CARD_SET_IDS_RESULT to updateCardSetIds))
+            with(sharedPreferences.edit()) {
+                putLong(DATABASE_LAST_UPDATED_CHECK_DATE_SHAREDPREF_KEY, Date().time)
+                commit()
+            }
+
+            Result.success(workDataOf(
+                UPDATE_AVAILABLE_RESULT to updateCardSetIds.isNotEmpty(),
+                UPDATE_CARD_SET_IDS_RESULT to updateCardSetIds,
+            ))
         } catch (e: Exception) {
             firebaseCrashlytics.recordException(e)
             Result.failure()

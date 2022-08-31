@@ -19,6 +19,10 @@ class DatabaseUpdateCheckScheduleWorker @AssistedInject constructor(
     private val workRequestManager: WorkRequestManager,
 ) : CoroutineWorker(appContext, workerParams) {
 
+    companion object {
+        val workerName = DatabaseUpdateCheckScheduleWorker::class.java.name
+    }
+
     override suspend fun doWork(): Result {
 
         workRequestManager.enqueueDatabaseUpdateCheck(false)

@@ -34,8 +34,16 @@ class DatabaseExploreFragment : Fragment(), CardSetExploreCardsAdapter.OnItemCli
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.databaseStatusInfo.observe(viewLifecycleOwner) {
+        initObservers()
+    }
+
+    private fun initObservers() {
+        viewModel.databaseInfoUiState.observe(viewLifecycleOwner) {
             binding.databaseStatusView.setupWith(it)
+        }
+
+        viewModel.databaseUpdateButtonState.observe(viewLifecycleOwner) {
+            binding.databaseStatusView.setupUpdateButtonState(it)
         }
 
         viewModel.recentCardSetsWithProducts.observe(viewLifecycleOwner) {
@@ -44,12 +52,16 @@ class DatabaseExploreFragment : Fragment(), CardSetExploreCardsAdapter.OnItemCli
     }
 
     private fun setupCardSetExploreList(data: Map<CardSet, Map<Product, Double?>>) {
-        for (entry in data.entries) {
-            context?.let {
-                val view = CardSetExploreRowView(it).apply {
-                    setupWith(entry.key, entry.value, this@DatabaseExploreFragment)
+        with (binding.cardSetExploreContainer) {
+            removeAllViews()
+
+            for (entry in data.entries) {
+                context?.let {
+                    val view = CardSetExploreRowView(it).apply {
+                        setupWith(entry.key, entry.value, this@DatabaseExploreFragment)
+                    }
+                    addView(view)
                 }
-                binding.cardSetExploreContainer.addView(view)
             }
         }
     }
