@@ -17,14 +17,14 @@ import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.databinding.FragmentUserListDetailBinding
 import sam.g.trackuriboh.ui.common.QuantitySelectorDialogFragment
-import sam.g.trackuriboh.ui.user_list.adapters.UserListEntryAdapter
+import sam.g.trackuriboh.ui.user_list.adapters.UserListCardAdapter
 import sam.g.trackuriboh.ui.user_list.viewmodels.UserListDetailViewModel
 import sam.g.trackuriboh.utils.safeNavigate
 import sam.g.trackuriboh.utils.viewBinding
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListener {
+class UserListDetailFragment : Fragment(), UserListCardAdapter.OnItemClickListener {
 
     @Inject lateinit var firebaseAnalytics: FirebaseAnalytics
 
@@ -34,7 +34,7 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListe
 
     private val viewModel: UserListDetailViewModel by viewModels()
 
-    private lateinit var userListEntryAdapter: UserListEntryAdapter
+    private lateinit var userListCardAdapter: UserListCardAdapter
 
     private var actionMode: ActionMode? = null
 
@@ -140,9 +140,9 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListe
         binding.userListDetailList.apply {
             layoutManager = LinearLayoutManager(context)
 
-            adapter = UserListEntryAdapter().apply {
+            adapter = UserListCardAdapter().apply {
                 setOnItemClickListener(this@UserListDetailFragment)
-                userListEntryAdapter = this
+                userListCardAdapter = this
             }
 
             addItemDecoration(MaterialDividerItemDecoration(context, (layoutManager as LinearLayoutManager).orientation))
@@ -151,15 +151,15 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnItemClickListe
 
     private fun initObservers() {
         viewModel.state.observe(viewLifecycleOwner) {
-            userListEntryAdapter.submitList(it.entries)
+            userListCardAdapter.submitList(it.entries)
 
              if (it.actionModeActive) {
                  if (actionMode == null) {
                      actionMode = activity?.startActionMode(actionModeCallback)
-                     userListEntryAdapter.setInActionMode(true)
+                     userListCardAdapter.setInActionMode(true)
                  }
             } else {
-                userListEntryAdapter.setInActionMode(false)
+                userListCardAdapter.setInActionMode(false)
                 actionMode?.finish()
                 actionMode = null
             }

@@ -29,4 +29,7 @@ class CatalogRepository @Inject constructor(
 
     suspend fun insertPrintings(printings: List<Printing>) =
         catalogLocalCache.insertPrintings(printings)
+
+    suspend fun getCardRarityByName(name: String) =
+        catalogLocalCache.getCardRarityByName(name)
 }

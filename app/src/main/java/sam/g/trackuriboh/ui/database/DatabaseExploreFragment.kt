@@ -1,4 +1,4 @@
-package sam.g.trackuriboh.ui.search
+package sam.g.trackuriboh.ui.database
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,15 +12,16 @@ import sam.g.trackuriboh.MainGraphDirections
 import sam.g.trackuriboh.data.db.entities.CardSet
 import sam.g.trackuriboh.data.db.entities.Product
 import sam.g.trackuriboh.databinding.FragmentDatabaseExploreBinding
-import sam.g.trackuriboh.ui.search.adapters.CardSetExploreCardsAdapter
+import sam.g.trackuriboh.ui.database.adapters.CardSetExploreCardsAdapter
+import sam.g.trackuriboh.ui.database.viewmodels.DatabaseExploreViewModel
+import sam.g.trackuriboh.ui.search.CardSetExploreRowView
 import sam.g.trackuriboh.utils.safeNavigate
-import sam.g.trackuriboh.utils.viewBinding
 
 
 @AndroidEntryPoint
 class DatabaseExploreFragment : Fragment(), CardSetExploreCardsAdapter.OnItemClickListener {
 
-    private val binding by viewBinding(FragmentDatabaseExploreBinding::inflate)
+    private lateinit var binding: FragmentDatabaseExploreBinding
     private val viewModel: DatabaseExploreViewModel by viewModels()
 
     override fun onCreateView(
@@ -28,6 +29,9 @@ class DatabaseExploreFragment : Fragment(), CardSetExploreCardsAdapter.OnItemCli
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        if (!this::binding.isInitialized) {
+            binding = FragmentDatabaseExploreBinding.inflate(inflater, container, false)
+        }
         return binding.root
     }
 
@@ -47,7 +51,9 @@ class DatabaseExploreFragment : Fragment(), CardSetExploreCardsAdapter.OnItemCli
         }
 
         viewModel.recentCardSetsWithProducts.observe(viewLifecycleOwner) {
-            setupCardSetExploreList(it)
+            if (binding.cardSetExploreContainer.childCount == 0) {
+                setupCardSetExploreList(it)
+            }
         }
     }
 
@@ -58,6 +64,8 @@ class DatabaseExploreFragment : Fragment(), CardSetExploreCardsAdapter.OnItemCli
             for (entry in data.entries) {
                 context?.let {
                     val view = CardSetExploreRowView(it).apply {
+                        this.id = View.generateViewId()
+
                         setupWith(entry.key, entry.value, this@DatabaseExploreFragment)
                     }
                     addView(view)

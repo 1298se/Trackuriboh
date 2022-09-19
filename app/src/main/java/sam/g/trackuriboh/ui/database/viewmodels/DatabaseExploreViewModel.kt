@@ -1,4 +1,4 @@
-package sam.g.trackuriboh.ui.search
+package sam.g.trackuriboh.ui.database.viewmodels
 
 import android.content.SharedPreferences
 import androidx.lifecycle.*
@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import sam.g.trackuriboh.data.repository.CardSetRepository
 import sam.g.trackuriboh.data.repository.ProductRepository
+import sam.g.trackuriboh.ui.database.DatabaseStatusView
 import sam.g.trackuriboh.utils.DATABASE_ASSET_CREATION_DATE
 import sam.g.trackuriboh.workers.DatabaseUpdateCheckWorker
 import sam.g.trackuriboh.workers.DatabaseUpdateWorker
@@ -92,7 +93,9 @@ class DatabaseExploreViewModel @Inject constructor(
                     if (isUpdateAvailable) {
                         val updateCardSetIds = it.outputData.getLongArray(DatabaseUpdateCheckWorker.UPDATE_CARD_SET_IDS_RESULT)
 
-                        value = DatabaseStatusView.ButtonState.UpdateAvailable { enqueueDatabaseUpdate(updateCardSetIds) }
+                        value = DatabaseStatusView.ButtonState.UpdateAvailable {
+                            enqueueDatabaseUpdate(updateCardSetIds)
+                        }
                     }
                 }
             }

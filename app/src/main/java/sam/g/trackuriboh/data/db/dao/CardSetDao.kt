@@ -11,7 +11,7 @@ import sam.g.trackuriboh.data.db.entities.CardSet
 @Dao
 interface CardSetDao : BaseDao<CardSet> {
     @Query("SELECT * FROM CardSet WHERE id = :setId")
-    suspend fun getCardSet(setId: Long): CardSet
+    suspend fun getCardSet(setId: Long): CardSet?
 
     @Query("SELECT COUNT(*) FROM CardSet")
     suspend fun getTotalCount(): Int

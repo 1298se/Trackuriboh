@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity
 data class CardRarity(
-    @PrimaryKey(autoGenerate = false)
-    val id: Long,
-    val name: String?,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+    val name: String,
 ) : Parcelable

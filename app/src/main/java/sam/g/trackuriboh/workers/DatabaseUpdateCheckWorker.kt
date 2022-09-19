@@ -14,10 +14,9 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import sam.g.trackuriboh.analytics.Events
+import sam.g.trackuriboh.data.network.ResponseToDatabaseEntityConverter
 import sam.g.trackuriboh.data.network.responses.CardSetResponse
 import sam.g.trackuriboh.data.repository.CardSetRepository
-import sam.g.trackuriboh.data.repository.CatalogRepository
-import sam.g.trackuriboh.data.repository.ProductRepository
 import sam.g.trackuriboh.di.NetworkModule
 import sam.g.trackuriboh.utils.DATABASE_ASSET_CREATION_DATE
 import sam.g.trackuriboh.workers.DatabaseUpdateWorker.Companion.DATABASE_LAST_UPDATED_DATE_SHAREDPREF_KEY
@@ -28,12 +27,11 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
     private val cardSetRepository: CardSetRepository,
-    private val productRepository: ProductRepository,
-    private val catalogRepository: CatalogRepository,
     private val sharedPreferences: SharedPreferences,
     private val firebaseCrashlytics: FirebaseCrashlytics,
     private val firebaseAnalytics: FirebaseAnalytics,
-) : CoroutineWorker(appContext, workerParams) {
+    private val responseToDatabaseEntityConverter: ResponseToDatabaseEntityConverter
+    ) : CoroutineWorker(appContext, workerParams) {
     companion object {
         const val DATABASE_LAST_UPDATED_CHECK_DATE_SHAREDPREF_KEY = "DatabaseUpdateCheckWorker_LastCheckDate"
 
@@ -47,58 +45,35 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
         try {
             firebaseAnalytics.logEvent(Events.UPDATE_CHECK_WORKER_START, null)
 
-            with(catalogRepository) {
-                val cardRarityResponse = fetchCardRarities().getResponseOrThrow()
-                val printingResponse = fetchProductPrintings().getResponseOrThrow()
-                val conditionResponse = fetchProductConditions().getResponseOrThrow()
-
-                insertCardRarities(cardRarityResponse.results.map { it.toDatabaseEntity() })
-                insertPrintings(printingResponse.results.map { it.toDatabaseEntity() })
-                insertConditions(conditionResponse.results.map { it.toDatabaseEntity() })
-            }
-
             val fetchedCardSetCount = cardSetRepository.fetchCardSets(limit = 1).getResponseOrThrow().totalItems
 
-            val fetchedCardSets = mutableListOf<CardSetResponse.CardSetItem>()
+            val updateCardSets = mutableListOf<CardSetResponse.CardSetItem>()
+
+            // We need to fetch the products from both the diff sets and unreleased sets as they may
+            // have been updated
+            val lastUpdatedDate = Date(sharedPreferences.getLong(DATABASE_LAST_UPDATED_DATE_SHAREDPREF_KEY, DATABASE_ASSET_CREATION_DATE))
 
             paginate(
                 totalCount = fetchedCardSetCount,
                 paginationSize = NetworkModule.DEFAULT_QUERY_LIMIT,
                 paginate = { offset, paginationSize -> cardSetRepository.fetchCardSets(offset, paginationSize).getResponseOrThrow().results }
             ) { _, list ->
-                fetchedCardSets.addAll(list)
+                for (item in list) {
+                    val responseSetModel = responseToDatabaseEntityConverter.toCardSet(item)
+                    val existingSetModel = cardSetRepository.getCardSet(item.id)
+
+                    // If it hasn't been released yet, or we don't have it in db, or the modified
+                    // date is after our db's modified date, then add to update list.
+                    if (responseSetModel.releaseDate?.after(lastUpdatedDate) == true ||
+                        existingSetModel == null ||
+                        responseSetModel.modifiedDate?.after(existingSetModel.modifiedDate) == true)
+
+                    updateCardSets.add(item)
+                }
             }
 
 
-            val currentCardSetsWithCounts = cardSetRepository.getCardSetsWithCount()
-            val currentCardSetIds = currentCardSetsWithCounts.map { it.key.id }.toSet()
-
-            // Get the diff between the two lists
-            val diffCardSet = fetchedCardSets.filter { it.id !in currentCardSetIds }
-
-            // We need to fetch the products from both the diff sets and unreleased sets as they may
-            // have been updated
-            val lastUpdatedDate = Date(sharedPreferences.getLong(DATABASE_LAST_UPDATED_DATE_SHAREDPREF_KEY, DATABASE_ASSET_CREATION_DATE))
-            val unreleasedCardSets = currentCardSetsWithCounts.filter { entry ->
-                val cardSet = entry.key
-                val count = entry.value
-
-                cardSet.releaseDate?.let {
-                    // If the set is unreleased yet, we check if the count from the API is different than the current count in
-                    // database. If so, we should add it to the update list.
-                    if (it >= lastUpdatedDate) {
-                        val updatedCount = productRepository.fetchProducts(limit = 1, cardSetId = cardSet.id).getResponseOrThrow().totalItems
-
-                        updatedCount != count
-                    } else {
-                        false
-                    }
-                } ?: false
-
-            }
-            val updateCardSetIds = diffCardSet.map { it.id }.toMutableSet().apply {
-                addAll(unreleasedCardSets.keys.map { it.id })
-            }.toLongArray()
+            val updateCardSetIds = updateCardSets.map { it.id }.toLongArray()
 
             firebaseAnalytics.logEvent(Events.UPDATE_CHECK_WORKER_SUCCESS, bundleOf(
                 "updateCardSetIds" to updateCardSetIds

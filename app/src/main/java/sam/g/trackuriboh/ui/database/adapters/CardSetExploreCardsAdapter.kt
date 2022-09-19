@@ -1,4 +1,4 @@
-package sam.g.trackuriboh.ui.search.adapters
+package sam.g.trackuriboh.ui.database.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

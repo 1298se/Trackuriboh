@@ -5,14 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.fragment.app.replace
+import androidx.fragment.app.viewModels
+import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.databinding.FragmentDatabaseBinding
-import sam.g.trackuriboh.ui.search.DatabaseExploreFragment
+import sam.g.trackuriboh.ui.database.viewmodels.DatabaseViewModel
 import sam.g.trackuriboh.ui.search.SearchResultFragment
-import sam.g.trackuriboh.utils.show
 import sam.g.trackuriboh.utils.viewBinding
 
 /**
@@ -28,13 +31,14 @@ import sam.g.trackuriboh.utils.viewBinding
  */
 @AndroidEntryPoint
 class DatabaseFragment : Fragment() {
+    private val binding by viewBinding(FragmentDatabaseBinding::inflate)
+    private val viewModel: DatabaseViewModel by viewModels()
+
     companion object {
-        private const val DATABASE_EXPLORE_FRAGMENT_TAG = "Database_Explore_Fragment"
-        private const val SEARCH_RESULT_FRAGMENT_TAG = "Search_Result_Fragment"
+        private val DATABASE_FRAGMENT_TAG: String = DatabaseExploreFragment::class.java.name
+        private val SEARCH_RESULT_FRAGMENT_TAG: String = SearchResultFragment::class.java.name
     }
 
-    private val binding by viewBinding(FragmentDatabaseBinding::inflate)
-    private var hasUserInitiatedSearch = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +49,7 @@ class DatabaseFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if (childFragmentManager.findFragmentByTag(DATABASE_EXPLORE_FRAGMENT_TAG) == null &&
+        if (childFragmentManager.findFragmentByTag(DATABASE_FRAGMENT_TAG) == null &&
                 childFragmentManager.findFragmentByTag(SEARCH_RESULT_FRAGMENT_TAG) == null) {
             showDatabaseExplorePage()
         }
@@ -55,52 +59,65 @@ class DatabaseFragment : Fragment() {
 
     private fun showDatabaseExplorePage() {
         childFragmentManager.commit {
-            replace(R.id.search_result_container, DatabaseExploreFragment(), DATABASE_EXPLORE_FRAGMENT_TAG)
+            replace<DatabaseExploreFragment>(binding.searchResultContainer.id, DATABASE_FRAGMENT_TAG)
         }
     }
 
     private fun initSearchView() {
-        binding.searchBackButton.show(hasUserInitiatedSearch)
+        with (binding.databaseToolbar) {
+            showBackButton(viewModel.hasUserInitiatedSearch)
+        }
 
-        binding.searchBackButton.setOnClickListener {
-            hasUserInitiatedSearch = false
+        with (binding.databaseSearchview) {
+            searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    viewModel.hasUserInitiatedSearch = true
 
-            it.visibility = View.GONE
+                    binding.databaseToolbar.showBackButton(true)
+                }
+            }
 
-            binding.searchView.apply {
+            searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    val searchResultFragment = SearchResultFragment.newInstance(query = query)
+
+                    childFragmentManager.commit {
+                        replace(binding.searchResultContainer.id, searchResultFragment, SEARCH_RESULT_FRAGMENT_TAG)
+                    }
+
+                    searchView.clearFocus()
+                    binding.databaseSearchview.focusDummyView.requestFocus()
+
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+            })
+        }
+    }
+
+    private fun MaterialToolbar.showBackButton(visible: Boolean) {
+        navigationIcon = if (visible) {
+            ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_arrow_back_24, context.theme)
+        } else {
+            null
+        }
+
+        binding.databaseToolbar.setNavigationOnClickListener {
+            viewModel.hasUserInitiatedSearch = false
+
+            showBackButton(false)
+
+            binding.databaseSearchview.searchView.apply {
                 setQuery("", false)
                 clearFocus()
             }
 
-            showDatabaseExplorePage()
-        }
-
-        binding.searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                hasUserInitiatedSearch = true
-
-                binding.searchBackButton.visibility = View.VISIBLE
+            if (childFragmentManager.findFragmentByTag(SEARCH_RESULT_FRAGMENT_TAG) != null) {
+                showDatabaseExplorePage()
             }
         }
-
-        binding.searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                val searchResultFragment = SearchResultFragment.newInstance(query = query)
-
-                childFragmentManager.commit {
-                    replace(R.id.search_result_container, searchResultFragment, SEARCH_RESULT_FRAGMENT_TAG)
-                }
-
-                binding.searchView.clearFocus()
-                binding.focusDummyView.requestFocus()
-
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return false
-            }
-        })
     }
-
 }

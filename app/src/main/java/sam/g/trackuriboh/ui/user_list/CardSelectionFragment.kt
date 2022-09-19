@@ -15,7 +15,7 @@ import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.databinding.FragmentCardSelectionBinding
-import sam.g.trackuriboh.ui.database.CardListFragment
+import sam.g.trackuriboh.ui.search.CardListFragment
 import sam.g.trackuriboh.ui.search_suggestions.CardSearchSuggestionsViewModel
 import sam.g.trackuriboh.utils.*
 
@@ -111,7 +111,7 @@ class CardSelectionFragment : Fragment() {
             menu.findItem(R.id.action_search).apply {
                 searchView = setIconifiedSearchViewBehaviour(object : SearchViewQueryHandler {
                     override fun handleQueryTextSubmit(query: String?) {
-                        cardListFragment.search(query)
+                        // cardListFragment.search(query)
 
                         searchView.clearFocus()
                         binding.focusDummyView.requestFocus()
@@ -122,7 +122,7 @@ class CardSelectionFragment : Fragment() {
                     }
 
                     override fun handleSearchViewCollapse() {
-                        cardListFragment.search(null)
+                        // cardListFragment.search(null)
                     }
                 })
             }

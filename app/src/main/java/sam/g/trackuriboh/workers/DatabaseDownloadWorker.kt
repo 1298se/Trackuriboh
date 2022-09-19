@@ -19,6 +19,7 @@ import kotlinx.coroutines.withContext
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.db.AppDatabase
+import sam.g.trackuriboh.data.network.ResponseToDatabaseEntityConverter
 import sam.g.trackuriboh.data.repository.*
 import sam.g.trackuriboh.di.NetworkModule.DEFAULT_QUERY_LIMIT
 import sam.g.trackuriboh.utils.DB_SYNC_PROGRESS_NOTIFICATION_ID
@@ -44,6 +45,7 @@ class DatabaseDownloadWorker @AssistedInject constructor(
     private val firebaseCrashlytics: FirebaseCrashlytics,
     private val firebaseAnalytics: FirebaseAnalytics,
     private val workRequestManager: WorkRequestManager,
+    private val responseConverter: ResponseToDatabaseEntityConverter,
 ) : CoroutineWorker(appContext, workerParams) {
 
     private val progressNotificationBuilder by lazy {
@@ -89,9 +91,9 @@ class DatabaseDownloadWorker @AssistedInject constructor(
                 val printingResponse = fetchProductPrintings().getResponseOrThrow()
                 val conditionResponse = fetchProductConditions().getResponseOrThrow()
 
-                insertCardRarities(cardRarityResponse.results.map { it.toDatabaseEntity() })
-                insertPrintings(printingResponse.results.map { it.toDatabaseEntity() })
-                insertConditions(conditionResponse.results.map { it.toDatabaseEntity() })
+                insertCardRarities(cardRarityResponse.results.map { responseConverter.toCardRarity(it) })
+                insertPrintings(printingResponse.results.map { responseConverter.toPrinting(it) })
+                insertConditions(conditionResponse.results.map { responseConverter.toCondition(it) })
             }
 
             downloadDatabase()
@@ -179,7 +181,7 @@ class DatabaseDownloadWorker @AssistedInject constructor(
             paginate = { offset, paginationSize -> cardSetRepository.fetchCardSets(offset, paginationSize).getResponseOrThrow().results },
         ) { offset, cardSets ->
             updateProgress(((totalOffset + offset.toDouble()) / totalItems * 100).toInt())
-            cardSetRepository.insertCardSets(cardSets.map { it.toDatabaseEntity() })
+            cardSetRepository.insertCardSets(cardSets.map { responseConverter.toCardSet(it) })
         }
 
         totalOffset += cardSetResponse.totalItems
@@ -192,9 +194,9 @@ class DatabaseDownloadWorker @AssistedInject constructor(
 
             updateProgress(((totalOffset + offset.toDouble()) / totalItems * 100).toInt())
 
-            productRepository.insertProducts(products.map { it.toDatabaseEntity() })
+            productRepository.insertProducts(products.map { responseConverter.toCardProduct(it) })
             products.forEach { cardItem -> cardItem.skus?.let {
-                skuRepository.insertSkus(cardItem.skus.map { it.toDatabaseEntity() })
+                skuRepository.insertSkus(cardItem.skus.map { responseConverter.toSku(it) })
             } }
         }
     }

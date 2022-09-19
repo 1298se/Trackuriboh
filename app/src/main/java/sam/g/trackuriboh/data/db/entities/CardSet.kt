@@ -13,5 +13,6 @@ data class CardSet(
     val id: Long,
     val name: String?,
     val code: String?,
-    val releaseDate: Date?
+    val releaseDate: Date?,
+    val modifiedDate: Date?
 ) : Parcelable

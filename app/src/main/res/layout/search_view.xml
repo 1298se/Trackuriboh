@@ -4,4 +4,4 @@
     android:id="@+id/search_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:theme="@style/ThemeOverlay.AppTheme.Toolbar.SearchView" />
+    style="@style/Widget.AppTheme.SearchView" />

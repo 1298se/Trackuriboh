@@ -1,4 +1,4 @@
-package sam.g.trackuriboh.ui.database.adapters
+package sam.g.trackuriboh.ui.search.adapters
 
 import android.content.Context
 import android.database.Cursor

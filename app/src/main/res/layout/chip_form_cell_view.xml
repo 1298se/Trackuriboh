@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/material_border_padding"
+    android:paddingStart="@dimen/material_border_padding"
+    android:paddingEnd="@dimen/material_border_padding">
+
+    <TextView
+        android:id="@+id/cell_title_textview"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:text="Card Type"/>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/multi_line_chipgroup"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:paddingBottom="@dimen/material_border_padding"
+        app:layout_constraintTop_toBottomOf="@id/cell_title_textview"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/divider"/>
+
+    <HorizontalScrollView
+        android:id="@+id/filter_options_list"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:paddingBottom="@dimen/material_border_padding"
+        app:layout_constraintTop_toBottomOf="@id/cell_title_textview"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/divider" >
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/single_line_chipgroup"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            app:singleLine="true"/>
+    </HorizontalScrollView>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

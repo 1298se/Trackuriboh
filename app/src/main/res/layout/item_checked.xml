@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingStart="@dimen/material_border_padding"
+    android:paddingEnd="@dimen/material_border_padding"
+    android:background="?attr/selectableItemBackground">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        tools:text="Bruh"
+        style="@style/TextAppearance.MaterialComponents.Body1" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:clickable="false" />
+
+</RelativeLayout>

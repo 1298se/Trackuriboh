@@ -21,26 +21,80 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleEnabled="false">
 
-            <FrameLayout
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/card_image_view_pager"
-                    style="@style/ImageSliderViewPager"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/card_image_height" />
+                    android:layout_height="wrap_content"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="0">
 
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/card_image_tab_layout"
-                    style="@style/ImageSliderTabLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/image_slider_height"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:layout_marginBottom="@dimen/image_slider_margin_bottom" />
-            </FrameLayout>
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/card_image_view_pager"
+                        style="@style/ImageSliderViewPager"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/card_image_height" />
+
+                    <!-- Since each card has only 1 image, there's no point of having a slider, but keeping
+                    because the implementation isn't that trivial
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/card_image_tab_layout"
+                        style="@style/ImageSliderTabLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/image_slider_height"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:layout_marginBottom="@dimen/image_slider_margin_bottom" /> -->
+                </FrameLayout>
+
+                <!-- Put content here so it still scrolls -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?attr/colorSurface">
+
+                    <!-- If we use wrap_content with the width, to prevent it from going out of bounds
+                    we need to add app:layout_constrainedWidth="true" -->
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/card_detail_name_textview"
+                        style="@style/TextAppearance.MaterialComponents.Headline6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/material_border_padding"
+                        android:layout_marginTop="@dimen/material_border_padding"
+                        android:layout_marginEnd="@dimen/material_border_padding"
+                        android:background="?attr/selectableItemBackground"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="Blue-Eyesssssssssssssssssssssssssssssssssssssssssss" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/card_detail_set_name_textview"
+                        style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/material_border_padding"
+                        android:layout_marginTop="@dimen/text_spacing_large"
+                        android:layout_marginEnd="@dimen/material_border_padding"
+                        android:background="?attr/selectableItemBackground"
+                        android:drawableEnd="@drawable/ic_baseline_chevron_right_24"
+                        android:singleLine="true"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/card_detail_name_textview"
+                        tools:text="The Legend of Blue-Eyes White Dragonnnnnnnnnnn" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/card_detail_toolbar"
@@ -51,59 +105,13 @@
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        <!-- Put content here so it still scrolls -->
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/card_detail_tab_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/colorSurface">
-
-            <!-- If we use wrap_content with the width, to prevent it from going out of bounds
-            we need to add app:layout_constrainedWidth="true" -->
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/card_detail_name_textview"
-                style="@style/TextAppearance.MaterialComponents.Headline6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/material_border_padding"
-                android:layout_marginTop="@dimen/material_border_padding"
-                android:layout_marginEnd="@dimen/material_border_padding"
-                android:background="?attr/selectableItemBackground"
-                android:ellipsize="end"
-                android:maxLines="2"
-                app:layout_constrainedWidth="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Blue-Eyesssssssssssssssssssssssssssssssssssssssssss" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/card_detail_set_name_textview"
-                style="@style/TextAppearance.MaterialComponents.Subtitle1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/material_border_padding"
-                android:layout_marginTop="@dimen/text_spacing_large"
-                android:layout_marginEnd="@dimen/material_border_padding"
-                android:background="?attr/selectableItemBackground"
-                android:drawableEnd="@drawable/ic_baseline_chevron_right_24"
-                android:singleLine="true"
-                app:layout_constrainedWidth="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/card_detail_name_textview"
-                tools:text="The Legend of Blue-Eyes White Dragonnnnnnnnnnn" />
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/card_detail_tab_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/material_border_padding"
-                app:tabGravity="center"
-                app:layout_constraintTop_toBottomOf="@id/card_detail_set_name_textview" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/material_border_padding"
+            app:tabGravity="center"
+            app:layout_constraintTop_toBottomOf="@id/card_detail_set_name_textview" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -123,9 +131,6 @@
         android:id="@+id/card_detail_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/card_detail_tab_layout" />
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"     />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -7,55 +7,68 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
+import sam.g.trackuriboh.MainGraphDirections
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.databinding.FragmentCardSetDetailBinding
 import sam.g.trackuriboh.ui.card_set_detail.viewmodels.CardSetDetailViewModel
-import sam.g.trackuriboh.ui.database.CardListFragment
+import sam.g.trackuriboh.ui.search.CardListFragment
 import sam.g.trackuriboh.ui.search_suggestions.CardSearchSuggestionsViewModel
 import sam.g.trackuriboh.utils.*
 
+/**
+ * Fragment containing the list of cards in a particular set
+ */
 @ExperimentalMaterialApi
 @AndroidEntryPoint
 class CardSetDetailFragment : Fragment() {
     private val binding by viewBinding(FragmentCardSetDetailBinding::inflate)
+    private val args: CardSetDetailFragmentArgs by navArgs()
 
     private val viewModel: CardSetDetailViewModel by viewModels()
-
     private val searchSuggestionsViewModel: CardSearchSuggestionsViewModel by viewModels()
-
-    private val args: CardSetDetailFragmentArgs by navArgs()
 
     private lateinit var searchView: SearchView
 
-    private lateinit var cardListFragment: CardListFragment
+    companion object {
+        private val CARD_LIST_FRAGMENT_TAG = CardListFragment::class.java.name
+    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        cardListFragment = CardListFragment.newInstance(setId = args.setId)
-
-        if (childFragmentManager.findFragmentByTag(CardListFragment::class.java.name) == null) {
-            childFragmentManager.beginTransaction().replace(
-                binding.cardSetDetailFragmentContainer.id,
-                cardListFragment,
-                CardListFragment::class.java.name
-            ).commit()
+        if (childFragmentManager.findFragmentByTag(CARD_LIST_FRAGMENT_TAG) == null) {
+            showSearchResults(null)
         }
 
         initToolbar()
-        initSearchSuggestions()
+        // initSearchSuggestions()
         initFragmentResultListeners()
         initObservers()
+    }
+
+    private fun showSearchResults(query: String?) {
+        childFragmentManager.commit {
+            replace(
+                binding.cardSetDetailFragmentContainer.id,
+                CardListFragment.newInstance(query = query, setId = args.setId),
+                CARD_LIST_FRAGMENT_TAG
+            )
+        }
     }
 
     private fun initToolbar() {
@@ -73,8 +86,6 @@ class CardSetDetailFragment : Fragment() {
     private fun initSearchSuggestions() {
         searchView.initSearchSuggestions()
 
-        searchView.initSearchSuggestions()
-
         searchSuggestionsViewModel.searchInSet(args.setId)
 
         searchSuggestionsViewModel.suggestionsCursor.observe(viewLifecycleOwner) {
@@ -89,15 +100,15 @@ class CardSetDetailFragment : Fragment() {
         ) { _, bundle ->
             val cardId = bundle.getLong(CardListFragment.CARD_ID_DATA_KEY)
 
-            /*findNavController().safeNavigate(
-                CardSetDetailFragmentDirections.actionCardSetDetailFragmentToCardDetailFragment(cardId)
-            )*/
+            findNavController().safeNavigate(
+                MainGraphDirections.actionGlobalCardDetailFragment(cardId)
+            )
         }
     }
 
     private fun initObservers() {
         viewModel.cardSet.observe(viewLifecycleOwner) {
-            binding.cardSetDetailToolbar.title = it.name
+            binding.cardSetDetailToolbar.title = it?.name
         }
     }
 
@@ -108,8 +119,10 @@ class CardSetDetailFragment : Fragment() {
             menu.findItem(R.id.action_search).apply {
                 searchView = setIconifiedSearchViewBehaviour(object : SearchViewQueryHandler {
                     override fun handleQueryTextSubmit(query: String?) {
-                        cardListFragment.search(query)
 
+                        showSearchResults(query)
+
+                        viewModel.query = query
                         searchView.clearFocus()
                         binding.focusDummyView.requestFocus()
                     }
@@ -119,7 +132,11 @@ class CardSetDetailFragment : Fragment() {
                     }
 
                     override fun handleSearchViewCollapse() {
-                        cardListFragment.search(null)
+                        searchView.setQuery("", false)
+
+                        if (!viewModel.query.isNullOrEmpty()) {
+                            showSearchResults(null)
+                        }
                     }
                 })
             }

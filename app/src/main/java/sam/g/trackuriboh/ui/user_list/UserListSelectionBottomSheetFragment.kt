@@ -50,11 +50,7 @@ class UserListSelectionBottomSheetFragment : BottomSheetDialogFragment() {
         viewModel.userLists.observe(viewLifecycleOwner) { list ->
             val userLists = list.map { it.userList }
 
-            if (binding.userListSelectionList.adapter == null) {
-                initListView(userLists)
-            } else {
-                userListAdapter.setUserLists(userLists)
-            }
+            initListView(userLists)
         }
     }
 
@@ -66,27 +62,25 @@ class UserListSelectionBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun initListView(userLists: List<UserList>) {
-        binding.userListSelectionList.adapter = UserListAdapter(requireContext()).apply {
-            setUserLists(userLists)
-
+        binding.userListSelectionList.adapter = UserListAdapter(requireContext(), userLists).apply {
             userListAdapter = this
         }
     }
 
     inner class UserListAdapter(
         context: Context,
-    ) : ArrayAdapter<UserList>(context, 0) {
-        private var userLists: List<UserList> = mutableListOf()
+        userLists: List<UserList>,
+    ) : ArrayAdapter<UserList>(context, 0, userLists) {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             var curView = convertView
 
             if (curView == null) {
                 val binding = ItemSimpleOneLineBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                val userList = userLists[position]
+                val userList = getItem(position)
 
                 with(binding) {
-                    binding.simpleOneLineText.text = userList.name
+                    binding.simpleOneLineText.text = userList?.name
 
                     root.setOnClickListener {
                         setFragmentResult(FRAGMENT_RESULT_REQUEST_KEY, bundleOf(SELECTED_USER_LIST_DATA_KEY to userList))
@@ -99,15 +93,6 @@ class UserListSelectionBottomSheetFragment : BottomSheetDialogFragment() {
             }
 
             return curView
-        }
-
-        fun setUserLists(data: List<UserList>) {
-            userLists = data
-            notifyDataSetChanged()
-        }
-
-        override fun getCount(): Int {
-            return userLists.size
         }
     }
 }

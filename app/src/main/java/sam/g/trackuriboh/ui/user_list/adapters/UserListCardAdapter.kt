@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.ListAdapter
 import com.bumptech.glide.Glide
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.entities.UserListEntry
-import sam.g.trackuriboh.databinding.ItemUserListEntryBinding
+import sam.g.trackuriboh.databinding.ItemUserListCardBinding
 import sam.g.trackuriboh.databinding.ListHeaderBinding
 import sam.g.trackuriboh.ui.common.BaseViewHolder
 import sam.g.trackuriboh.ui.user_list.viewmodels.UserListDetailViewModel
 import sam.g.trackuriboh.utils.show
 
-class UserListEntryAdapter
+class UserListCardAdapter
     : ListAdapter<UserListDetailViewModel.UiModel, BaseViewHolder<UserListDetailViewModel.UiModel>>(
     object : DiffUtil.ItemCallback<UserListDetailViewModel.UiModel>() {
         override fun areItemsTheSame(
@@ -48,7 +48,7 @@ class UserListEntryAdapter
     }
 
     inner class UserListEntryViewHolder(
-        val binding: ItemUserListEntryBinding,
+        val binding: ItemUserListCardBinding,
     ) : BaseViewHolder<UserListDetailViewModel.UiModel>(binding.root) {
 
         init {
@@ -99,7 +99,7 @@ class UserListEntryAdapter
             binding.itemUserListRarityNumberTextview.text = itemView.resources.getString(
                 R.string.number_rarity_oneline,
                 product.number,
-                product.rarity
+                product.rarityId
             )
 
             binding.itemUserListEntryEditionConditionTextview.text = itemView.resources.getString(
@@ -157,7 +157,7 @@ class UserListEntryAdapter
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<UserListDetailViewModel.UiModel> {
         return when (viewType) {
             VIEW_TYPE_USER_LIST_ENTRY -> UserListEntryViewHolder(
-                ItemUserListEntryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                ItemUserListCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             )
             VIEW_TYPE_HEADER -> HeaderViewHolder(
                 ListHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)

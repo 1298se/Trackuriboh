@@ -34,7 +34,10 @@ class ProductRepository @Inject constructor(
         ).flow
     }
 
-    fun getSearchResultStreamInSet(setId: Long?, query: String?): Flow<PagingData<ProductWithCardSetAndSkuIds>> {
+    fun getSearchResultStreamInSet(
+        setId: Long,
+        query: String?
+    ): Flow<PagingData<ProductWithCardSetAndSkuIds>> {
         val pagingSourceFactory = { productLocalCache.searchCardInSetByName(setId, query) }
 
         return Pager(
@@ -43,21 +46,34 @@ class ProductRepository @Inject constructor(
         ).flow
     }
 
+    fun getSuggestionsCursorObservable(query: String?, setId: Long? = null) =
+        productLocalCache.getSuggestionsCursorObservable(query, setId)
+
     suspend fun getProductWithSkusById(id: Long) =
         productLocalCache.getProductWithSkusById(id)
 
-    suspend fun fetchProducts(offset: Int = 0, limit: Int = DEFAULT_QUERY_LIMIT, cardSetId: Long? = null) =
+    suspend fun fetchProducts(
+        offset: Int = 0,
+        limit: Int = DEFAULT_QUERY_LIMIT,
+        cardSetId: Long? = null
+    ) =
         networkRequestHandler.getTCGPlayerResource {
-            productApiService.getProducts(listOf(TCGPLAYER_PRODUCT_TYPE_CARDS), offset, limit, cardSetId)
+            productApiService.getProducts(
+                listOf(TCGPLAYER_PRODUCT_TYPE_CARDS),
+                offset,
+                limit,
+                cardSetId
+            )
         }
 
     suspend fun insertProducts(products: List<Product>) =
         productLocalCache.insertProducts(products)
 
-    fun getSuggestionsCursorObservable(query: String?, setId: Long? = null) = productLocalCache.getSuggestionsCursorObservable(query, setId)
-
     suspend fun getTotalCardCount() =
         productLocalCache.getTotalCardCount()
+
+    suspend fun getRarities(query: String?) = productLocalCache.getRarities(query)
+
 
     // fun getProductPrintings(name: String): Flow<PagingData<ProductWithCardSetAndSkuIds>> = productLocalCache.getProductPrintings(name)
 }

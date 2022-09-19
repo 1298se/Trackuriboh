@@ -16,13 +16,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import sam.g.trackuriboh.MainGraphDirections
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
 import sam.g.trackuriboh.databinding.FragmentCardDetailBinding
 import sam.g.trackuriboh.ui.card_detail.adapters.CardDetailStateAdapter
 import sam.g.trackuriboh.ui.card_detail.viewmodels.CardDetailViewModel
 import sam.g.trackuriboh.ui.common.CollapseToolbarStateChangeListener
-import sam.g.trackuriboh.ui.database.adapters.ImagePagerAdapter
+import sam.g.trackuriboh.ui.search.adapters.ImagePagerAdapter
 import sam.g.trackuriboh.ui.user_list.AddToUserListDialogFragment
 import sam.g.trackuriboh.utils.*
 
@@ -103,7 +104,9 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private fun initImageViewPager(imageList: List<String?>) {
         binding.cardImageViewPager.adapter = ImagePagerAdapter(imageList)
 
-        TabLayoutMediator(binding.cardImageTabLayout, binding.cardImageViewPager) { _, _ -> }.attach()
+        // Since each card has one image, there's not really a point of having the image slider, but
+        // we'll keep it here for now because it's cool
+        // TabLayoutMediator(binding.cardImageTabLayout, binding.cardImageViewPager) { _, _ -> }.attach()
     }
 
     private fun initCardDetailViewPager(productWithCardSetAndSkuIds: ProductWithCardSetAndSkuIds) {
@@ -130,9 +133,9 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             text = productWithCardSetAndSkuIds?.cardSet?.name
             setOnClickListener { _ ->
                 productWithCardSetAndSkuIds?.cardSet?.id?.let { it ->
-                    /*findNavController().safeNavigate(
-                        CardDetailFragmentDirections.actionCardDetailFragmentToCardSetDetailFragment(it)
-                    )*/
+                    findNavController().safeNavigate(
+                        MainGraphDirections.actionGlobalCardSetDetailFragment(it)
+                    )
                 }
             }
         }

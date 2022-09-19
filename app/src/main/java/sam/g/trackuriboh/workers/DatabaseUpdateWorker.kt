@@ -13,9 +13,11 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import sam.g.trackuriboh.analytics.Events
+import sam.g.trackuriboh.data.network.ResponseToDatabaseEntityConverter
 import sam.g.trackuriboh.data.network.responses.CardResponse
 import sam.g.trackuriboh.data.network.responses.CardSetResponse
 import sam.g.trackuriboh.data.repository.CardSetRepository
+import sam.g.trackuriboh.data.repository.CatalogRepository
 import sam.g.trackuriboh.data.repository.ProductRepository
 import sam.g.trackuriboh.data.repository.SkuRepository
 import sam.g.trackuriboh.di.NetworkModule.DEFAULT_QUERY_LIMIT
@@ -26,11 +28,13 @@ class DatabaseUpdateWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
     private val cardSetRepository: CardSetRepository,
+    private val catalogRepository: CatalogRepository,
     private val productRepository: ProductRepository,
     private val skuRepository: SkuRepository,
     private val sharedPreferences: SharedPreferences,
     private val firebaseCrashlytics: FirebaseCrashlytics,
     private val firebaseAnalytics: FirebaseAnalytics,
+    private val responseConverter: ResponseToDatabaseEntityConverter,
 ) : CoroutineWorker(appContext, workerParams) {
     companion object {
 
@@ -44,6 +48,16 @@ class DatabaseUpdateWorker @AssistedInject constructor(
     override suspend fun doWork(): Result  = withContext(Dispatchers.Default) {
         try {
             firebaseAnalytics.logEvent(Events.UPDATE_WORKER_START, null)
+
+            with(catalogRepository) {
+                val cardRarityResponse = fetchCardRarities().getResponseOrThrow()
+                val printingResponse = fetchProductPrintings().getResponseOrThrow()
+                val conditionResponse = fetchProductConditions().getResponseOrThrow()
+
+                insertCardRarities(cardRarityResponse.results.map { responseConverter.toCardRarity(it) })
+                insertPrintings(printingResponse.results.map { responseConverter.toPrinting(it) })
+                insertConditions(conditionResponse.results.map { responseConverter.toCondition(it) })
+            }
 
             val updateCardSetIds = inputData.getLongArray(CARD_SET_IDS_INPUT_KEY)?.toList() ?: return@withContext Result.success()
 
@@ -61,11 +75,11 @@ class DatabaseUpdateWorker @AssistedInject constructor(
                     ).getResponseOrThrow().results
                 },
                 onPaginate = { _, list ->
-                    cardSetRepository.insertCardSets(list.map { it.toDatabaseEntity() })
+                    cardSetRepository.insertCardSets(list.map { responseConverter.toCardSet(it) })
                 }
             )
 
-            cardSetRepository.insertCardSets(updateCardSets.map { it.toDatabaseEntity() })
+            cardSetRepository.insertCardSets(updateCardSets.map { responseConverter.toCardSet(it) })
 
             // We "paginate" the updateCardSetIds since we only want 15 network requests in a batch.
             // Pagination size is 1 because we need to load for every card set.
@@ -93,9 +107,9 @@ class DatabaseUpdateWorker @AssistedInject constructor(
                     productList
                 },
                 onPaginate = { _, list ->
-                    productRepository.insertProducts(list.map { it.toDatabaseEntity() })
+                    productRepository.insertProducts(list.map { responseConverter.toCardProduct(it) })
                     list.forEach { cardItem -> cardItem.skus?.let {
-                        skuRepository.insertSkus(cardItem.skus.map { it.toDatabaseEntity() })
+                        skuRepository.insertSkus(cardItem.skus.map { responseConverter.toSku(it) })
                     } }
                 }
             )

@@ -18,7 +18,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
 import sam.g.trackuriboh.R
-import sam.g.trackuriboh.ui.database.adapters.SearchSuggestionsAdapter
+import sam.g.trackuriboh.ui.search.adapters.SearchSuggestionsAdapter
 
 fun ViewGroup.showOnly(vararg views: View) {
     children.forEach {
@@ -143,4 +143,3 @@ fun SearchView.setSuggestionsCursor(cursor: Cursor?) {
         suggestionsAdapter.changeCursor(newCursor)
     }
 }
-

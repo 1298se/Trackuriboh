@@ -1,8 +1,6 @@
 package sam.g.trackuriboh.data.network.responses
 
 import com.google.gson.annotations.SerializedName
-import sam.g.trackuriboh.data.db.AppDatabase
-import sam.g.trackuriboh.data.db.entities.Condition
 import sam.g.trackuriboh.data.network.responses.BaseTCGPlayerResponse.Companion.ERROR_FIELD_NAME
 import sam.g.trackuriboh.data.network.responses.BaseTCGPlayerResponse.Companion.RESULTS_FIELD_NAME
 
@@ -22,9 +20,5 @@ data class ConditionResponse(
         val abbreviation: String,
         @SerializedName("displayOrder")
         val order: Int?
-    ) : AppDatabase.DatabaseEntity<Condition> {
-
-        override fun toDatabaseEntity(): Condition =
-            Condition(id, name, abbreviation, order)
-    }
+    )
 }

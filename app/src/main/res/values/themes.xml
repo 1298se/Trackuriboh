@@ -3,11 +3,11 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/light_green</item>
+        <item name="colorPrimary">@color/white</item>
         <!-- Sets the color of menu items and other toolbar stuff -->
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorPrimaryDark">@color/dark_green</item>
-        <item name="colorPrimaryVariant">@color/dark_green</item>
+        <item name="colorOnPrimary">@color/light_green</item>
+        <item name="colorPrimaryDark">@color/gray</item>
+        <item name="colorPrimaryVariant">@color/gray</item>
         <item name="colorSecondary">@color/light_blue</item>
         <item name="colorOnSecondary">@color/white</item>
         <item name="colorSecondaryVariant">@color/dark_blue</item>
@@ -27,7 +27,7 @@
 
         <!-- Contextual action bar -->
         <item name="windowActionModeOverlay">true</item>
-        <item name="actionModeCloseDrawable">@drawable/ic_baseline_close_24dp</item>
+        <item name="actionModeCloseDrawable">@drawable/ic_baseline_close_24</item>
         <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
     </style>
 
@@ -39,10 +39,12 @@
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
+    <style name="Widget.AppTheme.Toolbar.SearchView" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="contentInsetStartWithNavigation">0dp</item>
+    </style>
+
     <!-- We need this theme to customize the SearchView itself. To change the cursor color, just change the color accent here! -->
     <style name="ThemeOverlay.AppTheme.Toolbar.SearchView" parent="AppTheme">
-        <item name="searchViewStyle">@style/Widget.AppTheme.SearchView</item>
-        <item name="autoCompleteTextViewStyle">@style/Widget.AppTheme.SearchView.AutoCompleteTextView</item>
     </style>
 
     <style name="ThemeOverlay.AppTheme.LinearProgressIndicator" parent="">

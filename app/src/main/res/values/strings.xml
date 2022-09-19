@@ -64,6 +64,8 @@
 
     <!-- Card List -->
     <string name="lbl_card_list">Card list</string>
+    <string name="lbl_filter">Filter</string>
+    <string name="lbl_sort">Sort</string>
 
     <!-- Card Item -->
     <string name="lbl_card_image">Card image</string>

@@ -22,7 +22,7 @@ import sam.g.trackuriboh.data.db.entities.*
         UserList::class,
         UserListEntry::class,
     ],
-    version = 1
+    version = 2
 )
 @TypeConverters(RoomConverter::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -39,10 +39,6 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userListDao(): UserListDao
     abstract fun userListEntryDao(): UserListEntryDao
-
-    interface DatabaseEntity<out T> {
-        fun toDatabaseEntity(): T
-    }
 
     /**
      * We do this because [clearAllTables] doesn't work with coroutines - we can't monitor when it ends

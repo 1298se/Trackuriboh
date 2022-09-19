@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.database.CardSetListFragment">
+    tools:context=".ui.search.CardSetListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/card_set_list"

@@ -1,11 +1,8 @@
 package sam.g.trackuriboh.data.network.responses
 
 import com.google.gson.annotations.SerializedName
-import sam.g.trackuriboh.data.db.AppDatabase
-import sam.g.trackuriboh.data.db.entities.Product
 import sam.g.trackuriboh.data.network.responses.BaseTCGPlayerResponse.Companion.ERROR_FIELD_NAME
 import sam.g.trackuriboh.data.network.responses.BaseTCGPlayerResponse.Companion.RESULTS_FIELD_NAME
-import sam.g.trackuriboh.data.types.ProductType
 
 data class CardResponse(
     @SerializedName(ERROR_FIELD_NAME)
@@ -25,19 +22,7 @@ data class CardResponse(
         val setId: Long?,
         val extendedData: List<ExtendedDataItem>?,
         val skus: List<SkuResponse.SkuItem>?
-    ) : AppDatabase.DatabaseEntity<Product> {
-
-        override fun toDatabaseEntity(): Product =
-            Product(
-                id = id,
-                name = name,
-                cleanName = cleanName,
-                productType = ProductType.CARD,
-                imageUrl = imageUrl,
-                setId = setId,
-                extendedData = extendedData
-            )
-    }
+    )
 
     data class ExtendedDataItem(
         val name: String,

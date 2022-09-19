@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.search.CardFilterSelectionFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/card_filter_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="Filter"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_baseline_close_24"
+        style="@style/Widget.MaterialComponents.Toolbar.Surface" />
+
+    <sam.g.trackuriboh.ui.search.ListPickerFormCellView
+        android:id="@+id/rarity_filter_chip_form_cellview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/card_filter_toolbar" />
+
+    <sam.g.trackuriboh.ui.search.ChipFormCellView
+        android:id="@+id/card_type_filter_chip_form_cellview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/rarity_filter_chip_form_cellview" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

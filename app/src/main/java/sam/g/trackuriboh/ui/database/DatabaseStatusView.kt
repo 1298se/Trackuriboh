@@ -1,4 +1,4 @@
-package sam.g.trackuriboh.ui.search
+package sam.g.trackuriboh.ui.database
 
 import android.content.Context
 import android.util.AttributeSet

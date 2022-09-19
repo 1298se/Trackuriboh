@@ -65,56 +65,52 @@ class CreateUserListBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun initListView() {
-        with(binding.createUserListOptionsList) {
-            adapter = CreateUserListOptionsAdapter(requireContext())
-        }
+        binding.createUserListOptionsList.adapter = CreateUserListOptionsAdapter(requireContext())
     }
 
     inner class CreateUserListOptionsAdapter(
         context: Context
     ) : ArrayAdapter<UserListType>(context, 0, UserListType.values()) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            var curView = convertView
-
-            if (curView == null) {
-                val binding = ItemCreateUserListOptionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
-                with(binding) {
-                    val type = getItem(position)
-
-                    val icon = when (type) {
-                        UserListType.USER_LIST -> R.drawable.ic_baseline_playlist_add_24
-                        // CollectionType.CHECKLIST -> R.drawable.ic_baseline_playlist_add_24
-                        else -> null
-                    }
-
-                    icon?.let { itemCreateUserListOptionImage.setImageDrawable(AppCompatResources.getDrawable(context, it)) }
-
-                    val text = when (type) {
-                        UserListType.USER_LIST -> R.string.create_user_list_option
-                        // CollectionType.CHECKLIST -> R.string.create_checklist_option
-                        else -> null
-                    }
-
-                    itemCreateUserListOptionTextview.text = text?.let { getString(it) }
-
-                    root.setOnClickListener {
-
-                        val title = when (type) {
-                            UserListType.USER_LIST -> getString(R.string.create_user_list_option)
-                            else -> getString(R.string.create_user_list_option)
-                        }
-
-                        SimpleTextFieldDialogFragment.newInstance(title, bundleOf(
-                            EXTRA_SELECTED_TYPE to type
-                        )).show(childFragmentManager, null)
-                    }
-                }
-
-                curView = binding.root
+            val binding = if (convertView == null) {
+                ItemCreateUserListOptionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            } else {
+                ItemCreateUserListOptionBinding.bind(convertView)
             }
 
-            return curView
+            with(binding) {
+                val type = getItem(position)
+
+                val icon = when (type) {
+                    UserListType.USER_LIST -> R.drawable.ic_baseline_playlist_add_24
+                    // CollectionType.CHECKLIST -> R.drawable.ic_baseline_playlist_add_24
+                    else -> null
+                }
+
+                icon?.let { itemCreateUserListOptionImage.setImageDrawable(AppCompatResources.getDrawable(context, it)) }
+
+                val text = when (type) {
+                    UserListType.USER_LIST -> R.string.create_user_list_option
+                    // CollectionType.CHECKLIST -> R.string.create_checklist_option
+                    else -> null
+                }
+
+                itemCreateUserListOptionTextview.text = text?.let { getString(it) }
+
+                root.setOnClickListener {
+
+                    val title = when (type) {
+                        UserListType.USER_LIST -> getString(R.string.create_user_list_option)
+                        else -> getString(R.string.create_user_list_option)
+                    }
+
+                    SimpleTextFieldDialogFragment.newInstance(title, bundleOf(
+                        EXTRA_SELECTED_TYPE to type
+                    )).show(childFragmentManager, null)
+                }
+            }
+
+            return binding.root
         }
     }
 }

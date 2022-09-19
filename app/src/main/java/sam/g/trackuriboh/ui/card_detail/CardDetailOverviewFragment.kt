@@ -50,7 +50,7 @@ class CardDetailOverviewFragment : Fragment() {
                 getString(R.string.lbl_name) to it.product.name,
                 getString(R.string.lbl_number) to it.product.number,
                 getString(R.string.lbl_set) to it.cardSet.name,
-                getString(R.string.lbl_rarity) to it.product.rarity,
+                getString(R.string.lbl_rarity) to it.rarity.name,
                 getString(R.string.lbl_attribute) to it.product.attribute,
                 getString(R.string.lbl_type) to it.product.cardType,
                 getString(R.string.lbl_atkdef) to getString(R.string.card_detail_atk_def, it.product.attack ?: 0, it.product.defense ?: 0),

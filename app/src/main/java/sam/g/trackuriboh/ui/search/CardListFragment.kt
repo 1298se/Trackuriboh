@@ -1,25 +1,22 @@
-package sam.g.trackuriboh.ui.database
+package sam.g.trackuriboh.ui.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.R
-import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
 import sam.g.trackuriboh.databinding.FragmentCardListBinding
 import sam.g.trackuriboh.ui.common.VerticalSpaceItemDecoration
-import sam.g.trackuriboh.ui.database.CardListFragment.Companion.FRAGMENT_RESULT_REQUEST_KEY
-import sam.g.trackuriboh.ui.database.CardListFragment.Companion.newInstance
-import sam.g.trackuriboh.ui.database.adapters.CardListAdapter
-import sam.g.trackuriboh.ui.database.viewmodels.BaseSearchViewModel
-import sam.g.trackuriboh.ui.database.viewmodels.CardListViewModel
+import sam.g.trackuriboh.ui.search.CardListFragment.Companion.FRAGMENT_RESULT_REQUEST_KEY
+import sam.g.trackuriboh.ui.search.CardListFragment.Companion.newInstance
+import sam.g.trackuriboh.ui.search.adapters.CardListAdapter
+import sam.g.trackuriboh.ui.search.viewmodels.CardListViewModel
 import sam.g.trackuriboh.utils.viewBinding
 
 /**
@@ -40,7 +37,7 @@ import sam.g.trackuriboh.utils.viewBinding
  * 3. Reduces use of magic strings for navigation because we call [newInstance] to create the fragment.
  */
 @AndroidEntryPoint
-class CardListFragment : BaseSearchListFragment<ProductWithCardSetAndSkuIds>(), CardListAdapter.OnItemClickListener {
+class CardListFragment : Fragment(), CardListAdapter.OnInteractionListener {
     private lateinit var cardListAdapter: CardListAdapter
 
     private val binding by viewBinding(FragmentCardListBinding::inflate)
@@ -51,7 +48,6 @@ class CardListFragment : BaseSearchListFragment<ProductWithCardSetAndSkuIds>(), 
         const val FRAGMENT_RESULT_REQUEST_KEY = "CardListFragment_fragmentResultRequestKey"
         const val CARD_ID_DATA_KEY = "CardListFragment_cardId"
 
-        // This is the same value as the navArg name so that the SavedStateHandle can access from either
         const val ARG_SET_ID = "CardListFragment_argSetId"
         const val ARG_QUERY = "CardListFragment_argQuery"
 
@@ -75,29 +71,31 @@ class CardListFragment : BaseSearchListFragment<ProductWithCardSetAndSkuIds>(), 
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView()
+
+        viewModel.searchResult.observe(viewLifecycleOwner) {
+            cardListAdapter.submitData(lifecycle, it)
+
+            binding.cardList.invalidateItemDecorations()
+        }
     }
-
-    override fun getViewModel(): BaseSearchViewModel<ProductWithCardSetAndSkuIds> = viewModel
-
-    override fun getListView(): RecyclerView = binding.cardList
-
-    override fun getAdapter(): PagingDataAdapter<ProductWithCardSetAndSkuIds, out RecyclerView.ViewHolder> = cardListAdapter
 
     override fun onCardItemClick(cardId: Long) {
         setFragmentResult(FRAGMENT_RESULT_REQUEST_KEY, bundleOf(CARD_ID_DATA_KEY to cardId))
     }
 
+    override fun onFilterButtonClick() {
+        CardFilterBottomSheetFragment.newInstance(
+            query = arguments?.getString(ARG_QUERY)
+        ).show(childFragmentManager, null)
+    }
+
     private fun initRecyclerView() {
-        cardListAdapter = CardListAdapter().apply {
-            setOnItemClickListener(this@CardListFragment)
-        }
+        cardListAdapter = CardListAdapter(this)
 
         binding.cardList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = cardListAdapter
             addItemDecoration(VerticalSpaceItemDecoration(resources.getDimension(R.dimen.list_item_large_row_spacing)))
         }
-
-        search(arguments?.getString(ARG_QUERY))
     }
 }

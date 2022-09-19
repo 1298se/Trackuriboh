@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/material_border_padding">
 
-            <sam.g.trackuriboh.ui.search.DatabaseStatusView
+            <sam.g.trackuriboh.ui.database.DatabaseStatusView
                 android:id="@+id/database_status_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

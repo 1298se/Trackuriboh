@@ -20,4 +20,9 @@ class CatalogLocalCache @Inject constructor(
 
     suspend fun insertPrintings(printings: List<Printing>) =
         appDatabase.printingDao().insert(printings)
+
+    suspend fun getCardRarityByName(name: String): CardRarity? {
+        return appDatabase.cardRarityDao().getCardRarityByName(name)
+            ?: appDatabase.cardRarityDao().getCardRarityByName("Unconfirmed")
+    }
 }

@@ -1,4 +1,4 @@
-package sam.g.trackuriboh.ui.database.adapters
+package sam.g.trackuriboh.ui.search.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -19,7 +19,9 @@ private val SET_COMPARATOR = object : DiffUtil.ItemCallback<CardSet>() {
         oldItem == newItem
 }
 
-class CardSetListAdapter : PagingDataAdapter<CardSet, CardSetListAdapter.CardSetViewHolder>(SET_COMPARATOR) {
+class CardSetListAdapter : PagingDataAdapter<CardSet, CardSetListAdapter.CardSetViewHolder>(
+    SET_COMPARATOR
+) {
     private var mOnItemClickListener: OnItemClickListener? = null
 
     interface OnItemClickListener {

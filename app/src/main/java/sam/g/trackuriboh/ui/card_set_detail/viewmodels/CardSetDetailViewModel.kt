@@ -15,10 +15,12 @@ class CardSetDetailViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
+    var query: String? = null
+
     // TODO: Fix Magic Strings
     private val setId = state.get<Long>("setId")!!
 
-    val cardSet: LiveData<CardSet> = liveData {
+    val cardSet: LiveData<CardSet?> = liveData {
         emit(cardSetRepository.getCardSet(setId))
     }
 }

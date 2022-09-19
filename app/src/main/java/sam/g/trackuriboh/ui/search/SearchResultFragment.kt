@@ -12,9 +12,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import sam.g.trackuriboh.MainGraphDirections
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.databinding.FragmentSearchResultBinding
-import sam.g.trackuriboh.ui.database.CardListFragment
-import sam.g.trackuriboh.ui.database.CardSetListFragment
-import sam.g.trackuriboh.ui.database.adapters.SearchResultStateAdapter
+import sam.g.trackuriboh.ui.search.adapters.SearchResultStateAdapter
 import sam.g.trackuriboh.utils.safeNavigate
 import sam.g.trackuriboh.utils.viewBinding
 

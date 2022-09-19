@@ -1,8 +1,6 @@
 package sam.g.trackuriboh.data.network.responses
 
 import com.google.gson.annotations.SerializedName
-import sam.g.trackuriboh.data.db.AppDatabase
-import sam.g.trackuriboh.data.db.entities.Sku
 import sam.g.trackuriboh.data.network.responses.BaseTCGPlayerResponse.Companion.ERROR_FIELD_NAME
 import sam.g.trackuriboh.data.network.responses.BaseTCGPlayerResponse.Companion.RESULTS_FIELD_NAME
 
@@ -19,9 +17,5 @@ data class SkuResponse(
         val productId: Long,
         val printingId: Long?,
         val conditionId: Long?,
-    ) : AppDatabase.DatabaseEntity<Sku> {
-
-        override fun toDatabaseEntity(): Sku =
-            Sku(id, productId, printingId, conditionId)
-    }
+    )
 }

@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        navHostFragment = supportFragmentManager.findFragmentById(binding.mainNavHostFragment.id) as NavHostFragment
+        navHostFragment = supportFragmentManager.findFragmentById(binding.mainNavHost.id) as NavHostFragment
         navController = navHostFragment.navController
 
         initBottomNavigation()
