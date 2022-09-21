@@ -32,12 +32,18 @@ class CardSetExploreRowView @JvmOverloads constructor(
     fun setupWith(
         cardSet: CardSet, productsWithPrice: Map<Product, Double?>,
         onItemClickListener: CardSetExploreCardsAdapter.OnItemClickListener,
+        onCardSetNameClick: (setId: Long) -> Unit,
     ) {
         binding.cardExploreList.apply {
             adapter = CardSetExploreCardsAdapter(productsWithPrice, onItemClickListener)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
-        binding.cardSetNameTextview.text = cardSet.name
+        binding.cardSetNameTextview.apply {
+            text = cardSet.name
+            setOnClickListener {
+                onCardSetNameClick(cardSet.id)
+            }
+        }
     }
 
     override fun onSaveInstanceState(): Parcelable {

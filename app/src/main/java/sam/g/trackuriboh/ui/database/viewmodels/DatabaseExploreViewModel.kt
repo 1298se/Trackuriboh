@@ -103,12 +103,15 @@ class DatabaseExploreViewModel @Inject constructor(
         value = DatabaseStatusView.ButtonState.UpToDate
 
         addSource(databaseUpdateWorkInfoLiveData) {
-            when (it?.state) {
-                WorkInfo.State.SUCCEEDED -> {
-                    // Once the update is done, set the button to update to date and refresh
-                    value = DatabaseStatusView.ButtonState.UpToDate
-                }
-                else -> {}
+            if (it?.state == WorkInfo.State.SUCCEEDED) {
+                // Once the update is done, set the button to update to date and refresh
+                value = DatabaseStatusView.ButtonState.UpToDate
+            }
+        }
+
+        addSource(databaseDownloadWorkInfoLiveData) {
+            if (it?.state == WorkInfo.State.SUCCEEDED) {
+                value = DatabaseStatusView.ButtonState.UpToDate
             }
         }
 

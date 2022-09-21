@@ -16,7 +16,6 @@ import sam.g.trackuriboh.databinding.FragmentDatabaseExploreBinding
 import sam.g.trackuriboh.ui.common.ProgressDialog
 import sam.g.trackuriboh.ui.database.adapters.CardSetExploreCardsAdapter
 import sam.g.trackuriboh.ui.database.viewmodels.DatabaseExploreViewModel
-import sam.g.trackuriboh.ui.search.CardSetExploreRowView
 import sam.g.trackuriboh.utils.safeNavigate
 
 
@@ -82,7 +81,13 @@ class DatabaseExploreFragment : Fragment(), CardSetExploreCardsAdapter.OnItemCli
                     val view = CardSetExploreRowView(it).apply {
                         this.id = View.generateViewId()
 
-                        setupWith(entry.key, entry.value, this@DatabaseExploreFragment)
+                        setupWith(
+                            entry.key, entry.value, this@DatabaseExploreFragment
+                        ) { id ->
+                            findNavController().safeNavigate(
+                                MainGraphDirections.actionGlobalCardSetDetailFragment(id)
+                            )
+                        }
                     }
                     addView(view)
                 }

@@ -5,15 +5,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/card_set_name_textview"
+        android:paddingTop="@dimen/item_card_set_explore_name_padding"
+        android:paddingBottom="@dimen/item_card_set_explore_name_padding"
+        android:drawableEnd="@drawable/ic_baseline_chevron_right_24"
+        android:background="?attr/selectableItemBackground"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/card_explore_list"
-        android:paddingTop="@dimen/item_card_set_explore_name_padding"
-        android:paddingBottom="@dimen/item_card_set_explore_name_padding"
         style="@style/TextAppearance.MaterialComponents.Subtitle2"
         tools:text="Legend of Blue-Eyes White Dragon"
         />
