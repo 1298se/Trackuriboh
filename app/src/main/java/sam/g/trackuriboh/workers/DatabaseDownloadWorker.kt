@@ -7,7 +7,6 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
-import androidx.work.workDataOf
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.assisted.Assisted
@@ -47,6 +46,10 @@ class DatabaseDownloadWorker @AssistedInject constructor(
     private val workRequestManager: WorkRequestManager,
     private val responseConverter: ResponseToDatabaseEntityConverter,
 ) : CoroutineWorker(appContext, workerParams) {
+
+    companion object {
+        val workerName: String = DatabaseDownloadWorker::class.java.name
+    }
 
     private val progressNotificationBuilder by lazy {
         createNotificationBuilder(
@@ -155,7 +158,7 @@ class DatabaseDownloadWorker @AssistedInject constructor(
     /**
      * Progress should be normalized to a percentage [0, 100]
      */
-    private suspend fun updateProgress(progress: Int, maxProgress: Int = MAX_PROGRESS) {
+    private fun updateProgress(progress: Int, maxProgress: Int = MAX_PROGRESS) {
         NotificationManagerCompat.from(applicationContext).apply {
             progressNotificationBuilder.apply {
                 setProgress(maxProgress, progress, false)
@@ -163,7 +166,7 @@ class DatabaseDownloadWorker @AssistedInject constructor(
             notify(DB_SYNC_PROGRESS_NOTIFICATION_ID, progressNotificationBuilder.build())
         }
 
-        setProgress(workDataOf(WORKER_PROGRESS_KEY to progress))
+        // setProgress(workDataOf(WORKER_PROGRESS_KEY to progress))
     }
 
     private suspend fun downloadDatabase() {

@@ -7,6 +7,7 @@ import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.databinding.DialogSimpleTextfieldBinding
 
@@ -49,7 +50,7 @@ class SimpleTextFieldDialogFragment : DialogFragment() {
      * Can't use viewbinding delegate here because [onCreateDialog] is called before [onCreateView]
      */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(requireContext())
+        val builder = MaterialAlertDialogBuilder(requireContext())
 
         binding = DialogSimpleTextfieldBinding.inflate(layoutInflater, null, false)
 

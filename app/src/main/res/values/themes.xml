@@ -23,24 +23,28 @@
         <item name="linearProgressIndicatorStyle">@style/Widget.AppTheme.LinearProgressIndicator</item>
         <item name="tabStyle">@style/Widget.AppTheme.TabLayout</item>
         <item name="materialCardViewStyle">@style/Widget.AppTheme.CardView</item>
-        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.Apptheme.BottomSheetDialog</item>
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.AppTheme.BottomSheetDialog</item>
 
         <!-- Contextual action bar -->
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeCloseDrawable">@drawable/ic_baseline_close_24</item>
         <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
+
+        <!-- Text Input -->
+        <item name="textInputStyle">@style/Widget.AppTheme.TextInputLayout</item>
+
+        <!-- Dialog Buttons -->
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.AppTheme.MaterialAlertDialog</item>
+
+
     </style>
 
-    <style name="ThemeOverlay.Apptheme.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+    <style name="ThemeOverlay.AppTheme.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/Widget.AppTheme.BottomSheet.Modal</item>
 
         <!-- Moves the bottom sheet dialog above the keyboard as per https://stackoverflow.com/questions/48002290/show-entire-bottom-sheet-with-edittext-above-keyboard-->
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
-    </style>
-
-    <style name="Widget.AppTheme.Toolbar.SearchView" parent="Widget.MaterialComponents.Toolbar.Primary">
-        <item name="contentInsetStartWithNavigation">0dp</item>
     </style>
 
     <!-- We need this theme to customize the SearchView itself. To change the cursor color, just change the color accent here! -->
@@ -57,4 +61,18 @@
         <item name="colorOnPrimary">@color/black</item>
     </style>
 
+    <style name="ThemeOverlay.AppTheme.TextInputLayout" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox.Dense">
+        <item name="colorPrimary">@color/light_green</item>
+        <item name="colorOnSurface">@color/gray</item>
+    </style>
+
+    <style name="ThemeOverlay.AppTheme.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.AppTheme.Button.TextButton.Dialog</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.AppTheme.Button.TextButton.Dialog</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.AppTheme.Button.TextButton.Dialog</item>
+    </style>
+
+    <style name="ThemeOverlay.AppTheme.Button" parent="">
+        <item name="colorPrimary">@color/light_green</item>
+    </style>
 </resources>

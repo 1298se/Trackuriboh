@@ -53,6 +53,8 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
             // have been updated
             val lastUpdatedDate = Date(sharedPreferences.getLong(DATABASE_LAST_UPDATED_DATE_SHAREDPREF_KEY, DATABASE_ASSET_CREATION_DATE))
 
+            val existingSetModelsWithCountMap = cardSetRepository.getCardSetsWithCount()
+
             paginate(
                 totalCount = fetchedCardSetCount,
                 paginationSize = NetworkModule.DEFAULT_QUERY_LIMIT,
@@ -62,10 +64,10 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
                     val responseSetModel = responseToDatabaseEntityConverter.toCardSet(item)
                     val existingSetModel = cardSetRepository.getCardSet(item.id)
 
-                    // If it hasn't been released yet, or we don't have it in db, or the modified
+                    // If we don't have it in db, or it hasn't been released yet, or the modified
                     // date is after our db's modified date, then add to update list.
-                    if (responseSetModel.releaseDate?.after(lastUpdatedDate) == true ||
-                        existingSetModel == null ||
+                    if (existingSetModel == null ||
+                        responseSetModel.releaseDate?.after(lastUpdatedDate) == true ||
                         responseSetModel.modifiedDate?.after(existingSetModel.modifiedDate) == true)
 
                     updateCardSets.add(item)

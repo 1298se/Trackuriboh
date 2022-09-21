@@ -20,7 +20,7 @@ class WorkRequestManager @Inject constructor(
             .build()
 
         workManager.enqueueUniqueWork(
-            DatabaseDownloadWorker::class.java.name,
+            DatabaseDownloadWorker.workerName,
             ExistingWorkPolicy.REPLACE,
             databaseDownloadRequest
         )
@@ -32,13 +32,13 @@ class WorkRequestManager @Inject constructor(
             .build()
 
         workManager.enqueueUniqueWork(
-            DatabaseUpdateWorker::class.java.name,
+            DatabaseUpdateWorker.workerName,
             ExistingWorkPolicy.REPLACE,
             databaseUpdateRequest
         )
     }
 
-    fun enqueueDatabaseUpdateCheck(isUserTriggered: Boolean) {
+    fun enqueueDatabaseUpdateCheck() {
         val databaseUpdateRequest = OneTimeWorkRequestBuilder<DatabaseUpdateCheckWorker>()
             .setConstraints(
                 Constraints.Builder()
@@ -55,9 +55,9 @@ class WorkRequestManager @Inject constructor(
     }
 
     /**
-     * Checks for database updates in the background
+     * Schedules a worker to periodically schedule database update checks
      */
-    fun enqueuePeriodicDatabaseUpdateCheck() {
+    fun enqueuePeriodicDatabaseUpdateCheckScheduler() {
         val databaseUpdateScheduleRequest = PeriodicWorkRequestBuilder<DatabaseUpdateCheckScheduleWorker>(24, TimeUnit.HOURS)
             .build()
 
@@ -91,8 +91,7 @@ class WorkRequestManager @Inject constructor(
                 Constraints.Builder()
                     .setRequiredNetworkType(NetworkType.CONNECTED)
                     .build()
-            )
-            .build()
+            ).build()
 
         workManager.enqueueUniqueWork(
             PriceSyncWorker::class.java.name + "OneTime",

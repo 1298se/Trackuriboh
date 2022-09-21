@@ -12,6 +12,8 @@ data class CardRarityResponse(
 ) : BaseTCGPlayerResponse<CardRarityResponse.CardRarityItem> {
 
     data class CardRarityItem(
+        @SerializedName("rarityId")
+        val id: Long,
         @SerializedName("displayText")
         val name: String,
         @SerializedName("dbValue")

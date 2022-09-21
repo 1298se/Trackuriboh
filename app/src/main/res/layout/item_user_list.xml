@@ -10,8 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/list_item_padding_start"
-        android:paddingEnd="@dimen/list_item_padding_end">
+        android:padding="@dimen/material_border_padding">
 
         <ImageView
             android:id="@+id/item_user_list_image"
@@ -40,15 +39,27 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true"
-            app:layout_constraintBottom_toTopOf="@id/item_user_list_value_textview"
+            android:layout_marginTop="@dimen/text_spacing"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/item_user_list_image_text_barrier"
             app:layout_constraintTop_toTopOf="@id/item_user_list_image"
-            app:layout_constraintVertical_chainStyle="packed"
-            tools:text="FB Watchlist (9)" />
+            tools:text="FB Watchlist" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/item_user_list_value_textview"
+            style="@style/TextAppearance.MaterialComponents.Overline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_spacing"
+            android:ellipsize="end"
+            android:singleLine="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/item_user_list_image_text_barrier"
+            app:layout_constraintTop_toBottomOf="@id/item_user_list_title_textview"
+            tools:text="Total Value: $100.0" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/item_user_list_count_textview"
             style="@style/TextAppearance.MaterialComponents.Caption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -56,29 +67,17 @@
             android:ellipsize="end"
             android:singleLine="true"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@id/item_user_list_image_text_barrier"
-            app:layout_constraintTop_toBottomOf="@id/item_user_list_title_textview"
-            tools:text="Total Value: $84.12" />
-
-        <Button
-            android:id="@+id/item_user_list_rename_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rename"
-            app:layout_constraintEnd_toStartOf="@id/item_user_list_delete_button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            style="@style/Widget.MaterialComponents.Button.TextButton" />
-
-        <Button
-            android:id="@+id/item_user_list_delete_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Delete"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/item_user_list_value_textview"
-            style="@style/Widget.MaterialComponents.Button.TextButton" />
+            tools:text="100 cards" />
+
+        <ImageView
+            android:id="@+id/item_user_list_more_actions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_more_vert_24"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

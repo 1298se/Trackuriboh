@@ -9,6 +9,7 @@ import sam.g.trackuriboh.BuildConfig
 import sam.g.trackuriboh.data.db.converters.RoomConverter
 import sam.g.trackuriboh.data.db.dao.*
 import sam.g.trackuriboh.data.db.entities.*
+import sam.g.trackuriboh.data.db.migrations.MIGRATION_1_2
 
 @Database(
     entities = [
@@ -75,6 +76,6 @@ abstract class AppDatabase : RoomDatabase() {
                 if (!BuildConfig.DEBUG) {
                     createFromAsset(DATABASE_FILE_PATH)
                 }
-            }.build()
+            }.addMigrations(MIGRATION_1_2).fallbackToDestructiveMigration().build()
     }
 }

@@ -9,9 +9,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.MainGraphDirections
+import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.entities.CardSet
 import sam.g.trackuriboh.data.db.entities.Product
 import sam.g.trackuriboh.databinding.FragmentDatabaseExploreBinding
+import sam.g.trackuriboh.ui.common.ProgressDialog
 import sam.g.trackuriboh.ui.database.adapters.CardSetExploreCardsAdapter
 import sam.g.trackuriboh.ui.database.viewmodels.DatabaseExploreViewModel
 import sam.g.trackuriboh.ui.search.CardSetExploreRowView
@@ -23,6 +25,8 @@ class DatabaseExploreFragment : Fragment(), CardSetExploreCardsAdapter.OnItemCli
 
     private lateinit var binding: FragmentDatabaseExploreBinding
     private val viewModel: DatabaseExploreViewModel by viewModels()
+
+    private var updateProgressDialog: ProgressDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,6 +52,18 @@ class DatabaseExploreFragment : Fragment(), CardSetExploreCardsAdapter.OnItemCli
 
         viewModel.databaseUpdateButtonState.observe(viewLifecycleOwner) {
             binding.databaseStatusView.setupUpdateButtonState(it)
+        }
+
+        viewModel.isUpdateRunning.observe(viewLifecycleOwner) {
+            if (it) {
+                if (updateProgressDialog == null) {
+                    updateProgressDialog = ProgressDialog.newInstance(getString(R.string.database_update_info))
+                    updateProgressDialog?.show(childFragmentManager, null)
+                }
+            } else {
+                updateProgressDialog?.dismiss()
+                updateProgressDialog = null
+            }
         }
 
         viewModel.recentCardSetsWithProducts.observe(viewLifecycleOwner) {

@@ -21,6 +21,9 @@ import sam.g.trackuriboh.ui.user_list.viewmodels.UserListsViewModel
 import sam.g.trackuriboh.utils.viewBinding
 import java.util.*
 
+/**
+ * Currently unused because we only have one type of list... Not sure if there will be others
+ */
 @AndroidEntryPoint
 class CreateUserListBottomSheetFragment : BottomSheetDialogFragment() {
 

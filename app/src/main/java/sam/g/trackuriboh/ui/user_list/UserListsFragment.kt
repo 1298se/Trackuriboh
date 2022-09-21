@@ -1,7 +1,10 @@
 package sam.g.trackuriboh.ui.user_list
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -11,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.db.entities.UserList
+import sam.g.trackuriboh.data.types.UserListType
 import sam.g.trackuriboh.databinding.FragmentUserListsBinding
 import sam.g.trackuriboh.ui.common.SimpleTextFieldDialogFragment
 import sam.g.trackuriboh.ui.common.VerticalSpaceItemDecoration
@@ -19,9 +23,10 @@ import sam.g.trackuriboh.ui.user_list.viewmodels.UserListsViewModel
 import sam.g.trackuriboh.utils.safeNavigate
 import sam.g.trackuriboh.utils.setupAsTopLevelDestinationToolbar
 import sam.g.trackuriboh.utils.viewBinding
+import java.util.*
 
 /**
- * Fragment accessed from clicking "Watchlist" in bottom nav
+ * Fragment accessed from clicking "Lists" in bottom nav
  */
 @AndroidEntryPoint
 class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener, UserListAdapter.OnItemClickListener {
@@ -33,6 +38,8 @@ class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener, UserListA
 
     companion object {
         const val EXTRA_RENAME_USER_LIST = "UserListsFragment_extraRenameUserList"
+
+        const val EXTRA_SELECTED_TYPE = "CreateUserListBottomSheetDialogFragment_extraSelectedType"
     }
 
     override fun onCreateView(
@@ -54,8 +61,10 @@ class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener, UserListA
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         return when(item?.itemId) {
             R.id.action_create_user_list -> {
-                CreateUserListBottomSheetFragment().show(childFragmentManager, null)
-
+                SimpleTextFieldDialogFragment.newInstance(
+                    getString(R.string.create_user_list_option),
+                    bundleOf(EXTRA_SELECTED_TYPE to UserListType.USER_LIST
+                )).show(childFragmentManager, null)
                 true
             }
             else -> false
@@ -73,8 +82,6 @@ class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener, UserListA
             getString(R.string.rename_user_list_action_title),
             bundleOf(EXTRA_RENAME_USER_LIST to userList)
         ).show(childFragmentManager, null)
-
-        true
     }
 
     override fun onDeleteClick(userList: UserList) {
@@ -93,9 +100,7 @@ class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener, UserListA
     }
 
     private fun initRecyclerView() {
-        userListAdapter = UserListAdapter().apply {
-            setOnItemClickListener(this@UserListsFragment)
-        }
+        userListAdapter = UserListAdapter(this)
 
         binding.userListsList.apply {
             layoutManager = LinearLayoutManager(context)
@@ -116,18 +121,29 @@ class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener, UserListA
 
     private fun initFragmentResultListeners() {
         with(childFragmentManager) {
-            // Observes renaming list
             setFragmentResultListener(
                 SimpleTextFieldDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
                 viewLifecycleOwner
             ) { _, bundle ->
                 val name = bundle.getString(SimpleTextFieldDialogFragment.TEXT_DATA_KEY)
+
                 val userList = bundle.getBundle(SimpleTextFieldDialogFragment.EXTRAS_DATA_KEY)?.getParcelable<UserList>(
                     EXTRA_RENAME_USER_LIST
                 )
 
-                if (userList != null && name != null) {
-                    viewModel.renameCurrentList(userList, name)
+                if (!name.isNullOrEmpty()) {
+                    // No user list in extra bundle, so must be a new type
+                    if (userList == null) {
+                        val type = bundle.getBundle(SimpleTextFieldDialogFragment.EXTRAS_DATA_KEY)?.getParcelable<UserListType>(
+                            EXTRA_SELECTED_TYPE
+                        )
+
+                        if (type != null) {
+                            viewModel.createUserList(UserList(name = name, creationDate = Date(), type = type))
+                        }
+                    } else {
+                        viewModel.renameCurrentList(userList, name)
+                    }
                 }
             }
         }

@@ -2,6 +2,8 @@
     <string name="app_name">Trackuriboh</string>
     <string name="preference_file_key">tang.song.edu.PREFERENCE_FILE_KEY</string>
 
+    <string name="lbl_rename">Rename</string>
+    <string name="lbl_delete">Delete</string>
     <string name="lbl_ok">OK</string>
     <string name="lbl_cancel">Cancel</string>
     <string name="lbl_update">Update</string>
@@ -49,7 +51,7 @@
     <string name="database_download_cancelled">Database download cancelled.</string>
     <string name="database_download_success">Database download successful.</string>
 
-    <string name="database_update_info">Updating…</string>
+    <string name="database_update_info">Updating Database…</string>
     <string name="database_update_failed">Database update failed</string>
     <string name="database_update_cancelled">Database update cancelled</string>
     <string name="database_update_success">Database update successful</string>
@@ -120,8 +122,9 @@
     <string name="create_user_list_prompt">You currently don\'t have any lists. Please create one to continue.</string>
 
     <!-- User List Item -->
-    <string name="item_user_list_title">&lt;b>%1$s&lt;/b> (%2$d)</string>
+    <string name="item_user_list_title">&lt;b>%1$s&lt;/b></string>
     <string name="item_user_list_total_value">Total value: \$%1$.2f</string>
+    <string name="item_user_list_card_count">%1$d Cards</string>
 
     <!-- User List Detail -->
     <string name="user_list_remove_entries_action_title">Remove items</string>

@@ -10,6 +10,7 @@ import sam.g.trackuriboh.data.repository.CardSetRepository
 import sam.g.trackuriboh.data.repository.ProductRepository
 import sam.g.trackuriboh.ui.database.DatabaseStatusView
 import sam.g.trackuriboh.utils.DATABASE_ASSET_CREATION_DATE
+import sam.g.trackuriboh.workers.DatabaseDownloadWorker
 import sam.g.trackuriboh.workers.DatabaseUpdateCheckWorker
 import sam.g.trackuriboh.workers.DatabaseUpdateWorker
 import sam.g.trackuriboh.workers.WorkRequestManager
@@ -25,8 +26,41 @@ class DatabaseExploreViewModel @Inject constructor(
     private val productRepository: ProductRepository,
 ) : ViewModel() {
 
-    private val forceRefreshTrigger = MutableLiveData<Boolean>().apply {
-        value = false
+    val databaseUpdateButtonState: LiveData<DatabaseStatusView.ButtonState>
+        get() = _databaseUpdateButtonState
+
+    val isUpdateRunning: LiveData<Boolean>
+        get() = _isUpdateRunning
+
+    private val databaseUpdateWorkInfoLiveData = Transformations.map(
+        workManager.getWorkInfosForUniqueWorkLiveData(DatabaseUpdateWorker.workerName)) {
+        it.firstOrNull()
+    }
+
+    private val databaseUpdateCheckWorkInfoLiveData = Transformations.map(
+        workManager.getWorkInfosForUniqueWorkLiveData(DatabaseUpdateCheckWorker.workerName)) {
+        it.firstOrNull()
+    }
+
+    private val databaseDownloadWorkInfoLiveData = Transformations.map(
+        workManager.getWorkInfosForUniqueWorkLiveData(DatabaseDownloadWorker.workerName)) {
+        it.firstOrNull()
+    }
+
+    private val forceRefreshTrigger = MediatorLiveData<Boolean>().apply {
+        value = true
+
+        addSource(databaseUpdateWorkInfoLiveData) {
+            if (it?.state == WorkInfo.State.SUCCEEDED) {
+                value = true
+            }
+        }
+
+        addSource(databaseDownloadWorkInfoLiveData) {
+            if (it?.state == WorkInfo.State.SUCCEEDED) {
+                value = true
+            }
+        }
     }
 
     val recentCardSetsWithProducts = forceRefreshTrigger.switchMap {
@@ -39,38 +73,47 @@ class DatabaseExploreViewModel @Inject constructor(
         loadDatabaseStatusInfo()
     }
 
-    private val databaseUpdateWorkInfoLiveData = Transformations.map(
-        workManager.getWorkInfosForUniqueWorkLiveData(DatabaseUpdateWorker.workerName)) {
-        it.firstOrNull()
+    private val _isUpdateRunning = MediatorLiveData<Boolean>().apply {
+        value = false
+
+        addSource(databaseUpdateWorkInfoLiveData) {
+            value = when (it?.state) {
+                WorkInfo.State.RUNNING -> {
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
+
+        addSource(databaseDownloadWorkInfoLiveData) {
+            value = when (it?.state) {
+                WorkInfo.State.RUNNING -> {
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
     }
 
-    private val databaseUpdateCheckWorkInfoLiveData = Transformations.map(
-        workManager.getWorkInfosForUniqueWorkLiveData(DatabaseUpdateCheckWorker.workerName)) {
-        it.firstOrNull()
-    }
-
-    val databaseUpdateButtonState = MediatorLiveData<DatabaseStatusView.ButtonState>().apply {
+    private val _databaseUpdateButtonState = MediatorLiveData<DatabaseStatusView.ButtonState>().apply {
         value = DatabaseStatusView.ButtonState.UpToDate
 
         addSource(databaseUpdateWorkInfoLiveData) {
             when (it?.state) {
-                WorkInfo.State.RUNNING -> {
-                    value = DatabaseStatusView.ButtonState.Updating
-                }
                 WorkInfo.State.SUCCEEDED -> {
+                    // Once the update is done, set the button to update to date and refresh
                     value = DatabaseStatusView.ButtonState.UpToDate
-
-                    forceRefreshTrigger.value = true
                 }
-                WorkInfo.State.FAILED -> {}
-                WorkInfo.State.BLOCKED -> {}
-                WorkInfo.State.CANCELLED -> {}
                 else -> {}
             }
         }
 
         addSource(databaseUpdateCheckWorkInfoLiveData) {
-            if (databaseUpdateWorkInfoLiveData.value?.state != WorkInfo.State.RUNNING) {
+            if (it?.state == WorkInfo.State.SUCCEEDED) {
                 val lastUpdateDate = Date(
                     sharedPreferences.getLong(
                         DatabaseUpdateWorker.DATABASE_LAST_UPDATED_DATE_SHAREDPREF_KEY,
@@ -84,18 +127,17 @@ class DatabaseExploreViewModel @Inject constructor(
                     )
                 )
 
-                if (it?.state == WorkInfo.State.SUCCEEDED && lastUpdateCheckDate >= lastUpdateDate) {
-                    val isUpdateAvailable = it.outputData.getBoolean(
-                        DatabaseUpdateCheckWorker.UPDATE_AVAILABLE_RESULT,
-                        false
-                    )
+                val isUpdateAvailable = it.outputData.getBoolean(
+                    DatabaseUpdateCheckWorker.UPDATE_AVAILABLE_RESULT,
+                    false
+                )
 
-                    if (isUpdateAvailable) {
-                        val updateCardSetIds = it.outputData.getLongArray(DatabaseUpdateCheckWorker.UPDATE_CARD_SET_IDS_RESULT)
+                // Check the last update check date and last update date
+                if (lastUpdateCheckDate >= lastUpdateDate && isUpdateAvailable) {
+                    val updateCardSetIds = it.outputData.getLongArray(DatabaseUpdateCheckWorker.UPDATE_CARD_SET_IDS_RESULT)
 
-                        value = DatabaseStatusView.ButtonState.UpdateAvailable {
-                            enqueueDatabaseUpdate(updateCardSetIds)
-                        }
+                    value = DatabaseStatusView.ButtonState.UpdateAvailable {
+                        enqueueDatabaseUpdate(updateCardSetIds)
                     }
                 }
             }

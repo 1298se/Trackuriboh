@@ -18,7 +18,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import sam.g.trackuriboh.R
 import sam.g.trackuriboh.di.NetworkModule
 
 const val SNACKBAR_SHOW_REQUEST_KEY = "Snackbar_Show"
@@ -58,9 +57,10 @@ interface SearchViewQueryHandler {
 
 
 fun MenuItem.setIconifiedSearchViewBehaviour(
+    searchView: SearchView,
     handler: SearchViewQueryHandler,
-): SearchView {
-    (actionView.findViewById(R.id.search_view) as SearchView).apply {
+) {
+    searchView.apply {
         setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 handler.handleQueryTextSubmit(query)
@@ -86,8 +86,6 @@ fun MenuItem.setIconifiedSearchViewBehaviour(
                 return true
             }
         })
-
-        return this
     }
 }
 

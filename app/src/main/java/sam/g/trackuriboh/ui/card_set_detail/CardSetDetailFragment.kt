@@ -117,7 +117,9 @@ class CardSetDetailFragment : Fragment() {
             inflateMenu(R.menu.card_set_detail_toolbar)
 
             menu.findItem(R.id.action_search).apply {
-                searchView = setIconifiedSearchViewBehaviour(object : SearchViewQueryHandler {
+                searchView = (actionView.findViewById(R.id.search_view) as SearchView)
+
+                setIconifiedSearchViewBehaviour(searchView, object : SearchViewQueryHandler {
                     override fun handleQueryTextSubmit(query: String?) {
 
                         showSearchResults(query)

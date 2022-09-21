@@ -21,7 +21,6 @@ class DatabaseStatusView @JvmOverloads constructor(
             ButtonState()
 
         object UpToDate : ButtonState()
-        object Updating : ButtonState()
     }
 
     data class UiState(
@@ -45,8 +44,6 @@ class DatabaseStatusView @JvmOverloads constructor(
     fun setupUpdateButtonState(buttonState: ButtonState) {
         when (buttonState) {
             ButtonState.UpToDate -> {
-                binding.updateProgressIndicator.hide()
-
                 with(binding.updateButton) {
                     show(true)
                     isEnabled = false
@@ -54,8 +51,6 @@ class DatabaseStatusView @JvmOverloads constructor(
                 }
             }
             is ButtonState.UpdateAvailable -> {
-                binding.updateProgressIndicator.hide()
-
                 with(binding.updateButton) {
                     setOnClickListener {
                         buttonState.onUpdateButtonClick()
@@ -64,11 +59,6 @@ class DatabaseStatusView @JvmOverloads constructor(
                     isEnabled = true
                     text = resources.getString(R.string.lbl_update)
                 }
-            }
-            ButtonState.Updating -> {
-                binding.updateProgressIndicator.show()
-                binding.updateButton.visibility = INVISIBLE
-                binding.updateButton.isEnabled = false
             }
         }
     }

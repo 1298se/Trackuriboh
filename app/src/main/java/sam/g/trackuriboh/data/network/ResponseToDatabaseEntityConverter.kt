@@ -63,7 +63,7 @@ class ResponseToDatabaseEntityConverter @Inject constructor(
         val rarityName =
             if (response.name == "Common / Short Print" && response.simpleName == "Common") response.simpleName else response.name
 
-        return CardRarity(name = rarityName)
+        return CardRarity(id = response.id, name = rarityName)
     }
 
     private enum class CardItemExtendedData(val field: String) {

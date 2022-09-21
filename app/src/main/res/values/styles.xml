@@ -75,4 +75,18 @@
         <item name="android:padding">8dp</item>
         <item name="android:clipToPadding">false</item>
     </style>
+
+    <style name="Widget.AppTheme.Toolbar.SearchView" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="contentInsetStartWithNavigation">0dp</item>
+    </style>
+
+    <style name="Widget.AppTheme.TextInputLayout" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.AppTheme.TextInputLayout</item>
+        <item name="hintTextColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="Widget.AppTheme.Button.TextButton.Dialog" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.AppTheme.Button</item>
+    </style>
+
 </resources>
