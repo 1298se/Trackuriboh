@@ -2,6 +2,7 @@ package sam.g.trackuriboh.workers
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
@@ -50,13 +51,14 @@ class DatabaseUpdateWorker @AssistedInject constructor(
             firebaseAnalytics.logEvent(Events.UPDATE_WORKER_START, null)
 
             with(catalogRepository) {
-                val cardRarityResponse = fetchCardRarities().getResponseOrThrow()
                 val printingResponse = fetchProductPrintings().getResponseOrThrow()
                 val conditionResponse = fetchProductConditions().getResponseOrThrow()
 
-                insertCardRarities(cardRarityResponse.results.map { responseConverter.toCardRarity(it) })
-                insertPrintings(printingResponse.results.map { responseConverter.toPrinting(it) })
-                insertConditions(conditionResponse.results.map { responseConverter.toCondition(it) })
+                Log.d("BRUH", "${insertPrintings(printingResponse.results.map { responseConverter.toPrinting(it) }) }")
+                Log.d("BRUH", "${insertConditions(conditionResponse.results.map { responseConverter.toCondition(it) }) }")
+
+                val cardRarityResponse = fetchCardRarities().getResponseOrThrow()
+                Log.d("BRUH", "${insertCardRarities(cardRarityResponse.results.map { responseConverter.toCardRarity(it) }) }")
             }
 
             val updateCardSetIds = inputData.getLongArray(CARD_SET_IDS_INPUT_KEY)?.toList() ?: return@withContext Result.success()

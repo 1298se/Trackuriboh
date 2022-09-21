@@ -32,7 +32,7 @@ class CardFilterSelectionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.allFilters.observe(viewLifecycleOwner) { model ->
-            val rarityNames = model.rarities.map { it.name }
+            val rarityNames = model.rarities.mapNotNull { it.name }
             val cardTypeNames = model.cardTypes.map { it.displayName }
 
             binding.rarityFilterChipFormCellview.setupWith(rarityNames)

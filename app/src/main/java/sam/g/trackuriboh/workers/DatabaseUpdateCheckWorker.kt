@@ -2,6 +2,7 @@ package sam.g.trackuriboh.workers
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
@@ -15,7 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.network.ResponseToDatabaseEntityConverter
-import sam.g.trackuriboh.data.network.responses.CardSetResponse
 import sam.g.trackuriboh.data.repository.CardSetRepository
 import sam.g.trackuriboh.di.NetworkModule
 import sam.g.trackuriboh.utils.DATABASE_ASSET_CREATION_DATE
@@ -47,13 +47,11 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
 
             val fetchedCardSetCount = cardSetRepository.fetchCardSets(limit = 1).getResponseOrThrow().totalItems
 
-            val updateCardSets = mutableListOf<CardSetResponse.CardSetItem>()
+            val updateCardSetIds = mutableListOf<Long>()
 
             // We need to fetch the products from both the diff sets and unreleased sets as they may
             // have been updated
             val lastUpdatedDate = Date(sharedPreferences.getLong(DATABASE_LAST_UPDATED_DATE_SHAREDPREF_KEY, DATABASE_ASSET_CREATION_DATE))
-
-            val existingSetModelsWithCountMap = cardSetRepository.getCardSetsWithCount()
 
             paginate(
                 totalCount = fetchedCardSetCount,
@@ -70,12 +68,10 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
                         responseSetModel.releaseDate?.after(lastUpdatedDate) == true ||
                         responseSetModel.modifiedDate?.after(existingSetModel.modifiedDate) == true)
 
-                    updateCardSets.add(item)
+                    updateCardSetIds.add(item.id)
                 }
             }
 
-
-            val updateCardSetIds = updateCardSets.map { it.id }.toLongArray()
 
             firebaseAnalytics.logEvent(Events.UPDATE_CHECK_WORKER_SUCCESS, bundleOf(
                 "updateCardSetIds" to updateCardSetIds
@@ -86,12 +82,15 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
                 commit()
             }
 
+            Log.d("BRUH", "${updateCardSetIds.size} IS OUT OF DATE")
+
             Result.success(workDataOf(
                 UPDATE_AVAILABLE_RESULT to updateCardSetIds.isNotEmpty(),
-                UPDATE_CARD_SET_IDS_RESULT to updateCardSetIds,
+                UPDATE_CARD_SET_IDS_RESULT to updateCardSetIds.toTypedArray(),
             ))
         } catch (e: Exception) {
             firebaseCrashlytics.recordException(e)
+            e.printStackTrace()
             Result.failure()
         }
     }

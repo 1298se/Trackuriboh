@@ -6,8 +6,6 @@ import androidx.work.Configuration
 import com.facebook.stetho.Stetho
 import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
 import sam.g.trackuriboh.data.repository.CardSetRepository
 import sam.g.trackuriboh.data.repository.ProductRepository
 import sam.g.trackuriboh.managers.SessionManager
@@ -45,9 +43,9 @@ class BaseApplication : Application(), Configuration.Provider {
             enqueuePeriodicPriceSync()
         }
 
-        MainScope().launch {
+        /*MainScope().launch {
             checkIfForceUpdateRequired()
-        }
+        }*/
     }
 
     override fun getWorkManagerConfiguration(): Configuration =
