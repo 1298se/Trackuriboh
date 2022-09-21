@@ -76,6 +76,6 @@ abstract class AppDatabase : RoomDatabase() {
                 if (!BuildConfig.DEBUG) {
                     createFromAsset(DATABASE_FILE_PATH)
                 }
-            }.addMigrations(MIGRATION_1_2).fallbackToDestructiveMigration().build()
+            }.addMigrations(MIGRATION_1_2).build()
     }
 }
