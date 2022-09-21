@@ -1,6 +1,7 @@
 package sam.g.trackuriboh.ui.search.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -60,13 +61,14 @@ class CardListAdapter(private val onInteractionListener: OnInteractionListener) 
                 )
             )
         } else {
-            FilterViewHolder(
+            object : RecyclerView.ViewHolder(View(parent.context)) { }
+            /*FilterViewHolder(
                 CardFilterRowViewBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
                 )
-            )
+            )*/
         }
     }
 
