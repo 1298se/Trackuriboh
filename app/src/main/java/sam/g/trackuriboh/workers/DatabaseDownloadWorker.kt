@@ -54,8 +54,8 @@ class DatabaseDownloadWorker @AssistedInject constructor(
     private val progressNotificationBuilder by lazy {
         createNotificationBuilder(
             context = applicationContext,
-            notificationTitle = applicationContext.getString(R.string.database_download_worker_notification_title),
-            message = applicationContext.getString(R.string.database_download_worker_notification_message),
+            notificationTitle = applicationContext.getString(R.string.database_download_worker_notification),
+            message = null,
             channelId = applicationContext.getString(R.string.database_sync_notification_channel_id),
             channelName = applicationContext.getString(R.string.database_sync_notification_channel_name),
             showProgress = true,
@@ -67,7 +67,7 @@ class DatabaseDownloadWorker @AssistedInject constructor(
     private val stateNotificationBuilder by lazy {
         createNotificationBuilder(
             context = applicationContext,
-            notificationTitle = applicationContext.getString(R.string.database_download_worker_notification_title),
+            notificationTitle = applicationContext.getString(R.string.database_download_worker_notification),
             message = null,
             channelId = applicationContext.getString(R.string.database_sync_notification_channel_id),
             channelName = applicationContext.getString(R.string.database_sync_notification_channel_name),
@@ -107,7 +107,7 @@ class DatabaseDownloadWorker @AssistedInject constructor(
             }
 
             with(NotificationManagerCompat.from(applicationContext)) {
-                stateNotificationBuilder.setContentText(applicationContext.getString(R.string.database_download_success))
+                stateNotificationBuilder.setContentTitle(applicationContext.getString(R.string.database_download_success))
                 notify(DB_SYNC_STATE_NOTIFICATION_ID, stateNotificationBuilder.build())
             }
 
@@ -139,7 +139,7 @@ class DatabaseDownloadWorker @AssistedInject constructor(
                         R.string.database_download_cancelled else R.string.database_download_failed
                 )
 
-                stateNotificationBuilder.setContentText(contentString)
+                stateNotificationBuilder.setContentTitle(contentString)
                 notify(DB_SYNC_STATE_NOTIFICATION_ID, stateNotificationBuilder.build())
             }
 
