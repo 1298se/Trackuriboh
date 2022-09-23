@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.ButtonDefaults.textButtonColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.ripple.rememberRipple
@@ -257,24 +258,39 @@ fun ColumnScope.AppThemeDialogButtons(
     Row(
         modifier = Modifier.align(Alignment.End)
     ) {
-        TextButton(
+
+        AppThemeTextButton(
             onClick = onNegativeButtonClick,
             enabled = negativeButtonEnabled,
-        ) {
-            Text(
-                text = negativeButtonText,
-                style = MaterialTheme.typography.button
-            )
-        }
-        TextButton(
+            text = negativeButtonText,
+        )
+
+        AppThemeTextButton(
             onClick = onPositiveButtonClick,
             enabled = positiveButtonEnabled,
-        ) {
-            Text(
-                text = positiveButtonText,
-                style = MaterialTheme.typography.button
-            )
-        }
+            text = positiveButtonText,
+        )
+    }
+}
+
+@Composable
+fun AppThemeTextButton(
+    onClick: () -> Unit,
+    enabled: Boolean = true,
+    text: String,
+) {
+    TextButton(
+        onClick = onClick,
+        enabled = enabled,
+        colors = textButtonColors(
+            backgroundColor = Color.Transparent,
+            contentColor = MaterialTheme.colors.onPrimary,
+            disabledContentColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
+    )) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.button
+        )
     }
 }
 
@@ -331,6 +347,16 @@ private fun QuantitySelectorPreview() {
             onQuantityChanged = { },
             modifier = Modifier,
         )
+
+        SimpleDialogForm(
+            onPositiveButtonClick = { },
+            onNegativeButtonClick = { }) {
+            AppThemeDialogButtons(
+                positiveButtonText = "OK",
+                negativeButtonText = "Cancel",
+                onPositiveButtonClick = { },
+                onNegativeButtonClick = { })
+        }
     }
 }
 
