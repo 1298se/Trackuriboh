@@ -20,8 +20,8 @@ class CardSetLocalCache @Inject constructor(
     suspend fun getCardSet(setId: Long) =
         appDatabase.cardSetDao().getCardSet(setId)
 
-    suspend fun insertCardSets(cardSets: List<CardSet>) =
-        appDatabase.cardSetDao().insert(cardSets)
+    suspend fun upsertCardSets(cardSets: List<CardSet>) =
+        appDatabase.cardSetDao().upsert(cardSets)
 
     suspend fun getAllCardSetsWithCount() =
         appDatabase.cardSetDao().getAllCardSetsWithCount()

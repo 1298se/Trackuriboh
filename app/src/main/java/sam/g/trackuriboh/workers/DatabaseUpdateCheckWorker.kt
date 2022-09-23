@@ -2,7 +2,6 @@ package sam.g.trackuriboh.workers
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
@@ -81,8 +80,6 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
                 putLong(DATABASE_LAST_UPDATED_CHECK_DATE_SHAREDPREF_KEY, Date().time)
                 commit()
             }
-
-            Log.d("BRUH", "${updateCardSetIds.size} IS OUT OF DATE")
 
             Result.success(workDataOf(
                 UPDATE_AVAILABLE_RESULT to updateCardSetIds.isNotEmpty(),

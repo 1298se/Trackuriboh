@@ -25,7 +25,7 @@ android {
             keyPassword 'android'
         }
     }
-    compileSdkVersion 31
+    compileSdkVersion 33
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -33,7 +33,7 @@ android {
     defaultConfig {
         applicationId 'sam.g.trackuriboh'
         minSdkVersion 23
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 19
         versionName "2.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

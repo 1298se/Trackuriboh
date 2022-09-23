@@ -12,14 +12,14 @@ class CatalogLocalCache @Inject constructor(
     private val appDatabase: AppDatabase
 ) {
 
-    suspend fun insertCardRarities(rarities: List<CardRarity>) =
-        appDatabase.cardRarityDao().insert(rarities)
+    suspend fun upsertCardRarities(rarities: List<CardRarity>) =
+        appDatabase.cardRarityDao().upsert(rarities)
 
-    suspend fun insertConditions(conditions: List<Condition>) =
-        appDatabase.conditionDao().insert(conditions)
+    suspend fun upsertConditions(conditions: List<Condition>) =
+        appDatabase.conditionDao().upsert(conditions)
 
-    suspend fun insertPrintings(printings: List<Printing>) =
-        appDatabase.printingDao().insert(printings)
+    suspend fun upsertPrintings(printings: List<Printing>) =
+        appDatabase.printingDao().upsert(printings)
 
     suspend fun getCardRarityByName(name: String): CardRarity? {
         return appDatabase.cardRarityDao().getCardRarityByName(name)

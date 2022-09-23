@@ -14,7 +14,7 @@ interface ReminderDao : BaseDao<Reminder> {
 
     @Transaction
     suspend fun insertAndReturn(reminder: Reminder): Reminder {
-        val id = insert(reminder)
+        val id = upsert(reminder)
 
         return getReminder(id)
     }

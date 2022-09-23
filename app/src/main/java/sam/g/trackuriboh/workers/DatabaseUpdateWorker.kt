@@ -2,7 +2,6 @@ package sam.g.trackuriboh.workers
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
@@ -53,12 +52,11 @@ class DatabaseUpdateWorker @AssistedInject constructor(
             with(catalogRepository) {
                 val printingResponse = fetchProductPrintings().getResponseOrThrow()
                 val conditionResponse = fetchProductConditions().getResponseOrThrow()
-
-                Log.d("BRUH", "${insertPrintings(printingResponse.results.map { responseConverter.toPrinting(it) }) }")
-                Log.d("BRUH", "${insertConditions(conditionResponse.results.map { responseConverter.toCondition(it) }) }")
-
                 val cardRarityResponse = fetchCardRarities().getResponseOrThrow()
-                Log.d("BRUH", "${insertCardRarities(cardRarityResponse.results.map { responseConverter.toCardRarity(it) }) }")
+
+                upsertPrintings(printingResponse.results.map { responseConverter.toPrinting(it) })
+                upsertConditions(conditionResponse.results.map { responseConverter.toCondition(it) })
+                upsertCardRarities(cardRarityResponse.results.map { responseConverter.toCardRarity(it) })
             }
 
             val updateCardSetIds = inputData.getLongArray(CARD_SET_IDS_INPUT_KEY)?.toList() ?: return@withContext Result.success()
@@ -77,11 +75,11 @@ class DatabaseUpdateWorker @AssistedInject constructor(
                     ).getResponseOrThrow().results
                 },
                 onPaginate = { _, list ->
-                    cardSetRepository.insertCardSets(list.map { responseConverter.toCardSet(it) })
+                    cardSetRepository.upsertCardSets(list.map { responseConverter.toCardSet(it) })
                 }
             )
 
-            cardSetRepository.insertCardSets(updateCardSets.map { responseConverter.toCardSet(it) })
+            cardSetRepository.upsertCardSets(updateCardSets.map { responseConverter.toCardSet(it) })
 
             // We "paginate" the updateCardSetIds since we only want 15 network requests in a batch.
             // Pagination size is 1 because we need to load for every card set.
@@ -109,9 +107,9 @@ class DatabaseUpdateWorker @AssistedInject constructor(
                     productList
                 },
                 onPaginate = { _, list ->
-                    productRepository.insertProducts(list.map { responseConverter.toCardProduct(it) })
+                    productRepository.upsertProducts(list.map { responseConverter.toCardProduct(it) })
                     list.forEach { cardItem -> cardItem.skus?.let {
-                        skuRepository.insertSkus(cardItem.skus.map { responseConverter.toSku(it) })
+                        skuRepository.upsertSkus(cardItem.skus.map { responseConverter.toSku(it) })
                     } }
                 }
             )

@@ -66,8 +66,8 @@ class ProductRepository @Inject constructor(
             )
         }
 
-    suspend fun insertProducts(products: List<Product>) =
-        productLocalCache.insertProducts(products)
+    suspend fun upsertProducts(products: List<Product>) =
+        productLocalCache.upsertProducts(products)
 
     suspend fun getTotalCardCount() =
         productLocalCache.getTotalCardCount()

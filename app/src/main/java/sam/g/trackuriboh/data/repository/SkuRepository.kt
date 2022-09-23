@@ -18,5 +18,5 @@ class SkuRepository @Inject constructor(
     suspend fun getSkusWithConditionAndPrinting(productId: Long) =
         skuLocalCache.getSkusWithConditionAndPrintingOrdered(productId)
 
-    suspend fun insertSkus(skus: List<Sku>) = skuLocalCache.insertSkus(skus)
+    suspend fun upsertSkus(skus: List<Sku>) = skuLocalCache.upsertSkus(skus)
 }

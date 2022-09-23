@@ -21,14 +21,14 @@ class CatalogRepository @Inject constructor(
 
     suspend fun fetchProductConditions() = networkRequestHandler.getTCGPlayerResource{ catalogApiService.getConditions() }
 
-    suspend fun insertCardRarities(rarities: List<CardRarity>) =
-        catalogLocalCache.insertCardRarities(rarities)
+    suspend fun upsertCardRarities(rarities: List<CardRarity>) =
+        catalogLocalCache.upsertCardRarities(rarities)
 
-    suspend fun insertConditions(conditions: List<Condition>) =
-        catalogLocalCache.insertConditions(conditions)
+    suspend fun upsertConditions(conditions: List<Condition>) =
+        catalogLocalCache.upsertConditions(conditions)
 
-    suspend fun insertPrintings(printings: List<Printing>) =
-        catalogLocalCache.insertPrintings(printings)
+    suspend fun upsertPrintings(printings: List<Printing>) =
+        catalogLocalCache.upsertPrintings(printings)
 
     suspend fun getCardRarityByName(name: String) =
         catalogLocalCache.getCardRarityByName(name)

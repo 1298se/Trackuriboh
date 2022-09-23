@@ -76,12 +76,12 @@ fun MenuItem.setIconifiedSearchViewBehaviour(
         })
 
         setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+            override fun onMenuItemActionExpand(p0: MenuItem): Boolean {
                 handler.handleSearchViewExpanded()
                 return true
             }
 
-            override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+            override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
                 handler.handleSearchViewCollapse()
                 return true
             }

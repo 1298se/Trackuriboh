@@ -1,9 +1,8 @@
 package sam.g.trackuriboh.data.db.dao
 
 import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Update
+import androidx.room.Upsert
 
 interface BaseDao<T> {
     /*
@@ -13,11 +12,11 @@ interface BaseDao<T> {
      *
      * The table's PRIMARY key is not the true primary key - the rowId is. Primary key constraints are just UNIQUE constraints.
      */
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(obj: T): Long
+    @Upsert
+    suspend fun upsert(obj: T): Long
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(objList: List<T>): List<Long>
+    @Upsert
+    suspend fun upsert(objList: List<T>): List<Long>
 
     @Update
     suspend fun update(obj: T)

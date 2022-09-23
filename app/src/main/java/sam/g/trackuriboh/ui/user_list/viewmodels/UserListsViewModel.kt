@@ -24,7 +24,7 @@ class UserListsViewModel @Inject constructor(
         firebaseAnalytics.logEvent(Events.CREATE_USER_LIST, bundleOf("name" to list.name))
 
         viewModelScope.launch {
-            userListRepository.insertUserList(list)
+            userListRepository.upsertUserList(list)
         }
     }
 

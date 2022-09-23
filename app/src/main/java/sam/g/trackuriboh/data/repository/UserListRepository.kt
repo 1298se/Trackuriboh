@@ -18,13 +18,13 @@ class UserListRepository @Inject constructor(
 
     suspend fun getAllUserListEntries() = userListLocalCache.getAllUserListEntries()
 
-    suspend fun insertUserList(userList: UserList) = userListLocalCache.insertUserList(userList)
+    suspend fun upsertUserList(userList: UserList) = userListLocalCache.upsertUserList(userList)
 
-    suspend fun insertUserLists(userLists: List<UserList>) = userListLocalCache.insertUserLists(userLists)
+    suspend fun upsertUserLists(userLists: List<UserList>) = userListLocalCache.upsertUserLists(userLists)
 
-    suspend fun insertUserListEntry(userListEntry: UserListEntry) = userListLocalCache.insertUserListEntry(userListEntry)
+    suspend fun upsertUserListEntry(userListEntry: UserListEntry) = userListLocalCache.upsertUserListEntry(userListEntry)
 
-    suspend fun insertUserListEntries(entries: List<UserListEntry>) = userListLocalCache.insertUserListEntries(entries)
+    suspend fun upsertUserListEntries(entries: List<UserListEntry>) = userListLocalCache.upsertUserListEntries(entries)
 
     suspend fun deleteUserListEntries(listId: Long, skuIds: List<Long>?) {
         if (skuIds == null) {

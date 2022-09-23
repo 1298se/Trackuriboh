@@ -21,7 +21,7 @@ class SkuLocalCache @Inject constructor(
     suspend fun getSkusWithConditionAndPrinting(skuIds: List<Long>) =
         appDatabase.skuDao()._getSkusWithConditionAndPrinting(skuIds)
 
-    suspend fun insertSkus(skus: List<Sku>) = appDatabase.skuDao().insert(skus)
+    suspend fun upsertSkus(skus: List<Sku>) = appDatabase.skuDao().upsert(skus)
 
     suspend fun updateSkuPrices(skuPriceUpdates: List<Sku.SkuPriceUpdate>) = appDatabase.skuDao().updateSkuPrices(skuPriceUpdates)
 }

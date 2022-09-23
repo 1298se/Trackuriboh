@@ -94,9 +94,9 @@ class DatabaseDownloadWorker @AssistedInject constructor(
                 val printingResponse = fetchProductPrintings().getResponseOrThrow()
                 val conditionResponse = fetchProductConditions().getResponseOrThrow()
 
-                insertCardRarities(cardRarityResponse.results.map { responseConverter.toCardRarity(it) })
-                insertPrintings(printingResponse.results.map { responseConverter.toPrinting(it) })
-                insertConditions(conditionResponse.results.map { responseConverter.toCondition(it) })
+                upsertCardRarities(cardRarityResponse.results.map { responseConverter.toCardRarity(it) })
+                upsertPrintings(printingResponse.results.map { responseConverter.toPrinting(it) })
+                upsertConditions(conditionResponse.results.map { responseConverter.toCondition(it) })
             }
 
             downloadDatabase()
@@ -112,8 +112,8 @@ class DatabaseDownloadWorker @AssistedInject constructor(
             }
 
             // insert the user lists back
-            userListRepository.insertUserLists(userLists)
-            userListRepository.insertUserListEntries(userListEntries)
+            userListRepository.upsertUserLists(userLists)
+            userListRepository.upsertUserListEntries(userListEntries)
 
             // Enqueue price sync
             workRequestManager.enqueueOneTimePriceSync()
@@ -184,7 +184,7 @@ class DatabaseDownloadWorker @AssistedInject constructor(
             paginate = { offset, paginationSize -> cardSetRepository.fetchCardSets(offset, paginationSize).getResponseOrThrow().results },
         ) { offset, cardSets ->
             updateProgress(((totalOffset + offset.toDouble()) / totalItems * 100).toInt())
-            cardSetRepository.insertCardSets(cardSets.map { responseConverter.toCardSet(it) })
+            cardSetRepository.upsertCardSets(cardSets.map { responseConverter.toCardSet(it) })
         }
 
         totalOffset += cardSetResponse.totalItems
@@ -197,9 +197,9 @@ class DatabaseDownloadWorker @AssistedInject constructor(
 
             updateProgress(((totalOffset + offset.toDouble()) / totalItems * 100).toInt())
 
-            productRepository.insertProducts(products.map { responseConverter.toCardProduct(it) })
+            productRepository.upsertProducts(products.map { responseConverter.toCardProduct(it) })
             products.forEach { cardItem -> cardItem.skus?.let {
-                skuRepository.insertSkus(cardItem.skus.map { responseConverter.toSku(it) })
+                skuRepository.upsertSkus(cardItem.skus.map { responseConverter.toSku(it) })
             } }
         }
     }

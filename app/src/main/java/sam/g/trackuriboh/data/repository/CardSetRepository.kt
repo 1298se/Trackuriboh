@@ -40,7 +40,7 @@ class CardSetRepository @Inject constructor(
 
     suspend fun getCardSet(setId: Long) = cardSetLocalCache.getCardSet(setId)
 
-    suspend fun insertCardSets(cardSets: List<CardSet>) = cardSetLocalCache.insertCardSets(cardSets)
+    suspend fun upsertCardSets(cardSets: List<CardSet>) = cardSetLocalCache.upsertCardSets(cardSets)
 
     suspend fun getCardSetsWithCount() = cardSetLocalCache.getAllCardSetsWithCount()
 

@@ -46,8 +46,8 @@ class ProductLocalCache @Inject constructor(
     suspend fun getProductWithSkusById(id: Long) =
         appDatabase.productDao().getProductWithSkusById(id)
 
-    suspend fun insertProducts(products: List<Product>) =
-        appDatabase.productDao().insert(products)
+    suspend fun upsertProducts(products: List<Product>) =
+        appDatabase.productDao().upsert(products)
 
 
     fun getSuggestionsCursorObservable(query: String?, setId: Long? = null) =
