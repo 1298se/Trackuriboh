@@ -85,8 +85,7 @@ class DatabaseFragment : Fragment() {
                         replace(binding.searchResultContainer.id, searchResultFragment, SEARCH_RESULT_FRAGMENT_TAG)
                     }
 
-                    searchView.clearFocus()
-                    binding.databaseSearchview.focusDummyView.requestFocus()
+                    clearFocus()
 
                     return false
                 }

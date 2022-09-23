@@ -7,5 +7,5 @@
         android:title="@string/search_action_title"
         android:icon="@drawable/ic_baseline_search_24"
         app:showAsAction="always|collapseActionView"
-        app:actionLayout="@layout/persistent_search_view" />
+        app:actionViewClass="sam.g.trackuriboh.ui.common.ToolbarSearchView" />
 </menu>

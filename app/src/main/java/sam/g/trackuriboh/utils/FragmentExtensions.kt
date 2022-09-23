@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.addCallback
-import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
@@ -19,6 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import sam.g.trackuriboh.di.NetworkModule
+import sam.g.trackuriboh.ui.common.ToolbarSearchView
 
 const val SNACKBAR_SHOW_REQUEST_KEY = "Snackbar_Show"
 const val SNACKBAR_TYPE = "Snackbar_Type"
@@ -57,32 +57,40 @@ interface SearchViewQueryHandler {
 
 
 fun MenuItem.setIconifiedSearchViewBehaviour(
-    searchView: SearchView,
+    toolbarSearchView: ToolbarSearchView,
     handler: SearchViewQueryHandler,
 ) {
-    searchView.apply {
-        setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+    toolbarSearchView.apply {
+        searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 handler.handleQueryTextSubmit(query)
+                clearFocus()
 
-                return true
+                return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 handler.handleQueryTextChanged(newText)
 
-                return true
+                return false
             }
         })
 
         setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(p0: MenuItem): Boolean {
                 handler.handleSearchViewExpanded()
+                searchView.isIconified = false
+
                 return true
             }
 
             override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
                 handler.handleSearchViewCollapse()
+                clearFocus()
+
+                searchView.setQuery("", false)
+                searchView.isIconified = true
+
                 return true
             }
         })

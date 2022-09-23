@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -18,9 +17,13 @@ import sam.g.trackuriboh.MainGraphDirections
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.databinding.FragmentCardSetDetailBinding
 import sam.g.trackuriboh.ui.card_set_detail.viewmodels.CardSetDetailViewModel
+import sam.g.trackuriboh.ui.common.ToolbarSearchView
 import sam.g.trackuriboh.ui.search.CardListFragment
 import sam.g.trackuriboh.ui.search_suggestions.CardSearchSuggestionsViewModel
-import sam.g.trackuriboh.utils.*
+import sam.g.trackuriboh.utils.SearchViewQueryHandler
+import sam.g.trackuriboh.utils.safeNavigate
+import sam.g.trackuriboh.utils.setIconifiedSearchViewBehaviour
+import sam.g.trackuriboh.utils.viewBinding
 
 /**
  * Fragment containing the list of cards in a particular set
@@ -34,7 +37,7 @@ class CardSetDetailFragment : Fragment() {
     private val viewModel: CardSetDetailViewModel by viewModels()
     private val searchSuggestionsViewModel: CardSearchSuggestionsViewModel by viewModels()
 
-    private lateinit var searchView: SearchView
+    private lateinit var toolbarSearchView: ToolbarSearchView
 
     companion object {
         private val CARD_LIST_FRAGMENT_TAG = CardListFragment::class.java.name
@@ -56,7 +59,6 @@ class CardSetDetailFragment : Fragment() {
         }
 
         initToolbar()
-        // initSearchSuggestions()
         initFragmentResultListeners()
         initObservers()
     }
@@ -83,16 +85,6 @@ class CardSetDetailFragment : Fragment() {
         createOptionsMenu()
     }
 
-    private fun initSearchSuggestions() {
-        searchView.initSearchSuggestions()
-
-        searchSuggestionsViewModel.searchInSet(args.setId)
-
-        searchSuggestionsViewModel.suggestionsCursor.observe(viewLifecycleOwner) {
-            searchView.setSuggestionsCursor(it)
-        }
-    }
-
     private fun initFragmentResultListeners() {
         childFragmentManager.setFragmentResultListener(
             CardListFragment.FRAGMENT_RESULT_REQUEST_KEY,
@@ -117,16 +109,13 @@ class CardSetDetailFragment : Fragment() {
             inflateMenu(R.menu.card_set_detail_toolbar)
 
             menu.findItem(R.id.action_search).apply {
-                searchView = (actionView?.findViewById(R.id.search_view) as SearchView)
+                toolbarSearchView = (actionView as ToolbarSearchView)
 
-                setIconifiedSearchViewBehaviour(searchView, object : SearchViewQueryHandler {
+                setIconifiedSearchViewBehaviour(toolbarSearchView, object : SearchViewQueryHandler {
                     override fun handleQueryTextSubmit(query: String?) {
-
                         showSearchResults(query)
 
                         viewModel.query = query
-                        searchView.clearFocus()
-                        binding.focusDummyView.requestFocus()
                     }
 
                     override fun handleQueryTextChanged(newText: String?) {
@@ -134,8 +123,6 @@ class CardSetDetailFragment : Fragment() {
                     }
 
                     override fun handleSearchViewCollapse() {
-                        searchView.setQuery("", false)
-
                         if (!viewModel.query.isNullOrEmpty()) {
                             showSearchResults(null)
                         }
