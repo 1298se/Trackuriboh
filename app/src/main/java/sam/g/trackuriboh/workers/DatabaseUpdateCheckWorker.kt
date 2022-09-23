@@ -61,10 +61,9 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
                     val responseSetModel = responseToDatabaseEntityConverter.toCardSet(item)
                     val existingSetModel = cardSetRepository.getCardSet(item.id)
 
-                    // If we don't have it in db, or it hasn't been released yet, or the modified
+                    // If we don't have it in db, or the modified
                     // date is after our db's modified date, then add to update list.
                     if (existingSetModel == null ||
-                        responseSetModel.releaseDate?.after(lastUpdatedDate) == true ||
                         responseSetModel.modifiedDate?.after(existingSetModel.modifiedDate) == true)
 
                     updateCardSetIds.add(item.id)
