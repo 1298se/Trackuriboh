@@ -18,7 +18,7 @@ class UserListLocalCache @Inject constructor(
 
     suspend fun upsertUserLists(userLists: List<UserList>) = appDatabase.userListDao().upsert(userLists)
 
-    suspend fun upsertUserListEntry(userListEntry: UserListEntry) = appDatabase.userListEntryDao().upsert(userListEntry)
+    suspend fun upsertUserListEntryAndAddQuantity(userListEntry: UserListEntry) = appDatabase.userListEntryDao().upsertAndAddQuantity(userListEntry)
 
     suspend fun upsertUserListEntries(entries: List<UserListEntry>) = appDatabase.userListEntryDao().upsert(entries)
 

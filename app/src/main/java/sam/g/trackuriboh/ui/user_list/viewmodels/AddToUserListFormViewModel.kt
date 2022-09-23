@@ -91,7 +91,7 @@ class AddToUserListFormViewModel @Inject constructor(
         ))
 
         if (sku != null && userList != null && quantity != null) {
-            userListRepository.upsertUserListEntry(
+            userListRepository.upsertUserListEntryAndAddQuantity(
                 UserListEntry(
                     listId = userList.id,
                     skuId = sku.id,

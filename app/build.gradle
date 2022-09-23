@@ -34,8 +34,8 @@ android {
         applicationId 'sam.g.trackuriboh'
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 21
-        versionName "2.0.3"
+        versionCode 22
+        versionName "2.0.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {

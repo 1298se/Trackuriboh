@@ -87,8 +87,10 @@ class UserListCardAdapter
 
         override fun bind(item: UserListDetailViewModel.UiModel) {
             val entryItem = item as UserListDetailViewModel.UiModel.UserListEntryItem
+
             val skuWithConditionAndPrintingAndProduct = entryItem.data.skuWithConditionAndPrintingAndProduct
-            val product = skuWithConditionAndPrintingAndProduct.productWithCardSet.product
+            val productWithCardSet = skuWithConditionAndPrintingAndProduct.productWithCardSet
+            val product = productWithCardSet.product
 
             Glide.with(itemView)
                 .load(product.imageUrl)
@@ -99,7 +101,7 @@ class UserListCardAdapter
             binding.itemUserListRarityNumberTextview.text = itemView.resources.getString(
                 R.string.number_rarity_oneline,
                 product.number,
-                product.rarityId
+                productWithCardSet.rarity.name
             )
 
             binding.itemUserListEntryEditionConditionTextview.text = itemView.resources.getString(

@@ -22,7 +22,7 @@ class UserListRepository @Inject constructor(
 
     suspend fun upsertUserLists(userLists: List<UserList>) = userListLocalCache.upsertUserLists(userLists)
 
-    suspend fun upsertUserListEntry(userListEntry: UserListEntry) = userListLocalCache.upsertUserListEntry(userListEntry)
+    suspend fun upsertUserListEntryAndAddQuantity(userListEntry: UserListEntry) = userListLocalCache.upsertUserListEntryAndAddQuantity(userListEntry)
 
     suspend fun upsertUserListEntries(entries: List<UserListEntry>) = userListLocalCache.upsertUserListEntries(entries)
 

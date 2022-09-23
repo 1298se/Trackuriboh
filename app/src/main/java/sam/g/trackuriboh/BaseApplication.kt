@@ -40,7 +40,6 @@ class BaseApplication : Application(), Configuration.Provider {
         Stetho.initializeWithDefaults(this)
 
         with(workRequestManager) {
-            enqueueDatabaseUpdateCheck()
             enqueuePeriodicDatabaseUpdateCheckScheduler()
             enqueuePeriodicPriceSync()
         }
