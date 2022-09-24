@@ -16,6 +16,7 @@ import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
 import sam.g.trackuriboh.databinding.BottomSheetSkuSelectionBinding
 import sam.g.trackuriboh.databinding.ItemSimpleOneLineBinding
 import sam.g.trackuriboh.ui.card_detail.viewmodels.SkuSelectionViewModel
+import sam.g.trackuriboh.utils.setDefaultExpanded
 import sam.g.trackuriboh.utils.viewBinding
 
 @AndroidEntryPoint
@@ -41,7 +42,7 @@ class SkuSelectionBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        setDefaultExpanded()
 
         viewModel.skus.observe(viewLifecycleOwner) {
             initListView(it)

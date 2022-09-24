@@ -17,7 +17,7 @@ import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.data.db.entities.Reminder
 import sam.g.trackuriboh.databinding.DialogAddEditRemindersBinding
-import sam.g.trackuriboh.ui.common.*
+import sam.g.trackuriboh.ui.common.DateTimePickerView
 import sam.g.trackuriboh.ui.reminder.components.ReminderForm
 import sam.g.trackuriboh.utils.viewBinding
 import java.util.*
@@ -49,8 +49,6 @@ class AddEditReminderDialogFragment : DialogFragment(), DateTimePickerView.OnInt
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        dialog?.setCanceledOnTouchOutside(false)
-
         binding.addEditRemindersComposeContainer.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
 
