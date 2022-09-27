@@ -81,7 +81,7 @@ class ResponseToDatabaseEntityConverter @Inject constructor(
         val extendedDataMap = response.extendedData?.associate { it.name to it.value }
         val rarity = extendedDataMap?.get(CardItemExtendedData.RARITY.field)?.let {
             catalogRepository.getCardRarityByName(it)
-        }
+        } ?: catalogRepository.getCardRarityByName("Unconfirmed")
 
         return Product(
             id = response.id,

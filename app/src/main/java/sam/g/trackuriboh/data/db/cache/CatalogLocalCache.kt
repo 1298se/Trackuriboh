@@ -23,6 +23,5 @@ class CatalogLocalCache @Inject constructor(
 
     suspend fun getCardRarityByName(name: String): CardRarity? {
         return appDatabase.cardRarityDao().getCardRarityByName(name)
-            ?: appDatabase.cardRarityDao().getCardRarityByName("Unconfirmed")
     }
 }
