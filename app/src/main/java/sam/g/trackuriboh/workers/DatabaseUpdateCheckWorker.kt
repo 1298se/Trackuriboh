@@ -46,7 +46,7 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
 
             val fetchedCardSetCount = cardSetRepository.fetchCardSets(limit = 1).getResponseOrThrow().totalItems
 
-            val updateCardSetIds = mutableListOf<Long>()
+            val updateCardSetIds = mutableListOf<Long?>()
 
             // We need to fetch the products from both the diff sets and unreleased sets as they may
             // have been updated
@@ -82,7 +82,7 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
 
             Result.success(workDataOf(
                 UPDATE_AVAILABLE_RESULT to updateCardSetIds.isNotEmpty(),
-                UPDATE_CARD_SET_IDS_RESULT to updateCardSetIds.toTypedArray(),
+                UPDATE_CARD_SET_IDS_RESULT to updateCardSetIds.filterNotNull().toTypedArray(),
             ))
         } catch (e: Exception) {
             firebaseCrashlytics.recordException(e)
