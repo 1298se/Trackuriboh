@@ -99,18 +99,19 @@ class DatabaseUpdateWorker @AssistedInject constructor(
                         totalCount = cardSetCount,
                         paginationSize = DEFAULT_QUERY_LIMIT,
                         paginate = { offset, paginationSize ->
-                            productRepository.fetchProducts(offset, paginationSize, cardSetId).getResponseOrThrow().results }
-                    ) { _, list ->
-                        productList.addAll(list)
-                    }
-
+                            productRepository.fetchProducts(offset, paginationSize, cardSetId).getResponseOrThrow().results
+                        },
+                        onPaginate = { _, list ->
+                            productList.addAll(list)
+                        }
+                    )
                     productList
                 },
                 onPaginate = { _, list ->
-                    productRepository.upsertProducts(list.map { responseConverter.toCardProduct(it) })
-                    list.forEach { cardItem -> cardItem.skus?.let {
-                        skuRepository.upsertSkus(cardItem.skus.map { responseConverter.toSku(it) })
-                    } }
+                    val products = list.map { responseConverter.toCardProduct(it) }
+                    val skus = list.filter { it.skus != null }.flatMap { cardItem -> cardItem.skus!! }
+                    productRepository.upsertProducts(products)
+                    skuRepository.upsertSkus(skus.map { responseConverter.toSku(it) })
                 }
             )
             with(sharedPreferences.edit()) {

@@ -10,6 +10,7 @@ import sam.g.trackuriboh.data.db.converters.RoomConverter
 import sam.g.trackuriboh.data.db.dao.*
 import sam.g.trackuriboh.data.db.entities.*
 import sam.g.trackuriboh.data.db.migrations.MIGRATION_1_2
+import sam.g.trackuriboh.data.db.migrations.MIGRATION_2_3
 
 @Database(
     entities = [
@@ -23,7 +24,7 @@ import sam.g.trackuriboh.data.db.migrations.MIGRATION_1_2
         UserList::class,
         UserListEntry::class,
     ],
-    version = 2
+    version = 3
 )
 @TypeConverters(RoomConverter::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -76,6 +77,6 @@ abstract class AppDatabase : RoomDatabase() {
                 if (!BuildConfig.DEBUG) {
                     createFromAsset(DATABASE_FILE_PATH)
                 }
-            }.addMigrations(MIGRATION_1_2).build()
+            }.addMigrations(MIGRATION_1_2, MIGRATION_2_3).build()
     }
 }
