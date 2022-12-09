@@ -2,6 +2,7 @@ package sam.g.trackuriboh.ui.user_list
 
 import android.os.Bundle
 import android.view.*
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -15,15 +16,18 @@ import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.MainGraphDirections
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.analytics.Events
+import sam.g.trackuriboh.data.db.entities.Product
 import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.databinding.FragmentUserListDetailBinding
 import sam.g.trackuriboh.ui.common.QuantitySelectorDialogFragment
+import sam.g.trackuriboh.ui.transaction.AddTransactionDialogFragment
 import sam.g.trackuriboh.ui.user_list.adapters.UserListCardAdapter
 import sam.g.trackuriboh.ui.user_list.viewmodels.UserListDetailViewModel
 import sam.g.trackuriboh.utils.safeNavigate
 import sam.g.trackuriboh.utils.viewBinding
 import javax.inject.Inject
 
+@ExperimentalMaterialApi
 @AndroidEntryPoint
 class UserListDetailFragment : Fragment(), UserListCardAdapter.OnItemClickListener {
 
@@ -105,6 +109,14 @@ class UserListDetailFragment : Fragment(), UserListCardAdapter.OnItemClickListen
 
     override fun onListEntryChecked(skuId: Long, isChecked: Boolean) {
         viewModel.setUserListEntryChecked(skuId, isChecked)
+    }
+
+    override fun onShowHistoryClick(skuId: Long, isExpanded: Boolean) {
+        viewModel.setUserListExpanded(skuId, isExpanded)
+    }
+
+    override fun onAddTransactionClick(product: Product, userListEntry: UserListEntry) {
+        AddTransactionDialogFragment.newInstance(product, userListEntry).show(childFragmentManager, null)
     }
 
     override fun onQuantityTextClick(entry: UserListEntry) {
