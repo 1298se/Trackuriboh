@@ -1,18 +1,27 @@
 package sam.g.trackuriboh.ui.user_list.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import sam.g.trackuriboh.R
+import sam.g.trackuriboh.data.db.entities.Product
+import sam.g.trackuriboh.data.db.entities.Transaction
+import sam.g.trackuriboh.data.db.entities.TransactionType
 import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.databinding.ItemUserListCardBinding
+import sam.g.trackuriboh.databinding.ItemUserListTransactionBinding
 import sam.g.trackuriboh.databinding.ListHeaderBinding
 import sam.g.trackuriboh.ui.common.BaseViewHolder
 import sam.g.trackuriboh.ui.user_list.viewmodels.UserListDetailViewModel
 import sam.g.trackuriboh.utils.show
+import java.util.Date
 
 class UserListCardAdapter
     : ListAdapter<UserListDetailViewModel.UiModel, BaseViewHolder<UserListDetailViewModel.UiModel>>(
@@ -45,6 +54,8 @@ class UserListCardAdapter
         fun onQuantityTextClick(entry: UserListEntry)
         fun onListEntryLongClick(skuId: Long)
         fun onListEntryChecked(skuId: Long, isChecked: Boolean)
+        fun onShowHistoryClick(skuId: Long, isExpanded: Boolean)
+        fun onAddTransactionClick(product: Product, userListEntry: UserListEntry)
     }
 
     inner class UserListEntryViewHolder(
@@ -82,6 +93,18 @@ class UserListCardAdapter
                 val userListEntryItem = getItem(bindingAdapterPosition) as UserListDetailViewModel.UiModel.UserListEntryItem
 
                 onItemClickListener?.onQuantityTextClick(userListEntryItem.data.entry)
+            }
+
+            binding.itemUserListEntryToggleHistoryButton.setOnClickListener {
+                val userListEntryItem = getItem(bindingAdapterPosition) as UserListDetailViewModel.UiModel.UserListEntryItem
+
+                onItemClickListener?.onShowHistoryClick(userListEntryItem.data.entry.skuId, !userListEntryItem.isExpanded)
+            }
+
+            binding.itemUserListEntryAddTransactionButton.setOnClickListener {
+                val userListEntryItem = getItem(bindingAdapterPosition) as UserListDetailViewModel.UiModel.UserListEntryItem
+                val product = userListEntryItem.data.skuWithConditionAndPrintingAndProduct.productWithCardSet.product
+                onItemClickListener?.onAddTransactionClick(product, userListEntryItem.data.entry)
             }
         }
 
@@ -128,6 +151,20 @@ class UserListCardAdapter
                     it
                 )
             } ?: itemView.context.getString(R.string.lbl_not_available)
+
+            binding.itemUserListTransactionRecyclerview.layoutManager = LinearLayoutManager(binding.root.context)
+            binding.itemUserListTransactionRecyclerview.adapter = TransactionAdapter(
+                arrayOf(
+                    Transaction(0, TransactionType.PURCHASE, 0, 0, 0, 25, 1.00, Date()),
+                    Transaction(0, TransactionType.SALE, 0, 0, 0, 10, 5.00, Date()),
+                    )
+            )
+
+            binding.itemUserListTransactionRecyclerview.visibility = if (!entryItem.isExpanded) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
         }
 
     }
@@ -192,4 +229,30 @@ class UserListCardAdapter
 
         notifyItemRangeChanged(0, itemCount)
     }
+}
+
+class TransactionAdapter(private val transactions: Array<Transaction>) :
+    RecyclerView.Adapter<TransactionAdapter.ViewHolder>() {
+
+    /**
+     * Provide a reference to the type of views that you are using
+     * (custom ViewHolder).
+     */
+    class ViewHolder(val binding: ItemUserListTransactionBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(transaction: Transaction) {
+            binding.itemUserListTransactionType.text = transaction.type.name
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = ItemUserListTransactionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+        viewHolder.bind(transactions[position])
+    }
+
+    override fun getItemCount() = transactions.size
+
 }
