@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "e78506383dce0d4855bad63c4c387d14",
+    "identityHash": "9875633ffa0b512a016c24ffec001aff",
     "entities": [
       {
         "tableName": "Product",
@@ -515,7 +515,7 @@
         ]
       },
       {
-        "tableName": "Transaction",
+        "tableName": "UserTransaction",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT NOT NULL, `productId` INTEGER NOT NULL, `listId` INTEGER NOT NULL, `skuId` INTEGER NOT NULL, `quantity` INTEGER NOT NULL, `price` REAL NOT NULL, `date` INTEGER NOT NULL, FOREIGN KEY(`productId`) REFERENCES `Product`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`listId`, `skuId`) REFERENCES `UserListEntry`(`listId`, `skuId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
@@ -575,31 +575,31 @@
         },
         "indices": [
           {
-            "name": "index_Transaction_productId",
+            "name": "index_UserTransaction_productId",
             "unique": false,
             "columnNames": [
               "productId"
             ],
             "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_Transaction_productId` ON `${TABLE_NAME}` (`productId`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_UserTransaction_productId` ON `${TABLE_NAME}` (`productId`)"
           },
           {
-            "name": "index_Transaction_listId",
+            "name": "index_UserTransaction_listId",
             "unique": false,
             "columnNames": [
               "listId"
             ],
             "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_Transaction_listId` ON `${TABLE_NAME}` (`listId`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_UserTransaction_listId` ON `${TABLE_NAME}` (`listId`)"
           },
           {
-            "name": "index_Transaction_skuId",
+            "name": "index_UserTransaction_skuId",
             "unique": false,
             "columnNames": [
               "skuId"
             ],
             "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_Transaction_skuId` ON `${TABLE_NAME}` (`skuId`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_UserTransaction_skuId` ON `${TABLE_NAME}` (`skuId`)"
           }
         ],
         "foreignKeys": [
@@ -633,7 +633,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e78506383dce0d4855bad63c4c387d14')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9875633ffa0b512a016c24ffec001aff')"
     ]
   }
 }

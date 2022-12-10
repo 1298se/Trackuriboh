@@ -9,13 +9,12 @@
     tools:ignore="RtlSymmetry">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/item_reminder_foreground"
+        android:id="@+id/item_user_list_entry_sku_detail_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/list_item_two_line_padding_top"
         android:paddingStart="@dimen/list_item_padding_start"
         android:paddingEnd="@dimen/list_item_padding_end"
-        app:layout_constraintBottom_toTopOf="@id/item_user_list_expanded_area"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -121,122 +120,50 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/item_user_list_expanded_area"
+        android:id="@+id/item_user_list_entry_transaction_summary_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@id/item_user_list_bottom_button_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/item_reminder_foreground">
+        app:layout_constraintTop_toBottomOf="@id/item_user_list_entry_sku_detail_layout">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/item_user_list_transaction_summary_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/item_user_list_total_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/item_user_list_total_purchase_amount"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:text="TOTAL" />
-
-            <TextView
-                android:id="@+id/item_user_list_total_purchase_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/item_user_list_total_sell_amount"
-                app:layout_constraintStart_toEndOf="@id/item_user_list_total_header"
-                app:layout_constraintTop_toTopOf="parent"
-                android:text="$15.00" />
-
-            <TextView
-                android:id="@+id/item_user_list_total_sell_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/item_user_list_total_net_amount"
-                app:layout_constraintStart_toEndOf="@id/item_user_list_total_purchase_amount"
-                app:layout_constraintTop_toTopOf="parent"
-                android:text="$15.00" />
-
-            <TextView
-                android:id="@+id/item_user_list_total_net_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/item_user_list_total_sell_amount"
-                app:layout_constraintTop_toTopOf="parent"
-                android:text="$0.00" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/item_user_list_transaction_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="@dimen/list_item_padding_start"
-            android:paddingEnd="@dimen/list_item_padding_end"
-            app:layout_constraintTop_toBottomOf="@id/item_user_list_transaction_summary_layout"
-            tools:itemCount="5"
-            tools:listitem="@layout/item_user_list_transaction" />
-
-        <View
-            android:id="@+id/border"
-            android:background="@color/gray"
-            app:layout_constraintTop_toBottomOf="@id/item_user_list_transaction_recyclerview"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="4dp"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/item_user_list_bottom_barrier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="item_user_list_expanded_area,item_reminder_foreground" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/item_user_list_bottom_button_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="@dimen/list_item_padding_start"
-        android:paddingEnd="@dimen/list_item_padding_end"
-        app:layout_constraintTop_toBottomOf="@id/item_user_list_bottom_barrier"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/item_user_list_entry_toggle_history_button"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+        <TextView
+            android:id="@+id/item_user_list_total_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Show History"
-            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/item_user_list_entry_add_transaction_button"
+            app:layout_constraintEnd_toStartOf="@id/item_user_list_total_purchase_amount"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="TOTAL" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/item_user_list_entry_add_transaction_button"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+        <TextView
+            android:id="@+id/item_user_list_total_purchase_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add Transaction"
-            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/item_user_list_entry_toggle_history_button"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toStartOf="@id/item_user_list_total_sell_amount"
+            app:layout_constraintStart_toEndOf="@id/item_user_list_total_header"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="$15.00" />
+
+        <TextView
+            android:id="@+id/item_user_list_total_sell_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/item_user_list_total_net_amount"
+            app:layout_constraintStart_toEndOf="@id/item_user_list_total_purchase_amount"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="$15.00" />
+
+        <TextView
+            android:id="@+id/item_user_list_total_net_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/item_user_list_total_sell_amount"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="$0.00" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

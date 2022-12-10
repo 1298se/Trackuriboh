@@ -34,7 +34,6 @@ class UserListDetailViewModel @Inject constructor(
         data class UserListEntryItem(
             val data: UserListEntryWithSkuAndProduct,
             val isChecked: Boolean,
-            val isExpanded: Boolean,
         ) : UiModel()
         data class Header(val totalCount: Int, val totalValue: Double) : UiModel()
     }
@@ -59,7 +58,6 @@ class UserListDetailViewModel @Inject constructor(
         value = UiState(emptyList(),  false, null)
     }
 
-    private val expandedSkuIdsLiveData = MutableLiveData<MutableSet<Long>>(mutableSetOf())
     private val checkedSkuIdsLiveData = MutableLiveData<MutableSet<Long>>(mutableSetOf())
 
     private var currentEditEntry: UserListEntry? = null
@@ -77,7 +75,7 @@ class UserListDetailViewModel @Inject constructor(
                 var totalValue = 0.0
                 // Map it to UiModels
                 val transformList: MutableList<UiModel> = list.map { entry ->
-                    UiModel.UserListEntryItem(entry, false, false).also {
+                    UiModel.UserListEntryItem(entry, false).also {
                         totalCount += it.data.entry.quantity
                         totalValue += (it.data.skuWithConditionAndPrintingAndProduct.sku.lowestBasePrice ?: 0.0) * (it.data.entry.quantity)
                     }
@@ -108,33 +106,6 @@ class UserListDetailViewModel @Inject constructor(
                         )
                     )
                 }
-            }
-        }
-
-        _state.addSource(expandedSkuIdsLiveData) { expandedProductIds ->
-            viewModelScope.launch(Dispatchers.Default) {
-                _state.value?.entries?.let {
-                    _state.postValue(
-                        _state.value?.copy(
-                            entries = updateExpandedStates(it, expandedProductIds),
-                            actionModeTitle = application.getString(R.string.user_list_detail_selected_count, expandedProductIds.size)
-                        )
-                    )
-                }
-            }
-        }
-    }
-
-    private fun updateExpandedStates(list: List<UiModel>, expandedProductIds: Set<Long>): List<UiModel> {
-        return list.map {
-            if (it is UiModel.UserListEntryItem) {
-                if (expandedProductIds.contains(it.data.entry.skuId)) {
-                    it.copy(isExpanded = true)
-                } else {
-                    it.copy(isExpanded = false)
-                }
-            } else {
-                it
             }
         }
     }
@@ -171,16 +142,6 @@ class UserListDetailViewModel @Inject constructor(
         }
 
         checkedSkuIdsLiveData.value = checkedSkuIds ?: mutableSetOf()
-    }
-
-    fun setUserListExpanded(skuId: Long, isExpanded: Boolean) {
-        val expandedSkuIds = if (isExpanded) {
-            expandedSkuIdsLiveData.value?.apply { add(skuId) }
-        } else {
-            expandedSkuIdsLiveData.value?.apply { remove(skuId) }
-        }
-
-        expandedSkuIdsLiveData.value = expandedSkuIds ?: mutableSetOf()
     }
 
     fun setCurrentEditEntry(entry: UserListEntry) {

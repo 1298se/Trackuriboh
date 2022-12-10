@@ -25,7 +25,7 @@ import sam.g.trackuriboh.data.db.migrations.MIGRATION_2_3
         Reminder::class,
         UserList::class,
         UserListEntry::class,
-        Transaction::class,
+        UserTransaction::class,
     ],
     autoMigrations = [
         AutoMigration (from = 3, to = 4)
@@ -46,8 +46,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userListDao(): UserListDao
     abstract fun userListEntryDao(): UserListEntryDao
-
-    abstract fun transactionDao(): TransactionDao
+    abstract fun userTransactionDao(): UserTransactionDao
 
     /**
      * We do this because [clearAllTables] doesn't work with coroutines - we can't monitor when it ends
@@ -64,7 +63,7 @@ abstract class AppDatabase : RoomDatabase() {
         printingDao().clearTable()
         conditionDao().clearTable()
 
-        transactionDao().clearTable()
+        userTransactionDao().clearTable()
     }
 
     companion object {

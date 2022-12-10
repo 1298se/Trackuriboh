@@ -9,19 +9,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.lifecycle.HiltViewModel
-import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.db.entities.Product
-import sam.g.trackuriboh.data.db.entities.Transaction
+import sam.g.trackuriboh.data.db.entities.UserTransaction
 import sam.g.trackuriboh.data.db.entities.TransactionType
-import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.data.db.entities.UserListEntry
-import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
-import sam.g.trackuriboh.data.repository.PriceRepository
 import sam.g.trackuriboh.data.repository.TransactionRepository
-import sam.g.trackuriboh.data.repository.UserListRepository
 import sam.g.trackuriboh.ui.transaction.AddTransactionDialogFragment
-import sam.g.trackuriboh.ui.user_list.AddToUserListDialogFragment
-import sam.g.trackuriboh.ui.user_list.viewmodels.AddToUserListFormViewModel
 import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
@@ -96,17 +89,10 @@ class AddTransactionFormViewModel @Inject constructor(
         val price = formState.value?.formData?.price
         val quantity = formState.value?.formData?.quantity
 
-//        firebaseAnalytics.logEvent(
-//            Events.ADD_TO_USER_LIST, bundleOf(
-//            "skuId" to sku?.id,
-//            "userList" to userList?.name,
-//            "quantity" to quantity)
-//        )
-
         if (type != null && date != null && price != null && quantity != null) {
             transactionRepository.upsertTransactionAndUpdateUserListEntry(
                 userListEntry,
-                Transaction(
+                UserTransaction(
                     type = type,
                     productId = product.id,
                     listId = userListEntry.listId,

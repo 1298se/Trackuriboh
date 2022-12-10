@@ -17,6 +17,7 @@ import sam.g.trackuriboh.MainGraphDirections
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.db.entities.Product
+import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.databinding.FragmentUserListDetailBinding
 import sam.g.trackuriboh.ui.common.QuantitySelectorDialogFragment
@@ -34,6 +35,8 @@ class UserListDetailFragment : Fragment(), UserListCardAdapter.OnItemClickListen
     @Inject lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private val args: UserListDetailFragmentArgs by navArgs()
+
+    private lateinit var userList: UserList
 
     private val binding: FragmentUserListDetailBinding by viewBinding(FragmentUserListDetailBinding::inflate)
 
@@ -72,6 +75,11 @@ class UserListDetailFragment : Fragment(), UserListCardAdapter.OnItemClickListen
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        userList = args.userList
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -92,7 +100,7 @@ class UserListDetailFragment : Fragment(), UserListCardAdapter.OnItemClickListen
 
     override fun onListEntryClick(productId: Long) {
         findNavController().safeNavigate(
-            MainGraphDirections.actionGlobalCardDetailFragment(productId)
+            UserListDetailFragmentDirections.actionUserListDetailFragmentToUserListEntryDetailFragment(userList.id, productId)
         )
     }
 
@@ -109,10 +117,6 @@ class UserListDetailFragment : Fragment(), UserListCardAdapter.OnItemClickListen
 
     override fun onListEntryChecked(skuId: Long, isChecked: Boolean) {
         viewModel.setUserListEntryChecked(skuId, isChecked)
-    }
-
-    override fun onShowHistoryClick(skuId: Long, isExpanded: Boolean) {
-        viewModel.setUserListExpanded(skuId, isExpanded)
     }
 
     override fun onAddTransactionClick(product: Product, userListEntry: UserListEntry) {
@@ -134,7 +138,7 @@ class UserListDetailFragment : Fragment(), UserListCardAdapter.OnItemClickListen
             }.build()
         )
 
-        binding.userListDetailToolbar.title = args.userList.name
+        binding.userListDetailToolbar.title = userList.name
     }
 
     private fun initFab() {
@@ -142,7 +146,7 @@ class UserListDetailFragment : Fragment(), UserListCardAdapter.OnItemClickListen
             setOnClickListener {
                 findNavController().safeNavigate(
                     UserListDetailFragmentDirections.actionUserListDetailFragmentToCardSelectionFragment(
-                        userList = args.userList
+                        userList = userList
                     )
                 )
             }

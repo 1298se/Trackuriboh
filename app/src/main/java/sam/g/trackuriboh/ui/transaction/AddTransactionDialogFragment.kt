@@ -16,22 +16,12 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.data.db.entities.Product
-import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.data.db.entities.UserListEntry
-import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
-import sam.g.trackuriboh.databinding.DialogAddToUserListBinding
 import sam.g.trackuriboh.databinding.DialogAddTransactionBinding
-import sam.g.trackuriboh.ui.card_detail.SkuSelectionBottomSheetFragment
 import sam.g.trackuriboh.ui.transaction.components.AddTransactionFrom
 import sam.g.trackuriboh.ui.transaction.viewmodels.AddTransactionFormViewModel
-import sam.g.trackuriboh.ui.user_list.AddToUserListDialogFragment
-import sam.g.trackuriboh.ui.user_list.UserListSelectionBottomSheetFragment
-import sam.g.trackuriboh.ui.user_list.components.AddToUserListForm
-import sam.g.trackuriboh.ui.user_list.viewmodels.AddToUserListFormViewModel
 import sam.g.trackuriboh.utils.viewBinding
-import java.util.Calendar
-import java.util.Date
-import kotlin.properties.Delegates
+import java.util.*
 
 @ExperimentalMaterialApi
 @AndroidEntryPoint
@@ -63,8 +53,8 @@ class AddTransactionDialogFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            product = it.getParcelable(ARG_PRODUCT, Product::class.java)!!
-            userListEntry = it.getParcelable(ARG_USER_LIST_ENTRY, UserListEntry::class.java)!!
+            product = it.getParcelable(ARG_PRODUCT)!!
+            userListEntry = it.getParcelable(ARG_USER_LIST_ENTRY)!!
         }
     }
 
@@ -74,7 +64,6 @@ class AddTransactionDialogFragment : DialogFragment() {
 
             setContent {
                 MdcTheme {
-
                     val formState by viewModel.formState.observeAsState()
 
                     AddTransactionFrom(
@@ -91,12 +80,6 @@ class AddTransactionDialogFragment : DialogFragment() {
         }
 
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        initFragmentResultListeners()
     }
 
     private fun addTransaction() {
@@ -117,29 +100,5 @@ class AddTransactionDialogFragment : DialogFragment() {
             val newCal = Calendar.getInstance().apply { this.set(year, month, dayOfMonth) }
             viewModel.onDateChanged(newCal.time)
         }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show()
-    }
-
-    private fun initFragmentResultListeners() {
-        // Here we can use viewLifecycleOwner because we are not using onCreateDialog
-//        childFragmentManager.setFragmentResultListener(
-//            SkuSelectionBottomSheetFragment.FRAGMENT_RESULT_REQUEST_KEY,
-//            viewLifecycleOwner
-//        ) { _, bundle ->
-//            val selectedSku = bundle.getParcelable<SkuWithConditionAndPrinting>(
-//                SkuSelectionBottomSheetFragment.SELECTED_SKU_WITH_CONDITION_AND_PRICING_DATA_KEY
-//            )
-//
-//            viewModel.onSkuChanged(selectedSku)
-//
-//        }
-
-//        childFragmentManager.setFragmentResultListener(
-//            UserListSelectionBottomSheetFragment.FRAGMENT_RESULT_REQUEST_KEY,
-//            viewLifecycleOwner
-//        ) { _, bundle ->
-//            val selectedList = bundle.getParcelable<UserList>(UserListSelectionBottomSheetFragment.SELECTED_USER_LIST_DATA_KEY)
-//
-//            viewModel.onUserListChanged(selectedList)
-//        }
     }
 }

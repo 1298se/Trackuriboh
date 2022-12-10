@@ -26,7 +26,7 @@ import java.util.Date
     indices = [Index(value = ["productId"]), Index(value = ["listId"]), Index(value = ["skuId"])]
 )
 @Parcelize
-data class Transaction(
+data class UserTransaction(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val type: TransactionType,

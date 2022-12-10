@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_userListDetailFragment_to_cardSelectionFragment"
             app:destination="@id/cardSelectionFragment" />
+        <action
+            android:id="@+id/action_userListDetailFragment_to_userListEntryDetailFragment"
+            app:destination="@id/userListEntryDetailFragment" />
     </fragment>
 
     <fragment
@@ -35,5 +38,17 @@
         <argument
             android:name="userList"
             app:argType="sam.g.trackuriboh.data.db.entities.UserList" />
+    </fragment>
+    <fragment
+        android:id="@+id/userListEntryDetailFragment"
+        android:name="sam.g.trackuriboh.ui.user_list.UserListEntryDetailFragment"
+        android:label="fragment_user_list_entry_detail"
+        tools:layout="@layout/fragment_user_list_entry_detail" >
+        <argument
+            android:name="listId"
+            app:argType="long" />
+        <argument
+            android:name="skuId"
+            app:argType="long" />
     </fragment>
 </navigation>
