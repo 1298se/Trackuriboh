@@ -4,22 +4,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import sam.g.trackuriboh.R
-import sam.g.trackuriboh.data.db.entities.Product
-import sam.g.trackuriboh.data.db.entities.UserTransaction
 import sam.g.trackuriboh.data.db.entities.UserListEntry
-import sam.g.trackuriboh.databinding.ItemUserListCardBinding
-import sam.g.trackuriboh.databinding.ItemUserListTransactionBinding
+import sam.g.trackuriboh.databinding.ItemUserListEntryBinding
 import sam.g.trackuriboh.databinding.ListHeaderBinding
 import sam.g.trackuriboh.ui.common.BaseViewHolder
 import sam.g.trackuriboh.ui.user_list.viewmodels.UserListDetailViewModel
 import sam.g.trackuriboh.utils.show
 
-class UserListCardAdapter
+class UserListCardAdapter(private val onInteractionListener: OnInteractionListener)
     : ListAdapter<UserListDetailViewModel.UiModel, BaseViewHolder<UserListDetailViewModel.UiModel>>(
     object : DiffUtil.ItemCallback<UserListDetailViewModel.UiModel>() {
         override fun areItemsTheSame(
@@ -41,20 +36,17 @@ class UserListCardAdapter
         }
     }
 ) {
-    private var onItemClickListener: OnItemClickListener? = null
-
     private var inActionMode = false
 
-    interface OnItemClickListener {
+    interface OnInteractionListener {
         fun onListEntryClick(productId: Long)
         fun onQuantityTextClick(entry: UserListEntry)
         fun onListEntryLongClick(skuId: Long)
         fun onListEntryChecked(skuId: Long, isChecked: Boolean)
-        fun onAddTransactionClick(product: Product, userListEntry: UserListEntry)
     }
 
     inner class UserListEntryViewHolder(
-        val binding: ItemUserListCardBinding,
+        val binding: ItemUserListEntryBinding,
     ) : BaseViewHolder<UserListDetailViewModel.UiModel>(binding.root) {
 
         init {
@@ -63,12 +55,12 @@ class UserListCardAdapter
 
                 if (inActionMode) {
                     binding.itemUserListEntryCheckbox.toggle()
-                    onItemClickListener?.onListEntryChecked(
+                    onInteractionListener.onListEntryChecked(
                         userListEntryItem.data.entry.skuId,
                         binding.itemUserListEntryCheckbox.isChecked
                     )
                 } else {
-                    onItemClickListener?.onListEntryClick(
+                    onInteractionListener.onListEntryClick(
                         userListEntryItem.data.skuWithConditionAndPrintingAndProduct.productWithCardSet.product.id
                     )
                 }
@@ -77,7 +69,7 @@ class UserListCardAdapter
             binding.root.setOnLongClickListener {
                 val userListEntryItem = getItem(bindingAdapterPosition) as UserListDetailViewModel.UiModel.UserListEntryItem
 
-                onItemClickListener?.onListEntryLongClick(
+                onInteractionListener.onListEntryLongClick(
                     userListEntryItem.data.entry.skuId
                 )
 
@@ -87,7 +79,7 @@ class UserListCardAdapter
             binding.itemUserListEntryQuantityButton.setOnClickListener {
                 val userListEntryItem = getItem(bindingAdapterPosition) as UserListDetailViewModel.UiModel.UserListEntryItem
 
-                onItemClickListener?.onQuantityTextClick(userListEntryItem.data.entry)
+                onInteractionListener.onQuantityTextClick(userListEntryItem.data.entry)
             }
         }
 
@@ -165,7 +157,7 @@ class UserListCardAdapter
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<UserListDetailViewModel.UiModel> {
         return when (viewType) {
             VIEW_TYPE_USER_LIST_ENTRY -> UserListEntryViewHolder(
-                ItemUserListCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                ItemUserListEntryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             )
             VIEW_TYPE_HEADER -> HeaderViewHolder(
                 ListHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -183,10 +175,6 @@ class UserListCardAdapter
             is UserListDetailViewModel.UiModel.UserListEntryItem -> VIEW_TYPE_USER_LIST_ENTRY
             is UserListDetailViewModel.UiModel.Header -> VIEW_TYPE_HEADER
         }
-    }
-
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        onItemClickListener = listener
     }
 
     fun setInActionMode(active: Boolean) {

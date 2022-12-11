@@ -58,7 +58,7 @@
     <style name="AppTheme.Secondary" parent="AppTheme">
         <item name="colorPrimary">@color/light_blue</item>
         <item name="colorPrimaryVariant">@color/dark_blue</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorOnPrimary">@color/white</item>
     </style>
 
     <style name="ThemeOverlay.AppTheme.TextInputLayout" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox.Dense">

@@ -11,7 +11,7 @@ import sam.g.trackuriboh.data.db.relations.UserListEntryWithSkuAndProduct
 interface UserListEntryDao : BaseDao<UserListEntry> {
 
     @Query("SELECT * FROM UserListEntry WHERE listId = :listId ORDER BY dateAdded")
-    fun getEntriesInUserListObservable(listId: Long): Flow<List<UserListEntryWithSkuAndProduct>>
+    fun getUserListEntriesObservable(listId: Long): Flow<List<UserListEntryWithSkuAndProduct>>
 
     @Query("SELECT * FROM UserListEntry WHERE listId = :listId AND :skuId = skuId")
     suspend fun get(listId: Long, skuId: Long): UserListEntry?

@@ -10,7 +10,7 @@
     tools:context=".ui.user_list.UserListEntryDetailFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/item_user_list_transaction_recyclerview"
+        android:id="@+id/user_transactions_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"

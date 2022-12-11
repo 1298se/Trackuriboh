@@ -188,5 +188,8 @@
 
     <string name="reminder_notification_channel_id">reminder_channel</string>
     <string name="reminder_notification_channel_name">Reminders</string>
+    
+    <!-- Add transaction -->
+    <string name="add_user_transaction">Add New User Transaction</string>
 </resources>
 
