@@ -38,7 +38,7 @@ class UserListEntryAdapter(private val onInteractionListener: OnInteractionListe
     private var inActionMode = false
 
     interface OnInteractionListener {
-        fun onListEntryClick(productId: Long)
+        fun onListEntryClick(skuId: Long)
         fun onQuantityTextClick(entry: UserListEntry)
         fun onListEntryLongClick(skuId: Long)
         fun onListEntryChecked(skuId: Long, isChecked: Boolean)
@@ -60,7 +60,7 @@ class UserListEntryAdapter(private val onInteractionListener: OnInteractionListe
                     )
                 } else {
                     onInteractionListener.onListEntryClick(
-                        userListEntryItem.data.skuWithConditionAndPrintingAndProduct.productWithCardSet.product.id
+                        userListEntryItem.data.skuWithConditionAndPrintingAndProduct.sku.id
                     )
                 }
             }
@@ -121,9 +121,8 @@ class UserListEntryAdapter(private val onInteractionListener: OnInteractionListe
                 entryItem.avgPurchasePrice
             )
 
-            if (sku.lowestListingPrice != null && entryItem.avgPurchasePrice != 0.0) {
-                val profit = (entryItem.avgPurchasePrice - sku.lowestListingPrice) * entryItem.quantity
-
+            if (sku.lowestBasePrice != null) {
+                val profit = (sku.lowestBasePrice - entryItem.avgPurchasePrice) * entryItem.quantity
 
                 val profitPercentage = if (entryItem.avgPurchasePrice == 0.0) {
                     itemView.resources.getString(R.string.lbl_inf)

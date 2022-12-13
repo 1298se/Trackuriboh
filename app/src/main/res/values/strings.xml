@@ -126,7 +126,7 @@
     <string name="item_user_list_total_value">Total value: \$%1$.2f</string>
     <string name="item_user_list_card_count">%1$d Cards</string>
     <string name="item_user_list_quantity_avg_price">%1$d @ \$%2$.2f</string>
-    <string name="item_user_list_profit">+\$%1$.2f\(%2$s\)</string>
+    <string name="item_user_list_profit">+\$%1$.2f\(%2$s%%\)</string>
 
     <!-- User List Detail -->
     <string name="user_list_remove_entries_action_title">Remove items</string>

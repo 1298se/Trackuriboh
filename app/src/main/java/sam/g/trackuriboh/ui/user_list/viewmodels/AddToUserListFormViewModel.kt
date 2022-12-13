@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import sam.g.trackuriboh.analytics.Events
+import sam.g.trackuriboh.data.db.entities.TransactionType
 import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
@@ -30,8 +31,12 @@ class AddToUserListFormViewModel @Inject constructor(
     )
 
     data class AddToUserListFormData(
-        val skuWithConditionAndPrinting: SkuWithConditionAndPrinting? = null,
+        val type: TransactionType = TransactionType.PURCHASE,
+        val name: String? = null,
+        val date: Date? = null,
         val userList: UserList? = null,
+        val skuWithConditionAndPrinting: SkuWithConditionAndPrinting? = null,
+        val price: Double? = null,
         val quantity: Int = 1,
     )
 

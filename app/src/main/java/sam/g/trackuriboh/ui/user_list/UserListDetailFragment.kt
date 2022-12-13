@@ -83,11 +83,11 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnInteractionLis
         initFragmentResultListeners()
     }
 
-    override fun onListEntryClick(productId: Long) {
+    override fun onListEntryClick(skuId: Long) {
         findNavController().safeNavigate(
             UserListDetailFragmentDirections.actionUserListDetailFragmentToUserListEntryDetailFragment(
                 viewModel.userList.id,
-                productId
+                skuId
             )
         )
     }

@@ -1,7 +1,6 @@
 package sam.g.trackuriboh.data.repository
 
 import sam.g.trackuriboh.data.db.cache.TransactionLocalCache
-import sam.g.trackuriboh.data.db.cache.UserListLocalCache
 import sam.g.trackuriboh.data.db.entities.TransactionType
 import sam.g.trackuriboh.data.db.entities.UserTransaction
 import javax.inject.Inject
@@ -13,7 +12,7 @@ class TransactionRepository @Inject constructor(
     private val userListRepository: UserListRepository,
 ) {
     suspend fun insertTransaction(userTransaction: UserTransaction) {
-        var entry = userListRepository.getUserListEntry(userTransaction.listId, userTransaction.skuId)
+        val entry = userListRepository.getUserListEntry(userTransaction.listId, userTransaction.skuId)
 
         if (entry != null) {
             var quantity = entry.quantity
