@@ -96,7 +96,8 @@ class AddToUserListFormViewModel @Inject constructor(
                     listId = userList.id,
                     skuId = sku.id,
                     quantity = quantity,
-                    dateAdded = Date()
+                    dateAdded = Date(),
+                    avgPurchasePrice = 0.0
                 )
             )
 
