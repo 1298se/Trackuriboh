@@ -29,7 +29,6 @@ import java.text.DateFormat
 import java.util.Date
 
 
-@ExperimentalMaterialApi
 @Composable
 fun AddTransactionFrom(
     state: AddTransactionFormViewModel.AddTransactionFormState?,
@@ -112,7 +111,6 @@ fun AddTransactionFrom(
     }
 }
 
-@ExperimentalMaterialApi
 @Preview
 @Composable
 private fun AddTransactionFormPreview() {

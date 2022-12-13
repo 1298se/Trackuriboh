@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "9875633ffa0b512a016c24ffec001aff",
+    "identityHash": "4fe0943d3a5e7e49f1ffd72d830b234a",
     "entities": [
       {
         "tableName": "Product",
@@ -465,7 +465,7 @@
       },
       {
         "tableName": "UserListEntry",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`listId` INTEGER NOT NULL, `skuId` INTEGER NOT NULL, `quantity` INTEGER NOT NULL, `dateAdded` INTEGER NOT NULL, PRIMARY KEY(`listId`, `skuId`), FOREIGN KEY(`listId`) REFERENCES `UserList`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`listId` INTEGER NOT NULL, `skuId` INTEGER NOT NULL, `quantity` INTEGER NOT NULL, `dateAdded` INTEGER NOT NULL, `avgPurchasePrice` REAL NOT NULL DEFAULT 0.0, PRIMARY KEY(`listId`, `skuId`), FOREIGN KEY(`listId`) REFERENCES `UserList`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "listId",
@@ -490,6 +490,13 @@
             "columnName": "dateAdded",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "avgPurchasePrice",
+            "columnName": "avgPurchasePrice",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0.0"
           }
         ],
         "primaryKey": {
@@ -516,7 +523,7 @@
       },
       {
         "tableName": "UserTransaction",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT NOT NULL, `productId` INTEGER NOT NULL, `listId` INTEGER NOT NULL, `skuId` INTEGER NOT NULL, `quantity` INTEGER NOT NULL, `price` REAL NOT NULL, `date` INTEGER NOT NULL, FOREIGN KEY(`productId`) REFERENCES `Product`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`listId`, `skuId`) REFERENCES `UserListEntry`(`listId`, `skuId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT NOT NULL, `listId` INTEGER NOT NULL, `skuId` INTEGER NOT NULL, `quantity` INTEGER NOT NULL, `price` REAL NOT NULL, `date` INTEGER NOT NULL, FOREIGN KEY(`listId`) REFERENCES `UserList`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -528,12 +535,6 @@
             "fieldPath": "type",
             "columnName": "type",
             "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "productId",
-            "columnName": "productId",
-            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -575,15 +576,6 @@
         },
         "indices": [
           {
-            "name": "index_UserTransaction_productId",
-            "unique": false,
-            "columnNames": [
-              "productId"
-            ],
-            "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_UserTransaction_productId` ON `${TABLE_NAME}` (`productId`)"
-          },
-          {
             "name": "index_UserTransaction_listId",
             "unique": false,
             "columnNames": [
@@ -604,27 +596,14 @@
         ],
         "foreignKeys": [
           {
-            "table": "Product",
+            "table": "UserList",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
-              "productId"
+              "listId"
             ],
             "referencedColumns": [
               "id"
-            ]
-          },
-          {
-            "table": "UserListEntry",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "listId",
-              "skuId"
-            ],
-            "referencedColumns": [
-              "listId",
-              "skuId"
             ]
           }
         ]
@@ -633,7 +612,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9875633ffa0b512a016c24ffec001aff')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4fe0943d3a5e7e49f1ffd72d830b234a')"
     ]
   }
 }

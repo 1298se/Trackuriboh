@@ -6,7 +6,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,11 +14,10 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.analytics.Events
-import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.databinding.FragmentUserListDetailBinding
 import sam.g.trackuriboh.ui.common.QuantitySelectorDialogFragment
-import sam.g.trackuriboh.ui.user_list.adapters.UserListCardAdapter
+import sam.g.trackuriboh.ui.user_list.adapters.UserListEntryAdapter
 import sam.g.trackuriboh.ui.user_list.viewmodels.UserListDetailViewModel
 import sam.g.trackuriboh.utils.safeNavigate
 import sam.g.trackuriboh.utils.viewBinding
@@ -27,19 +25,15 @@ import javax.inject.Inject
 
 @ExperimentalMaterialApi
 @AndroidEntryPoint
-class UserListDetailFragment : Fragment(), UserListCardAdapter.OnInteractionListener {
+class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnInteractionListener {
 
     @Inject lateinit var firebaseAnalytics: FirebaseAnalytics
-
-    private val args: UserListDetailFragmentArgs by navArgs()
-
-    private lateinit var userList: UserList
 
     private val binding: FragmentUserListDetailBinding by viewBinding(FragmentUserListDetailBinding::inflate)
 
     private val viewModel: UserListDetailViewModel by viewModels()
 
-    private lateinit var userListCardAdapter: UserListCardAdapter
+    private lateinit var userListEntryAdapter: UserListEntryAdapter
 
     private var actionMode: ActionMode? = null
 
@@ -72,12 +66,6 @@ class UserListDetailFragment : Fragment(), UserListCardAdapter.OnInteractionList
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        userList = args.userList
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -97,7 +85,10 @@ class UserListDetailFragment : Fragment(), UserListCardAdapter.OnInteractionList
 
     override fun onListEntryClick(productId: Long) {
         findNavController().safeNavigate(
-            UserListDetailFragmentDirections.actionUserListDetailFragmentToUserListEntryDetailFragment(userList.id, productId)
+            UserListDetailFragmentDirections.actionUserListDetailFragmentToUserListEntryDetailFragment(
+                viewModel.userList.id,
+                productId
+            )
         )
     }
 
@@ -131,7 +122,7 @@ class UserListDetailFragment : Fragment(), UserListCardAdapter.OnInteractionList
             }.build()
         )
 
-        binding.userListDetailToolbar.title = userList.name
+        binding.userListDetailToolbar.title = viewModel.userList.name
     }
 
     private fun initFab() {
@@ -139,7 +130,7 @@ class UserListDetailFragment : Fragment(), UserListCardAdapter.OnInteractionList
             setOnClickListener {
                 findNavController().safeNavigate(
                     UserListDetailFragmentDirections.actionUserListDetailFragmentToCardSelectionFragment(
-                        userList = userList
+                        userList = viewModel.userList
                     )
                 )
             }
@@ -147,12 +138,12 @@ class UserListDetailFragment : Fragment(), UserListCardAdapter.OnInteractionList
     }
 
     private fun initRecyclerView() {
-        userListCardAdapter = UserListCardAdapter(this)
+        userListEntryAdapter = UserListEntryAdapter(this)
 
         binding.userListDetailList.apply {
             layoutManager = LinearLayoutManager(context)
 
-            adapter = userListCardAdapter
+            adapter = userListEntryAdapter
 
             addItemDecoration(MaterialDividerItemDecoration(context, (layoutManager as LinearLayoutManager).orientation))
         }
@@ -160,15 +151,15 @@ class UserListDetailFragment : Fragment(), UserListCardAdapter.OnInteractionList
 
     private fun initObservers() {
         viewModel.state.observe(viewLifecycleOwner) {
-            userListCardAdapter.submitList(it.entries)
+            userListEntryAdapter.submitList(it.entries)
 
              if (it.actionModeActive) {
                  if (actionMode == null) {
                      actionMode = activity?.startActionMode(actionModeCallback)
-                     userListCardAdapter.setInActionMode(true)
+                     userListEntryAdapter.setInActionMode(true)
                  }
             } else {
-                userListCardAdapter.setInActionMode(false)
+                userListEntryAdapter.setInActionMode(false)
                 actionMode?.finish()
                 actionMode = null
             }

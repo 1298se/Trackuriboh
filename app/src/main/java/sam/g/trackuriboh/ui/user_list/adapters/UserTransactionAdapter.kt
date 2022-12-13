@@ -9,6 +9,8 @@ import sam.g.trackuriboh.databinding.ItemUserTransactionBinding
 import sam.g.trackuriboh.databinding.UserTransactionsHeaderBinding
 import sam.g.trackuriboh.ui.common.BaseViewHolder
 import sam.g.trackuriboh.ui.user_list.UserListEntryDetailViewModel
+import java.text.DateFormat
+import java.util.*
 
 class UserTransactionAdapter(private val onItemClickListener: OnInteractionListener)
     : ListAdapter<UserListEntryDetailViewModel.UiModel, RecyclerView.ViewHolder>(
@@ -28,7 +30,6 @@ class UserTransactionAdapter(private val onItemClickListener: OnInteractionListe
         ): Boolean {
             return oldItem == newItem
         }
-
     }
 ) {
     companion object {
@@ -47,9 +48,12 @@ class UserTransactionAdapter(private val onItemClickListener: OnInteractionListe
         override fun bind(item: UserListEntryDetailViewModel.UiModel) {
             val transaction = (item as UserListEntryDetailViewModel.UiModel.TransactionItem).transaction
 
-            binding.itemUserTransactionTime.text = transaction.date.toString()
+            binding.itemUserTransactionTime.text = DateFormat.getDateInstance(
+                DateFormat.SHORT, Locale.getDefault()
+            ).format(item.transaction.date).toString()
             binding.itemUserTransactionType.text = transaction.type.name
             binding.itemUserTransactionAmount.text = transaction.price.toString()
+            binding.itemUserTransactionQuantity.text = transaction.quantity.toString()
         }
     }
 
@@ -75,8 +79,8 @@ class UserTransactionAdapter(private val onItemClickListener: OnInteractionListe
         viewType: Int
     ): RecyclerView.ViewHolder {
         return when (viewType) {
-            VIEW_TYPE_TRANSACTION -> UserTransactionViewHolder(ItemUserTransactionBinding.inflate(LayoutInflater.from(parent.context), parent, false))
             VIEW_TYPE_HEADER -> UserTransactionHeaderViewHolder(UserTransactionsHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            VIEW_TYPE_TRANSACTION -> UserTransactionViewHolder(ItemUserTransactionBinding.inflate(LayoutInflater.from(parent.context), parent, false))
             else -> throw IllegalStateException("invalid viewtype $viewType")
         }
     }

@@ -31,7 +31,7 @@ interface UserListEntryDao : BaseDao<UserListEntry> {
 
             -1
         } else {
-            upsert(obj)
+            insert(obj)
         }
     }
 

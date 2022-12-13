@@ -42,7 +42,6 @@
     <fragment
         android:id="@+id/userListEntryDetailFragment"
         android:name="sam.g.trackuriboh.ui.user_list.UserListEntryDetailFragment"
-        android:label="fragment_user_list_entry_detail"
         tools:layout="@layout/fragment_user_list_entry_detail" >
         <argument
             android:name="listId"

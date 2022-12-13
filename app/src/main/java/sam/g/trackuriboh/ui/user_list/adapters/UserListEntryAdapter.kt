@@ -1,7 +1,6 @@
 package sam.g.trackuriboh.ui.user_list.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -14,7 +13,7 @@ import sam.g.trackuriboh.ui.common.BaseViewHolder
 import sam.g.trackuriboh.ui.user_list.viewmodels.UserListDetailViewModel
 import sam.g.trackuriboh.utils.show
 
-class UserListCardAdapter(private val onInteractionListener: OnInteractionListener)
+class UserListEntryAdapter(private val onInteractionListener: OnInteractionListener)
     : ListAdapter<UserListDetailViewModel.UiModel, BaseViewHolder<UserListDetailViewModel.UiModel>>(
     object : DiffUtil.ItemCallback<UserListDetailViewModel.UiModel>() {
         override fun areItemsTheSame(
@@ -75,20 +74,17 @@ class UserListCardAdapter(private val onInteractionListener: OnInteractionListen
 
                 true
             }
-
-            binding.itemUserListEntryQuantityButton.setOnClickListener {
-                val userListEntryItem = getItem(bindingAdapterPosition) as UserListDetailViewModel.UiModel.UserListEntryItem
-
-                onInteractionListener.onQuantityTextClick(userListEntryItem.data.entry)
-            }
         }
 
         override fun bind(item: UserListDetailViewModel.UiModel) {
-            val entryItem = item as UserListDetailViewModel.UiModel.UserListEntryItem
+            val uiModel = item as UserListDetailViewModel.UiModel.UserListEntryItem
+            val skuWithConditionAndPrintingAndProduct = uiModel.data.skuWithConditionAndPrintingAndProduct
+            val entryItem = uiModel.data.entry
 
-            val skuWithConditionAndPrintingAndProduct = entryItem.data.skuWithConditionAndPrintingAndProduct
             val productWithCardSet = skuWithConditionAndPrintingAndProduct.productWithCardSet
+
             val product = productWithCardSet.product
+            val sku = skuWithConditionAndPrintingAndProduct.sku
 
             Glide.with(itemView)
                 .load(product.imageUrl)
@@ -110,24 +106,38 @@ class UserListCardAdapter(private val onInteractionListener: OnInteractionListen
 
             binding.itemUserListEntryCheckbox.show(inActionMode)
 
-            binding.itemUserListEntryQuantityButton.visibility = if (!inActionMode) {
-                View.VISIBLE
-            } else {
-                View.INVISIBLE
-            }
+            binding.itemUserListEntryCheckbox.isChecked = uiModel.isChecked
 
-            binding.itemUserListEntryQuantityButton.text = entryItem.data.entry.quantity.toString()
-
-            binding.itemUserListEntryCheckbox.isChecked = entryItem.isChecked
-
-            binding.itemUserListEntryPriceTextview.text = skuWithConditionAndPrintingAndProduct.sku.lowestBasePrice?.let {
+            binding.itemUserListEntryPriceTextview.text = sku.lowestBasePrice?.let {
                 itemView.context.getString(
                     R.string.lbl_price_with_dollar_sign,
                     it
                 )
             } ?: itemView.context.getString(R.string.lbl_not_available)
-        }
 
+            binding.itemUserListEntryQuantityAvgPurchasePriceTextview.text = itemView.resources.getString(
+                R.string.item_user_list_quantity_avg_price,
+                entryItem.quantity,
+                entryItem.avgPurchasePrice
+            )
+
+            if (sku.lowestListingPrice != null && entryItem.avgPurchasePrice != 0.0) {
+                val profit = (entryItem.avgPurchasePrice - sku.lowestListingPrice) * entryItem.quantity
+
+
+                val profitPercentage = if (entryItem.avgPurchasePrice == 0.0) {
+                    itemView.resources.getString(R.string.lbl_inf)
+                } else {
+                    (profit / entryItem.avgPurchasePrice).toInt().toString()
+                }
+
+                binding.itemUserListEntryProfitTextview.text = itemView.resources.getString(
+                    R.string.item_user_list_profit,
+                    profit,
+                    profitPercentage
+                )
+            }
+        }
     }
 
     inner class HeaderViewHolder(

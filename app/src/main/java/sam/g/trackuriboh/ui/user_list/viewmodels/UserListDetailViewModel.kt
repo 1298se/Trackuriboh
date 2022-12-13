@@ -167,14 +167,10 @@ class UserListDetailViewModel @Inject constructor(
             val updatedEntry = currentEditEntry?.copy(quantity = quantity)
 
             if (updatedEntry != null) {
-                if (quantity > 0) {
-                    userListRepository.updateUserListEntry(updatedEntry)
-                } else {
-                    userListRepository.deleteUserListEntry(updatedEntry)
-                }
-
-                currentEditEntry = null
+                userListRepository.updateUserListEntry(updatedEntry)
             }
+
+            currentEditEntry = null
         }
     }
 

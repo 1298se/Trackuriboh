@@ -12,8 +12,8 @@
         android:id="@+id/item_user_list_entry_sku_detail_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/list_item_two_line_padding_top"
         android:paddingStart="@dimen/list_item_padding_start"
+        android:paddingTop="@dimen/list_item_two_line_padding_top"
         android:paddingEnd="@dimen/list_item_padding_end"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,7 +49,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             app:layout_constraintBottom_toTopOf="@id/item_user_list_rarity_number_textview"
-            app:layout_constraintEnd_toStartOf="@id/item_user_list_entry_quantity_button"
+            app:layout_constraintEnd_toStartOf="@id/item_user_list_entry_checkbox"
             app:layout_constraintStart_toEndOf="@id/item_user_list_entry_image_text_barrier"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
@@ -65,7 +65,7 @@
             android:gravity="center_vertical"
             android:maxLines="1"
             app:layout_constraintBottom_toTopOf="@id/item_user_list_entry_edition_condition_textview"
-            app:layout_constraintEnd_toStartOf="@id/item_user_list_entry_quantity_button"
+            app:layout_constraintEnd_toStartOf="@id/item_user_list_entry_quantity_avg_purchase_price_textview"
             app:layout_constraintStart_toEndOf="@id/item_user_list_entry_image_text_barrier"
             app:layout_constraintTop_toBottomOf="@id/item_user_list_entry_title_textview"
             tools:text="Ultra Rare \u2022 LOB-001" />
@@ -81,7 +81,7 @@
             android:gravity="center_vertical"
             android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/item_user_list_entry_quantity_button"
+            app:layout_constraintEnd_toStartOf="@id/item_user_list_entry_profit_textview"
             app:layout_constraintStart_toEndOf="@id/item_user_list_entry_image_text_barrier"
             app:layout_constraintTop_toBottomOf="@id/item_user_list_rarity_number_textview"
             tools:text="1st Edition \u2022 Near Mint" />
@@ -91,9 +91,10 @@
             style="@style/TextAppearance.MaterialComponents.Subtitle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/item_user_list_entry_quantity_button"
+            app:layout_constraintBottom_toTopOf="@id/item_user_list_entry_quantity_avg_purchase_price_textview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
             tools:text="$69.69" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
@@ -101,69 +102,34 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:clickable="false"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/item_user_list_entry_quantity_avg_purchase_price_textview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/item_user_list_entry_price_textview"
             tools:visibility="visible" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/item_user_list_entry_quantity_button"
-            style="@style/Widget.AppTheme.Button.IconOnly.Surface"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/item_user_list_entry_quantity_avg_purchase_price_textview"
+            style="@style/TextAppearance.MaterialComponents.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="@dimen/text_spacing"
+            app:layout_constraintBottom_toTopOf="@id/item_user_list_entry_profit_textview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/item_user_list_entry_price_textview"
-            tools:text="99" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            tools:text="3 @ $69.69" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/item_user_list_entry_transaction_summary_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/item_user_list_entry_sku_detail_layout">
-
-        <TextView
-            android:id="@+id/item_user_list_total_header"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/item_user_list_entry_profit_textview"
+            style="@style/TextAppearance.MaterialComponents.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/item_user_list_total_purchase_amount"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text="TOTAL" />
-
-        <TextView
-            android:id="@+id/item_user_list_total_purchase_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/item_user_list_total_sell_amount"
-            app:layout_constraintStart_toEndOf="@id/item_user_list_total_header"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text="$15.00" />
-
-        <TextView
-            android:id="@+id/item_user_list_total_sell_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/item_user_list_total_net_amount"
-            app:layout_constraintStart_toEndOf="@id/item_user_list_total_purchase_amount"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text="$15.00" />
-
-        <TextView
-            android:id="@+id/item_user_list_total_net_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_spacing"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/item_user_list_total_sell_amount"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text="$0.00" />
+            app:layout_constraintTop_toBottomOf="@id/item_user_list_entry_quantity_avg_purchase_price_textview"
+            android:textColor="@color/light_green"
+            tools:text="+$69.69(69%)" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

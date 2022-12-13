@@ -1,33 +1,27 @@
 package sam.g.trackuriboh.ui.transaction.viewmodels
 
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.core.os.bundleOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.lifecycle.HiltViewModel
-import sam.g.trackuriboh.data.db.entities.Product
 import sam.g.trackuriboh.data.db.entities.UserTransaction
 import sam.g.trackuriboh.data.db.entities.TransactionType
-import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.data.repository.TransactionRepository
-import sam.g.trackuriboh.ui.transaction.AddTransactionDialogFragment
+import sam.g.trackuriboh.ui.transaction.AddTransactionDialogFragment.Companion.ARG_LIST_ID
+import sam.g.trackuriboh.ui.transaction.AddTransactionDialogFragment.Companion.ARG_SKU_ID
 import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
 import kotlin.math.absoluteValue
 
-@ExperimentalMaterialApi
 @HiltViewModel
 class AddTransactionFormViewModel @Inject constructor(
     private val transactionRepository: TransactionRepository,
-    // private val priceRepository: PriceRepository,
-    private val firebaseAnalytics: FirebaseAnalytics,
     state: SavedStateHandle
 ) : ViewModel() {
+    private val listId = state.get<Long>(ARG_LIST_ID)!!
+    private val skuId = state.get<Long>(ARG_SKU_ID)!!
 
     data class AddTransactionFormState(
         val canSave: Boolean = false,
@@ -83,28 +77,22 @@ class AddTransactionFormViewModel @Inject constructor(
         }
     }
 
-    fun addEntryToTransactionList(product: Product, userListEntry: UserListEntry)  = liveData {
+    suspend fun addEntryToTransactionList() {
         val type = formState.value?.formData?.type
         val date = formState.value?.formData?.date
         val price = formState.value?.formData?.price
         val quantity = formState.value?.formData?.quantity
 
         if (type != null && date != null && price != null && quantity != null) {
-            transactionRepository.upsertTransactionAndUpdateUserListEntry(
-                userListEntry,
+            transactionRepository.insertTransaction(
                 UserTransaction(
                     type = type,
-                    productId = product.id,
-                    listId = userListEntry.listId,
-                    skuId = userListEntry.skuId,
+                    listId = listId,
+                    skuId = skuId,
                     quantity = quantity,
                     price = price,
                     date = date
                 )
-            )
-
-            emit(
-                bundleOf(AddTransactionDialogFragment.ADDED_TRANSACTION_NAME_DATA_KEY to "")
             )
         }
     }

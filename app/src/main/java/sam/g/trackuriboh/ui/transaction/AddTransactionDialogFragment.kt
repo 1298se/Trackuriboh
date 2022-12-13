@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -13,49 +12,35 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
-import sam.g.trackuriboh.data.db.entities.Product
-import sam.g.trackuriboh.data.db.entities.UserListEntry
+import kotlinx.coroutines.launch
 import sam.g.trackuriboh.databinding.DialogAddTransactionBinding
 import sam.g.trackuriboh.ui.transaction.components.AddTransactionFrom
 import sam.g.trackuriboh.ui.transaction.viewmodels.AddTransactionFormViewModel
 import sam.g.trackuriboh.utils.viewBinding
 import java.util.*
 
-@ExperimentalMaterialApi
 @AndroidEntryPoint
 class AddTransactionDialogFragment : DialogFragment() {
     private val binding: DialogAddTransactionBinding by viewBinding(DialogAddTransactionBinding::inflate)
 
     private val viewModel: AddTransactionFormViewModel by viewModels()
 
-    private lateinit var product: Product
-    private lateinit var userListEntry: UserListEntry
-
     companion object {
         const val FRAGMENT_RESULT_REQUEST_KEY = "AddTransactionDialogFragment_fragmentResultRequestKey"
-        const val ADDED_TRANSACTION_NAME_DATA_KEY = "AddTransactionDialogFragment_addedTransaction"
 
-        const val ARG_USER_LIST_ENTRY = "AddTransactionDialogFragment_argUserListEntry"
-        const val ARG_PRODUCT = "AddTransactionDialogFragment_argProduct"
+        const val ARG_LIST_ID = "AddTransactionDialogFragment_argListId"
+        const val ARG_SKU_ID = "AddTransactionDialogFragment_argSkuId"
 
-        fun newInstance(product: Product, userListEntry: UserListEntry) =
+        fun newInstance(listId: Long, skuId: Long) =
             AddTransactionDialogFragment().apply {
                 arguments = bundleOf(
-                    ARG_USER_LIST_ENTRY to userListEntry,
-                    ARG_PRODUCT to product,
+                    ARG_LIST_ID to listId,
+                    ARG_SKU_ID to skuId
                 )
             }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            product = it.getParcelable(ARG_PRODUCT)!!
-            userListEntry = it.getParcelable(ARG_USER_LIST_ENTRY)!!
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -83,11 +68,11 @@ class AddTransactionDialogFragment : DialogFragment() {
     }
 
     private fun addTransaction() {
-        viewModel.addEntryToTransactionList(product, userListEntry).observe(viewLifecycleOwner) {
-            setFragmentResult(FRAGMENT_RESULT_REQUEST_KEY, it)
+        lifecycleScope.launch {
+            viewModel.addEntryToTransactionList()
+
             dismiss()
         }
-        dismiss()
     }
 
     private fun showDateSelectionDialog(date: Date?) {

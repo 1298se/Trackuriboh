@@ -7,13 +7,11 @@ import androidx.lifecycle.liveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
 import sam.g.trackuriboh.data.repository.ProductRepository
-import sam.g.trackuriboh.data.repository.UserListRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class CardDetailViewModel @Inject constructor(
     private val productRepository: ProductRepository,
-    private val userListRepository: UserListRepository,
     state: SavedStateHandle
 ) : ViewModel() {
 

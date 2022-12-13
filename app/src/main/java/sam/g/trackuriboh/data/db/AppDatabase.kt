@@ -82,9 +82,9 @@ abstract class AppDatabase : RoomDatabase() {
 
         private fun buildDatabase(application: Application) =
             Room.databaseBuilder(application, AppDatabase::class.java, DATABASE_NAME).apply {
-                if (!BuildConfig.DEBUG) {
+                //if (!BuildConfig.DEBUG) {
                     createFromAsset(DATABASE_FILE_PATH)
-                }
+                //}
             }.addMigrations(MIGRATION_1_2, MIGRATION_2_3).build()
     }
 }

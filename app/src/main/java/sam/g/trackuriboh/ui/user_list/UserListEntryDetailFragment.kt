@@ -6,12 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.databinding.FragmentUserListEntryDetailBinding
 import sam.g.trackuriboh.ui.transaction.AddTransactionDialogFragment
 import sam.g.trackuriboh.ui.user_list.adapters.UserTransactionAdapter
 import sam.g.trackuriboh.utils.viewBinding
 
+@AndroidEntryPoint
 class UserListEntryDetailFragment : Fragment(), UserTransactionAdapter.OnInteractionListener {
     private val binding: FragmentUserListEntryDetailBinding by viewBinding(FragmentUserListEntryDetailBinding::inflate)
 
@@ -29,11 +34,16 @@ class UserListEntryDetailFragment : Fragment(), UserTransactionAdapter.OnInterac
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initToolbar()
         initRecyclerView()
 
         viewModel.transactions.observe(viewLifecycleOwner) {
             userTransactionAdapter.submitList(it)
         }
+    }
+
+    private fun initToolbar() {
+        binding.userListEntryDetailToolbar.setupWithNavController(findNavController())
     }
 
     private fun initRecyclerView() {
@@ -46,6 +56,6 @@ class UserListEntryDetailFragment : Fragment(), UserTransactionAdapter.OnInterac
     }
 
     override fun onAddNewTransactionClick() {
-        AddTransactionDialogFragment.newInstance()
+        AddTransactionDialogFragment.newInstance(viewModel.listId, viewModel.skuId).show(childFragmentManager, null)
     }
 }

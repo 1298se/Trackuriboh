@@ -14,7 +14,7 @@ class UserListLocalCache @Inject constructor(
 
     fun getEntriesInUserListObservable(listId: Long) = appDatabase.userListEntryDao().getUserListEntriesObservable(listId)
 
-    suspend fun upsertUserList(userList: UserList) = appDatabase.userListDao().upsert(userList)
+    suspend fun upsertUserList(userList: UserList) = appDatabase.userListDao().insert(userList)
 
     suspend fun upsertUserLists(userLists: List<UserList>) = appDatabase.userListDao().upsert(userLists)
 
@@ -39,4 +39,5 @@ class UserListLocalCache @Inject constructor(
 
     suspend fun getAllUserListEntries() = appDatabase.userListEntryDao().getAllUserListEntries()
 
+    suspend fun getUserListEntry(listId: Long, skuId: Long) = appDatabase.userListEntryDao().get(listId, skuId)
 }
