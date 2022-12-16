@@ -20,7 +20,8 @@ import sam.g.trackuriboh.ui.common.AppThemeDenseOutlinedTextField
 import sam.g.trackuriboh.ui.common.AppThemeOutlinedTextButton
 import sam.g.trackuriboh.ui.common.SimpleDialogForm
 import sam.g.trackuriboh.ui.reminder.ReminderFormViewModel
-import sam.g.trackuriboh.utils.formatReminderDateTime
+import sam.g.trackuriboh.utils.formatDateTime
+import java.text.DateFormat
 import java.util.*
 
 @ExperimentalMaterialApi
@@ -90,9 +91,7 @@ fun ReminderForm(
 
         AppThemeOutlinedTextButton(
             modifier = Modifier.fillMaxWidth(),
-            text = state?.formData?.date?.let {
-                formatReminderDateTime(it)
-            } ?: stringResource(id = R.string.reminder_form_date_time_hint),
+            text = state?.formData?.date?.formatDateTime(DateFormat.LONG, DateFormat.SHORT) ?: stringResource(id = R.string.reminder_form_date_time_hint),
             onButtonClick = onDateTimeButtonClick,
             trailingIcon = {
                 Icon(

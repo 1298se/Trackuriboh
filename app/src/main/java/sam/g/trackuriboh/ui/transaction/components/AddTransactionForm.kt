@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +24,7 @@ import sam.g.trackuriboh.ui.common.AppThemeSegmentedButton
 import sam.g.trackuriboh.ui.common.QuantitySelector
 import sam.g.trackuriboh.ui.common.SimpleDialogForm
 import sam.g.trackuriboh.ui.transaction.viewmodels.AddTransactionFormViewModel
+import sam.g.trackuriboh.utils.formatDate
 import java.text.DateFormat
 import java.util.Date
 
@@ -62,7 +62,7 @@ fun AddTransactionFrom(
         )
 
         val date = state?.formData?.date ?: Date()
-        val dateString = DateFormat.getDateInstance().format(date)
+        val dateString = date.formatDate(DateFormat.MEDIUM) ?: ""
 
         AppThemeOutlinedTextButton(
             text = dateString,

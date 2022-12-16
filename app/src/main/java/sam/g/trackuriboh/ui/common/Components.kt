@@ -380,24 +380,57 @@ fun QuantitySelector(
     }
 }
 
-@Preview
 @Composable
-private fun QuantitySelectorPreview() {
-    MdcTheme {
-        QuantitySelector(
-            onQuantityChanged = { },
-            modifier = Modifier,
+fun SelectableLabelValueRow(
+    modifier: Modifier = Modifier,
+    label: String?,
+    value: String?,
+    onClick: () -> Unit
+) {
+    Row(modifier = modifier
+        .fillMaxWidth()
+        .clickable { onClick() }) {
+        
+        Text(
+            text = label ?: "",
+            modifier = Modifier.weight(1f),
+            style = MaterialTheme.typography.subtitle1
         )
 
-        SimpleDialogForm(
-            onPositiveButtonClick = { },
-            onNegativeButtonClick = { }) {
-            AppThemeDialogButtons(
-                positiveButtonText = "OK",
-                negativeButtonText = "Cancel",
+        Text(
+            text = value ?: "",
+            modifier = Modifier.weight(1f),
+            style = MaterialTheme.typography.body2,
+            textAlign = TextAlign.End
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ComponentPreviews() {
+    MdcTheme {
+        Column {
+            SelectableLabelValueRow(label = "Bruh", value = "Bruh") {
+                
+            }
+            
+            QuantitySelector(
+                onQuantityChanged = { },
+                modifier = Modifier,
+            )
+
+            SimpleDialogForm(
                 onPositiveButtonClick = { },
-                onNegativeButtonClick = { })
+                onNegativeButtonClick = { }) {
+                AppThemeDialogButtons(
+                    positiveButtonText = "OK",
+                    negativeButtonText = "Cancel",
+                    onPositiveButtonClick = { },
+                    onNegativeButtonClick = { })
+            }
         }
     }
 }
+
 

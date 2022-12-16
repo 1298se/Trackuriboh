@@ -18,7 +18,7 @@ import sam.g.trackuriboh.data.db.entities.UserList
 import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
 import sam.g.trackuriboh.databinding.DialogAddToUserListBinding
 import sam.g.trackuriboh.ui.card_detail.SkuSelectionBottomSheetFragment
-import sam.g.trackuriboh.ui.user_list.components.AddToUserListForm
+import sam.g.trackuriboh.ui.user_list.components.AddTransactionForm
 import sam.g.trackuriboh.ui.user_list.viewmodels.AddToUserListFormViewModel
 import sam.g.trackuriboh.utils.viewBinding
 import kotlin.properties.Delegates
@@ -65,7 +65,7 @@ class AddToUserListDialogFragment : DialogFragment() {
 
                     val formState by viewModel.formState.observeAsState()
 
-                    AddToUserListForm(
+                    AddTransactionForm(
                         state = formState,
                         onSelectSkuButtonClick = ::showSkuSelectionBottomSheet,
                         onSelectListButtonClick = ::showListSelectionBottomSheet,

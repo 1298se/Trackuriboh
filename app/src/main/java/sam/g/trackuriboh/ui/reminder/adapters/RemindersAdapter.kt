@@ -14,7 +14,8 @@ import sam.g.trackuriboh.databinding.ItemReminderBinding
 import sam.g.trackuriboh.databinding.ListHeaderBinding
 import sam.g.trackuriboh.ui.common.BaseViewHolder
 import sam.g.trackuriboh.ui.reminder.RemindersViewModel
-import sam.g.trackuriboh.utils.formatReminderDateTime
+import sam.g.trackuriboh.utils.formatDateTime
+import java.text.DateFormat
 
 @ExperimentalMaterialApi
 class RemindersAdapter : ListAdapter<RemindersViewModel.UiModel, BaseViewHolder<RemindersViewModel.UiModel>>(
@@ -81,7 +82,7 @@ class RemindersAdapter : ListAdapter<RemindersViewModel.UiModel, BaseViewHolder<
 
             binding.itemReminderImage.setImageDrawable(reminderIcon)
 
-            binding.itemReminderDescriptionTextview.text = formatReminderDateTime(reminder.date)
+            binding.itemReminderDescriptionTextview.text = reminder.date.formatDateTime(DateFormat.MEDIUM, DateFormat.SHORT)
         }
     }
 

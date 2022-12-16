@@ -31,8 +31,8 @@ class AddToUserListFormViewModel @Inject constructor(
     )
 
     data class AddToUserListFormData(
-        val type: TransactionType = TransactionType.PURCHASE,
         val name: String? = null,
+        val type: TransactionType = TransactionType.PURCHASE,
         val date: Date? = null,
         val userList: UserList? = null,
         val skuWithConditionAndPrinting: SkuWithConditionAndPrinting? = null,
