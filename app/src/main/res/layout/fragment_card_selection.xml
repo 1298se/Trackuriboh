@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        style="@style/Widget.MaterialComponents.Toolbar.Primary" />
+        style="@style/Widget.AppTheme.Toolbar.SearchView.Primary" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/new_card_selection_fragment_container"

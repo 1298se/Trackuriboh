@@ -10,13 +10,14 @@ import javax.inject.Singleton
 class SkuRepository @Inject constructor(
     private val skuLocalCache: SkuLocalCache
 ) {
+    suspend fun getSkus(productId: Long) =
+        skuLocalCache.getSkus(productId)
+
+    fun getSkusWithMetadataObservable(productId: Long) =
+        skuLocalCache.getSkusWithMetadataObservable(productId)
 
     suspend fun getSkuIdsPaginated(offset: Int, limit: Int = GET_REQUEST_ID_QUERY_LIMIT) =
         skuLocalCache.getSkuIdsPaginated(offset, limit)
-
-
-    suspend fun getSkusWithConditionAndPrinting(productId: Long) =
-        skuLocalCache.getSkusWithConditionAndPrintingOrdered(productId)
 
     suspend fun upsertSkus(skus: List<Sku>) = skuLocalCache.upsertSkus(skus)
 }

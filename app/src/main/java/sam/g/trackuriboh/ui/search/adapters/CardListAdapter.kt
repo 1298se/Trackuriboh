@@ -12,6 +12,7 @@ import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
 import sam.g.trackuriboh.databinding.CardFilterRowViewBinding
 import sam.g.trackuriboh.databinding.ItemCardBinding
 import sam.g.trackuriboh.ui.search.viewmodels.CardListViewModel
+import sam.g.trackuriboh.utils.joinStringsWithInterpunct
 
 class CardListAdapter(private val onInteractionListener: OnInteractionListener) :
     PagingDataAdapter<CardListViewModel.UiModel, RecyclerView.ViewHolder>(CARD_COMPARATOR) {
@@ -83,13 +84,21 @@ class CardListAdapter(private val onInteractionListener: OnInteractionListener) 
         RecyclerView.ViewHolder(binding.root) {
         init {
             binding.cardFilterContainer.setOnClickListener {
-                onInteractionListener?.onFilterButtonClick()
+                onInteractionListener.onFilterButtonClick()
             }
         }
     }
 
     inner class CardViewHolder(private val binding: ItemCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.root.setOnClickListener {
+                val item = getItem(bindingAdapterPosition) as CardListViewModel.UiModel.CardItem
+
+                onInteractionListener.onCardItemClick(item.productWithCardSetAndSkuIds.product.id)
+            }
+        }
 
         fun bind(item: ProductWithCardSetAndSkuIds) {
             Glide.with(itemView)
@@ -98,13 +107,8 @@ class CardListAdapter(private val onInteractionListener: OnInteractionListener) 
                 .into(binding.itemCardImage)
 
             with(binding) {
-                root.setOnClickListener {
-                    onInteractionListener.onCardItemClick(item.product.id)
-                }
-
                 itemCardTitleTextview.text = item.product.name
-                itemCardNumberRarityTextview.text = itemView.resources.getString(
-                    R.string.number_rarity_oneline,
+                itemCardNumberRarityTextview.text = joinStringsWithInterpunct(
                     item.product.number,
                     item.rarity.name
                 )

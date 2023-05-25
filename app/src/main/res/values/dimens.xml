@@ -25,16 +25,13 @@
     <dimen name="list_padding_end">8dp</dimen>
 
     <!-- List Items -->
-    <dimen name="list_item_padding_start">16dp</dimen>
-    <dimen name="list_item_padding_end">16dp</dimen>
+    <dimen name="list_item_padding_horizontal">16dp</dimen>
 
     <dimen name="list_item_one_line_height">48dp</dimen>
-    <dimen name="list_item_one_line_padding_top">12dp</dimen>
-    <dimen name="list_item_one_line_padding_bottom">12dp</dimen>
+    <dimen name="list_item_one_line_padding_vertical">12dp</dimen>
 
     <dimen name="list_item_two_line_height">64dp</dimen>
-    <dimen name="list_item_two_line_padding_top">8dp</dimen>
-    <dimen name="list_item_two_line_padding_bottom">8dp</dimen>
+    <dimen name="list_item_two_line_padding_vertical">8dp</dimen>
 
     <dimen name="list_item_three_line_height">88dp</dimen>
     <dimen name="list_item_three_line_image_padding_top">16dp</dimen>
@@ -61,9 +58,6 @@
     <!-- Search Bar -->
     <dimen name="search_view_margin_start">8dp</dimen>
 
-    <!-- Database Status View -->
-    <dimen name="database_status_view_padding">12dp</dimen>
-
 
     <!-- Card Detail -->
     <dimen name="card_image_swipe_padding">16dp</dimen>
@@ -81,7 +75,7 @@
 
     <!-- Forms -->
     <dimen name="form_row_spacing">16dp</dimen>
-    <dimen name="text_field_height">48dp</dimen>
+    <dimen name="text_field_height">56dp</dimen>
     <dimen name="text_field_dense_height">40dp</dimen>
     <dimen name="text_field_dense_paddingTop">8dp</dimen>
     <dimen name="text_field_dense_paddingStart">16dp</dimen>

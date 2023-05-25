@@ -16,7 +16,7 @@ class CardDetailStateAdapter(
         var total = 0
 
         productWithCardSetAndSkuIds.let { total++ }
-        productWithCardSetAndSkuIds.skuIds.let { total++ }
+        productWithCardSetAndSkuIds.skusWithMetadata.let { total++ }
         return total
     }
 

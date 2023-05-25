@@ -9,11 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.divider.MaterialDividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import sam.g.trackuriboh.databinding.FragmentCardSetListBinding
 import sam.g.trackuriboh.ui.search.adapters.CardSetListAdapter
 import sam.g.trackuriboh.ui.search.viewmodels.CardSetListViewModel
+import sam.g.trackuriboh.utils.addDividerItemDecoration
 import sam.g.trackuriboh.utils.viewBinding
 
 @AndroidEntryPoint
@@ -65,7 +65,7 @@ class CardSetListFragment : Fragment(), CardSetListAdapter.OnItemClickListener {
         binding.cardSetList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = cardSetListAdapter
-            addItemDecoration(MaterialDividerItemDecoration(context, (layoutManager as LinearLayoutManager).orientation))
+            addDividerItemDecoration()
         }
     }
 }

@@ -106,6 +106,7 @@ class QuantitySelectorDialogFragment : DialogFragment() {
                 onQuantityChanged = onQuantityChanged,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 quantity = quantity,
+                dense = true
             )
         }
     }

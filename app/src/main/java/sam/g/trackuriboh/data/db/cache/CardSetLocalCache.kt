@@ -7,7 +7,9 @@ import sam.g.trackuriboh.data.db.dao.toSearchSuggestionsCursor
 import sam.g.trackuriboh.data.db.entities.CardSet
 import sam.g.trackuriboh.data.db.entities.Product
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class CardSetLocalCache @Inject constructor(
     private val appDatabase: AppDatabase
 ) {

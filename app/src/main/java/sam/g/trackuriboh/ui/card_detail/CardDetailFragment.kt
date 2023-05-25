@@ -24,8 +24,16 @@ import sam.g.trackuriboh.ui.card_detail.adapters.CardDetailStateAdapter
 import sam.g.trackuriboh.ui.card_detail.viewmodels.CardDetailViewModel
 import sam.g.trackuriboh.ui.common.CollapseToolbarStateChangeListener
 import sam.g.trackuriboh.ui.search.adapters.ImagePagerAdapter
-import sam.g.trackuriboh.ui.user_list.AddToUserListDialogFragment
-import sam.g.trackuriboh.utils.*
+import sam.g.trackuriboh.ui.user_list.AddToUserListFormDialogFragment
+import sam.g.trackuriboh.utils.SNACKBAR_MESSAGE
+import sam.g.trackuriboh.utils.SNACKBAR_SHOW_REQUEST_KEY
+import sam.g.trackuriboh.utils.SNACKBAR_TYPE
+import sam.g.trackuriboh.utils.SnackbarType
+import sam.g.trackuriboh.utils.openTCGPlayer
+import sam.g.trackuriboh.utils.safeNavigate
+import sam.g.trackuriboh.utils.setViewPagerBackPressBehaviour
+import sam.g.trackuriboh.utils.showSnackbar
+import sam.g.trackuriboh.utils.viewBinding
 
 @ExperimentalMaterialApi
 @AndroidEntryPoint
@@ -54,8 +62,6 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
             populateLayout(it)
             /*
-             * !IMPORTANT: FOR PROPER VIEWSTATE RESTORATION TO OCCUR, THE ADAPTERS MUST BE REATTACHED
-             * ONCHANGE INSTEAD OF EXPOSIING A setItems METHOD AND CALLING NOTIFYCHANGE.
              * In this case, since the data is a one-shot operation, we just initialize the adapters
              * here.
              * See ViewPager2.setAdapter
@@ -68,7 +74,8 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_add_to_user_list -> {
-                AddToUserListDialogFragment.newInstance(args.cardId).show(childFragmentManager, null)
+                AddToUserListFormDialogFragment.newInstance(args.cardId)
+                    .show(childFragmentManager, null)
             }
         }
         return false
@@ -156,14 +163,5 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             showSnackbar(message, type)
         }
 
-        // Observe [AddToUserListDialogFragment]
-        childFragmentManager.setFragmentResultListener(
-            AddToUserListDialogFragment.FRAGMENT_RESULT_REQUEST_KEY,
-            viewLifecycleOwner
-        ) { _, bundle ->
-            val userListName = bundle.getString(AddToUserListDialogFragment.ADDED_USER_LIST_NAME_DATA_KEY)
-
-            showSnackbar(getString(R.string.add_to_user_list_success_message, userListName))
-        }
     }
 }

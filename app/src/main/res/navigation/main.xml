@@ -7,6 +7,8 @@
 
     <include app:graph="@navigation/database" />
 
+    <include app:graph="@navigation/inventory" />
+
     <include app:graph="@navigation/user_lists" />
 
     <include app:graph="@navigation/reminders" />
@@ -39,5 +41,19 @@
 
     <action
         android:id="@+id/action_global_cardSetDetailFragment"
-        app:destination="@+id/cardSetDetailFragment" />
+        app:destination="@id/cardSetDetailFragment" />
+
+    <fragment
+        android:id="@+id/cardSelectionFragment"
+        android:label="@string/lbl_select_card"
+        android:name="sam.g.trackuriboh.ui.card_selection.CardSelectionFragment"
+        tools:layout="@layout/fragment_card_selection">
+        <argument
+            android:name="shouldCloseAfterClick"
+            app:argType="boolean" />
+    </fragment>
+
+    <action
+        android:id="@+id/action_global_cardSelectionFragment"
+        app:destination="@id/cardSelectionFragment" />
 </navigation>

@@ -77,7 +77,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_more_vert_24"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="?attr/colorOnSurface" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

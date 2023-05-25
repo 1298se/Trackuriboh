@@ -12,16 +12,14 @@ class SkuLocalCache @Inject constructor(
     suspend fun getSkuIdsPaginated(offset: Int, limit: Int) =
         appDatabase.skuDao().getSkuIdsPaginated(offset, limit)
 
-    suspend fun getSkusWithConditionAndPrintingOrdered(skuIds: List<Long>) =
-        appDatabase.skuDao().getSkusWithConditionAndPrintingOrdered(skuIds)
-
-    suspend fun getSkusWithConditionAndPrintingOrdered(productId: Long) =
-        appDatabase.skuDao().getSkusWithConditionAndPrintingOrdered(productId)
-
-    suspend fun getSkusWithConditionAndPrinting(skuIds: List<Long>) =
-        appDatabase.skuDao()._getSkusWithConditionAndPrinting(skuIds)
+    fun getSkusWithMetadataObservable(productId: Long) =
+        appDatabase.skuDao().getSkusWithMetadataObservable(productId)
 
     suspend fun upsertSkus(skus: List<Sku>) = appDatabase.skuDao().upsert(skus)
 
-    suspend fun updateSkuPrices(skuPriceUpdates: List<Sku.SkuPriceUpdate>) = appDatabase.skuDao().updateSkuPrices(skuPriceUpdates)
+    suspend fun updateSkuPrices(skuPriceUpdates: List<Sku.SkuPriceUpdate>) =
+        appDatabase.skuDao().updateSkuPrices(skuPriceUpdates)
+
+    suspend fun getSkus(productId: Long) =
+        appDatabase.skuDao().getSkus(productId)
 }

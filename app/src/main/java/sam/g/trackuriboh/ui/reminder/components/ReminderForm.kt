@@ -15,19 +15,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.google.android.material.composethemeadapter.MdcTheme
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.data.types.ReminderType
-import sam.g.trackuriboh.ui.common.AppThemeDenseOutlinedEnumAutoCompleteTextField
+import sam.g.trackuriboh.ui.common.AppThemeDenseOutlinedAutoCompleteTextField
 import sam.g.trackuriboh.ui.common.AppThemeDenseOutlinedTextField
 import sam.g.trackuriboh.ui.common.AppThemeOutlinedTextButton
 import sam.g.trackuriboh.ui.common.SimpleDialogForm
 import sam.g.trackuriboh.ui.reminder.ReminderFormViewModel
 import sam.g.trackuriboh.utils.formatDateTime
-import java.text.DateFormat
-import java.util.*
+import java.util.Date
 
 @ExperimentalMaterialApi
 @Composable
 fun ReminderForm(
-    state: ReminderFormViewModel.ReminderFormState?,
+    state: ReminderFormViewModel.ReminderFormState,
     onReminderTypeSelected: (Int) -> Unit,
     onHostChanged: (String) -> Unit,
     onLinkChanged: (String) -> Unit,
@@ -38,36 +37,46 @@ fun ReminderForm(
 
     // Since the text buttons already have some margin at the top and bottom (???), we use paddingSmall at the bottom
     SimpleDialogForm(
-        title = stringResource(id = if (state?.mode == ReminderFormViewModel.Mode.EDIT) {
-            R.string.edit_reminder_form_title
-        } else {
-            R.string.create_reminder_form_title
-        }),
+        title = stringResource(
+            id = if (state.mode == ReminderFormViewModel.Mode.EDIT) {
+                R.string.edit_reminder_form_title
+            } else {
+                R.string.create_reminder_form_title
+            }
+        ),
         onPositiveButtonClick = onSaveClick,
         onNegativeButtonClick = onCancelClick,
-        positiveButtonEnabled = state?.canSave ?: false,
-        positiveButtonText = stringResource(id = if (state?.mode == ReminderFormViewModel.Mode.EDIT) {
-            R.string.lbl_update
-        } else {
-            R.string.lbl_save
-        }).uppercase(),
+        positiveButtonEnabled = state.canSave,
+        positiveButtonText = stringResource(
+            id = if (state.mode == ReminderFormViewModel.Mode.EDIT) {
+                R.string.lbl_update
+            } else {
+                R.string.lbl_save
+            }
+        ).uppercase(),
         negativeButtonText = stringResource(id = R.string.lbl_cancel).uppercase()
     ) {
 
-        AppThemeDenseOutlinedEnumAutoCompleteTextField(
+        AppThemeDenseOutlinedAutoCompleteTextField(
             modifier = Modifier.fillMaxWidth(),
-            options = state?.reminderTypeOptions ?: emptyList(),
+            options = state.reminderTypeOptions.map {
+                stringResource(id = it.getDisplayStringRes())
+            },
             hintText = stringResource(id = R.string.reminder_form_reminder_type_hint),
-            selectedOption = state?.formData?.reminderType,
+            selectedOption = state.formData.reminderType?.getDisplayStringRes()
+                ?.let { stringResource(id = it) },
             onOptionSelected = onReminderTypeSelected
         )
 
         AppThemeDenseOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            text = state?.formData?.host,
+            text = state.formData.host,
             onValueChange = onHostChanged,
             hintText = stringResource(id = R.string.reminder_form_host_hint),
-            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Next),
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Words,
+                imeAction = ImeAction.Next
+            ),
             trailingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_baseline_person_outline_24),
@@ -78,7 +87,7 @@ fun ReminderForm(
 
         AppThemeDenseOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            text = state?.formData?.link,
+            text = state.formData.link,
             onValueChange = onLinkChanged,
             hintText = stringResource(id = R.string.reminder_form_link_hint),
             trailingIcon = {
@@ -91,7 +100,8 @@ fun ReminderForm(
 
         AppThemeOutlinedTextButton(
             modifier = Modifier.fillMaxWidth(),
-            text = state?.formData?.date?.formatDateTime(DateFormat.LONG, DateFormat.SHORT) ?: stringResource(id = R.string.reminder_form_date_time_hint),
+            text = state.formData.date?.formatDateTime()
+                ?: stringResource(id = R.string.reminder_form_date_time_hint),
             onButtonClick = onDateTimeButtonClick,
             trailingIcon = {
                 Icon(
@@ -130,8 +140,3 @@ private fun Preview() {
         )
     }
 }
-
-
-
-
-

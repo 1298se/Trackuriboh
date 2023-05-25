@@ -1,10 +1,10 @@
 package sam.g.trackuriboh.data.types
 
+import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import sam.g.trackuriboh.R
 
 @Parcelize
-enum class UserListType(override val resourceId: Int) : StringResourceEnum {
-    USER_LIST(R.string.user_list_type_list),
+enum class UserListType : Parcelable {
+    USER_LIST,
     // CHECKLIST(R.string.collection_type_checklist),
 }

@@ -1,16 +1,12 @@
 <resources>
 
     <!-- Components -->
-    <style name="Widget.AppTheme.TabLayout" parent="Widget.MaterialComponents.TabLayout.Colored">
-        <item name="android:elevation">2dp</item>
-    </style>
-
     <style name="Widget.AppTheme.SearchView" parent="Widget.AppCompat.SearchView.ActionBar">
         <item name="searchIcon">@drawable/ic_baseline_search_24</item>
         <item name="closeIcon">@drawable/ic_baseline_close_24</item>
-        <item name="queryBackground">@drawable/bg_white_rounded</item>
-        <item name="submitBackground">@drawable/bg_white_rounded</item>
-        <item name="android:background">@drawable/bg_white_rounded</item>
+        <item name="queryBackground">@drawable/bg_surface_rounded</item>
+        <item name="submitBackground">@drawable/bg_surface_rounded</item>
+        <item name="android:background">@drawable/bg_surface_rounded</item>
     </style>
 
     <style name="Widget.AppTheme.SearchView.AutoCompleteTextView" parent="Widget.AppCompat.AutoCompleteTextView">
@@ -21,12 +17,6 @@
     <style name="Widget.AppTheme.LinearProgressIndicator" parent="Widget.MaterialComponents.LinearProgressIndicator">
         <item name="materialThemeOverlay">@style/ThemeOverlay.AppTheme.LinearProgressIndicator
         </item>
-    </style>
-
-
-    <style name="Widget.AppTheme.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
-        <item name="itemIconTint">@color/bottom_nav_states</item>
-        <item name="itemTextColor">@color/bottom_nav_states</item>
     </style>
 
     <style name="ImageSliderViewPager" parent="">
@@ -76,17 +66,19 @@
         <item name="android:clipToPadding">false</item>
     </style>
 
-    <style name="Widget.AppTheme.Toolbar.SearchView" parent="Widget.MaterialComponents.Toolbar.Primary">
+    <style name="Widget.AppTheme.Toolbar.SearchView.Surface" parent="Widget.MaterialComponents.Toolbar.Surface">
+        <!-- This decreases the padding between the searchview and the back button -->
         <item name="contentInsetStartWithNavigation">0dp</item>
+        <item name="contentInsetEnd">16dp</item>
     </style>
 
-    <style name="Widget.AppTheme.TextInputLayout" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
-        <item name="materialThemeOverlay">@style/ThemeOverlay.AppTheme.TextInputLayout</item>
-        <item name="hintTextColor">?attr/colorOnSurface</item>
+    <style name="Widget.AppTheme.Toolbar.SearchView.Primary" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <!-- This decreases the padding between the searchview and the back button -->
+        <item name="contentInsetStartWithNavigation">0dp</item>
+        <item name="contentInsetEnd">16dp</item>
     </style>
 
-    <style name="Widget.AppTheme.Button.TextButton.Dialog" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="materialThemeOverlay">@style/ThemeOverlay.AppTheme.Button</item>
+    <style name="Widget.AppTheme.Button.Surface" parent="Widget.MaterialComponents.Button">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.AppTheme.Button.Surface</item>
     </style>
-
 </resources>

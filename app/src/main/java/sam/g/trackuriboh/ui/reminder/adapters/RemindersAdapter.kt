@@ -15,7 +15,6 @@ import sam.g.trackuriboh.databinding.ListHeaderBinding
 import sam.g.trackuriboh.ui.common.BaseViewHolder
 import sam.g.trackuriboh.ui.reminder.RemindersViewModel
 import sam.g.trackuriboh.utils.formatDateTime
-import java.text.DateFormat
 
 @ExperimentalMaterialApi
 class RemindersAdapter : ListAdapter<RemindersViewModel.UiModel, BaseViewHolder<RemindersViewModel.UiModel>>(
@@ -65,7 +64,7 @@ class RemindersAdapter : ListAdapter<RemindersViewModel.UiModel, BaseViewHolder<
             val reminder = (item as RemindersViewModel.UiModel.ReminderItem).reminder
 
             val context = itemView.context
-            val reminderType = context.getString(reminder.type.resourceId)
+            val reminderType = context.getString(reminder.type.getDisplayStringRes())
 
             binding.itemReminderTitleTextview.text = if (reminder.host != null) {
                 context.getString(R.string.reminder_title, reminder.host, reminderType)
@@ -82,7 +81,7 @@ class RemindersAdapter : ListAdapter<RemindersViewModel.UiModel, BaseViewHolder<
 
             binding.itemReminderImage.setImageDrawable(reminderIcon)
 
-            binding.itemReminderDescriptionTextview.text = reminder.date.formatDateTime(DateFormat.MEDIUM, DateFormat.SHORT)
+            binding.itemReminderDescriptionTextview.text = reminder.date.formatDateTime()
         }
     }
 

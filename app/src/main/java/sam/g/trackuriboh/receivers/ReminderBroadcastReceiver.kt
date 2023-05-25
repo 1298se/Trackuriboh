@@ -48,7 +48,7 @@ class ReminderBroadcastReceiver : BroadcastReceiver() {
                     goAsync {
                         reminderRepository.updateReminder(reminder.copy(notificationDisplayed = true))
 
-                        val reminderType = context.getString(reminder.type.resourceId)
+                        val reminderType = context.getString(reminder.type.getDisplayStringRes())
 
                         val reminderHostTypeString = if (!reminder.host.isNullOrEmpty()) {
                             context.getString(R.string.reminder_title, reminder.host, reminderType)

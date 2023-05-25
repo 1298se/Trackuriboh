@@ -61,10 +61,10 @@
             android:id="@+id/item_reminder_foreground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingStart="@dimen/list_item_padding_start"
-            android:paddingTop="@dimen/list_item_two_line_padding_top"
-            android:paddingEnd="@dimen/list_item_padding_end"
-            android:paddingBottom="@dimen/list_item_two_line_padding_bottom"
+            android:paddingStart="@dimen/list_item_padding_horizontal"
+            android:paddingTop="@dimen/list_item_two_line_padding_vertical"
+            android:paddingEnd="@dimen/list_item_padding_horizontal"
+            android:paddingBottom="@dimen/list_item_two_line_padding_vertical"
             android:background="@drawable/background_color_surface_selectable">
 
             <ImageView

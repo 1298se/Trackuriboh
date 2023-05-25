@@ -1,11 +1,10 @@
 package sam.g.trackuriboh.data.db.entities
 
 import android.os.Parcelable
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import kotlinx.parcelize.Parcelize
-import java.util.*
+import java.util.Date
 
 @Parcelize
 @Entity(
@@ -25,6 +24,4 @@ data class UserListEntry(
     val skuId: Long,
     val quantity: Int,
     val dateAdded: Date,
-    @ColumnInfo(defaultValue = "0.0")
-    val avgPurchasePrice: Double,
 ) : Parcelable

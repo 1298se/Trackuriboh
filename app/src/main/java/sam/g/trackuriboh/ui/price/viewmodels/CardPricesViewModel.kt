@@ -1,49 +1,48 @@
 package sam.g.trackuriboh.ui.price.viewmodels
 
-import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import sam.g.trackuriboh.R
-import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
-import sam.g.trackuriboh.data.network.responses.Resource
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import sam.g.trackuriboh.data.db.relations.SkuWithMetadata
 import sam.g.trackuriboh.data.repository.PriceRepository
-import sam.g.trackuriboh.ui.common.utils.UiState
+import sam.g.trackuriboh.data.repository.SkuRepository
 import sam.g.trackuriboh.ui.price.CardPricesBottomSheetFragment.Companion.ARG_PRODUCT_ID
 import javax.inject.Inject
+import kotlin.collections.set
 
 @HiltViewModel
 class CardPricesViewModel @Inject constructor(
+    skuRepository: SkuRepository,
     private val priceRepository: PriceRepository,
     savedState: SavedStateHandle,
-    private val application: Application,
 ) : ViewModel() {
     private val productId = savedState.get<Long>(ARG_PRODUCT_ID)!!
 
-    val state = liveData {
-            emit(UiState.Loading())
-            when (val resource = priceRepository.getPricesForProductSkusOrdered(productId)) {
-                is Resource.Success -> emit(UiState.Success(buildPrintingToSkuMap(resource.data)))
-                is Resource.Failure -> emit(
-                    UiState.Failure(
-                    message = application.getString(R.string.error_message_generic),
-                    data = resource.data?.let { buildPrintingToSkuMap(it) }
-                ))
-                else -> return@liveData
-            }
+    init {
+        viewModelScope.launch {
+            priceRepository.updatePricesForProduct(productId)
         }
+    }
 
-    private fun buildPrintingToSkuMap(skus: List<SkuWithConditionAndPrinting>): Map<String?, List<SkuWithConditionAndPrinting>> {
-        val map = mutableMapOf<String?, MutableList<SkuWithConditionAndPrinting>>()
+    val printingToSkuMap = skuRepository.getSkusWithMetadataObservable(productId).map {
+        buildPrintingToSkuMap(SkuWithMetadata.getOrderedSkusByPrintingAndCondition(it))
+    }.asLiveData(viewModelScope.coroutineContext)
 
-        skus.run {
-            forEach {
-                val skuList = map[it.printing?.name]
+    private fun buildPrintingToSkuMap(skus: List<SkuWithMetadata>): Map<String?, List<SkuWithMetadata>> {
+        val map = mutableMapOf<String?, MutableList<SkuWithMetadata>>()
 
-                if (skuList != null) {
-                    skuList.add(it)
-                } else {
-                    map[it.printing?.name] = mutableListOf(it)
-                }
+        // Add each sku to the corresponding printing
+        skus.forEach {
+            val skuList = map[it.printing?.name]
+
+            if (skuList != null) {
+                skuList.add(it)
+            } else {
+                map[it.printing?.name] = mutableListOf(it)
             }
         }
 

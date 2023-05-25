@@ -16,12 +16,21 @@
     <string name="lbl_download">Download</string>
     <string name="lbl_name">Name</string>
     <string name="lbl_create">Create</string>
-    <string name="lbl_price_with_dollar_sign">\$%1$.2f</string>
+    <string name="price_placeholder">\$%1$.2f</string>
     <string name="lbl_last_updated">Last Updated</string>
     <string name="lbl_total_card_count">Total Cards</string>
     <string name="lbl_total_card_set_count">Total Card Sets</string>
     <string name="lbl_latest_releases">Latest Releases</string>
     <string name="lbl_inf">inf</string>
+    <string name="lbl_purchase">Purchase</string>
+    <string name="lbl_sale">Sale</string>
+    <string name="lbl_transaction">Transaction</string>
+    <string name="lbl_transactions">Transactions</string>
+    <string name="lbl_product">Product</string>
+    <string name="lbl_sku">SKU</string>
+    <string name="lbl_price">Price</string>
+    <string name="lbl_total_value">Total Value</string>
+
     <string name="progress_percent">%1$d%%</string>
     <string name="more_actions_action_title">More actions</string>
 
@@ -32,7 +41,7 @@
     <string name="lbl_database">Database</string>
     <string name="lbl_reminders">Reminders</string>
     <string name="lbl_user_lists">Lists</string>
-    <string name="lbl_search">Search</string>
+    <string name="lbl_inventory">Inventory</string>
 
     <string name="lbl_all_printings">All Printings</string>
 
@@ -71,7 +80,6 @@
 
     <!-- Card Item -->
     <string name="lbl_card_image">Card image</string>
-    <string name="number_rarity_oneline">%1$s \u2022 %2$s</string>
 
     <!-- Card Set Item -->
     <string name="lbl_no_date_available">No Date Available</string>
@@ -83,8 +91,6 @@
     <string name="lbl_buy_now">Buy now</string>
     <string name="add_to_user_list_action_title">Add to list</string>
     <string name="add_to_user_list_success_message">Added to %1$s</string>
-    <string name="base_price_with_shipping">\$%1$.2f + &lt;i>%2$.2f&lt;/i></string>
-    <string name="base_price_with_free_shipping">\$%1$.2f + &lt;i>Free&lt;/i></string>
 
     <!-- Card Detail Overview -->
     <string name="lbl_number">Number</string>
@@ -99,7 +105,18 @@
 
     <!-- Prices -->
     <string name="lbl_not_available">Not Available</string>
-    <string name="lbl_price_lowest_listing_usd">Lowest Listing + &lt;i>Shipping&lt;/i></string>
+    <string name="lbl_price_lowest_listing_usd">Lowest Listing + Shipping</string>
+    <string name="base_price_with_shipping">\$%1$.2f + %2$.2f</string>
+    <string name="base_price_with_free_shipping">\$%1$.2f + Free</string>
+
+    <string name="market_price_placeholder">Market Price: %1$s</string>
+    <string name="lowest_listing_price_with_shipping_price_placeholder">Lowest Listing Price + Shipping: %1$s</string>
+    <string name="quantity_at_average_purchase_price_placeholder">Quantity @ Average Purchase Price: %1$s</string>
+    <string name="unrealized_profit_per_card_placeholder">Unrealized Profit Per Card: %1$s</string>
+    <string name="total_unrealized_profit_placeholder">Total Unrealized Profit: \$%1$.2f</string>
+    <string name="total_realized_profit_placeholder">Total Realized Profit: \$%1$.2f</string>
+    <string name="gross_profit_placeholder">Gross Profit: \$%1$.2f</string>
+    <string name="total_purchase_amount_placeholder">Total Purchase Amount: \$%1$.2f</string>
 
     <!-- Search -->
     <string name="search_action_title">Search</string>
@@ -116,7 +133,9 @@
     <!-- User Lists -->
     <string name="create_new_list_action_title">Create a new list</string>
     <string name="create_user_list_option">Create a list</string>
+    <string name="create_inventory_option">Create an inventory</string>
     <string name="user_list_type_list">List</string>
+    <string name="user_list_type_inventory">Inventory</string>
 
     <string name="rename_user_list_action_title">Rename list</string>
     <string name="create_user_list_prompt">You currently don\'t have any lists. Please create one to continue.</string>
@@ -125,8 +144,8 @@
     <string name="item_user_list_title">&lt;b>%1$s&lt;/b></string>
     <string name="item_user_list_total_value">Total value: \$%1$.2f</string>
     <string name="item_user_list_card_count">%1$d Cards</string>
-    <string name="item_user_list_quantity_avg_price">%1$d @ \$%2$.2f</string>
-    <string name="item_user_list_profit">+\$%1$.2f\(%2$s%%\)</string>
+    <string name="quantity_avg_price_oneline">%1$d @ \$%2$.2f</string>
+    <string name="item_user_list_profit_with_percentage">\$%1$.2f \(%2$s%%\)</string>
 
     <!-- User List Detail -->
     <string name="user_list_remove_entries_action_title">Remove items</string>
@@ -136,14 +155,6 @@
         <item quantity="one">Total: %1$d card</item>
         <item quantity="other">Total: %1$d cards</item>
     </plurals>
-
-    <!-- User List Selection -->
-    <string name="user_list_selection_title">Choose a list</string>
-    <string name="user_list_detail_selected_count">%1$d selected</string>
-    <string name="user_list_detail_add_new_card">Add a new card</string>
-
-    <!-- Item User List Entry -->
-    <string name="edition_condition_oneline">%1$s \u2022 %2$s</string>
 
     <!-- Card Selection -->
     <string name="lbl_select_card">Select card</string>
@@ -191,8 +202,14 @@
 
     <string name="reminder_notification_channel_id">reminder_channel</string>
     <string name="reminder_notification_channel_name">Reminders</string>
-    
-    <!-- Add transaction -->
-    <string name="add_user_transaction">Add New User Transaction</string>
+
+    <!-- Add transaction Form -->
+    <string name="new_transaction">New Transaction</string>
+
+    <string name="add_transaction_select_sku_hint">Select a SKU</string>
+    <string name="add_transaction_select_card_hint">Select a card</string>
+    <string name="add_transaction_select_date_hint">Select a date</string>
+
+    <string name="add_transaction">Add Transaction</string>
 </resources>
 

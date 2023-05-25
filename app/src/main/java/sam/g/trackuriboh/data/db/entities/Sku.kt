@@ -7,6 +7,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity(
     foreignKeys = [
         ForeignKey(
@@ -26,10 +27,8 @@ import kotlinx.parcelize.Parcelize
             childColumns = ["printingId"],
         )
     ],
-    indices = [Index(value = ["productId"])]
+    indices = [Index("productId"), Index("conditionId"), Index("printingId")]
 )
-
-@Parcelize
 data class Sku(
     @PrimaryKey(autoGenerate = false)
     val id: Long,

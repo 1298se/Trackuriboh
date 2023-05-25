@@ -18,10 +18,15 @@ import sam.g.trackuriboh.R
 import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.db.entities.Reminder
 import sam.g.trackuriboh.databinding.FragmentRemindersBinding
+import sam.g.trackuriboh.ui.common.RequestPermission
 import sam.g.trackuriboh.ui.common.VerticalSpaceItemDecoration
-import sam.g.trackuriboh.ui.common.actions.RequestPermission
 import sam.g.trackuriboh.ui.reminder.adapters.RemindersAdapter
-import sam.g.trackuriboh.utils.*
+import sam.g.trackuriboh.utils.SnackbarType
+import sam.g.trackuriboh.utils.createAlertDialog
+import sam.g.trackuriboh.utils.getOpenLinkIntent
+import sam.g.trackuriboh.utils.setupAsTopLevelDestinationToolbar
+import sam.g.trackuriboh.utils.showSnackbar
+import sam.g.trackuriboh.utils.viewBinding
 import javax.inject.Inject
 
 @ExperimentalMaterialApi

@@ -4,34 +4,41 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import sam.g.trackuriboh.data.db.entities.UserTransaction
+import kotlinx.coroutines.launch
 import sam.g.trackuriboh.data.db.entities.TransactionType
-import sam.g.trackuriboh.data.repository.TransactionRepository
-import sam.g.trackuriboh.ui.transaction.AddTransactionDialogFragment.Companion.ARG_LIST_ID
-import sam.g.trackuriboh.ui.transaction.AddTransactionDialogFragment.Companion.ARG_SKU_ID
-import java.util.Calendar
+import sam.g.trackuriboh.data.db.relations.ProductWithCardSetAndSkuIds
+import sam.g.trackuriboh.data.db.relations.SkuWithMetadata
+import sam.g.trackuriboh.data.repository.InventoryRepository
+import sam.g.trackuriboh.data.repository.InventoryTransactionRepository
+import sam.g.trackuriboh.data.repository.PriceRepository
+import sam.g.trackuriboh.data.repository.ProductRepository
 import java.util.Date
 import javax.inject.Inject
-import kotlin.math.absoluteValue
 
 @HiltViewModel
 class AddTransactionFormViewModel @Inject constructor(
-    private val transactionRepository: TransactionRepository,
+    private val productRepository: ProductRepository,
+    private val inventoryRepository: InventoryRepository,
+    private val inventoryTransactionRepository: InventoryTransactionRepository,
+    private val priceRepository: PriceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
-    private val listId = state.get<Long>(ARG_LIST_ID)!!
-    private val skuId = state.get<Long>(ARG_SKU_ID)!!
+
+    val inventoryId = state.get<Long>("inventoryId")!!
 
     data class AddTransactionFormState(
+        val formData: AddTransactionFormData = AddTransactionFormData(),
         val canSave: Boolean = false,
-        val formData: AddTransactionFormData,
     )
 
     data class AddTransactionFormData(
         val type: TransactionType = TransactionType.PURCHASE,
-        val date: Date = Calendar.getInstance().time,
-        val price: Double = 0.00,
+        val date: Date = Date(),
+        val productWithCardSetAndSkuIds: ProductWithCardSetAndSkuIds? = null,
+        val skuWithMetadata: SkuWithMetadata? = null,
+        val price: String? = null,
         val quantity: Int = 1,
     )
 
@@ -39,9 +46,25 @@ class AddTransactionFormViewModel @Inject constructor(
         AddTransactionFormState(formData = AddTransactionFormData())
     )
 
+    init {
+        viewModelScope.launch {
+            inventoryRepository.getInventoryWithSkuMetadata(inventoryId)?.skuWithMetadata?.let {
+                val productWithCardSetAndSkuIds =
+                    productRepository.getProductWithSkusById(it.productWithCardSet.product.id)
+
+                _formState.value = AddTransactionFormState(
+                    AddTransactionFormData(
+                        productWithCardSetAndSkuIds = productWithCardSetAndSkuIds,
+                        skuWithMetadata = it
+                    )
+                )
+            }
+        }
+    }
+
     private fun validate(formDataState: AddTransactionFormData): Boolean {
-        with (formDataState) {
-            return true
+        with(formDataState) {
+            return productWithCardSetAndSkuIds != null && skuWithMetadata != null && price != null && price.toDoubleOrNull() != null
         }
     }
 
@@ -53,47 +76,70 @@ class AddTransactionFormViewModel @Inject constructor(
         }
     }
 
-    fun onTypeChanged(type: TransactionType) {
+    fun setProduct(productId: Long) {
+        viewModelScope.launch {
+            val productWithCardSetAndSkuIds = productRepository.getProductWithSkusById(productId)
+
+            _formState.value = _formState.value?.let {
+                it.copy(
+                    formData = it.formData.copy(
+                        productWithCardSetAndSkuIds = productWithCardSetAndSkuIds.copy(
+                            skusWithMetadata = productWithCardSetAndSkuIds.getOrderedSkusByPrintingAndCondition()
+                        ),
+                        skuWithMetadata = null,
+                    )
+                )
+            }
+        }
+    }
+
+    fun setSku(skuWithMetadata: SkuWithMetadata?) {
+        _formState.value = _formState.value?.let {
+            it.copy(formData = it.formData.copy(skuWithMetadata = skuWithMetadata))
+        }
+    }
+
+    fun setTransactionType(type: TransactionType) {
         _formState.value = _formState.value?.let {
             it.copy(formData = it.formData.copy(type = type))
         }
     }
 
-    fun onPriceChanged(price: Double) {
-        _formState.value = _formState.value?.let {
-            it.copy(formData = it.formData.copy(price = price.absoluteValue))
-        }
-    }
-
-    fun onDateChanged(date: Date) {
+    fun setDate(date: Date) {
         _formState.value = _formState.value?.let {
             it.copy(formData = it.formData.copy(date = date))
         }
     }
 
-    fun onQuantityChanged(quantity: Int) {
+    fun setPrice(price: String) {
+        _formState.value = _formState.value?.let {
+            it.copy(formData = it.formData.copy(price = price))
+        }
+    }
+
+    fun setQuantity(quantity: Int) {
         _formState.value = _formState.value?.let {
             it.copy(formData = it.formData.copy(quantity = quantity.coerceIn(1, 99)))
         }
     }
 
-    suspend fun addEntryToTransactionList() {
+    suspend fun addTransaction() {
         val type = formState.value?.formData?.type
+        val skuId = formState.value?.formData?.skuWithMetadata?.sku?.id
         val date = formState.value?.formData?.date
-        val price = formState.value?.formData?.price
+        val price = formState.value?.formData?.price?.toDouble()
         val quantity = formState.value?.formData?.quantity
 
-        if (type != null && date != null && price != null && quantity != null) {
-            transactionRepository.insertTransaction(
-                UserTransaction(
-                    type = type,
-                    listId = listId,
-                    skuId = skuId,
-                    quantity = quantity,
-                    price = price,
-                    date = date
-                )
+        if (type != null && date != null && price != null && quantity != null && skuId != null) {
+            inventoryTransactionRepository.insertTransaction(
+                type,
+                date,
+                skuId,
+                price,
+                quantity,
             )
+
+            priceRepository.updatePricesForSkus(listOf(skuId))
         }
     }
 }

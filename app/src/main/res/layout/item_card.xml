@@ -11,9 +11,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingStart="@dimen/list_item_padding_start"
+        android:paddingStart="@dimen/list_item_padding_horizontal"
         android:paddingTop="@dimen/list_item_three_line_image_padding_top"
-        android:paddingEnd="@dimen/list_item_padding_end"
+        android:paddingEnd="@dimen/list_item_padding_horizontal"
         android:paddingBottom="@dimen/list_item_three_line_image_padding_bottom">
 
         <ImageView

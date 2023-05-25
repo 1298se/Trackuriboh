@@ -1,24 +1,28 @@
 package sam.g.trackuriboh.ui.user_list
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.divider.MaterialDividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.AndroidEntryPoint
-import sam.g.trackuriboh.R
-import sam.g.trackuriboh.analytics.Events
+import sam.g.trackuriboh.MainGraphDirections
 import sam.g.trackuriboh.data.db.entities.UserListEntry
 import sam.g.trackuriboh.databinding.FragmentUserListDetailBinding
 import sam.g.trackuriboh.ui.common.QuantitySelectorDialogFragment
+import sam.g.trackuriboh.ui.common.SwipeToDeleteCallback
 import sam.g.trackuriboh.ui.user_list.adapters.UserListEntryAdapter
 import sam.g.trackuriboh.ui.user_list.viewmodels.UserListDetailViewModel
+import sam.g.trackuriboh.utils.addDividerItemDecoration
 import sam.g.trackuriboh.utils.safeNavigate
 import sam.g.trackuriboh.utils.viewBinding
 import javax.inject.Inject
@@ -34,37 +38,6 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnInteractionLis
     private val viewModel: UserListDetailViewModel by viewModels()
 
     private lateinit var userListEntryAdapter: UserListEntryAdapter
-
-    private var actionMode: ActionMode? = null
-
-    private val actionModeCallback = object : ActionMode.Callback {
-        override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
-            firebaseAnalytics.logEvent(Events.ACTION_MODE_ON, null)
-
-            mode.menuInflater?.inflate(R.menu.user_list_detail_contextual_action, menu)
-            return true
-        }
-
-        override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
-            return false
-        }
-
-        override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
-            return when (item.itemId) {
-                R.id.action_remove_user_list_entries -> {
-                    viewModel.deleteSelectedItems()
-                    true
-                }
-                else -> false
-            }
-        }
-
-        override fun onDestroyActionMode(mode: ActionMode) {
-            firebaseAnalytics.logEvent(Events.ACTION_MODE_OFF, null)
-
-            viewModel.setActionMode(false)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -83,28 +56,10 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnInteractionLis
         initFragmentResultListeners()
     }
 
-    override fun onListEntryClick(skuId: Long) {
+    override fun onListEntryClick(productId: Long) {
         findNavController().safeNavigate(
-            UserListDetailFragmentDirections.actionUserListDetailFragmentToUserListEntryDetailFragment(
-                viewModel.userList.id,
-                skuId
-            )
+            MainGraphDirections.actionGlobalCardDetailFragment(productId)
         )
-    }
-
-    override fun onDestroyView() {
-        actionMode?.finish()
-
-        super.onDestroyView()
-    }
-
-    override fun onListEntryLongClick(skuId: Long) {
-        viewModel.setActionMode(true)
-        viewModel.setUserListEntryChecked(skuId, true)
-    }
-
-    override fun onListEntryChecked(skuId: Long, isChecked: Boolean) {
-        viewModel.setUserListEntryChecked(skuId, isChecked)
     }
 
     override fun onQuantityTextClick(entry: UserListEntry) {
@@ -129,7 +84,7 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnInteractionLis
         with(binding.userListDetailAddCardFab) {
             setOnClickListener {
                 findNavController().safeNavigate(
-                    UserListDetailFragmentDirections.actionUserListDetailFragmentToCardSelectionFragment(
+                    UserListDetailFragmentDirections.actionUserListDetailFragmentToAddToUserListFragment(
                         userList = viewModel.userList
                     )
                 )
@@ -142,29 +97,20 @@ class UserListDetailFragment : Fragment(), UserListEntryAdapter.OnInteractionLis
 
         binding.userListDetailList.apply {
             layoutManager = LinearLayoutManager(context)
-
             adapter = userListEntryAdapter
+            addDividerItemDecoration()
 
-            addItemDecoration(MaterialDividerItemDecoration(context, (layoutManager as LinearLayoutManager).orientation))
+            ItemTouchHelper(object : SwipeToDeleteCallback(context) {
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    viewModel.deleteEntry(viewHolder.itemId)
+                }
+            }).attachToRecyclerView(this)
         }
     }
 
     private fun initObservers() {
-        viewModel.state.observe(viewLifecycleOwner) {
-            userListEntryAdapter.submitList(it.entries)
-
-             if (it.actionModeActive) {
-                 if (actionMode == null) {
-                     actionMode = activity?.startActionMode(actionModeCallback)
-                     userListEntryAdapter.setInActionMode(true)
-                 }
-            } else {
-                userListEntryAdapter.setInActionMode(false)
-                actionMode?.finish()
-                actionMode = null
-            }
-
-            actionMode?.title = it.actionModeTitle
+        viewModel.entries.observe(viewLifecycleOwner) {
+            userListEntryAdapter.submitList(it)
         }
     }
 

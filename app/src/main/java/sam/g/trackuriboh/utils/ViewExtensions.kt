@@ -15,7 +15,10 @@ import androidx.core.view.children
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.google.android.material.snackbar.Snackbar
 import sam.g.trackuriboh.R
 import sam.g.trackuriboh.ui.search.adapters.SearchSuggestionsAdapter
@@ -99,7 +102,14 @@ fun Context.createAlertDialog(
     }
 }
 
-fun getAppBarConfiguration() : AppBarConfiguration = AppBarConfiguration(setOf(R.id.databaseFragment, R.id.userListsFragment, R.id.remindersFragment))
+fun getAppBarConfiguration(): AppBarConfiguration = AppBarConfiguration(
+    setOf(
+        R.id.databaseFragment,
+        R.id.userListsFragment,
+        R.id.inventoryFragment,
+        R.id.remindersFragment
+    )
+)
 
 fun MaterialToolbar.setupAsTopLevelDestinationToolbar() {
     setupWithNavController(findNavController(), getAppBarConfiguration())
@@ -142,4 +152,13 @@ fun SearchView.setSuggestionsCursor(cursor: Cursor?) {
     post {
         suggestionsAdapter.changeCursor(newCursor)
     }
+}
+
+fun RecyclerView.addDividerItemDecoration() {
+    addItemDecoration(
+        MaterialDividerItemDecoration(
+            context,
+            (layoutManager as LinearLayoutManager).orientation
+        )
+    )
 }

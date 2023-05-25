@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="?attr/colorOnPrimary">
+    app:cardBackgroundColor="?attr/colorPrimary">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/database_status_view_padding">
+        android:padding="@dimen/material_border_padding">
 
         <TextView
             android:id="@+id/last_updated_lbl_textview"
@@ -71,6 +71,7 @@
             tools:text="500" />
         <Button
             android:id="@+id/update_button"
+            style="@style/Widget.AppTheme.Button.Surface"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/lbl_up_to_date"

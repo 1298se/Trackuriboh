@@ -1,12 +1,7 @@
 package sam.g.trackuriboh.data.db
 
 import android.app.Application
-import androidx.room.AutoMigration
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import sam.g.trackuriboh.BuildConfig
+import androidx.room.*
 import sam.g.trackuriboh.data.db.converters.RoomConverter
 import sam.g.trackuriboh.data.db.dao.*
 import sam.g.trackuriboh.data.db.entities.*
@@ -25,7 +20,8 @@ import sam.g.trackuriboh.data.db.migrations.MIGRATION_2_3
         Reminder::class,
         UserList::class,
         UserListEntry::class,
-        UserTransaction::class,
+        Inventory::class,
+        InventoryTransaction::class,
     ],
     autoMigrations = [
         AutoMigration (from = 3, to = 4)
@@ -46,11 +42,13 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userListDao(): UserListDao
     abstract fun userListEntryDao(): UserListEntryDao
-    abstract fun userTransactionDao(): UserTransactionDao
+
+    abstract fun inventoryDao(): InventoryDao
+    abstract fun inventoryTransactionDao(): InventoryTransactionDao
 
     /**
      * We do this because [clearAllTables] doesn't work with coroutines - we can't monitor when it ends
-      */
+     */
     suspend fun clearCardDatabaseTables() {
         userListEntryDao().clearTable()
         userListDao().clearTable()
@@ -63,7 +61,7 @@ abstract class AppDatabase : RoomDatabase() {
         printingDao().clearTable()
         conditionDao().clearTable()
 
-        userTransactionDao().clearTable()
+        inventoryDao().clearTable()
     }
 
     companion object {

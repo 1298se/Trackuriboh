@@ -1,14 +1,18 @@
 package sam.g.trackuriboh.ui.common
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -50,7 +54,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import com.google.android.material.composethemeadapter.MdcTheme
 import sam.g.trackuriboh.R
-import sam.g.trackuriboh.data.types.StringResourceEnum
 import sam.g.trackuriboh.databinding.ComponentSegmentedTwoButtonBinding
 
 @Composable
@@ -250,24 +253,6 @@ fun AppThemeDenseOutlinedAutoCompleteTextField(
     }
 }
 
-@ExperimentalMaterialApi
-@Composable
-fun AppThemeDenseOutlinedEnumAutoCompleteTextField(
-    options: List<StringResourceEnum>,
-    modifier: Modifier = Modifier,
-    hintText: String? = null,
-    selectedOption: StringResourceEnum? = null,
-    onOptionSelected: (Int) -> Unit = { },
-) {
-    AppThemeDenseOutlinedAutoCompleteTextField(
-        modifier = modifier,
-        options = options.map { stringResource(id = it.resourceId) },
-        selectedOption = selectedOption?.resourceId?.let { stringResource(id = it) },
-        onOptionSelected = onOptionSelected,
-        hintText = hintText,
-    )
-}
-
 @Composable
 fun ColumnScope.AppThemeDialogButtons(
     positiveButtonText: String,
@@ -308,7 +293,8 @@ fun AppThemeTextButton(
             backgroundColor = Color.Transparent,
             contentColor = MaterialTheme.colors.onPrimary,
             disabledContentColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
-    )) {
+        )
+    ) {
         Text(
             text = text,
             style = MaterialTheme.typography.button
@@ -326,7 +312,7 @@ fun AppThemeSegmentedButton(
         option1.text = option1Text
         option2.text = option2Text
         toggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
-            val index = when(checkedId) {
+            val index = when (checkedId) {
                 option2.id -> 1
                 else -> 0
             }
@@ -340,19 +326,25 @@ fun QuantitySelector(
     onQuantityChanged: (Int) -> Unit,
     modifier: Modifier = Modifier,
     quantity: Int = 0,
-    borderColor: Color = Color.LightGray,
+    borderColor: Color = Color.Gray,
+    dense: Boolean = false,
 ) {
     Row(
         modifier = modifier
-            .height(dimensionResource(id = R.dimen.text_field_dense_height))
-            .clip(MaterialTheme.shapes.small)
-            .border(BorderStroke(2.dp, borderColor))
-            .padding(
-                top = dimensionResource(id = R.dimen.text_field_dense_paddingTop),
-                bottom = dimensionResource(id = R.dimen.text_field_dense_paddingBottom),
+            .then(
+                if (dense) {
+                    Modifier.height(dimensionResource(id = R.dimen.text_field_dense_height))
+                } else {
+                    Modifier.height(dimensionResource(id = R.dimen.text_field_height))
+                }
             )
+            .border(BorderStroke(1.dp, borderColor))
+            .clip(MaterialTheme.shapes.small)
     ) {
-        IconButton(onClick = { onQuantityChanged(quantity - 1) }) {
+        IconButton(
+            onClick = { onQuantityChanged(quantity - 1) },
+            modifier = Modifier.align(Alignment.CenterVertically),
+        ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_baseline_remove_24),
                 contentDescription = null
@@ -361,7 +353,9 @@ fun QuantitySelector(
 
         BasicTextField(
             value = quantity.toString(),
-            modifier = Modifier.width(24.dp),
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .width(24.dp),
             textStyle = MaterialTheme.typography.subtitle1.copy(
                 color = MaterialTheme.colors.onSurface,
                 textAlign = TextAlign.Center,
@@ -371,7 +365,10 @@ fun QuantitySelector(
             readOnly = true,
             onValueChange = { },
         )
-        IconButton(onClick = { onQuantityChanged(quantity + 1) }) {
+        IconButton(
+            onClick = { onQuantityChanged(quantity + 1) },
+            modifier = Modifier.align(Alignment.CenterVertically),
+        ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_baseline_add_24dp),
                 contentDescription = null
@@ -389,19 +386,77 @@ fun SelectableLabelValueRow(
 ) {
     Row(modifier = modifier
         .fillMaxWidth()
-        .clickable { onClick() }) {
-        
+        .clickable { onClick() }
+        .padding(dimensionResource(id = R.dimen.material_border_padding)),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+
         Text(
             text = label ?: "",
-            modifier = Modifier.weight(1f),
             style = MaterialTheme.typography.subtitle1
         )
 
         Text(
             text = value ?: "",
-            modifier = Modifier.weight(1f),
             style = MaterialTheme.typography.body2,
             textAlign = TextAlign.End
+        )
+    }
+}
+
+@Composable
+fun TwoLineTextRow(
+    headerText: String?,
+    valueText: String?,
+) {
+    Column(
+        modifier = Modifier.padding(
+            horizontal = dimensionResource(id = R.dimen.list_item_padding_horizontal),
+            vertical = dimensionResource(id = R.dimen.list_item_two_line_padding_vertical)
+        )
+    ) {
+        Text(
+            text = headerText ?: "",
+            style = MaterialTheme.typography.overline,
+        )
+
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.text_spacing)))
+
+        Text(
+            text = valueText ?: "",
+            style = MaterialTheme.typography.body1
+        )
+    }
+}
+
+@Composable
+fun getProfitTextColor(profit: Double?) =
+    if (profit != null) {
+        if (profit < 0) {
+            MaterialTheme.colors.onError
+        } else {
+            MaterialTheme.colors.primary
+        }
+    } else {
+        Color.Unspecified
+    }
+
+@Composable
+fun SwipeToDismissDeleteBackground() {
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.error, MaterialTheme.shapes.medium)
+            .padding(
+                horizontal = dimensionResource(id = R.dimen.list_item_padding_horizontal)
+            )
+    ) {
+        Icon(
+            painter = painterResource(
+                id = R.drawable.ic_baseline_delete_forever_24
+            ),
+            contentDescription = "",
+            modifier = Modifier.align(Alignment.CenterEnd)
         )
     }
 }
@@ -412,9 +467,9 @@ private fun ComponentPreviews() {
     MdcTheme {
         Column {
             SelectableLabelValueRow(label = "Bruh", value = "Bruh") {
-                
+
             }
-            
+
             QuantitySelector(
                 onQuantityChanged = { },
                 modifier = Modifier,
@@ -432,5 +487,3 @@ private fun ComponentPreviews() {
         }
     }
 }
-
-

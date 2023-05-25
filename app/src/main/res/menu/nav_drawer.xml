@@ -3,17 +3,22 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/databaseGraph"
+            android:id="@id/databaseGraph"
             android:icon="@drawable/ic_outline_dns_24"
             android:title="@string/lbl_database" />
 
         <item
-            android:id="@+id/userListsGraph"
+            android:id="@id/userListsGraph"
             android:icon="@drawable/ic_baseline_format_list_bulleted_24"
             android:title="@string/lbl_user_lists" />
 
         <item
-            android:id="@+id/remindersGraph"
+            android:id="@id/inventoryGraph"
+            android:icon="@drawable/ic_baseline_inventory_24"
+            android:title="@string/lbl_inventory" />
+
+        <item
+            android:id="@id/remindersGraph"
             android:icon="@drawable/ic_baseline_event_note_24"
             android:title="@string/lbl_reminders" />
     </group>

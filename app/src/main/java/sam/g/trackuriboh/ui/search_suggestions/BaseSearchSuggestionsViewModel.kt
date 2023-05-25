@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
 
 abstract class BaseSearchSuggestionsViewModel : ViewModel() {
@@ -12,7 +13,7 @@ abstract class BaseSearchSuggestionsViewModel : ViewModel() {
     private val suggestionsQuery = MutableLiveData<String?>(null)
 
     val suggestionsCursor = Transformations.switchMap(suggestionsQuery) {
-        getSuggestionsSource(it).asLiveData()
+        getSuggestionsSource(it).asLiveData(viewModelScope.coroutineContext)
     }
 
     fun getSuggestions(query: String?) {

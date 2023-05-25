@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
@@ -98,10 +97,10 @@ class DatabaseFragment : Fragment() {
     }
 
     private fun MaterialToolbar.showBackButton(visible: Boolean) {
-        navigationIcon = if (visible) {
-            ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_arrow_back_24, context.theme)
+        if (visible) {
+            setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
         } else {
-            null
+            navigationIcon = null
         }
 
         binding.databaseToolbar.setNavigationOnClickListener {

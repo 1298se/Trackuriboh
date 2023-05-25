@@ -18,7 +18,8 @@ class UserListsViewModel @Inject constructor(
     private val firebaseAnalytics: FirebaseAnalytics,
 ) : ViewModel() {
 
-    val userLists = userListRepository.getUserListsObervable().asLiveData()
+    val userLists =
+        userListRepository.getUserListsObervable().asLiveData(viewModelScope.coroutineContext)
 
     fun createUserList(list: UserList) {
         firebaseAnalytics.logEvent(Events.CREATE_USER_LIST, bundleOf("name" to list.name))

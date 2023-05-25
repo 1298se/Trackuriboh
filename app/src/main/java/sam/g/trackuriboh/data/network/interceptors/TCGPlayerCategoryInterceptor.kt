@@ -13,7 +13,7 @@ class TCGPlayerCategoryInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val requestBuilder = request.newBuilder()
-        var url = request.url()
+        var url = request.url
 
         if (request.header(CATEGORY_QUERY_PARAM) != null) {
             requestBuilder.removeHeader(CATEGORY_QUERY_PARAM)

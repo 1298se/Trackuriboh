@@ -1,9 +1,10 @@
 package sam.g.trackuriboh.data.types
 
+import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-enum class ProductType(override val resourceId: Int) : StringResourceEnum {
-    CARD(1),
+enum class ProductType : Parcelable {
+    CARD
     ;
 }

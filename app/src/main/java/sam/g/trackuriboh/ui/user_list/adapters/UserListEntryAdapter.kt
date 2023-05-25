@@ -11,7 +11,7 @@ import sam.g.trackuriboh.databinding.ItemUserListEntryBinding
 import sam.g.trackuriboh.databinding.ListHeaderBinding
 import sam.g.trackuriboh.ui.common.BaseViewHolder
 import sam.g.trackuriboh.ui.user_list.viewmodels.UserListDetailViewModel
-import sam.g.trackuriboh.utils.show
+import sam.g.trackuriboh.utils.joinStringsWithInterpunct
 
 class UserListEntryAdapter(private val onInteractionListener: OnInteractionListener)
     : ListAdapter<UserListDetailViewModel.UiModel, BaseViewHolder<UserListDetailViewModel.UiModel>>(
@@ -35,13 +35,10 @@ class UserListEntryAdapter(private val onInteractionListener: OnInteractionListe
         }
     }
 ) {
-    private var inActionMode = false
 
     interface OnInteractionListener {
-        fun onListEntryClick(skuId: Long)
+        fun onListEntryClick(productId: Long)
         fun onQuantityTextClick(entry: UserListEntry)
-        fun onListEntryLongClick(skuId: Long)
-        fun onListEntryChecked(skuId: Long, isChecked: Boolean)
     }
 
     inner class UserListEntryViewHolder(
@@ -50,36 +47,25 @@ class UserListEntryAdapter(private val onInteractionListener: OnInteractionListe
 
         init {
             binding.root.setOnClickListener {
-                val userListEntryItem = getItem(bindingAdapterPosition) as UserListDetailViewModel.UiModel.UserListEntryItem
+                val userListEntryItem =
+                    getItem(bindingAdapterPosition) as UserListDetailViewModel.UiModel.UserListEntryItem
 
-                if (inActionMode) {
-                    binding.itemUserListEntryCheckbox.toggle()
-                    onInteractionListener.onListEntryChecked(
-                        userListEntryItem.data.entry.skuId,
-                        binding.itemUserListEntryCheckbox.isChecked
-                    )
-                } else {
-                    onInteractionListener.onListEntryClick(
-                        userListEntryItem.data.skuWithConditionAndPrintingAndProduct.sku.id
-                    )
-                }
+                onInteractionListener.onListEntryClick(
+                    userListEntryItem.data.skuWithMetadata.productWithCardSet.product.id
+                )
             }
 
-            binding.root.setOnLongClickListener {
-                val userListEntryItem = getItem(bindingAdapterPosition) as UserListDetailViewModel.UiModel.UserListEntryItem
+            binding.itemUserListEntryQuantityButton.setOnClickListener {
+                val userListEntryItem =
+                    getItem(bindingAdapterPosition) as UserListDetailViewModel.UiModel.UserListEntryItem
 
-                onInteractionListener.onListEntryLongClick(
-                    userListEntryItem.data.entry.skuId
-                )
-
-                true
+                onInteractionListener.onQuantityTextClick(userListEntryItem.data.entry)
             }
         }
 
         override fun bind(item: UserListDetailViewModel.UiModel) {
             val uiModel = item as UserListDetailViewModel.UiModel.UserListEntryItem
-            val skuWithConditionAndPrintingAndProduct = uiModel.data.skuWithConditionAndPrintingAndProduct
-            val entryItem = uiModel.data.entry
+            val skuWithConditionAndPrintingAndProduct = uiModel.data.skuWithMetadata
 
             val productWithCardSet = skuWithConditionAndPrintingAndProduct.productWithCardSet
 
@@ -92,50 +78,24 @@ class UserListEntryAdapter(private val onInteractionListener: OnInteractionListe
                 .into(binding.itemUserListEntryImage)
 
             binding.itemUserListEntryTitleTextview.text = product.name
-            binding.itemUserListRarityNumberTextview.text = itemView.resources.getString(
-                R.string.number_rarity_oneline,
+            binding.itemUserListRarityNumberTextview.text = joinStringsWithInterpunct(
                 product.number,
                 productWithCardSet.rarity.name
             )
 
-            binding.itemUserListEntryEditionConditionTextview.text = itemView.resources.getString(
-                R.string.edition_condition_oneline,
+            binding.itemUserListEntryEditionConditionTextview.text = joinStringsWithInterpunct(
                 skuWithConditionAndPrintingAndProduct.printing?.name,
                 skuWithConditionAndPrintingAndProduct.condition?.name,
             )
 
-            binding.itemUserListEntryCheckbox.show(inActionMode)
-
-            binding.itemUserListEntryCheckbox.isChecked = uiModel.isChecked
+            binding.itemUserListEntryQuantityButton.text = uiModel.data.entry.quantity.toString()
 
             binding.itemUserListEntryPriceTextview.text = sku.lowestBasePrice?.let {
                 itemView.context.getString(
-                    R.string.lbl_price_with_dollar_sign,
+                    R.string.price_placeholder,
                     it
                 )
             } ?: itemView.context.getString(R.string.lbl_not_available)
-
-            binding.itemUserListEntryQuantityAvgPurchasePriceTextview.text = itemView.resources.getString(
-                R.string.item_user_list_quantity_avg_price,
-                entryItem.quantity,
-                entryItem.avgPurchasePrice
-            )
-
-            if (sku.lowestBasePrice != null) {
-                val profit = (sku.lowestBasePrice - entryItem.avgPurchasePrice) * entryItem.quantity
-
-                val profitPercentage = if (entryItem.avgPurchasePrice == 0.0) {
-                    itemView.resources.getString(R.string.lbl_inf)
-                } else {
-                    (profit / entryItem.avgPurchasePrice).toInt().toString()
-                }
-
-                binding.itemUserListEntryProfitTextview.text = itemView.resources.getString(
-                    R.string.item_user_list_profit,
-                    profit,
-                    profitPercentage
-                )
-            }
         }
     }
 
@@ -152,25 +112,30 @@ class UserListEntryAdapter(private val onInteractionListener: OnInteractionListe
                     R.plurals.user_list_detail_total_count, totalCount, totalCount
                 )
 
-                binding.headerEndTextTextview.text = itemView.resources.getString(R.string.lbl_price_with_dollar_sign, totalValue)
+                binding.headerEndTextTextview.text =
+                    itemView.resources.getString(R.string.price_placeholder, totalValue)
             }
 
         }
     }
 
-    companion object {
-        private const val VIEW_TYPE_USER_LIST_ENTRY = 1
-        private const val VIEW_TYPE_HEADER = 2
+    init {
+        setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<UserListDetailViewModel.UiModel> {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): BaseViewHolder<UserListDetailViewModel.UiModel> {
         return when (viewType) {
-            VIEW_TYPE_USER_LIST_ENTRY -> UserListEntryViewHolder(
+            R.layout.item_user_list_entry -> UserListEntryViewHolder(
                 ItemUserListEntryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             )
-            VIEW_TYPE_HEADER -> HeaderViewHolder(
+
+            R.layout.list_header -> HeaderViewHolder(
                 ListHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             )
+
             else -> throw IllegalStateException("invalid viewtype $viewType")
         }
     }
@@ -181,18 +146,15 @@ class UserListEntryAdapter(private val onInteractionListener: OnInteractionListe
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is UserListDetailViewModel.UiModel.UserListEntryItem -> VIEW_TYPE_USER_LIST_ENTRY
-            is UserListDetailViewModel.UiModel.Header -> VIEW_TYPE_HEADER
+            is UserListDetailViewModel.UiModel.UserListEntryItem -> R.layout.item_user_list_entry
+            is UserListDetailViewModel.UiModel.Header -> R.layout.list_header
         }
     }
 
-    fun setInActionMode(active: Boolean) {
-        if (active == inActionMode) {
-            return
+    override fun getItemId(position: Int): Long {
+        return when (val item = getItem(position)) {
+            is UserListDetailViewModel.UiModel.Header -> 0
+            is UserListDetailViewModel.UiModel.UserListEntryItem -> item.data.entry.skuId
         }
-
-        inActionMode = active
-
-        notifyItemRangeChanged(0, itemCount)
     }
 }

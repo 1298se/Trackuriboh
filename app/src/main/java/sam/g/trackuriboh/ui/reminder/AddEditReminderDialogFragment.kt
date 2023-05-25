@@ -20,7 +20,7 @@ import sam.g.trackuriboh.databinding.DialogAddEditRemindersBinding
 import sam.g.trackuriboh.ui.common.DateTimePickerView
 import sam.g.trackuriboh.ui.reminder.components.ReminderForm
 import sam.g.trackuriboh.utils.viewBinding
-import java.util.*
+import java.util.Calendar
 
 /**
  * Bottom Sheet is kinda buggy with Compose. The cursor keeps jumping everywhere when
@@ -56,15 +56,17 @@ class AddEditReminderDialogFragment : DialogFragment(), DateTimePickerView.OnInt
                 MdcTheme {
                     val formState by viewModel.formState.observeAsState()
 
-                    ReminderForm(
-                        state = formState,
-                        onHostChanged = viewModel::onHostChanged,
-                        onLinkChanged = viewModel::onLinkValueChanged,
-                        onReminderTypeSelected = viewModel::onReminderTypeChanged,
-                        onDateTimeButtonClick = ::showDateTimePicker,
-                        onSaveClick = ::setReminder,
-                        onCancelClick = ::dismiss,
-                    )
+                    formState?.let {
+                        ReminderForm(
+                            state = it,
+                            onHostChanged = viewModel::onHostChanged,
+                            onLinkChanged = viewModel::onLinkValueChanged,
+                            onReminderTypeSelected = viewModel::onReminderTypeChanged,
+                            onDateTimeButtonClick = ::showDateTimePicker,
+                            onSaveClick = ::setReminder,
+                            onCancelClick = ::dismiss,
+                        )
+                    }
                 }
             }
         }

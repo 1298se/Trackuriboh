@@ -5,10 +5,10 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:paddingStart="@dimen/list_item_padding_start"
-    android:paddingEnd="@dimen/list_item_padding_end"
-    android:paddingTop="@dimen/list_item_two_line_padding_top"
-    android:paddingBottom="@dimen/list_item_two_line_padding_bottom">
+    android:paddingStart="@dimen/list_item_padding_horizontal"
+    android:paddingEnd="@dimen/list_item_padding_horizontal"
+    android:paddingTop="@dimen/list_item_two_line_padding_vertical"
+    android:paddingBottom="@dimen/list_item_two_line_padding_vertical">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/two_line_attribute_header_title_textview"

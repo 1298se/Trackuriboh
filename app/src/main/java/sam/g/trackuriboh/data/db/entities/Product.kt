@@ -3,6 +3,7 @@ package sam.g.trackuriboh.data.db.entities
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import sam.g.trackuriboh.data.types.ProductType
@@ -29,7 +30,8 @@ import sam.g.trackuriboh.data.types.ProductType
             childColumns = ["rarityId"],
             onDelete = ForeignKey.CASCADE
         )
-    ]
+    ],
+    indices = [Index("setId"), Index("rarityId")]
 )
 data class Product(
     @PrimaryKey(autoGenerate = false)

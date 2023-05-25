@@ -1,6 +1,7 @@
 package sam.g.trackuriboh.ui.common
 
 import android.content.Context
+import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -43,5 +44,9 @@ class TwoLineAttributeCardView @JvmOverloads constructor(
 
             binding.attributeContentContainer.addView(rowBinding.root)
         }
+    }
+
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
     }
 }

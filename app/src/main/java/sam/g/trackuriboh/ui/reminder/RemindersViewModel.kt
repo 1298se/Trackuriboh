@@ -15,12 +15,11 @@ import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.db.entities.Reminder
 import sam.g.trackuriboh.data.repository.ReminderRepository
 import sam.g.trackuriboh.managers.ReminderScheduler
-import sam.g.trackuriboh.ui.common.actions.RequestPermission
-import sam.g.trackuriboh.ui.common.actions.UiAction
+import sam.g.trackuriboh.ui.common.RequestPermission
+import sam.g.trackuriboh.ui.common.UiAction
 import sam.g.trackuriboh.utils.SingleEvent
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 @ExperimentalMaterialApi
 @HiltViewModel
@@ -41,7 +40,8 @@ class RemindersViewModel @Inject constructor(
 
     private val _action = MutableLiveData<SingleEvent<UiAction>>()
 
-    val reminders = reminderRepository.getRemindersObservable().map { createRemindersList(it) }.asLiveData()
+    val reminders = reminderRepository.getRemindersObservable().map { createRemindersList(it) }
+        .asLiveData(viewModelScope.coroutineContext)
 
     @SuppressLint("InlinedApi")
     fun save(reminder: Reminder, mode: ReminderFormViewModel.Mode) {

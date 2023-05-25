@@ -4,26 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import sam.g.trackuriboh.*
-import sam.g.trackuriboh.data.db.relations.SkuWithConditionAndPrinting
+import sam.g.trackuriboh.R
+import sam.g.trackuriboh.data.db.relations.SkuWithMetadata
 import sam.g.trackuriboh.databinding.BottomSheetCardPricesBinding
 import sam.g.trackuriboh.ui.common.OneLineAttributeCardView
-import sam.g.trackuriboh.ui.common.utils.UiState
 import sam.g.trackuriboh.ui.price.viewmodels.CardPricesViewModel
-import sam.g.trackuriboh.utils.*
+import sam.g.trackuriboh.utils.getListingAndShippingPriceString
+import sam.g.trackuriboh.utils.setDefaultExpanded
+import sam.g.trackuriboh.utils.viewBinding
 
 /**
  * This fragment can be used as a bottom sheet by itself and an embedded fragment
  */
 @AndroidEntryPoint
 class CardPricesBottomSheetFragment : BottomSheetDialogFragment() {
-    private val mViewModel: CardPricesViewModel by viewModels()
+    private val viewModel: CardPricesViewModel by viewModels()
 
     private val binding by viewBinding(BottomSheetCardPricesBinding::inflate)
 
@@ -68,36 +67,18 @@ class CardPricesBottomSheetFragment : BottomSheetDialogFragment() {
         setDefaultExpanded()
 
         // According to docs, don't use viewLifeCycleOwner for observe because of the dialog lifecycle being different
-        mViewModel.run {
-            state.observe(if (showsDialog) this@CardPricesBottomSheetFragment else viewLifecycleOwner) { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> binding.contentContainer.showOnly(binding.progressIndicator)
-                    is UiState.Failure, is UiState.Success -> {
-                        binding.progressIndicator.hide()
-
-                        binding.contentContainer.showAllExcept(binding.progressIndicator)
-
-                        uiState.data?.let { buildSkuPriceViews(it) }
-
-                        if (uiState is UiState.Failure) {
-                            uiState.message.let {
-                                if (showsDialog) {
-                                    showSnackbar(it)
-                                } else {
-                                    setFragmentResult(SNACKBAR_SHOW_REQUEST_KEY, bundleOf(
-                                        SNACKBAR_TYPE to SnackbarType.ERROR.name,
-                                        SNACKBAR_MESSAGE to it
-                                    ))
-                                }
-                            }
-                        }
-                    }
-                }
+        viewModel.run {
+            printingToSkuMap.observe(if (showsDialog) this@CardPricesBottomSheetFragment else viewLifecycleOwner) {
+                binding.contentContainer.removeAllViews()
+                buildSkuPriceViews(it)
             }
         }
     }
 
-    private fun buildSkuPriceViews(data: Map<String?, List<SkuWithConditionAndPrinting>>) {
+    /**
+     * Builds each price grid - each grid represents a printing, each row represents a condition
+     */
+    private fun buildSkuPriceViews(data: Map<String?, List<SkuWithMetadata>>) {
         data.toList().forEachIndexed { index, entry ->
             binding.contentContainer.addView(OneLineAttributeCardView(requireContext()).apply {
                 layoutParams = ViewGroup.MarginLayoutParams(
@@ -105,27 +86,22 @@ class CardPricesBottomSheetFragment : BottomSheetDialogFragment() {
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                 ).apply {
                     if (index != data.size - 1) {
-                        bottomMargin = context.resources.getDimension(R.dimen.list_item_large_row_spacing).toInt()
+                        bottomMargin =
+                            context.resources.getDimension(R.dimen.list_item_large_row_spacing)
+                                .toInt()
                     }
                 }
                 setHeader(entry.first, HtmlCompat.fromHtml(getString(R.string.lbl_price_lowest_listing_usd), HtmlCompat.FROM_HTML_MODE_LEGACY))
 
                 with (entry.second) {
-
                     val conditionPriceMap: Map<CharSequence?, CharSequence?> = associate {
-                        val conditionText = it.condition?.name ?: getString(R.string.lbl_not_available)
-                        val priceText = if (it.sku.lowestBasePrice != null) {
-                            val basePrice = it.sku.lowestBasePrice
-                            val shippingPrice = (it.sku.lowestShippingPrice ?: 0.0)
-
-                            if (shippingPrice > 0.0) {
-                                getString(R.string.base_price_with_shipping, basePrice, shippingPrice)
-                            } else {
-                                getString(R.string.base_price_with_free_shipping, basePrice)
-                            }
-                        } else {
-                            getString(R.string.lbl_not_available)
-                        }
+                        val conditionText =
+                            it.condition?.name ?: getString(R.string.lbl_not_available)
+                        val priceText = getListingAndShippingPriceString(
+                            context,
+                            it.sku.lowestBasePrice,
+                            it.sku.lowestShippingPrice
+                        )
 
                         conditionText to HtmlCompat.fromHtml(priceText, HtmlCompat.FROM_HTML_MODE_LEGACY)
                     }

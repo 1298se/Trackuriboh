@@ -28,7 +28,10 @@ data class ProductWithCardSetAndSkuIds(
         entity = Sku::class,
         parentColumn = "id",
         entityColumn = "productId",
-        projection = ["id"]
     )
-    val skuIds: List<Long>,
-) : Parcelable
+    val skusWithMetadata: List<SkuWithMetadata>
+) : Parcelable {
+
+    fun getOrderedSkusByPrintingAndCondition() =
+        SkuWithMetadata.getOrderedSkusByPrintingAndCondition(skusWithMetadata)
+}

@@ -2,7 +2,7 @@ package sam.g.trackuriboh.data.network.interceptors
 
 import okhttp3.Interceptor
 import okhttp3.Response
-import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.json.JSONArray
 import org.json.JSONObject
 import sam.g.trackuriboh.data.network.responses.BaseTCGPlayerResponse.Companion.ERROR_FIELD_NAME
@@ -17,8 +17,8 @@ class TCGPlayerResponseInterceptor : Interceptor {
 
         // The API currently returns 404 for queries with no results. This isn't very convenient because it counts
         // as an exception to retrofit. So if there are no results, we just change it to a 200.
-        if (response.code() == 404) {
-            val responseBody = response.body()
+        if (response.code == 404) {
+            val responseBody = response.body
 
             if (responseBody != null) {
                 val jsonString = responseBody.charStream().readText()
@@ -31,7 +31,7 @@ class TCGPlayerResponseInterceptor : Interceptor {
 
                     return response.newBuilder()
                         .body(
-                            ResponseBody.create(responseBody.contentType(), jsonObject.toString())
+                            jsonObject.toString().toResponseBody(responseBody.contentType())
                         )
                         .code(200).build()
                 }

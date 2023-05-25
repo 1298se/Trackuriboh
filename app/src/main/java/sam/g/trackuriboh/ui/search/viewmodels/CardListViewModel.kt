@@ -32,7 +32,8 @@ class CardListViewModel @Inject constructor(
     private val setId = state.get<Long?>(CardListFragment.ARG_SET_ID)
     private val query = state.get<String?>(CardListFragment.ARG_QUERY)
 
-    val searchResult = getSearchResultStream().cachedIn(viewModelScope).asLiveData()
+    val searchResult =
+        getSearchResultStream().cachedIn(viewModelScope).asLiveData(viewModelScope.coroutineContext)
 
     private fun getSearchResultStream(): Flow<PagingData<UiModel>> {
         val resultStream: Flow<PagingData<UiModel>> = if (setId != null) {

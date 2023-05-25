@@ -23,7 +23,7 @@ import sam.g.trackuriboh.ui.user_list.viewmodels.UserListsViewModel
 import sam.g.trackuriboh.utils.safeNavigate
 import sam.g.trackuriboh.utils.setupAsTopLevelDestinationToolbar
 import sam.g.trackuriboh.utils.viewBinding
-import java.util.*
+import java.util.Date
 
 /**
  * Fragment accessed from clicking "Lists" in bottom nav
@@ -132,7 +132,7 @@ class UserListsFragment : Fragment(), Toolbar.OnMenuItemClickListener, UserListA
                 )
 
                 if (!name.isNullOrEmpty()) {
-                    // No user list in extra bundle, so must be a new type
+                    // No user list in extra bundle, so must be a new list
                     if (userList == null) {
                         val type = bundle.getBundle(SimpleTextFieldDialogFragment.EXTRAS_DATA_KEY)?.getParcelable<UserListType>(
                             EXTRA_SELECTED_TYPE

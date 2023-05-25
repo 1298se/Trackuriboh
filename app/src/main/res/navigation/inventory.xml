@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/inventoryGraph"
+    app:startDestination="@id/inventoryFragment">
+
+    <fragment
+        android:id="@+id/inventoryFragment"
+        android:name="sam.g.trackuriboh.ui.inventory.InventoryFragment"
+        android:label="@string/lbl_inventory"
+        tools:layout="@layout/fragment_inventory">
+        <action
+            android:id="@+id/action_inventoryFragment_to_addTransactionFragment"
+            app:destination="@id/addTransactionFragment" />
+        <action
+            android:id="@+id/action_inventoryFragment_to_inventoryDetailFragment"
+            app:destination="@id/inventoryDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addTransactionFragment"
+        android:name="sam.g.trackuriboh.ui.transaction.AddTransactionFragment"
+        android:label="@string/add_transaction"
+        tools:layout="@layout/fragment_add_transaction">
+
+        <argument
+            android:name="inventoryId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/inventoryDetailFragment"
+        android:name="sam.g.trackuriboh.ui.inventory_detail.InventoryDetailFragment"
+        android:label="InventoryDetailFragment"
+        tools:layout="@layout/fragment_inventory_detail">
+        <argument
+            android:name="inventoryId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_inventoryDetailFragment_to_addTransactionFragment"
+            app:destination="@id/addTransactionFragment" />
+    </fragment>
+</navigation>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- We need this LinearLayout as parent apparently because DialogFragment is weird...
+https://stackoverflow.com/questions/44942440/why-is-my-dialogfragment-not-showing-the-custom-layout -->
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".ui.user_list.UserListSelectionBottomSheetFragment">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/simple_list_bottom_sheet_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/Widget.MaterialComponents.Toolbar.Surface" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/simple_list_bottom_sheet_toolbar_divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/simple_list_bottom_sheet_toolbar" />
+
+        <ListView
+            android:id="@+id/simple_list_bottom_sheet_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/simple_list_bottom_sheet_toolbar_divider"
+            tools:listitem="@layout/item_simple_one_line" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

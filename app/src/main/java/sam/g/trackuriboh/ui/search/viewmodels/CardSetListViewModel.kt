@@ -17,6 +17,6 @@ class CardSetListViewModel @Inject constructor(
 ) : ViewModel() {
 
     val searchResult =
-        cardSetRepository.search(state.get(CardSetListFragment.ARG_QUERY)).cachedIn(viewModelScope)
-            .asLiveData()
+        cardSetRepository.search(state[CardSetListFragment.ARG_QUERY]).cachedIn(viewModelScope)
+            .asLiveData(viewModelScope.coroutineContext)
 }

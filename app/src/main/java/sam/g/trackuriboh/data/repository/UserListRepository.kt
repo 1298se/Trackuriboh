@@ -12,7 +12,8 @@ class UserListRepository @Inject constructor(
 ) {
     fun getUserListsObervable() = userListLocalCache.getUserListsObservable()
 
-    fun getEntriesInUserListObservable(listId: Long) = userListLocalCache.getEntriesInUserListObservable(listId)
+    fun getEntriesInUserListObservable(listId: Long) =
+        userListLocalCache.getEntriesInUserListObservable(listId)
 
     suspend fun getAllUserLists() = userListLocalCache.getAllUserLists()
 
@@ -20,17 +21,22 @@ class UserListRepository @Inject constructor(
 
     suspend fun upsertUserList(userList: UserList) = userListLocalCache.upsertUserList(userList)
 
-    suspend fun upsertUserLists(userLists: List<UserList>) = userListLocalCache.upsertUserLists(userLists)
+    suspend fun upsertUserLists(userLists: List<UserList>) =
+        userListLocalCache.upsertUserLists(userLists)
 
-    suspend fun upsertUserListEntryAndAddQuantity(userListEntry: UserListEntry) = userListLocalCache.upsertUserListEntryAndAddQuantity(userListEntry)
+    suspend fun upsertUserListEntryWithQuantity(userListEntry: UserListEntry) {
+        var entry = userListLocalCache.getUserListEntry(userListEntry.listId, userListEntry.skuId)
 
-    suspend fun upsertUserListEntries(entries: List<UserListEntry>) = userListLocalCache.upsertUserListEntries(entries)
+        entry = entry?.copy(quantity = entry.quantity + userListEntry.quantity) ?: userListEntry
 
-    suspend fun deleteUserListEntries(listId: Long, skuIds: List<Long>?) {
-        if (skuIds == null) {
-            return
-        }
-        userListLocalCache.deleteUserListEntries(listId, skuIds)
+        userListLocalCache.upsertUserListEntry(entry)
+    }
+
+    suspend fun upsertUserListEntries(entries: List<UserListEntry>) =
+        userListLocalCache.upsertUserListEntries(entries)
+
+    suspend fun deleteUserListEntry(listId: Long, skuId: Long) {
+        userListLocalCache.deleteUserListEntry(listId, skuId)
     }
 
     suspend fun updateUserListEntry(entry: UserListEntry) {

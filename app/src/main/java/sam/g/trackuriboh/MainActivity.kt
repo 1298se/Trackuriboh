@@ -3,6 +3,7 @@ package sam.g.trackuriboh
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
@@ -38,6 +39,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun initBottomNavigation() {
         binding.bottomNavView.setupWithNavController(navController)
+        binding.bottomNavView.setOnItemReselectedListener {
+            val currentTabGraph = navController.graph.findNode(it.itemId) as NavGraph
+
+            navController.popBackStack(currentTabGraph.startDestinationId, false)
+        }
     }
 
     private fun initFragmentResultListeners() {
