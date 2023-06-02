@@ -9,7 +9,7 @@ import sam.g.trackuriboh.data.db.migrations.MIGRATION_1_2
 import sam.g.trackuriboh.data.db.migrations.MIGRATION_2_3
 
 @Database(
-    version = 4,
+    version = 5,
     entities = [
         Product::class,
         Sku::class,
@@ -24,7 +24,8 @@ import sam.g.trackuriboh.data.db.migrations.MIGRATION_2_3
         InventoryTransaction::class,
     ],
     autoMigrations = [
-        AutoMigration (from = 3, to = 4)
+        AutoMigration(from = 3, to = 4),
+        AutoMigration(from = 4, to = 5),
     ]
 )
 @TypeConverters(RoomConverter::class)

@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "98f6ec8f4a103a0c7622acd57c2e46d3",
+    "identityHash": "4fe0943d3a5e7e49f1ffd72d830b234a",
     "entities": [
       {
         "tableName": "Product",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `cleanName` TEXT NOT NULL, `type` TEXT NOT NULL, `imageUrl` TEXT, `setId` INTEGER, `number` TEXT, `rarityId` INTEGER, `attribute` TEXT, `cardType` TEXT, `attack` INTEGER, `defense` INTEGER, `description` TEXT, `marketPrice` REAL, PRIMARY KEY(`id`), FOREIGN KEY(`setId`) REFERENCES `CardSet`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`rarityId`) REFERENCES `CardRarity`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `cleanName` TEXT NOT NULL, `type` TEXT NOT NULL, `imageUrl` TEXT, `setId` INTEGER, `number` TEXT, `rarityId` INTEGER, `attribute` TEXT, `cardType` TEXT, `attack` INTEGER, `defense` INTEGER, `description` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`setId`) REFERENCES `CardSet`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`rarityId`) REFERENCES `CardRarity`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
