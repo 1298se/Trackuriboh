@@ -11,7 +11,7 @@ enum class ReminderType : Parcelable {
     LISTING,
     OTHER;
 
-    fun getDisplayStringRes() =
+    fun getDisplayStringResId() =
         when (this) {
             AUCTION -> R.string.reminder_type_auction
             CLAIM_SALE -> R.string.reminder_type_claim_sale

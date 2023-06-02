@@ -24,13 +24,13 @@ class CardPricesViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            priceRepository.updatePricesForProduct(productId)
+            priceRepository.updatePricesForSkus(skuRepository.getSkus(productId).map { it.id })
         }
     }
 
     val printingToSkuMap = skuRepository.getSkusWithMetadataObservable(productId).map {
         buildPrintingToSkuMap(SkuWithMetadata.getOrderedSkusByPrintingAndCondition(it))
-    }.asLiveData(viewModelScope.coroutineContext)
+    }.asLiveData()
 
     private fun buildPrintingToSkuMap(skus: List<SkuWithMetadata>): Map<String?, List<SkuWithMetadata>> {
         val map = mutableMapOf<String?, MutableList<SkuWithMetadata>>()

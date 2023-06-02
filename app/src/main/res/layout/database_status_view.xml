@@ -74,10 +74,7 @@
             style="@style/Widget.AppTheme.Button.Surface"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/lbl_up_to_date"
-            android:enabled="false"
-            android:visibility="invisible"
-            tools:visibility="visible"
+            tools:text="@string/lbl_up_to_date"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

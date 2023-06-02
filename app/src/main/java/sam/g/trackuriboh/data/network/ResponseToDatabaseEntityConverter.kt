@@ -1,13 +1,23 @@
 package sam.g.trackuriboh.data.network
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import sam.g.trackuriboh.data.db.entities.*
-import sam.g.trackuriboh.data.network.responses.*
+import sam.g.trackuriboh.data.db.entities.CardRarity
+import sam.g.trackuriboh.data.db.entities.CardSet
+import sam.g.trackuriboh.data.db.entities.Condition
+import sam.g.trackuriboh.data.db.entities.Printing
+import sam.g.trackuriboh.data.db.entities.Product
+import sam.g.trackuriboh.data.db.entities.Sku
+import sam.g.trackuriboh.data.network.responses.CardRarityResponse
+import sam.g.trackuriboh.data.network.responses.CardResponse
+import sam.g.trackuriboh.data.network.responses.CardSetResponse
+import sam.g.trackuriboh.data.network.responses.ConditionResponse
+import sam.g.trackuriboh.data.network.responses.PrintingResponse
+import sam.g.trackuriboh.data.network.responses.SkuResponse
 import sam.g.trackuriboh.data.repository.CatalogRepository
 import sam.g.trackuriboh.data.types.ProductType
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,7 +28,6 @@ class ResponseToDatabaseEntityConverter @Inject constructor(
     companion object {
         private const val cardSetResponseDatePattern = "yyyy-MM-dd'T'HH:mm:ss"
     }
-
     fun toSku(response: SkuResponse.SkuItem) =
         Sku(response.id, response.productId, response.printingId, response.conditionId)
 

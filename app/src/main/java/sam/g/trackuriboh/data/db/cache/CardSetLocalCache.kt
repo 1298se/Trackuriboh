@@ -33,23 +33,8 @@ class CardSetLocalCache @Inject constructor(
             it.toSearchSuggestionsCursor()
         }
 
-    suspend fun getRecentSetsWithCardsSortedByPrice(numSets: Int, numCards: Int, shouldRefresh: Boolean): Map<CardSet, Map<Product, Double?>> {
-        if (recentCardSetsWithCards.isEmpty() || shouldRefresh) {
-            val map = mutableMapOf<CardSet, Map<Product, Double?>>()
-
-            val recentCardSets = appDatabase.cardSetDao().getRecentCardSets(numSets)
-
-            for (cardSet in recentCardSets) {
-                val productWithLowestListing = appDatabase.productDao().getMostExpensiveProductsInSet(cardSet.id, numCards)
-
-                map[cardSet] = productWithLowestListing
-            }
-
-            return map.also { recentCardSetsWithCards = it }
-        }
-
-        return recentCardSetsWithCards
-    }
+    suspend fun getRecentCardSetsAndMostExpensiveCards(numSets: Int, numCards: Int) =
+        appDatabase.cardSetDao().getRecentCardSetsAndMostExpensiveCards(numSets, numCards)
 
     suspend fun getTotalCardSetCount() =
         appDatabase.cardSetDao().getTotalCount()

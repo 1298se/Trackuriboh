@@ -8,12 +8,10 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.delay
 import sam.g.trackuriboh.analytics.Events
-import sam.g.trackuriboh.data.network.responses.Resource
 import sam.g.trackuriboh.data.repository.PriceRepository
+import sam.g.trackuriboh.data.repository.ProductRepository
 import sam.g.trackuriboh.data.repository.SkuRepository
-import java.io.IOException
 
 /**
  * Worker to sync prices in the background. It will try to fetch prices for all skus, but it's okay if it fails
@@ -23,37 +21,50 @@ import java.io.IOException
 class PriceSyncWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
+    private val productRepository: ProductRepository,
     private val skuRepository: SkuRepository,
     private val priceRepository: PriceRepository,
     private val firebaseCrashlytics: FirebaseCrashlytics,
     private val firebaseAnalytics: FirebaseAnalytics
 ) : CoroutineWorker(appContext, workerParams) {
+
     companion object {
-        const val NETWORK_REQUEST_DELAY = 250L
+        val workerName: String = PriceSyncWorker::class.java.name
     }
     override suspend fun doWork(): Result {
         return try {
             firebaseAnalytics.logEvent(Events.PRICE_SYNC_WORKER_START, null)
 
-            var offset = 0
+            val skuCount = skuRepository.getSkuCount()
 
-            while (true) {
-                val skuIds = skuRepository.getSkuIdsPaginated(offset, GET_REQUEST_ID_QUERY_LIMIT)
+            paginate(
+                totalCount = skuCount,
+                paginationSize = GET_REQUEST_ID_QUERY_LIMIT,
+                paginate = { offset, paginationSize ->
+                    val skuIds = skuRepository.getSkuIdsPaginated(offset, paginationSize)
 
-                if (skuIds.isEmpty()) {
-                    break
-                }
+                    priceRepository.updatePricesForSkus(skuIds)
 
-                val resource = priceRepository.updatePricesForSkus(skuIds)
+                    emptyList()
+                },
+                onPaginate = { _: Int, _: List<Int> -> }
+            )
 
-                if (resource is Resource.Failure) {
-                    throw IOException(resource.exception)
-                }
+            val productCount = productRepository.getCardCount()
 
-                offset += GET_REQUEST_ID_QUERY_LIMIT
+            paginate(
+                totalCount = productCount,
+                paginationSize = GET_REQUEST_ID_QUERY_LIMIT,
+                paginate = { offset, paginationSize ->
+                    val productIds =
+                        productRepository.getProductIdsPaginated(offset, paginationSize)
 
-                delay(NETWORK_REQUEST_DELAY)
-            }
+                    priceRepository.updatePricesForProducts(productIds)
+
+                    emptyList()
+                },
+                onPaginate = { _: Int, _: List<Int> -> }
+            )
 
             firebaseAnalytics.logEvent(Events.PRICE_SYNC_SUCCESS, null)
 

@@ -30,12 +30,12 @@ class CardSetExploreRowView @JvmOverloads constructor(
     }
 
     fun setupWith(
-        cardSet: CardSet, productsWithPrice: Map<Product, Double?>,
+        cardSet: CardSet, products: List<Product>,
         onItemClickListener: CardSetExploreCardsAdapter.OnItemClickListener,
         onCardSetNameClick: (setId: Long) -> Unit,
     ) {
         binding.cardExploreList.apply {
-            adapter = CardSetExploreCardsAdapter(productsWithPrice, onItemClickListener)
+            adapter = CardSetExploreCardsAdapter(products, onItemClickListener)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
         binding.cardSetNameTextview.apply {

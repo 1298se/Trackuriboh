@@ -14,15 +14,18 @@ interface SkuDao : BaseDao<Sku> {
     @Query("SELECT * FROM Sku WHERE productId = :productId")
     fun getSkusWithMetadataObservable(productId: Long): Flow<List<SkuWithMetadata>>
 
+    @Query("SELECT COUNT(*) FROM Sku")
+    suspend fun getSkuCount(): Int
+
     @Update(entity = Sku::class)
     suspend fun updateSkuPrices(skuPriceUpdates: List<Sku.SkuPriceUpdate>)
 
-    @Query("SELECT id FROM Sku ORDER BY id LIMIT :limit OFFSET :offset")
+    @Query("SELECT id FROM Sku LIMIT :limit OFFSET :offset")
     suspend fun getSkuIdsPaginated(offset: Int, limit: Int): List<Long>
-
-    @Query("DELETE FROM Sku")
-    suspend fun clearTable()
 
     @Query("SELECT * FROM Sku WHERE productId = :productId")
     suspend fun getSkus(productId: Long): List<Sku>
+
+    @Query("DELETE FROM Sku")
+    suspend fun clearTable()
 }

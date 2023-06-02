@@ -49,4 +49,10 @@ data class Product(
     var attack: Int? = null,
     var defense: Int? = null,
     var description: String? = null,
-) : Parcelable
+    val marketPrice: Double? = null,
+) : Parcelable {
+    data class ProductPriceUpdate(
+        val id: Long,
+        val marketPrice: Double?
+    )
+}

@@ -7,6 +7,8 @@ import androidx.room.Query
 import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
 import sam.g.trackuriboh.data.db.entities.CardSet
+import sam.g.trackuriboh.data.db.entities.Product
+import java.util.Date
 
 @Dao
 interface CardSetDao : BaseDao<CardSet> {
@@ -23,12 +25,20 @@ interface CardSetDao : BaseDao<CardSet> {
 
     @Transaction
     @Query(
-        "SELECT CardSet.* FROM CardSet " +
+        "SELECT * FROM (SELECT CardSet.* FROM CardSet " +
                 "LEFT JOIN Product ON Product.setId = CardSet.id " +
+                "WHERE releaseDate <= :today " +
                 "GROUP BY CardSet.id HAVING COUNT(Product.id) > 0 " +
-                "ORDER BY CardSet.releaseDate DESC LIMIT :limit"
+                "ORDER BY CardSet.releaseDate DESC LIMIT :cardSetLimit) AS recentCardSets " +
+                "JOIN Product p ON recentCardSets.id = p.setId " +
+                "WHERE p.id IN (SELECT id FROM Product p2 WHERE p2.setId = recentCardSets.id ORDER BY marketPrice DESC LIMIT :cardLimit) " +
+                "ORDER BY recentCardSets.releaseDate, p.marketPrice DESC;"
     )
-    suspend fun getRecentCardSets(limit: Int): List<CardSet>
+    suspend fun getRecentCardSetsAndMostExpensiveCards(
+        cardSetLimit: Int,
+        cardLimit: Int,
+        today: Date = Date()
+    ): Map<CardSet, List<Product>>
 
     @Query("SELECT * FROM CardSet ORDER BY name ASC")
     fun getCardSetList(): PagingSource<Int, CardSet>

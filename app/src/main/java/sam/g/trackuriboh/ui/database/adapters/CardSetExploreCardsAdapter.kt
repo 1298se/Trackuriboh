@@ -9,23 +9,23 @@ import sam.g.trackuriboh.data.db.entities.Product
 import sam.g.trackuriboh.databinding.ItemCardSetExploreCardBinding
 
 class CardSetExploreCardsAdapter(
-    productsWithPrice: Map<Product, Double?>,
+    private val products: List<Product>,
     private val onItemClickListener: OnItemClickListener,
 ) : RecyclerView.Adapter<CardSetExploreCardsAdapter.CardSetExploreCardViewHolder>() {
     interface OnItemClickListener {
         fun onItemClick(cardId: Long)
     }
 
-    private val productsWithPriceList = productsWithPrice.toList()
-
     inner class CardSetExploreCardViewHolder(private val binding: ItemCardSetExploreCardBinding) : RecyclerView.ViewHolder(binding.root) {
-        internal fun bind(product: Product, price: Double?) {
+        internal fun bind(product: Product) {
             Glide.with(itemView)
                 .load(product.imageUrl)
                 .placeholder(R.drawable.img_cardback)
                 .into(binding.cardImage)
 
             binding.itemCardTitleTextview.text = product.name
+            binding.itemCardMarketPriceTextview.text =
+                itemView.context.getString(R.string.market_price_placeholder, product.marketPrice)
         }
     }
 
@@ -35,17 +35,15 @@ class CardSetExploreCardsAdapter(
     ): CardSetExploreCardViewHolder {
         return CardSetExploreCardViewHolder(ItemCardSetExploreCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)).apply {
             itemView.setOnClickListener {
-                onItemClickListener.onItemClick(productsWithPriceList[bindingAdapterPosition].first.id)
+                onItemClickListener.onItemClick(products[bindingAdapterPosition].id)
             }
         }
     }
 
     override fun onBindViewHolder(holder: CardSetExploreCardViewHolder, position: Int) {
-        val entry = productsWithPriceList[position]
-
-        holder.bind(entry.first, entry.second)
+        holder.bind(products[position])
     }
 
     override fun getItemCount() =
-        productsWithPriceList.size
+        products.size
 }

@@ -44,8 +44,8 @@ class CardSetRepository @Inject constructor(
 
     suspend fun getCardSetsWithCount() = cardSetLocalCache.getAllCardSetsWithCount()
 
-    suspend fun getRecentSetsWithCards(numSets: Int, numCards: Int, shouldRefresh: Boolean) =
-        cardSetLocalCache.getRecentSetsWithCardsSortedByPrice(numSets, numCards, shouldRefresh)
+    suspend fun getRecentCardSetsAndMostExpensiveCards(numSets: Int, numCards: Int) =
+        cardSetLocalCache.getRecentCardSetsAndMostExpensiveCards(numSets, numCards)
 
     suspend fun getTotalCardSetCount() =
         cardSetLocalCache.getTotalCardSetCount()

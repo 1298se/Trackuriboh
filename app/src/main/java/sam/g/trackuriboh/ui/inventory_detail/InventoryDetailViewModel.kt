@@ -29,7 +29,7 @@ class InventoryDetailViewModel @Inject constructor(
     val inventoryWithSkuMetadataAndTransactions =
         inventoryRepository.getInventoryWithSkuMetadataAndTransactionsObservable(inventoryId).map {
             it.copy(transactions = it.getSortedTransactionsByDateDesc())
-        }.asLiveData(viewModelScope.coroutineContext)
+        }.asLiveData()
 
     fun deleteTransaction(transaction: InventoryTransaction) {
         viewModelScope.launch {

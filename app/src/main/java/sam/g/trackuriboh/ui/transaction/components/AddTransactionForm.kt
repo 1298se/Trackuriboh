@@ -43,7 +43,7 @@ fun AddTransactionFrom(
     Column {
         SelectableLabelValueRow(
             label = stringResource(id = R.string.lbl_transaction),
-            value = state.formData.type.getDisplayStringRes(LocalContext.current)
+            value = state.formData.type.getDisplayStringResId(LocalContext.current)
         ) {
             onTransactionTypeClick()
         }

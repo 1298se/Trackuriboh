@@ -64,7 +64,6 @@ class CardDetailFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             /*
              * In this case, since the data is a one-shot operation, we just initialize the adapters
              * here.
-             * See ViewPager2.setAdapter
              */
             initImageViewPager(listOf(it.product.imageUrl))
             initCardDetailViewPager(it)

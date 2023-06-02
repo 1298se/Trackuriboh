@@ -124,10 +124,6 @@ class CardSelectionFragment : Fragment() {
                     override fun handleQueryTextChanged(newText: String?) {
                         searchSuggestionsViewModel.getSuggestions(newText)
                     }
-
-                    override fun handleSearchViewCollapse() {
-                        findNavController().popBackStack()
-                    }
                 })
             }
         }

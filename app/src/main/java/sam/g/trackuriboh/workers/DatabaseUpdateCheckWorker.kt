@@ -17,9 +17,7 @@ import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.network.ResponseToDatabaseEntityConverter
 import sam.g.trackuriboh.data.repository.CardSetRepository
 import sam.g.trackuriboh.di.NetworkModule
-import sam.g.trackuriboh.utils.DATABASE_ASSET_CREATION_DATE
-import sam.g.trackuriboh.workers.DatabaseUpdateWorker.Companion.DATABASE_LAST_UPDATED_DATE_SHAREDPREF_KEY
-import java.util.*
+import java.util.Date
 
 @HiltWorker
 class DatabaseUpdateCheckWorker @AssistedInject constructor(
@@ -29,8 +27,9 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
     private val sharedPreferences: SharedPreferences,
     private val firebaseCrashlytics: FirebaseCrashlytics,
     private val firebaseAnalytics: FirebaseAnalytics,
-    private val responseToDatabaseEntityConverter: ResponseToDatabaseEntityConverter
-    ) : CoroutineWorker(appContext, workerParams) {
+    private val responseToDatabaseEntityConverter: ResponseToDatabaseEntityConverter,
+    private val workRequestManager: WorkRequestManager,
+) : CoroutineWorker(appContext, workerParams) {
     companion object {
         const val DATABASE_LAST_UPDATED_CHECK_DATE_SHAREDPREF_KEY = "DatabaseUpdateCheckWorker_LastCheckDate"
 
@@ -48,10 +47,6 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
 
             val updateCardSetIds = mutableListOf<Long?>()
 
-            // We need to fetch the products from both the diff sets and unreleased sets as they may
-            // have been updated
-            val lastUpdatedDate = Date(sharedPreferences.getLong(DATABASE_LAST_UPDATED_DATE_SHAREDPREF_KEY, DATABASE_ASSET_CREATION_DATE))
-
             paginate(
                 totalCount = fetchedCardSetCount,
                 paginationSize = NetworkModule.DEFAULT_QUERY_LIMIT,
@@ -64,26 +59,39 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
                     // If we don't have it in db, or the modified
                     // date is after our db's modified date, then add to update list.
                     if (existingSetModel == null ||
-                        responseSetModel.modifiedDate?.after(existingSetModel.modifiedDate) == true)
+                        responseSetModel.modifiedDate?.after(existingSetModel.modifiedDate) == true
+                    ) {
+                        updateCardSetIds.add(item.id)
 
-                    updateCardSetIds.add(item.id)
+                    }
                 }
             }
 
 
-            firebaseAnalytics.logEvent(Events.UPDATE_CHECK_WORKER_SUCCESS, bundleOf(
-                "updateCardSetIds" to updateCardSetIds
-            ))
+            firebaseAnalytics.logEvent(
+                Events.UPDATE_CHECK_WORKER_SUCCESS, bundleOf(
+                    "updateCardSetIds" to updateCardSetIds
+                )
+            )
 
             with(sharedPreferences.edit()) {
                 putLong(DATABASE_LAST_UPDATED_CHECK_DATE_SHAREDPREF_KEY, Date().time)
                 commit()
             }
 
-            Result.success(workDataOf(
-                UPDATE_AVAILABLE_RESULT to updateCardSetIds.isNotEmpty(),
-                UPDATE_CARD_SET_IDS_RESULT to updateCardSetIds.filterNotNull().toTypedArray(),
-            ))
+            val updateAvailable = updateCardSetIds.isNotEmpty()
+
+            // If there's no update available, we can run a price sync
+            if (!updateAvailable) {
+                workRequestManager.enqueueOneTimePriceSync()
+            }
+
+            Result.success(
+                workDataOf(
+                    UPDATE_AVAILABLE_RESULT to updateAvailable,
+                    UPDATE_CARD_SET_IDS_RESULT to updateCardSetIds.filterNotNull().toTypedArray(),
+                )
+            )
         } catch (e: Exception) {
             firebaseCrashlytics.recordException(e)
             e.printStackTrace()

@@ -103,7 +103,7 @@ class InventoryAdapter(private val onInteractionListener: OnInteractionListener)
                 skuWithMetadata.condition?.name,
             )
 
-            binding.itemUserListEntryPriceTextview.text = sku.lowestBasePrice?.let {
+            binding.itemUserListEntryPriceTextview.text = sku.lowestListingPrice?.let {
                 itemView.context.getString(
                     R.string.price_placeholder,
                     it

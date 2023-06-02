@@ -57,7 +57,11 @@ class CardPricesBottomSheetFragment : BottomSheetDialogFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return binding.root
     }
 
@@ -67,11 +71,9 @@ class CardPricesBottomSheetFragment : BottomSheetDialogFragment() {
         setDefaultExpanded()
 
         // According to docs, don't use viewLifeCycleOwner for observe because of the dialog lifecycle being different
-        viewModel.run {
-            printingToSkuMap.observe(if (showsDialog) this@CardPricesBottomSheetFragment else viewLifecycleOwner) {
-                binding.contentContainer.removeAllViews()
-                buildSkuPriceViews(it)
-            }
+        viewModel.printingToSkuMap.observe(if (showsDialog) this@CardPricesBottomSheetFragment else viewLifecycleOwner) {
+            binding.contentContainer.removeAllViews()
+            buildSkuPriceViews(it)
         }
     }
 
@@ -91,9 +93,15 @@ class CardPricesBottomSheetFragment : BottomSheetDialogFragment() {
                                 .toInt()
                     }
                 }
-                setHeader(entry.first, HtmlCompat.fromHtml(getString(R.string.lbl_price_lowest_listing_usd), HtmlCompat.FROM_HTML_MODE_LEGACY))
+                setHeader(
+                    entry.first,
+                    HtmlCompat.fromHtml(
+                        getString(R.string.lbl_price_lowest_listing_usd),
+                        HtmlCompat.FROM_HTML_MODE_LEGACY
+                    )
+                )
 
-                with (entry.second) {
+                with(entry.second) {
                     val conditionPriceMap: Map<CharSequence?, CharSequence?> = associate {
                         val conditionText =
                             it.condition?.name ?: getString(R.string.lbl_not_available)
@@ -103,7 +111,10 @@ class CardPricesBottomSheetFragment : BottomSheetDialogFragment() {
                             it.sku.lowestShippingPrice
                         )
 
-                        conditionText to HtmlCompat.fromHtml(priceText, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                        conditionText to HtmlCompat.fromHtml(
+                            priceText,
+                            HtmlCompat.FROM_HTML_MODE_LEGACY
+                        )
                     }
 
                     setRowItems(conditionPriceMap)

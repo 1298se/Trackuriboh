@@ -37,7 +37,7 @@ enum class TransactionType {
     PURCHASE,
     SALE;
 
-    fun getDisplayStringRes(context: Context) =
+    fun getDisplayStringResId(context: Context) =
         when (this) {
             PURCHASE -> context.getString(R.string.lbl_purchase)
             SALE -> context.getString(R.string.lbl_sale)

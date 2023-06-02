@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import sam.g.trackuriboh.MainGraphDirections
 import sam.g.trackuriboh.R
@@ -50,17 +49,6 @@ class SearchResultFragment : Fragment() {
             ).also {
                 searchResultAdapter = it
             }
-
-            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    when(position) {
-                        0 -> {
-                        }
-                        1 -> {
-                        }
-                    }
-                }
-            })
         }
 
         TabLayoutMediator(binding.searchResultTabLayout, binding.searchResultViewPager) { tab, position ->

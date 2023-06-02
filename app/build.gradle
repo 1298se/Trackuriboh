@@ -110,7 +110,7 @@ dependencies {
     implementation "androidx.room:room-paging:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
-    // PagedList
+    // Paging
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
     // Material design

@@ -1,6 +1,14 @@
 package sam.g.trackuriboh.workers
 
-import androidx.work.*
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.OutOfQuotaPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -68,23 +76,6 @@ class WorkRequestManager @Inject constructor(
         )
     }
 
-    fun enqueuePeriodicPriceSync() {
-        val priceSyncRequest = PeriodicWorkRequestBuilder<PriceSyncWorker>(3, TimeUnit.DAYS)
-            .setInitialDelay(10, TimeUnit.MINUTES)
-            .setConstraints(
-                Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .build()
-            )
-            .build()
-
-        workManager.enqueueUniquePeriodicWork(
-            PriceSyncWorker::class.java.name,
-            ExistingPeriodicWorkPolicy.KEEP,
-            priceSyncRequest
-        )
-    }
-
     fun enqueueOneTimePriceSync() {
         val priceSyncRequest = OneTimeWorkRequestBuilder<PriceSyncWorker>()
             .setConstraints(
@@ -94,7 +85,7 @@ class WorkRequestManager @Inject constructor(
             ).build()
 
         workManager.enqueueUniqueWork(
-            PriceSyncWorker::class.java.name + "OneTime",
+            PriceSyncWorker.workerName,
             ExistingWorkPolicy.REPLACE,
             priceSyncRequest
         )

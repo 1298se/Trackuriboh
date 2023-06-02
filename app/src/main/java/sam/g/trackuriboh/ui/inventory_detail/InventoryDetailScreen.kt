@@ -1,6 +1,7 @@
 package sam.g.trackuriboh.ui.inventory_detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -25,7 +26,6 @@ import sam.g.trackuriboh.data.db.relations.ProductWithCardSet
 import sam.g.trackuriboh.data.db.relations.SkuWithMetadata
 import sam.g.trackuriboh.data.types.ProductType
 import sam.g.trackuriboh.utils.formatDate
-import sam.g.trackuriboh.utils.formattedPriceString
 import sam.g.trackuriboh.utils.getListingAndShippingPriceString
 import sam.g.trackuriboh.utils.joinStringsWithInterpunct
 import java.util.*
@@ -36,57 +36,63 @@ fun InventoryDetailScreen(
     modifier: Modifier = Modifier,
     onTransactionSwiped: (InventoryTransaction) -> Unit,
     onAddTransactionClick: () -> Unit,
+    onSkuDetailClick: (productId: Long) -> Unit,
 ) {
-    LazyColumn(
-        modifier = modifier
-            .background(MaterialTheme.colors.surface),
-        contentPadding = PaddingValues(dimensionResource(id = R.dimen.material_border_padding)),
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.list_item_row_spacing))
-    ) {
-        item {
-            SkuDetailInfoSection(skuWithMetadata = inventoryWithSkuMetadataAndTransactions.inventoryWithSkuMetadata.skuWithMetadata)
 
-            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.heading_text_spacing)))
-        }
+    Column {
+        SkuDetailInfoSection(
+            skuWithMetadata = inventoryWithSkuMetadataAndTransactions.inventoryWithSkuMetadata.skuWithMetadata,
+            onSkuDetailClick = onSkuDetailClick,
+        )
 
-        item {
-            PriceInfoSection(inventoryWithSkuMetadata = inventoryWithSkuMetadataAndTransactions.inventoryWithSkuMetadata)
+        LazyColumn(
+            modifier = modifier
+                .background(MaterialTheme.colors.surface),
+            contentPadding = PaddingValues(dimensionResource(id = R.dimen.material_border_padding)),
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.list_item_row_spacing))
+        ) {
+            item {
+                PriceInfoSection(inventoryWithSkuMetadata = inventoryWithSkuMetadataAndTransactions.inventoryWithSkuMetadata)
 
-            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.heading_text_spacing)))
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.heading_text_spacing)))
 
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text(
-                    text = stringResource(id = R.string.lbl_transactions),
-                    modifier = Modifier.align(Alignment.CenterVertically),
-                    style = MaterialTheme.typography.subtitle2,
-                )
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Text(
+                        text = stringResource(id = R.string.lbl_transactions),
+                        modifier = Modifier.align(Alignment.CenterVertically),
+                        style = MaterialTheme.typography.subtitle2,
+                    )
 
-                IconButton(
-                    onClick = onAddTransactionClick,
-                    modifier = Modifier.align(Alignment.CenterVertically),
-                ) {
-                    Icon(imageVector = Icons.Filled.Add, contentDescription = "")
+                    IconButton(
+                        onClick = onAddTransactionClick,
+                        modifier = Modifier.align(Alignment.CenterVertically),
+                    ) {
+                        Icon(imageVector = Icons.Filled.Add, contentDescription = "")
+                    }
                 }
+
             }
 
-        }
-
-        items(inventoryWithSkuMetadataAndTransactions.transactions) { transaction ->
-            TransactionItemRow(transaction, onTransactionSwiped)
+            items(inventoryWithSkuMetadataAndTransactions.transactions) { transaction ->
+                TransactionItemRow(transaction, onTransactionSwiped)
+            }
         }
     }
 }
 
 @Composable
 fun SkuDetailInfoSection(
-    skuWithMetadata: SkuWithMetadata
+    skuWithMetadata: SkuWithMetadata,
+    onSkuDetailClick: (productId: Long) -> Unit,
 ) {
-    Column(
+    Row(
         Modifier
-            .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.text_spacing_large))
+            .fillMaxWidth()
+            .clickable {
+                onSkuDetailClick(skuWithMetadata.productWithCardSet.product.id)
+            }
+            .padding(dimensionResource(id = R.dimen.material_border_padding)),
     ) {
-
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(skuWithMetadata.productWithCardSet.product.imageUrl)
@@ -94,26 +100,34 @@ fun SkuDetailInfoSection(
                 .build(),
             contentDescription = "",
             modifier = Modifier
-                .height(dimensionResource(id = R.dimen.item_user_list_entry_image_height))
-                .width(dimensionResource(id = R.dimen.item_user_list_entry_image_width))
+                .fillMaxWidth(0.25f)
         )
 
-        Text(
-            text = joinStringsWithInterpunct(
-                skuWithMetadata.productWithCardSet.cardSet.name ?: "",
-                skuWithMetadata.productWithCardSet.product.number
-            ),
-            style = MaterialTheme.typography.subtitle1
-        )
+        Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.list_item_image_content_spacing)))
 
-        Text(
-            text = joinStringsWithInterpunct(
-                skuWithMetadata.productWithCardSet.rarity.name,
-                skuWithMetadata.printing?.name,
-                skuWithMetadata.condition?.name
-            ),
-            style = MaterialTheme.typography.subtitle1
-        )
+        Column {
+            Text(
+                text = skuWithMetadata.productWithCardSet.product.name,
+                style = MaterialTheme.typography.h6
+            )
+
+            Text(
+                text = joinStringsWithInterpunct(
+                    skuWithMetadata.productWithCardSet.cardSet.name ?: "",
+                    skuWithMetadata.productWithCardSet.product.number
+                ),
+                style = MaterialTheme.typography.body1
+            )
+
+            Text(
+                text = joinStringsWithInterpunct(
+                    skuWithMetadata.productWithCardSet.rarity.name,
+                    skuWithMetadata.printing?.name,
+                    skuWithMetadata.condition?.name
+                ),
+                style = MaterialTheme.typography.body1
+            )
+        }
     }
 }
 
@@ -128,11 +142,13 @@ fun PriceInfoSection(inventoryWithSkuMetadata: InventoryWithSkuMetadata) {
         val marketPrice = skuWithMetadata.sku.marketPrice
 
         Text(
-            text = stringResource(
-                id = R.string.market_price_placeholder,
-                marketPrice?.formattedPriceString() ?: stringResource(
-                    id = R.string.lbl_not_available
+            text = marketPrice?.let {
+                stringResource(
+                    id = R.string.market_price_placeholder,
+                    it
                 )
+            } ?: stringResource(
+                id = R.string.lbl_not_available
             ),
             style = MaterialTheme.typography.caption
         )
@@ -228,7 +244,7 @@ fun TransactionItemRow(
                 verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.text_spacing))
             ) {
                 Text(
-                    text = transaction.type.getDisplayStringRes(LocalContext.current),
+                    text = transaction.type.getDisplayStringResId(LocalContext.current),
                     style = MaterialTheme.typography.subtitle2,
                 )
                 transaction.date.formatDate()?.let {
@@ -301,6 +317,7 @@ private fun InventoryDetailScreen() {
     InventoryDetailScreen(
         inventoryWithSkuMetadataAndTransactions,
         Modifier,
+        { },
         { },
         { }
     )

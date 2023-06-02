@@ -64,7 +64,7 @@ class RemindersAdapter : ListAdapter<RemindersViewModel.UiModel, BaseViewHolder<
             val reminder = (item as RemindersViewModel.UiModel.ReminderItem).reminder
 
             val context = itemView.context
-            val reminderType = context.getString(reminder.type.getDisplayStringRes())
+            val reminderType = context.getString(reminder.type.getDisplayStringResId())
 
             binding.itemReminderTitleTextview.text = if (reminder.host != null) {
                 context.getString(R.string.reminder_title, reminder.host, reminderType)

@@ -67,14 +67,13 @@ class DatabaseExploreFragment : Fragment(), CardSetExploreCardsAdapter.OnItemCli
         }
 
         viewModel.recentCardSetsWithProducts.observe(viewLifecycleOwner) {
-            if (binding.cardSetExploreContainer.childCount == 0) {
-                setupCardSetExploreList(it)
-            }
+            binding.cardSetExploreContainer.removeAllViews()
+            setupCardSetExploreList(it)
         }
     }
 
-    private fun setupCardSetExploreList(data: Map<CardSet, Map<Product, Double?>>) {
-        with (binding.cardSetExploreContainer) {
+    private fun setupCardSetExploreList(data: Map<CardSet, List<Product>>) {
+        with(binding.cardSetExploreContainer) {
             removeAllViews()
 
             for (entry in data.entries) {

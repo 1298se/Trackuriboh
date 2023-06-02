@@ -5,6 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
 import sam.g.trackuriboh.data.network.interceptors.TCGPlayerAuthorizationInterceptor
+import sam.g.trackuriboh.data.network.responses.ProductPriceResponse
 import sam.g.trackuriboh.data.network.responses.SkuPriceResponse
 
 interface PriceApiService {
@@ -16,6 +17,12 @@ interface PriceApiService {
     @GET("${PRICE_URL}sku/{skuIds}")
     suspend fun getPricesForSkus(
         // List of comma delimited skuIds
-        @Path(value="skuIds", encoded = true) skuIds: String
+        @Path(value = "skuIds", encoded = true) skuIds: String
     ): Response<SkuPriceResponse>
+
+    @Headers("${TCGPlayerAuthorizationInterceptor.AUTHORIZATION_HEADER}: true")
+    @GET("${PRICE_URL}product/{productIds}")
+    suspend fun getPricesForProducts(
+        @Path(value = "productIds", encoded = true) productIds: String
+    ): Response<ProductPriceResponse>
 }

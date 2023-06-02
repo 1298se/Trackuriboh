@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "356dab056d6d54ac0947858bb9f8955e",
+    "identityHash": "98f6ec8f4a103a0c7622acd57c2e46d3",
     "entities": [
       {
         "tableName": "Product",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `cleanName` TEXT NOT NULL, `type` TEXT NOT NULL, `imageUrl` TEXT, `setId` INTEGER, `number` TEXT, `rarityId` INTEGER, `attribute` TEXT, `cardType` TEXT, `attack` INTEGER, `defense` INTEGER, `description` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`setId`) REFERENCES `CardSet`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`rarityId`) REFERENCES `CardRarity`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `cleanName` TEXT NOT NULL, `type` TEXT NOT NULL, `imageUrl` TEXT, `setId` INTEGER, `number` TEXT, `rarityId` INTEGER, `attribute` TEXT, `cardType` TEXT, `attack` INTEGER, `defense` INTEGER, `description` TEXT, `marketPrice` REAL, PRIMARY KEY(`id`), FOREIGN KEY(`setId`) REFERENCES `CardSet`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`rarityId`) REFERENCES `CardRarity`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -84,6 +84,12 @@
             "fieldPath": "description",
             "columnName": "description",
             "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "marketPrice",
+            "columnName": "marketPrice",
+            "affinity": "REAL",
             "notNull": false
           }
         ],
@@ -683,7 +689,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '356dab056d6d54ac0947858bb9f8955e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '98f6ec8f4a103a0c7622acd57c2e46d3')"
     ]
   }
 }

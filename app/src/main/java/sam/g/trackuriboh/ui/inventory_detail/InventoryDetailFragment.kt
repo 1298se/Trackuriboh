@@ -22,6 +22,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
+import sam.g.trackuriboh.MainGraphDirections
 import sam.g.trackuriboh.databinding.FragmentInventoryDetailBinding
 import sam.g.trackuriboh.utils.viewBinding
 
@@ -67,7 +68,8 @@ class InventoryDetailFragment : Fragment() {
                                     it,
                                     Modifier.padding(padding),
                                     viewModel::deleteTransaction,
-                                    ::navigateToAddTransactionFragment
+                                    ::navigateToAddTransactionFragment,
+                                    ::navigateToProductDetailsFragment,
                                 )
                             }
                         })
@@ -83,6 +85,12 @@ class InventoryDetailFragment : Fragment() {
             InventoryDetailFragmentDirections.actionInventoryDetailFragmentToAddTransactionFragment(
                 viewModel.inventoryId
             )
+        )
+    }
+
+    private fun navigateToProductDetailsFragment(productId: Long) {
+        findNavController().navigate(
+            MainGraphDirections.actionGlobalCardDetailFragment(productId)
         )
     }
 }

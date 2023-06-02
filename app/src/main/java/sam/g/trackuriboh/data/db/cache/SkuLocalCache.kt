@@ -22,4 +22,6 @@ class SkuLocalCache @Inject constructor(
 
     suspend fun getSkus(productId: Long) =
         appDatabase.skuDao().getSkus(productId)
+
+    suspend fun getSkuCount() = appDatabase.skuDao().getSkuCount()
 }

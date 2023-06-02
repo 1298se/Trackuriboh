@@ -107,7 +107,7 @@ class AddTransactionFragment : Fragment() {
         SingleChoiceDialog(
             requireContext(),
             getString(R.string.lbl_transaction),
-            transactionTypes.map { it.getDisplayStringRes(requireContext()) },
+            transactionTypes.map { it.getDisplayStringResId(requireContext()) },
             transactionTypes.indexOf(viewModel.formState.value?.formData?.type)
         ) { dialog, i ->
             viewModel.setTransactionType(TransactionType.values()[i])

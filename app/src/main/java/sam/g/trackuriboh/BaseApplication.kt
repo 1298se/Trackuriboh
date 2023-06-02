@@ -41,7 +41,6 @@ class BaseApplication : Application(), Configuration.Provider {
 
         with(workRequestManager) {
             enqueuePeriodicDatabaseUpdateCheckScheduler()
-            enqueuePeriodicPriceSync()
         }
 
         MainScope().launch {
@@ -53,8 +52,9 @@ class BaseApplication : Application(), Configuration.Provider {
         Configuration.Builder().setWorkerFactory(workerFactory).build()
 
     private suspend fun checkIfForceUpdateRequired() {
-        if (productRepository.getTotalCardCount() == 0 ||
-                cardSetRepository.getTotalCardSetCount() == 0) {
+        if (productRepository.getCardCount() == 0 ||
+            cardSetRepository.getTotalCardSetCount() == 0
+        ) {
             workRequestManager.enqueueDatabaseDownloadWorker()
         }
     }

@@ -78,6 +78,10 @@
     <string name="lbl_filter">Filter</string>
     <string name="lbl_sort">Sort</string>
 
+    <string name="lbl_best_match">Best Match</string>
+    <string name="lbl_price_low_to_high">Price: Low to High</string>
+    <string name="lbl_price_high_to_low">Price: High to Low</string>
+
     <!-- Card Item -->
     <string name="lbl_card_image">Card image</string>
 
@@ -109,7 +113,7 @@
     <string name="base_price_with_shipping">\$%1$.2f + %2$.2f</string>
     <string name="base_price_with_free_shipping">\$%1$.2f + Free</string>
 
-    <string name="market_price_placeholder">Market Price: %1$s</string>
+    <string name="market_price_placeholder">Market Price: \$%1$.2f</string>
     <string name="lowest_listing_price_with_shipping_price_placeholder">Lowest Listing Price + Shipping: %1$s</string>
     <string name="quantity_at_average_purchase_price_placeholder">Quantity @ Average Purchase Price: %1$s</string>
     <string name="unrealized_profit_per_card_placeholder">Unrealized Profit Per Card: %1$s</string>

@@ -3,6 +3,7 @@ package sam.g.trackuriboh.workers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import sam.g.trackuriboh.di.NetworkModule.MAX_PARALLEL_REQUESTS
 
 const val WORKER_PROGRESS_KEY = "WorkerProgress"
@@ -10,6 +11,7 @@ const val WORKER_PROGRESS_KEY = "WorkerProgress"
 // Around 250 ids seems to be the limit for a GET request with the ids sent in the URL.
 // We can send a lot more if it was changed to a POST endpoint
 const val GET_REQUEST_ID_QUERY_LIMIT = 250
+const val NETWORK_BATCH_REQUEST_DELAY = 250L
 
 suspend fun <T> paginate(
     totalCount: Int,
@@ -34,13 +36,12 @@ suspend fun <T> paginate(
                             step paginationSize
                     ).map { curOffset ->
                     async {
-                        val itemList = paginate(curOffset, minOf(paginationSize, totalCount - batchOffset))
-
-                        onPaginate(batchOffset, itemList)
+                        paginate(curOffset, minOf(paginationSize, totalCount - batchOffset))
                     }
                 }
 
             requestBatch.awaitAll()
+            delay(NETWORK_BATCH_REQUEST_DELAY)
         }
     }
 }

@@ -78,6 +78,7 @@ abstract class AppDatabase : RoomDatabase() {
                 ).also { instance = it }
             }
 
+
         private fun buildDatabase(application: Application) =
             Room.databaseBuilder(application, AppDatabase::class.java, DATABASE_NAME).apply {
                 //if (!BuildConfig.DEBUG) {

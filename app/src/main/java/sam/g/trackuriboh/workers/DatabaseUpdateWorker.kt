@@ -6,6 +6,7 @@ import androidx.core.os.bundleOf
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.assisted.Assisted
@@ -15,13 +16,14 @@ import kotlinx.coroutines.withContext
 import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.network.ResponseToDatabaseEntityConverter
 import sam.g.trackuriboh.data.network.responses.CardResponse
-import sam.g.trackuriboh.data.network.responses.CardSetResponse
 import sam.g.trackuriboh.data.repository.CardSetRepository
 import sam.g.trackuriboh.data.repository.CatalogRepository
+import sam.g.trackuriboh.data.repository.PriceRepository
 import sam.g.trackuriboh.data.repository.ProductRepository
 import sam.g.trackuriboh.data.repository.SkuRepository
 import sam.g.trackuriboh.di.NetworkModule.DEFAULT_QUERY_LIMIT
-import java.util.*
+import java.util.Date
+import kotlin.math.min
 
 @HiltWorker
 class DatabaseUpdateWorker @AssistedInject constructor(
@@ -31,10 +33,12 @@ class DatabaseUpdateWorker @AssistedInject constructor(
     private val catalogRepository: CatalogRepository,
     private val productRepository: ProductRepository,
     private val skuRepository: SkuRepository,
+    private val priceRepository: PriceRepository,
     private val sharedPreferences: SharedPreferences,
     private val firebaseCrashlytics: FirebaseCrashlytics,
     private val firebaseAnalytics: FirebaseAnalytics,
     private val responseConverter: ResponseToDatabaseEntityConverter,
+    private val workRequestManager: WorkRequestManager,
 ) : CoroutineWorker(appContext, workerParams) {
     companion object {
 
@@ -61,28 +65,25 @@ class DatabaseUpdateWorker @AssistedInject constructor(
 
             val updateCardSetIds = inputData.getLongArray(CARD_SET_IDS_INPUT_KEY)?.toList() ?: return@withContext Result.success()
 
-            val updateCardSets = mutableListOf<CardSetResponse.CardSetItem>()
-
-            // Fetch and update the card sets in batches of 250 because the URL can be too long
+            // Fetch and update the card sets in batches of GET_REQUEST_ID_QUERY_LIMIT because the URL can be too long
             // resulting in 404
             paginate(
                 totalCount = updateCardSetIds.size,
                 paginationSize = GET_REQUEST_ID_QUERY_LIMIT,
-                maxParallelRequests = 1,
-                paginate = { cardSetOffset, limit ->
-                    cardSetRepository.fetchCardSetDetails(
-                        updateCardSetIds.subList(cardSetOffset, cardSetOffset + limit)
+                paginate = { offset, limit ->
+                    val responses = cardSetRepository.fetchCardSetDetails(
+                        updateCardSetIds.subList(
+                            offset,
+                            min(updateCardSetIds.size, offset + limit)
+                        )
                     ).getResponseOrThrow().results
+
+                    cardSetRepository.upsertCardSets(responses.map { responseConverter.toCardSet(it) })
                 },
-                onPaginate = { _, list ->
-                    cardSetRepository.upsertCardSets(list.map { responseConverter.toCardSet(it) })
-                }
+                onPaginate = { _: Int, _: List<Long> -> }
             )
 
-            cardSetRepository.upsertCardSets(updateCardSets.map { responseConverter.toCardSet(it) })
-
             // We "paginate" the updateCardSetIds since we only want 15 network requests in a batch.
-            // Pagination size is 1 because we need to load for every card set.
             paginate(
                 totalCount = updateCardSetIds.size,
                 paginationSize = 1,
@@ -90,43 +91,60 @@ class DatabaseUpdateWorker @AssistedInject constructor(
                     val productList = mutableListOf<CardResponse.CardItem>()
 
                     val cardSetId = updateCardSetIds[cardSetOffset]
-                    val cardSetCount = productRepository.fetchProducts(
+                    val productCount = productRepository.fetchProducts(
                         limit = 1,
                         cardSetId = cardSetId
                     ).getResponseOrThrow().totalItems
 
                     paginate(
-                        totalCount = cardSetCount,
+                        totalCount = productCount,
                         paginationSize = DEFAULT_QUERY_LIMIT,
                         paginate = { offset, paginationSize ->
-                            productRepository.fetchProducts(offset, paginationSize, cardSetId).getResponseOrThrow().results
+                            run {
+                                val responses =
+                                    productRepository.fetchProducts(
+                                        offset,
+                                        paginationSize,
+                                        cardSetId
+                                    )
+                                        .getResponseOrThrow().results
+
+                                val products = responses.map { responseConverter.toCardProduct(it) }
+                                val skus = responses.filter { it.skus != null }
+                                    .flatMap { cardItem -> cardItem.skus!! }
+
+                                productRepository.upsertProducts(products)
+                                skuRepository.upsertSkus(skus.map { responseConverter.toSku(it) })
+                                priceRepository.updatePricesForProducts(products.map { it.id })
+
+                                return@run responses
+                            }
                         },
-                        onPaginate = { _, list ->
-                            productList.addAll(list)
-                        }
+                        onPaginate = { _: Int, _: List<CardResponse.CardItem> -> }
                     )
+
                     productList
                 },
-                onPaginate = { _, list ->
-                    val products = list.map { responseConverter.toCardProduct(it) }
-                    val skus = list.filter { it.skus != null }.flatMap { cardItem -> cardItem.skus!! }
-                    productRepository.upsertProducts(products)
-                    skuRepository.upsertSkus(skus.map { responseConverter.toSku(it) })
-                }
+                onPaginate = { _: Int, _: List<CardResponse.CardItem> -> }
             )
             with(sharedPreferences.edit()) {
                 putLong(DATABASE_LAST_UPDATED_DATE_SHAREDPREF_KEY, Date().time)
                 commit()
             }
 
-            firebaseAnalytics.logEvent(Events.UPDATE_WORKER_SUCCESS, bundleOf(
-                "updateCardSetIds" to updateCardSetIds,
-            ))
+            firebaseAnalytics.logEvent(
+                Events.UPDATE_WORKER_SUCCESS, bundleOf(
+                    "updateCardSetIds" to updateCardSetIds,
+                )
+            )
+
+            // After the update, enqueue a price sync
+            workRequestManager.enqueueOneTimePriceSync()
 
             Result.success()
         } catch (e: Exception) {
             firebaseCrashlytics.recordException(e)
-            Result.failure()
+            Result.failure(workDataOf("error message" to e.message))
         }
     }
 }

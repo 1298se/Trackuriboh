@@ -31,12 +31,12 @@ class UserListDetailViewModel @Inject constructor(
     // TODO: Fix magic strings
     val userList = state.get<UserList>("userList")!!
 
-    sealed class UiModel {
+    sealed class ItemUiState {
         data class UserListEntryItem(
             val data: UserListEntryWithSkuMetadata,
-        ) : UiModel()
+        ) : ItemUiState()
 
-        data class Header(val totalCount: Int, val totalValue: Double) : UiModel()
+        data class Header(val totalCount: Int, val totalValue: Double) : ItemUiState()
     }
 
     /*
@@ -58,8 +58,8 @@ class UserListDetailViewModel @Inject constructor(
         var totalCount = 0
         var totalValue = 0.0
         // Map it to UiModels
-        val transformList: MutableList<UiModel> = list.map { entry ->
-            UiModel.UserListEntryItem(entry).also {
+        val transformList: MutableList<ItemUiState> = list.map { entry ->
+            ItemUiState.UserListEntryItem(entry).also {
                 totalCount += entry.entry.quantity
                 totalValue += (entry.skuWithMetadata.sku.lowestBasePrice
                     ?: 0.0) * entry.entry.quantity
@@ -69,7 +69,7 @@ class UserListDetailViewModel @Inject constructor(
         // Add the header
         transformList.add(
             0,
-            UiModel.Header(
+            ItemUiState.Header(
                 totalCount,
                 totalValue,
             )

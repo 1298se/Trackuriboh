@@ -89,6 +89,10 @@ class CardListFragment : Fragment(), CardListAdapter.OnInteractionListener {
         ).show(childFragmentManager, null)
     }
 
+    override fun onSortOptionClick(sortOption: CardListViewModel.SortOption) {
+        viewModel.setSortOrdering(sortOption)
+    }
+
     private fun initRecyclerView() {
         cardListAdapter = CardListAdapter(this)
 

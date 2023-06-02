@@ -60,10 +60,10 @@ fun ReminderForm(
         AppThemeDenseOutlinedAutoCompleteTextField(
             modifier = Modifier.fillMaxWidth(),
             options = state.reminderTypeOptions.map {
-                stringResource(id = it.getDisplayStringRes())
+                stringResource(id = it.getDisplayStringResId())
             },
             hintText = stringResource(id = R.string.reminder_form_reminder_type_hint),
-            selectedOption = state.formData.reminderType?.getDisplayStringRes()
+            selectedOption = state.formData.reminderType?.getDisplayStringResId()
                 ?.let { stringResource(id = it) },
             onOptionSelected = onReminderTypeSelected
         )
