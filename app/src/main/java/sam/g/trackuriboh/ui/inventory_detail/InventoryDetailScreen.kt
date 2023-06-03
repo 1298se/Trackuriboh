@@ -39,43 +39,44 @@ fun InventoryDetailScreen(
     onSkuDetailClick: (productId: Long) -> Unit,
 ) {
 
-    Column {
-        SkuDetailInfoSection(
-            skuWithMetadata = inventoryWithSkuMetadataAndTransactions.inventoryWithSkuMetadata.skuWithMetadata,
-            onSkuDetailClick = onSkuDetailClick,
-        )
 
-        LazyColumn(
-            modifier = modifier
-                .background(MaterialTheme.colors.surface),
-            contentPadding = PaddingValues(dimensionResource(id = R.dimen.material_border_padding)),
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.list_item_row_spacing))
-        ) {
-            item {
-                PriceInfoSection(inventoryWithSkuMetadata = inventoryWithSkuMetadataAndTransactions.inventoryWithSkuMetadata)
+    LazyColumn(
+        modifier = modifier
+            .background(MaterialTheme.colors.surface),
+        contentPadding = PaddingValues(dimensionResource(id = R.dimen.material_border_padding)),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.list_item_row_spacing))
+    ) {
+        item {
+            SkuDetailInfoSection(
+                skuWithMetadata = inventoryWithSkuMetadataAndTransactions.inventoryWithSkuMetadata.skuWithMetadata,
+                onSkuDetailClick = onSkuDetailClick,
+            )
+        }
 
-                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.heading_text_spacing)))
+        item {
+            PriceInfoSection(inventoryWithSkuMetadata = inventoryWithSkuMetadataAndTransactions.inventoryWithSkuMetadata)
 
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    Text(
-                        text = stringResource(id = R.string.lbl_transactions),
-                        modifier = Modifier.align(Alignment.CenterVertically),
-                        style = MaterialTheme.typography.subtitle2,
-                    )
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.heading_text_spacing)))
 
-                    IconButton(
-                        onClick = onAddTransactionClick,
-                        modifier = Modifier.align(Alignment.CenterVertically),
-                    ) {
-                        Icon(imageVector = Icons.Filled.Add, contentDescription = "")
-                    }
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text(
+                    text = stringResource(id = R.string.lbl_transactions),
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    style = MaterialTheme.typography.subtitle2,
+                )
+
+                IconButton(
+                    onClick = onAddTransactionClick,
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                ) {
+                    Icon(imageVector = Icons.Filled.Add, contentDescription = "")
                 }
-
             }
 
-            items(inventoryWithSkuMetadataAndTransactions.transactions) { transaction ->
-                TransactionItemRow(transaction, onTransactionSwiped)
-            }
+        }
+
+        items(inventoryWithSkuMetadataAndTransactions.transactions) { transaction ->
+            TransactionItemRow(transaction, onTransactionSwiped)
         }
     }
 }
@@ -91,7 +92,6 @@ fun SkuDetailInfoSection(
             .clickable {
                 onSkuDetailClick(skuWithMetadata.productWithCardSet.product.id)
             }
-            .padding(dimensionResource(id = R.dimen.material_border_padding)),
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)

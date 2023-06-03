@@ -32,7 +32,7 @@ interface CardSetDao : BaseDao<CardSet> {
                 "ORDER BY CardSet.releaseDate DESC LIMIT :cardSetLimit) AS recentCardSets " +
                 "JOIN Product p ON recentCardSets.id = p.setId " +
                 "WHERE p.id IN (SELECT id FROM Product p2 WHERE p2.setId = recentCardSets.id ORDER BY marketPrice DESC LIMIT :cardLimit) " +
-                "ORDER BY recentCardSets.releaseDate, p.marketPrice DESC;"
+                "ORDER BY recentCardSets.releaseDate DESC, p.marketPrice DESC;"
     )
     suspend fun getRecentCardSetsAndMostExpensiveCards(
         cardSetLimit: Int,
