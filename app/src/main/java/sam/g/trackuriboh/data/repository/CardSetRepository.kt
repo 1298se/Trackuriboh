@@ -33,7 +33,7 @@ class CardSetRepository @Inject constructor(
         val pagingSourceFactory = { cardSetLocalCache.searchCardSetByName(queryString) }
 
         return Pager(
-            config = PagingConfig(pageSize = DATABASE_PAGE_SIZE),
+            config = PagingConfig(pageSize = DATABASE_PAGE_SIZE, enablePlaceholders = false),
             pagingSourceFactory = pagingSourceFactory
         ).flow
     }

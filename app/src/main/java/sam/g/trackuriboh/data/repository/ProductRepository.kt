@@ -48,7 +48,7 @@ class ProductRepository @Inject constructor(
         }
 
         return Pager(
-            config = PagingConfig(pageSize = DATABASE_PAGE_SIZE),
+            config = PagingConfig(pageSize = DATABASE_PAGE_SIZE, enablePlaceholders = false),
             pagingSourceFactory = pagingSourceFactory
         ).flow
     }
