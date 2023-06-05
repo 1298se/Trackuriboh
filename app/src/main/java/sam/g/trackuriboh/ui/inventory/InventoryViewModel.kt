@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import sam.g.trackuriboh.data.db.relations.InventoryWithSkuMetadata
+import sam.g.trackuriboh.data.db.relations.InventoryWithSkuMetadataAndTransactions
 import sam.g.trackuriboh.data.repository.InventoryRepository
 import sam.g.trackuriboh.data.repository.PriceRepository
 import sam.g.trackuriboh.utils.UpdateTimer
@@ -22,7 +22,7 @@ class InventoryViewModel @Inject constructor(
 
     sealed class ItemUiState {
         data class InventoryItemUiState(
-            val data: InventoryWithSkuMetadata,
+            val data: InventoryWithSkuMetadataAndTransactions,
         ) : ItemUiState()
 
         data class SummaryUiState(
@@ -38,7 +38,11 @@ class InventoryViewModel @Inject constructor(
     )
 
     val inventory = inventoryRepository.getInventoryObservable().map { list ->
-        refreshPricesIfNecessary(list.map { it.inventory.skuId }, updateTimer, priceRepository)
+        refreshPricesIfNecessary(
+            list.map { it.inventoryWithSkuMetadata.inventory.skuId },
+            updateTimer,
+            priceRepository
+        )
 
         var totalValue = 0.0
         var totalUnrealizedProfit = 0.0
@@ -47,12 +51,12 @@ class InventoryViewModel @Inject constructor(
 
         val transformList: MutableList<ItemUiState> = list.map { inventory ->
             ItemUiState.InventoryItemUiState(inventory).also {
-                totalValue += inventory.getTotalValue() ?: 0.0
-                totalUnrealizedProfit += inventory.getTotalUnrealizedProfit() ?: 0.0
-                totalRealizedProfit += inventory.inventory.totalRealizedProfit
-                totalPurchaseAmount += inventory.getTotalCost()
+                totalValue += it.data.totalValue ?: 0.0
+                totalUnrealizedProfit += it.data.totalUnrealizedProfit ?: 0.0
+                totalRealizedProfit += it.data.totalRealizedProfit
+                totalPurchaseAmount += it.data.totalPurchaseAmount
             }
-        }.filter { it.data.inventory.quantity > 0 }.toMutableList()
+        }.filter { it.data.quantity > 0 }.toMutableList()
 
         transformList.add(
             0,

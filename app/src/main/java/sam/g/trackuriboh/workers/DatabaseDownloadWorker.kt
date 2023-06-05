@@ -19,13 +19,17 @@ import sam.g.trackuriboh.R
 import sam.g.trackuriboh.analytics.Events
 import sam.g.trackuriboh.data.db.AppDatabase
 import sam.g.trackuriboh.data.network.ResponseToDatabaseEntityConverter
-import sam.g.trackuriboh.data.repository.*
+import sam.g.trackuriboh.data.repository.CardSetRepository
+import sam.g.trackuriboh.data.repository.CatalogRepository
+import sam.g.trackuriboh.data.repository.ProductRepository
+import sam.g.trackuriboh.data.repository.SkuRepository
+import sam.g.trackuriboh.data.repository.UserListRepository
 import sam.g.trackuriboh.di.NetworkModule.DEFAULT_QUERY_LIMIT
 import sam.g.trackuriboh.utils.DB_SYNC_PROGRESS_NOTIFICATION_ID
 import sam.g.trackuriboh.utils.DB_SYNC_STATE_NOTIFICATION_ID
 import sam.g.trackuriboh.utils.MAX_PROGRESS
 import sam.g.trackuriboh.utils.createNotificationBuilder
-import java.util.*
+import java.util.Date
 
 /**
  * Worker to fully download all necessary data from TCGPlayer API
@@ -181,10 +185,8 @@ class DatabaseDownloadWorker @AssistedInject constructor(
         paginate(
             totalCount = cardSetResponse.totalItems,
             paginationSize = DEFAULT_QUERY_LIMIT,
-            paginate = { offset, paginationSize -> cardSetRepository.fetchCardSets(offset, paginationSize).getResponseOrThrow().results },
-        ) { offset, cardSets ->
-            updateProgress(((totalOffset + offset.toDouble()) / totalItems * 100).toInt())
-            cardSetRepository.upsertCardSets(cardSets.map { responseConverter.toCardSet(it) })
+        ) { offset, paginationSize ->
+            cardSetRepository.fetchCardSets(offset, paginationSize).getResponseOrThrow().results
         }
 
         totalOffset += cardSetResponse.totalItems
@@ -192,15 +194,8 @@ class DatabaseDownloadWorker @AssistedInject constructor(
         paginate(
             totalCount = productResponse.totalItems,
             paginationSize = DEFAULT_QUERY_LIMIT,
-            paginate = { offset, paginationSize -> productRepository.fetchProducts(offset, paginationSize).getResponseOrThrow().results },
-        ) { offset, products ->
-
-            updateProgress(((totalOffset + offset.toDouble()) / totalItems * 100).toInt())
-
-            productRepository.upsertProducts(products.map { responseConverter.toCardProduct(it) })
-            products.forEach { cardItem -> cardItem.skus?.let {
-                skuRepository.upsertSkus(cardItem.skus.map { responseConverter.toSku(it) })
-            } }
+        ) { offset, paginationSize ->
+            productRepository.fetchProducts(offset, paginationSize).getResponseOrThrow().results
         }
     }
 }

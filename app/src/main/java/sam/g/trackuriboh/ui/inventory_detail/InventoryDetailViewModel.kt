@@ -22,18 +22,18 @@ class InventoryDetailViewModel @Inject constructor(
 
     /**
      * Flows are not lifecycle aware! If we don't pass the [viewModelScope] CoroutineContext, it will not
-     * cancel until a timeout.
+     * cancel until a timeout. This is a problem if the inventory item gets deleted, then
      * See [https://developer.android.com/reference/kotlin/androidx/lifecycle/package-summary#(kotlinx.coroutines.flow.Flow).asLiveData(kotlin.coroutines.CoroutineContext,java.time.Duration]
      * and [https://stackoverflow.com/questions/63806895/is-flow-lifecycle-aware-as-livedata]
      */
     val inventoryWithSkuMetadataAndTransactions =
         inventoryRepository.getInventoryWithSkuMetadataAndTransactionsObservable(inventoryId).map {
-            it.copy(transactions = it.getSortedTransactionsByDateDesc())
+            it?.copy(transactions = it.getSortedTransactionsByDateDesc())
         }.asLiveData()
 
     fun deleteTransaction(transaction: InventoryTransaction) {
         viewModelScope.launch {
-            inventoryTransactionRepository.deleteInventory(transaction)
+            inventoryTransactionRepository.deleteTransaction(transaction)
         }
     }
 }

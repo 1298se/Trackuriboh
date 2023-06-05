@@ -29,7 +29,7 @@ fun Fragment.setViewPagerBackPressBehaviour(viewPager: ViewPager2) {
         if (viewPager.currentItem == 0) {
             if (!findNavController().navigateUp(getAppBarConfiguration())) {
                 isEnabled = false
-                activity?.onBackPressed()
+                activity?.onBackPressedDispatcher?.onBackPressed()
             }
         } else {
             viewPager.currentItem = viewPager.currentItem - 1

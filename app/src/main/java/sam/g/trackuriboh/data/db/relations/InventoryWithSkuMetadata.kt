@@ -17,16 +17,4 @@ data class InventoryWithSkuMetadata(
         entityColumn = "id",
     )
     val skuWithMetadata: SkuWithMetadata,
-) : Parcelable {
-    fun getTotalValue() = skuWithMetadata.sku.lowestBasePrice?.times(inventory.quantity)
-
-    fun getUnrealizedProfitPerCard() =
-        skuWithMetadata.sku.lowestBasePrice?.minus(inventory.avgPurchasePrice)
-
-    fun getTotalUnrealizedProfit() = getUnrealizedProfitPerCard()?.times(inventory.quantity)
-
-    fun getUnrealizedProfitPercentagePerCard() =
-        getUnrealizedProfitPerCard()?.div(inventory.avgPurchasePrice)?.times(100)?.toInt()
-
-    fun getTotalCost() = inventory.avgPurchasePrice * inventory.quantity
-}
+) : Parcelable

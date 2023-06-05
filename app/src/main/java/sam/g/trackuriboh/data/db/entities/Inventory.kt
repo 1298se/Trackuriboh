@@ -13,7 +13,4 @@ data class Inventory(
     val id: Long = 0,
     val skuId: Long,
     val dateAdded: Date,
-    val quantity: Int = 0,
-    val avgPurchasePrice: Double = 0.0,
-    val totalRealizedProfit: Double = 0.0,
 ) : Parcelable

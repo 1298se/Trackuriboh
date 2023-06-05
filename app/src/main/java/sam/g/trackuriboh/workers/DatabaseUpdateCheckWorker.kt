@@ -49,22 +49,9 @@ class DatabaseUpdateCheckWorker @AssistedInject constructor(
 
             paginate(
                 totalCount = fetchedCardSetCount,
-                paginationSize = NetworkModule.DEFAULT_QUERY_LIMIT,
-                paginate = { offset, paginationSize -> cardSetRepository.fetchCardSets(offset, paginationSize).getResponseOrThrow().results }
-            ) { _, list ->
-                for (item in list) {
-                    val responseSetModel = responseToDatabaseEntityConverter.toCardSet(item)
-                    val existingSetModel = cardSetRepository.getCardSet(item.id)
-
-                    // If we don't have it in db, or the modified
-                    // date is after our db's modified date, then add to update list.
-                    if (existingSetModel == null ||
-                        responseSetModel.modifiedDate?.after(existingSetModel.modifiedDate) == true
-                    ) {
-                        updateCardSetIds.add(item.id)
-
-                    }
-                }
+                paginationSize = NetworkModule.DEFAULT_QUERY_LIMIT
+            ) { offset, paginationSize ->
+                cardSetRepository.fetchCardSets(offset, paginationSize).getResponseOrThrow().results
             }
 
 

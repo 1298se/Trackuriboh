@@ -69,64 +69,55 @@ class DatabaseUpdateWorker @AssistedInject constructor(
             // resulting in 404
             paginate(
                 totalCount = updateCardSetIds.size,
-                paginationSize = GET_REQUEST_ID_QUERY_LIMIT,
-                paginate = { offset, limit ->
-                    val responses = cardSetRepository.fetchCardSetDetails(
-                        updateCardSetIds.subList(
-                            offset,
-                            min(updateCardSetIds.size, offset + limit)
-                        )
-                    ).getResponseOrThrow().results
+                paginationSize = GET_REQUEST_ID_QUERY_LIMIT
+            ) { offset, limit ->
+                val responses = cardSetRepository.fetchCardSetDetails(
+                    updateCardSetIds.subList(
+                        offset,
+                        min(updateCardSetIds.size, offset + limit)
+                    )
+                ).getResponseOrThrow().results
 
-                    cardSetRepository.upsertCardSets(responses.map { responseConverter.toCardSet(it) })
-                },
-                onPaginate = { _: Int, _: List<Long> -> }
-            )
+                cardSetRepository.upsertCardSets(responses.map { responseConverter.toCardSet(it) })
+            }
 
             // We "paginate" the updateCardSetIds since we only want 15 network requests in a batch.
             paginate(
                 totalCount = updateCardSetIds.size,
-                paginationSize = 1,
-                paginate = { cardSetOffset, _ ->
-                    val productList = mutableListOf<CardResponse.CardItem>()
+                paginationSize = 1
+            ) { cardSetOffset, _ ->
+                val productList = mutableListOf<CardResponse.CardItem>()
 
-                    val cardSetId = updateCardSetIds[cardSetOffset]
-                    val productCount = productRepository.fetchProducts(
-                        limit = 1,
-                        cardSetId = cardSetId
-                    ).getResponseOrThrow().totalItems
+                val cardSetId = updateCardSetIds[cardSetOffset]
+                val productCount = productRepository.fetchProducts(
+                    limit = 1,
+                    cardSetId = cardSetId
+                ).getResponseOrThrow().totalItems
 
-                    paginate(
-                        totalCount = productCount,
-                        paginationSize = DEFAULT_QUERY_LIMIT,
-                        paginate = { offset, paginationSize ->
-                            run {
-                                val responses =
-                                    productRepository.fetchProducts(
-                                        offset,
-                                        paginationSize,
-                                        cardSetId
-                                    )
-                                        .getResponseOrThrow().results
+                paginate(
+                    totalCount = productCount,
+                    paginationSize = DEFAULT_QUERY_LIMIT
+                ) { offset, paginationSize ->
+                    run {
+                        val responses =
+                            productRepository.fetchProducts(
+                                offset,
+                                paginationSize,
+                                cardSetId
+                            )
+                                .getResponseOrThrow().results
 
-                                val products = responses.map { responseConverter.toCardProduct(it) }
-                                val skus = responses.filter { it.skus != null }
-                                    .flatMap { cardItem -> cardItem.skus!! }
+                        val products = responses.map { responseConverter.toCardProduct(it) }
+                        val skus = responses.filter { it.skus != null }
+                            .flatMap { cardItem -> cardItem.skus!! }
 
-                                productRepository.upsertProducts(products)
-                                skuRepository.upsertSkus(skus.map { responseConverter.toSku(it) })
-                                priceRepository.updatePricesForProducts(products.map { it.id })
+                        productRepository.upsertProducts(products)
+                        skuRepository.upsertSkus(skus.map { responseConverter.toSku(it) })
+                        priceRepository.updatePricesForProducts(products.map { it.id })
+                    }
+                }
+            }
 
-                                return@run responses
-                            }
-                        },
-                        onPaginate = { _: Int, _: List<CardResponse.CardItem> -> }
-                    )
-
-                    productList
-                },
-                onPaginate = { _: Int, _: List<CardResponse.CardItem> -> }
-            )
             with(sharedPreferences.edit()) {
                 putLong(DATABASE_LAST_UPDATED_DATE_SHAREDPREF_KEY, Date().time)
                 commit()

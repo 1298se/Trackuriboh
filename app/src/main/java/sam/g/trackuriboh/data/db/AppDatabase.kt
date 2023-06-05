@@ -5,11 +5,12 @@ import androidx.room.*
 import sam.g.trackuriboh.data.db.converters.RoomConverter
 import sam.g.trackuriboh.data.db.dao.*
 import sam.g.trackuriboh.data.db.entities.*
+import sam.g.trackuriboh.data.db.migrations.AutoMigration5to6Spec
 import sam.g.trackuriboh.data.db.migrations.MIGRATION_1_2
 import sam.g.trackuriboh.data.db.migrations.MIGRATION_2_3
 
 @Database(
-    version = 5,
+    version = 6,
     entities = [
         Product::class,
         Sku::class,
@@ -26,6 +27,7 @@ import sam.g.trackuriboh.data.db.migrations.MIGRATION_2_3
     autoMigrations = [
         AutoMigration(from = 3, to = 4),
         AutoMigration(from = 4, to = 5),
+        AutoMigration(from = 5, to = 6, spec = AutoMigration5to6Spec::class)
     ]
 )
 @TypeConverters(RoomConverter::class)

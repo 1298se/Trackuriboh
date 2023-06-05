@@ -13,12 +13,11 @@ const val WORKER_PROGRESS_KEY = "WorkerProgress"
 const val GET_REQUEST_ID_QUERY_LIMIT = 250
 const val NETWORK_BATCH_REQUEST_DELAY = 250L
 
-suspend fun <T> paginate(
+suspend fun paginate(
     totalCount: Int,
     paginationSize: Int,
     maxParallelRequests: Int = MAX_PARALLEL_REQUESTS,
-    paginate: suspend (offset: Int, paginationSize: Int) -> List<T>,
-    onPaginate: suspend (offset: Int, List<T>) -> Unit,
+    paginate: suspend (offset: Int, paginationSize: Int) -> Unit,
 ) {
 
     if (totalCount == 0) {

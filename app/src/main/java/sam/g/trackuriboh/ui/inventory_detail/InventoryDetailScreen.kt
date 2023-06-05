@@ -25,6 +25,7 @@ import sam.g.trackuriboh.data.db.relations.InventoryWithSkuMetadataAndTransactio
 import sam.g.trackuriboh.data.db.relations.ProductWithCardSet
 import sam.g.trackuriboh.data.db.relations.SkuWithMetadata
 import sam.g.trackuriboh.data.types.ProductType
+import sam.g.trackuriboh.ui.common.SwipeToDismissDeleteBackground
 import sam.g.trackuriboh.utils.formatDate
 import sam.g.trackuriboh.utils.getListingAndShippingPriceString
 import sam.g.trackuriboh.utils.joinStringsWithInterpunct
@@ -39,7 +40,8 @@ fun InventoryDetailScreen(
     onSkuDetailClick: (productId: Long) -> Unit,
 ) {
 
-
+    // We need to supply a key, otherwise the default key is the row number. However, if we dismiss
+    // row 1, it gets deleted, row 2 takes on key row 1 and will be permanently stuck in the dismiss state.
     LazyColumn(
         modifier = modifier
             .background(MaterialTheme.colors.surface),
@@ -54,7 +56,7 @@ fun InventoryDetailScreen(
         }
 
         item {
-            PriceInfoSection(inventoryWithSkuMetadata = inventoryWithSkuMetadataAndTransactions.inventoryWithSkuMetadata)
+            PriceInfoSection(inventoryWithSkuMetadataAndTransactions)
 
             Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.heading_text_spacing)))
 
@@ -75,7 +77,10 @@ fun InventoryDetailScreen(
 
         }
 
-        items(inventoryWithSkuMetadataAndTransactions.transactions) { transaction ->
+        items(
+            items = inventoryWithSkuMetadataAndTransactions.transactions,
+            key = { it.id }
+        ) { transaction ->
             TransactionItemRow(transaction, onTransactionSwiped)
         }
     }
@@ -132,13 +137,16 @@ fun SkuDetailInfoSection(
 }
 
 @Composable
-fun PriceInfoSection(inventoryWithSkuMetadata: InventoryWithSkuMetadata) {
+fun PriceInfoSection(
+    inventoryWithSkuMetadataAndTransactions: InventoryWithSkuMetadataAndTransactions
+) {
     Column(
         Modifier
             .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.text_spacing_large))
     ) {
-        val skuWithMetadata = inventoryWithSkuMetadata.skuWithMetadata
+        val skuWithMetadata =
+            inventoryWithSkuMetadataAndTransactions.inventoryWithSkuMetadata.skuWithMetadata
         val marketPrice = skuWithMetadata.sku.marketPrice
 
         Text(
@@ -170,14 +178,15 @@ fun PriceInfoSection(inventoryWithSkuMetadata: InventoryWithSkuMetadata) {
                 id = R.string.quantity_at_average_purchase_price_placeholder,
                 stringResource(
                     id = R.string.quantity_avg_price_oneline,
-                    inventoryWithSkuMetadata.inventory.quantity,
-                    inventoryWithSkuMetadata.inventory.avgPurchasePrice
+                    inventoryWithSkuMetadataAndTransactions.quantity,
+                    inventoryWithSkuMetadataAndTransactions.averagePurchasePrice
                 )
             ),
             style = MaterialTheme.typography.caption
         )
 
-        val unrealizedProfitPerCard = inventoryWithSkuMetadata.getUnrealizedProfitPerCard()
+        val unrealizedProfitPerCard =
+            inventoryWithSkuMetadataAndTransactions.unrealizedProfitPerCard
 
         Text(
             text = stringResource(
@@ -186,7 +195,7 @@ fun PriceInfoSection(inventoryWithSkuMetadata: InventoryWithSkuMetadata) {
                     stringResource(
                         id = R.string.item_user_list_profit_with_percentage,
                         unrealizedProfitPerCard,
-                        inventoryWithSkuMetadata.getUnrealizedProfitPercentagePerCard().toString(),
+                        inventoryWithSkuMetadataAndTransactions.unrealizedProfitPercentPerCard.toString(),
                     )
                 } else {
                     stringResource(id = R.string.lbl_not_available)
@@ -198,7 +207,7 @@ fun PriceInfoSection(inventoryWithSkuMetadata: InventoryWithSkuMetadata) {
         Text(
             text = stringResource(
                 id = R.string.total_unrealized_profit_placeholder,
-                inventoryWithSkuMetadata.getTotalUnrealizedProfit() ?: 0.0
+                inventoryWithSkuMetadataAndTransactions.totalUnrealizedProfit ?: 0.0
             ),
             style = MaterialTheme.typography.caption,
         )
@@ -206,7 +215,7 @@ fun PriceInfoSection(inventoryWithSkuMetadata: InventoryWithSkuMetadata) {
         Text(
             text = stringResource(
                 id = R.string.total_realized_profit_placeholder,
-                inventoryWithSkuMetadata.inventory.totalRealizedProfit
+                inventoryWithSkuMetadataAndTransactions.totalRealizedProfit
             ),
             style = MaterialTheme.typography.caption,
         )
@@ -219,54 +228,60 @@ fun TransactionItemRow(
     transaction: InventoryTransaction,
     onTransactionSwiped: (InventoryTransaction) -> Unit
 ) {
-    val dismissState = rememberDismissState(initialValue = DismissValue.Default)
+    val dismissState = rememberDismissState(initialValue = DismissValue.Default) {
+        when (it) {
+            DismissValue.DismissedToStart -> {
+                onTransactionSwiped(transaction)
+                true
+            }
 
-    if (dismissState.isDismissed(DismissDirection.EndToStart)) {
-        onTransactionSwiped(transaction)
+            else -> false
+        }
     }
 
-    /*SwipeToDismiss(
+    SwipeToDismiss(
         state = dismissState,
         background = { SwipeToDismissDeleteBackground() },
         directions = setOf(DismissDirection.EndToStart),
-    ) {*/
-    Card(
-        Modifier.fillMaxWidth(),
-        elevation = 2.dp
+        dismissThresholds = { FractionalThreshold(0.5f) },
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(dimensionResource(id = R.dimen.material_border_padding)),
-            horizontalArrangement = Arrangement.SpaceBetween
+        Card(
+            Modifier.fillMaxWidth(),
+            elevation = 2.dp
         ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.text_spacing))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(id = R.dimen.material_border_padding)),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = transaction.type.getDisplayStringResId(LocalContext.current),
-                    style = MaterialTheme.typography.subtitle2,
-                )
-                transaction.date.formatDate()?.let {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.text_spacing))
+                ) {
                     Text(
-                        text = it,
-                        style = MaterialTheme.typography.caption
+                        text = transaction.type.getDisplayStringResId(LocalContext.current),
+                        style = MaterialTheme.typography.subtitle2,
                     )
+                    transaction.date.formatDate()?.let {
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.caption
+                        )
+                    }
                 }
-            }
 
-            Text(
-                text = stringResource(
-                    id = R.string.quantity_avg_price_oneline,
-                    transaction.quantity,
-                    transaction.price
-                ),
-                modifier = Modifier.align(Alignment.Top),
-                style = MaterialTheme.typography.caption
-            )
+                Text(
+                    text = stringResource(
+                        id = R.string.quantity_avg_price_oneline,
+                        transaction.quantity,
+                        transaction.price
+                    ),
+                    modifier = Modifier.align(Alignment.Top),
+                    style = MaterialTheme.typography.caption
+                )
+            }
         }
     }
-    //}
 }
 
 @Preview
@@ -305,9 +320,6 @@ private fun InventoryDetailScreen() {
         0,
         0,
         Date(),
-        69,
-        69.69,
-        696969.69
     )
 
     val inventoryWithSkuMetadataAndTransactions = InventoryWithSkuMetadataAndTransactions(

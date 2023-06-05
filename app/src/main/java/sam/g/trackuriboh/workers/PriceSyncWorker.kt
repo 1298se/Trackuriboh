@@ -39,32 +39,24 @@ class PriceSyncWorker @AssistedInject constructor(
 
             paginate(
                 totalCount = skuCount,
-                paginationSize = GET_REQUEST_ID_QUERY_LIMIT,
-                paginate = { offset, paginationSize ->
-                    val skuIds = skuRepository.getSkuIdsPaginated(offset, paginationSize)
+                paginationSize = GET_REQUEST_ID_QUERY_LIMIT
+            ) { offset, paginationSize ->
+                val skuIds = skuRepository.getSkuIdsPaginated(offset, paginationSize)
 
-                    priceRepository.updatePricesForSkus(skuIds)
-
-                    emptyList()
-                },
-                onPaginate = { _: Int, _: List<Int> -> }
-            )
+                priceRepository.updatePricesForSkus(skuIds)
+            }
 
             val productCount = productRepository.getCardCount()
 
             paginate(
                 totalCount = productCount,
-                paginationSize = GET_REQUEST_ID_QUERY_LIMIT,
-                paginate = { offset, paginationSize ->
-                    val productIds =
-                        productRepository.getProductIdsPaginated(offset, paginationSize)
+                paginationSize = GET_REQUEST_ID_QUERY_LIMIT
+            ) { offset, paginationSize ->
+                val productIds =
+                    productRepository.getProductIdsPaginated(offset, paginationSize)
 
-                    priceRepository.updatePricesForProducts(productIds)
-
-                    emptyList()
-                },
-                onPaginate = { _: Int, _: List<Int> -> }
-            )
+                priceRepository.updatePricesForProducts(productIds)
+            }
 
             firebaseAnalytics.logEvent(Events.PRICE_SYNC_SUCCESS, null)
 

@@ -22,7 +22,7 @@ class InventoryAdapter(private val onInteractionListener: OnInteractionListener)
             ): Boolean {
                 return (oldItem is InventoryViewModel.ItemUiState.InventoryItemUiState &&
                         newItem is InventoryViewModel.ItemUiState.InventoryItemUiState &&
-                        oldItem.data.inventory.id == newItem.data.inventory.id)
+                        oldItem.data.inventoryWithSkuMetadata.inventory.id == newItem.data.inventoryWithSkuMetadata.inventory.id)
             }
 
             override fun areContentsTheSame(
@@ -75,14 +75,14 @@ class InventoryAdapter(private val onInteractionListener: OnInteractionListener)
                 val uiModel =
                     getItem(bindingAdapterPosition) as InventoryViewModel.ItemUiState.InventoryItemUiState
 
-                onInteractionListener.onItemClick(uiModel.data.inventory.id)
+                onInteractionListener.onItemClick(uiModel.data.inventoryWithSkuMetadata.inventory.id)
             }
         }
 
         override fun bind(item: InventoryViewModel.ItemUiState) {
             val uiModel = item as InventoryViewModel.ItemUiState.InventoryItemUiState
-            val inventory = uiModel.data.inventory
-            val skuWithMetadata = uiModel.data.skuWithMetadata
+            val inventory = uiModel.data.inventoryWithSkuMetadata.inventory
+            val skuWithMetadata = uiModel.data.inventoryWithSkuMetadata.skuWithMetadata
 
             val productWithCardSet = skuWithMetadata.productWithCardSet
 
@@ -113,18 +113,18 @@ class InventoryAdapter(private val onInteractionListener: OnInteractionListener)
             binding.itemUserListEntryQuantityAvgPurchasePriceTextview.text =
                 itemView.resources.getString(
                     R.string.quantity_avg_price_oneline,
-                    inventory.quantity,
-                    inventory.avgPurchasePrice
+                    uiModel.data.quantity,
+                    uiModel.data.averagePurchasePrice
                 )
 
             binding.itemUserListEntryProfitTextview.text = itemView.resources.getString(
                 R.string.item_user_list_profit_with_percentage,
-                uiModel.data.getTotalUnrealizedProfit(),
-                uiModel.data.getUnrealizedProfitPercentagePerCard()?.toString(),
+                uiModel.data.totalUnrealizedProfit,
+                uiModel.data.totalUnrealizedProfit?.toString(),
             )
 
             val unrealizedProfitPercentagePerCard =
-                uiModel.data.getUnrealizedProfitPercentagePerCard()
+                uiModel.data.unrealizedProfitPercentPerCard
 
             if (unrealizedProfitPercentagePerCard != null) {
                 binding.itemUserListEntryProfitTextview.setTextColor(
@@ -176,7 +176,7 @@ class InventoryAdapter(private val onInteractionListener: OnInteractionListener)
 
     override fun getItemId(position: Int): Long {
         return when (val item = getItem(position)) {
-            is InventoryViewModel.ItemUiState.InventoryItemUiState -> item.data.inventory.id
+            is InventoryViewModel.ItemUiState.InventoryItemUiState -> item.data.inventoryWithSkuMetadata.inventory.id
             is InventoryViewModel.ItemUiState.SummaryUiState -> -1
         }
     }

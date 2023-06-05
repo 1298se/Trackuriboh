@@ -311,7 +311,7 @@ fun AppThemeSegmentedButton(
     AndroidViewBinding(ComponentSegmentedTwoButtonBinding::inflate) {
         option1.text = option1Text
         option2.text = option2Text
-        toggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
+        toggleButton.addOnButtonCheckedListener { _, checkedId, _ ->
             val index = when (checkedId) {
                 option2.id -> 1
                 else -> 0

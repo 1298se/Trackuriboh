@@ -12,11 +12,11 @@ import sam.g.trackuriboh.data.db.relations.InventoryWithSkuMetadataAndTransactio
 interface InventoryDao : BaseDao<Inventory> {
     @Transaction
     @Query("SELECT * FROM Inventory")
-    fun getInventoryObservable(): Flow<List<InventoryWithSkuMetadata>>
+    fun getInventoriesWithSkuMetadataAndTransactionsObservable(): Flow<List<InventoryWithSkuMetadataAndTransactions>>
 
     @Transaction
     @Query("SELECT * FROM Inventory WHERE Inventory.id = :inventoryId")
-    fun getInventoryWithMetadataAndTransactionsObservable(inventoryId: Long): Flow<InventoryWithSkuMetadataAndTransactions>
+    fun getInventoryWithSkuMetadataAndTransactionsObservable(inventoryId: Long): Flow<InventoryWithSkuMetadataAndTransactions?>
 
     @Query("SELECT * FROM Inventory WHERE Inventory.skuId = :skuId")
     suspend fun getBySkuId(skuId: Long): Inventory?
