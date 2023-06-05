@@ -42,26 +42,26 @@ class InventoryAdapter(private val onInteractionListener: OnInteractionListener)
         val binding: InventorySummaryBinding,
     ) : BaseViewHolder<InventoryViewModel.ItemUiState>(binding.root) {
         override fun bind(item: InventoryViewModel.ItemUiState) {
-            val uiState = item as InventoryViewModel.ItemUiState.SummaryUiState
+            item as InventoryViewModel.ItemUiState.SummaryUiState
             val context = itemView.context
 
             binding.totalValueTextview.text =
-                context.getString(R.string.price_placeholder, uiState.totalValue)
+                context.getString(R.string.price_placeholder, item.totalValue)
             binding.totalUnrealizedProfitTextview.text = context.getString(
                 R.string.total_unrealized_profit_placeholder,
-                uiState.totalUnrealizedProfit
+                item.totalUnrealizedProfit
             )
             binding.totalRealizedProfitTextview.text = context.getString(
                 R.string.total_realized_profit_placeholder,
-                uiState.totalRealizedProfit
+                item.totalRealizedProfit
             )
             binding.totalPurchaseAmountTextview.text = context.getString(
                 R.string.total_purchase_amount_placeholder,
-                uiState.totalPurchaseAmount
+                item.totalPurchaseAmount
             )
             binding.grossProfitTextview.text = context.getString(
                 R.string.gross_profit_placeholder,
-                (uiState.totalRealizedProfit - uiState.totalPurchaseAmount)
+                (item.totalRealizedProfit - item.totalPurchaseAmount)
             )
         }
 
@@ -80,9 +80,8 @@ class InventoryAdapter(private val onInteractionListener: OnInteractionListener)
         }
 
         override fun bind(item: InventoryViewModel.ItemUiState) {
-            val uiModel = item as InventoryViewModel.ItemUiState.InventoryItemUiState
-            val inventory = uiModel.data.inventoryWithSkuMetadata.inventory
-            val skuWithMetadata = uiModel.data.inventoryWithSkuMetadata.skuWithMetadata
+            item as InventoryViewModel.ItemUiState.InventoryItemUiState
+            val skuWithMetadata = item.data.inventoryWithSkuMetadata.skuWithMetadata
 
             val productWithCardSet = skuWithMetadata.productWithCardSet
 
@@ -113,18 +112,18 @@ class InventoryAdapter(private val onInteractionListener: OnInteractionListener)
             binding.itemUserListEntryQuantityAvgPurchasePriceTextview.text =
                 itemView.resources.getString(
                     R.string.quantity_avg_price_oneline,
-                    uiModel.data.quantity,
-                    uiModel.data.averagePurchasePrice
+                    item.data.quantity,
+                    item.data.averagePurchasePrice
                 )
 
             binding.itemUserListEntryProfitTextview.text = itemView.resources.getString(
                 R.string.item_user_list_profit_with_percentage,
-                uiModel.data.totalUnrealizedProfit,
-                uiModel.data.totalUnrealizedProfit?.toString(),
+                item.data.totalUnrealizedProfit,
+                item.data.unrealizedProfitPercentPerCard?.toString(),
             )
 
             val unrealizedProfitPercentagePerCard =
-                uiModel.data.unrealizedProfitPercentPerCard
+                item.data.unrealizedProfitPercentPerCard
 
             if (unrealizedProfitPercentagePerCard != null) {
                 binding.itemUserListEntryProfitTextview.setTextColor(

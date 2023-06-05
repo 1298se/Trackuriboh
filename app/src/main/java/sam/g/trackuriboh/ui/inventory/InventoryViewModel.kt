@@ -51,7 +51,7 @@ class InventoryViewModel @Inject constructor(
 
         val transformList: MutableList<ItemUiState> = list.map { inventory ->
             ItemUiState.InventoryItemUiState(inventory).also {
-                totalValue += it.data.totalValue ?: 0.0
+                totalValue += it.data.totalValue
                 totalUnrealizedProfit += it.data.totalUnrealizedProfit ?: 0.0
                 totalRealizedProfit += it.data.totalRealizedProfit
                 totalPurchaseAmount += it.data.totalPurchaseAmount
