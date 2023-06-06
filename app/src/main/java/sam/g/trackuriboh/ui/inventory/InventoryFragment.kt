@@ -55,6 +55,10 @@ class InventoryFragment : Fragment(),
         )
     }
 
+    override fun onShowOutOfStockSwitchToggle(enabled: Boolean) {
+        viewModel.showOutOfStock(enabled)
+    }
+
     private fun initToolbar() {
         with(binding.inventoryToolbar) {
             setupAsTopLevelDestinationToolbar()

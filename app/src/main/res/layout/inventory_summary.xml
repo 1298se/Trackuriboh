@@ -7,7 +7,7 @@
     android:padding="@dimen/material_border_padding_large"
     android:background="?attr/colorSurface">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/total_value_lbl_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         style="@style/TextAppearance.MaterialComponents.Headline6" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/total_value_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
         style="@style/TextAppearance.MaterialComponents.Headline4"
         tools:text="$696969.69" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/total_unrealized_profit_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
         android:layout_marginTop="@dimen/text_spacing_large"
         tools:text="Total Unrealized Profit: $6969.69" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/total_realized_profit_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
         android:layout_marginTop="@dimen/text_spacing"
         tools:text="Total Realized Profit: $6969.69" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/total_purchase_amount_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
         android:layout_marginTop="@dimen/text_spacing"
         tools:text="Total Cost: $6969.69" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/gross_profit_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,5 +60,21 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="@dimen/text_spacing"
         tools:text="Gross Profit: $6969.69" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/show_out_of_stock_label_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/show_out_of_stock_switch"
+        app:layout_constraintBottom_toBottomOf="@id/show_out_of_stock_switch"
+        android:text="Show Out of Stock" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/show_out_of_stock_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/gross_profit_textview"
+        app:layout_constraintStart_toEndOf="@id/show_out_of_stock_label_textview" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

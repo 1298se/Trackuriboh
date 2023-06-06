@@ -36,6 +36,8 @@ class InventoryAdapter(private val onInteractionListener: OnInteractionListener)
 
     interface OnInteractionListener {
         fun onItemClick(inventoryId: Long)
+
+        fun onShowOutOfStockSwitchToggle(enabled: Boolean)
     }
 
     inner class SummaryViewHolder(
@@ -63,6 +65,13 @@ class InventoryAdapter(private val onInteractionListener: OnInteractionListener)
                 R.string.gross_profit_placeholder,
                 (item.totalRealizedProfit - item.totalPurchaseAmount)
             )
+
+            binding.showOutOfStockSwitch.isChecked = item.showOutOfStock
+            binding.showOutOfStockSwitch.setOnCheckedChangeListener { _, isChecked ->
+                onInteractionListener.onShowOutOfStockSwitchToggle(
+                    isChecked
+                )
+            }
         }
 
     }
