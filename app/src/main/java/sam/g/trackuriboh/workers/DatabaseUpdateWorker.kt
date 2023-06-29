@@ -42,7 +42,7 @@ class DatabaseUpdateWorker @AssistedInject constructor(
 ) : CoroutineWorker(appContext, workerParams) {
     companion object {
 
-        const val DATABASE_LAST_UPDATED_DATE_SHAREDPREF_KEY = "DatabaseCheckWorker_LastUpdatedDate"
+        const val DATABASE_LAST_UPDATED_DATE_KEY = "DatabaseCheckWorker_LastUpdatedDate"
 
         const val CARD_SET_IDS_INPUT_KEY = "DatabaseUpdateWorker_CardSetIdsInputKey"
 
@@ -119,7 +119,7 @@ class DatabaseUpdateWorker @AssistedInject constructor(
             }
 
             with(sharedPreferences.edit()) {
-                putLong(DATABASE_LAST_UPDATED_DATE_SHAREDPREF_KEY, Date().time)
+                putLong(DATABASE_LAST_UPDATED_DATE_KEY, Date().time)
                 commit()
             }
 

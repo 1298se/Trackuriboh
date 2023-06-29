@@ -158,7 +158,7 @@ class DatabaseExploreViewModel @Inject constructor(
             if (it?.state == WorkInfo.State.SUCCEEDED) {
                 val lastUpdateDate = Date(
                     sharedPreferences.getLong(
-                        DatabaseUpdateWorker.DATABASE_LAST_UPDATED_DATE_SHAREDPREF_KEY,
+                        DatabaseUpdateWorker.DATABASE_LAST_UPDATED_DATE_KEY,
                         DATABASE_ASSET_CREATION_DATE
                     )
                 )
@@ -204,7 +204,7 @@ class DatabaseExploreViewModel @Inject constructor(
             viewModelScope.launch {
                 val lastUpdateDate = Date(
                     sharedPreferences.getLong(
-                        DatabaseUpdateWorker.DATABASE_LAST_UPDATED_DATE_SHAREDPREF_KEY,
+                        DatabaseUpdateWorker.DATABASE_LAST_UPDATED_DATE_KEY,
                         DATABASE_ASSET_CREATION_DATE
                     )
                 )

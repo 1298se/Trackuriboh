@@ -17,9 +17,9 @@
             android:icon="@drawable/ic_baseline_inventory_24"
             android:title="@string/lbl_inventory" />
 
-        <item
+<!--        <item
             android:id="@id/remindersGraph"
             android:icon="@drawable/ic_baseline_event_note_24"
-            android:title="@string/lbl_reminders" />
+            android:title="@string/lbl_reminders" />-->
     </group>
 </menu>
